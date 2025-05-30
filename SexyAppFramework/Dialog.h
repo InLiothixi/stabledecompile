@@ -17,7 +17,7 @@ extern SexyString DIALOG_NO_STRING;
 extern SexyString DIALOG_OK_STRING;
 extern SexyString DIALOG_CANCEL_STRING;
 
-typedef std::vector<std::string> StringVector;
+typedef std::vector<SexyString> StringVector;
 
 class Dialog : public Widget, public ButtonListener
 {

@@ -24,16 +24,16 @@ public:
 	void					SeekFront() const;
 	void					Clear();
 
-	void					FromWebString(const std::string& theString);
+	void					FromWebString(const SexyString& theString);
 	void					WriteByte(uchar theByte);
 	void					WriteNumBits(int theNum, int theBits);
 	static int				GetBitsRequired(int theNum, bool isSigned);
 	void					WriteBoolean(bool theBool);
 	void					WriteShort(short theShort);
 	void					WriteLong(long theLong);
-	void					WriteString(const std::string& theString);
+	void					WriteString(const SexyString& theString);
 	void					WriteUTF8String(const std::wstring& theString);
-	void					WriteLine(const std::string& theString);	
+	void					WriteLine(const SexyString& theString);
 	void					WriteBuffer(const ByteVector& theBuffer);
 	void					WriteBytes(const uchar* theByte, int theCount);
 	void					SetData(const ByteVector& theBuffer);
@@ -46,7 +46,7 @@ public:
 	bool					ReadBoolean() const;
 	short					ReadShort() const;
 	long					ReadLong() const;
-	std::string				ReadString() const;	
+	SexyString				ReadString() const;
 	std::wstring			ReadUTF8String() const;
 	std::string				ReadLine() const;
 	void					ReadBytes(uchar* theData, int theLen) const;

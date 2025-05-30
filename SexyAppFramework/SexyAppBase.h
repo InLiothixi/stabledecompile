@@ -45,16 +45,16 @@ typedef std::set<MemoryImage*> MemoryImageSet;
 typedef std::map<int, Dialog*> DialogMap;
 typedef std::list<Dialog*> DialogList;
 typedef std::list<MSG> WindowsMessageList;
-typedef std::vector<std::string> StringVector;
+typedef std::vector<SexyString> StringVector;
 //typedef std::basic_string<TCHAR> tstring; // string of TCHARs
 
 typedef std::map<std::string, SexyString> StringSexyStringMap;
 typedef std::map<std::string, std::string> StringStringMap;
 typedef std::map<std::string, std::wstring> StringWStringMap;
-typedef std::map<std::string, bool> StringBoolMap;
-typedef std::map<std::string, int> StringIntMap;
-typedef std::map<std::string, double> StringDoubleMap;
-typedef std::map<std::string, StringVector> StringStringVectorMap;
+typedef std::map<SexyString, bool> StringBoolMap;
+typedef std::map<SexyString, int> StringIntMap;
+typedef std::map<SexyString, double> StringDoubleMap;
+typedef std::map<SexyString, StringVector> StringStringVectorMap;
 
 enum
 {
@@ -125,11 +125,11 @@ public:
 	
 	ulong					mRandSeed;
 		
-	std::string				mCompanyName;
-	std::string				mFullCompanyName;
-	std::string				mProdName;
+	SexyString				mCompanyName;
+	SexyString				mFullCompanyName;
+	SexyString				mProdName;
 	SexyString				mTitle;
-	std::string				mRegKey;
+	SexyString				mRegKey;
 	SexyString				mChangeDirTo;
 	
 	int						mRelaxUpdateBacklogCount; // app doesn't try to catch up for this many frames
@@ -185,13 +185,13 @@ public:
 	bool					mAlphaDisabled;
 	MusicInterface*			mMusicInterface;	
 	bool					mReadFromRegistry;
-	std::string				mRegisterLink;
-	std::string				mProductVersion;
+	SexyString				mRegisterLink;
+	SexyString				mProductVersion;
 	Image*					mCursorImages[NUM_CURSORS];
 	HCURSOR					mOverrideCursor;
 	bool					mIsOpeningURL;
 	bool					mShutdownOnURLOpen;
-	std::string				mOpeningURL;
+	SexyString				mOpeningURL;
 	DWORD					mOpeningURLTime;
 	DWORD					mLastTimerTime;
 	DWORD					mLastBigDelayTime;	
@@ -272,8 +272,8 @@ public:
 	bool					mRecordingDemoBuffer;
 	bool					mPlayingDemoBuffer;
 	bool					mManualShutdown;
-	std::string				mDemoPrefix;
-	std::string				mDemoFileName;
+	SexyString 			    mDemoPrefix;
+	SexyString				mDemoFileName;
 	Buffer					mDemoBuffer;
 	int						mDemoLength;
 	int						mLastDemoMouseX;
@@ -288,7 +288,7 @@ public:
 	HandleToIntMap			mHandleToIntMap; // For waiting on handles
 	int						mCurHandleNum;
 
-	typedef std::pair<std::string, int> DemoMarker;
+	typedef std::pair<SexyString, int> DemoMarker;
 	typedef std::list<DemoMarker> DemoMarkerList;
 	DemoMarkerList			mDemoMarkerList;
 
@@ -363,9 +363,9 @@ protected:
 	void					ShowMemoryUsage();			
 
 	// Registry helpers
-	bool					RegistryRead(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength);
-	bool					RegistryReadKey(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength, HKEY theMainKey = HKEY_CURRENT_USER);
-	bool					RegistryWrite(const std::string& theValueName, ulong theType, const uchar* theValue, ulong theLength);
+	bool					RegistryRead(const SexyString& theValueName, ulong* theType, uchar* theValue, ulong* theLength);
+	bool					RegistryReadKey(const SexyString& theValueName, ulong* theType, uchar* theValue, ulong* theLength, HKEY theMainKey = HKEY_CURRENT_USER);
+	bool					RegistryWrite(const SexyString& theValueName, ulong theType, const uchar* theValue, ulong theLength);
 
 	// Demo recording helpers	
 	void					ProcessDemo();
@@ -392,22 +392,22 @@ public:
 	virtual int				MsgBox(const std::wstring &theText, const std::wstring &theTitle = L"Message", int theFlags = MB_OK);
 	virtual void			Popup(const std::string& theString);
 	virtual void			Popup(const std::wstring& theString);
-	virtual void			LogScreenSaverError(const std::string &theError);
+	virtual void			LogScreenSaverError(const SexyString&theError);
 	virtual void			SafeDeleteWidget(Widget* theWidget);	
 
-	virtual void			URLOpenFailed(const std::string& theURL);
-	virtual void			URLOpenSucceeded(const std::string& theURL);
-	virtual bool			OpenURL(const std::string& theURL, bool shutdownOnOpen = false);	
-	virtual std::string		GetProductVersion(const std::string& thePath);
+	virtual void			URLOpenFailed(const SexyString& theURL);
+	virtual void			URLOpenSucceeded(const SexyString& theURL);
+	virtual bool			OpenURL(const SexyString& theURL, bool shutdownOnOpen = false);
+	virtual SexyString		GetProductVersion(const SexyString& thePath);
 
 	virtual void			SEHOccured();
-	virtual std::string		GetGameSEHInfo();
+	virtual SexyString		GetGameSEHInfo();
 	virtual void			GetSEHWebParams(DefinesMap* theDefinesMap);
 	virtual void			Shutdown();	
 
 	virtual void			DoParseCmdLine();
-	virtual void			ParseCmdLine(const std::string& theCmdLine);
-	virtual void			HandleCmdLineParam(const std::string& theParamName, const std::string& theParamValue);
+	virtual void			ParseCmdLine(const SexyString& theCmdLine);
+	virtual void			HandleCmdLineParam(const SexyString& theParamName, const SexyString& theParamValue);
 	virtual void			HandleNotifyGameMessage(int theType, int theParam); // for HWND_BROADCAST of mNotifyGameMessage (0-1000 are reserved for SexyAppBase for theType)
 	virtual void			HandleGameAlreadyRunning(); 
 
@@ -433,14 +433,14 @@ public:
 	void					StartLoadingThread();
 	virtual double			GetLoadingThreadProgress();	
 
-	void					CopyToClipboard(const std::string& theString);
-	std::string				GetClipboard();
+	void					CopyToClipboard(const SexyString& theString);
+	SexyString				GetClipboard();
 
 	void					SetCursor(int theCursorNum);
 	int						GetCursor();
 	void					EnableCustomCursors(bool enabled);	
-	virtual DDImage*		GetImage(const std::string& theFileName, bool commitBits = true);	
-	virtual SharedImageRef	GetSharedImage(const std::string& theFileName, const std::string& theVariant = "", bool* isNew = NULL);
+	virtual DDImage*		GetImage(const SexyString& theFileName, bool commitBits = true);
+	virtual SharedImageRef	GetSharedImage(const SexyString& theFileName, const SexyString& theVariant = L"", bool* isNew = NULL);
 
 	void					CleanSharedImages();
 	void					PrecacheAdditive(MemoryImage* theImage);
@@ -494,7 +494,7 @@ public:
 	void					DemoSyncRefreshRate();
 	void					Set3DAcclerated(bool is3D, bool reinit = true);
 	virtual void			Done3dTesting();
-	virtual std::string		NotifyCrashHook(); // return file name that you want to upload
+	virtual SexyString		NotifyCrashHook(); // return file name that you want to upload
 	
 	virtual bool			CheckSignature(const Buffer& theBuffer, const SexyString& theFileName);
 	virtual bool			DrawDirtyStuff();
@@ -509,51 +509,51 @@ public:
 	void					LoadResourceManifest();
 	void					ShowResourceError(bool doExit = false);
 	
-	bool					GetBoolean(const std::string& theId);
-	bool					GetBoolean(const std::string& theId, bool theDefault);	
-	int						GetInteger(const std::string& theId);
-	int						GetInteger(const std::string& theId, int theDefault);
-	double					GetDouble(const std::string& theId);
-	double					GetDouble(const std::string& theId, double theDefault);
-	SexyString				GetString(const std::string& theId);
-	SexyString				GetString(const std::string& theId, const SexyString& theDefault);
+	bool					GetBoolean(const SexyString& theId);
+	bool					GetBoolean(const SexyString& theId, bool theDefault);
+	int						GetInteger(const SexyString& theId);
+	int						GetInteger(const SexyString& theId, int theDefault);
+	double					GetDouble(const SexyString& theId);
+	double					GetDouble(const SexyString& theId, double theDefault);
+	SexyString				GetString(const SexyString& theId);
+	SexyString				GetString(const SexyString& theId, const SexyString& theDefault);
 
-	StringVector			GetStringVector(const std::string& theId);
+	StringVector			GetStringVector(const SexyString& theId);
 
-	void					SetBoolean(const std::string& theId, bool theValue);
-	void					SetInteger(const std::string& theId, int theValue);
-	void					SetDouble(const std::string& theId, double theValue);
-	void					SetString(const std::string& theId, const std::wstring& theValue);
+	void					SetBoolean(const SexyString& theId, bool theValue);
+	void					SetInteger(const SexyString& theId, int theValue);
+	void					SetDouble(const SexyString& theId, double theValue);
+	void					SetString(const SexyString& theId, const std::wstring& theValue);
 	
 	// Demo access methods
 	bool					PrepareDemoCommand(bool required);
 	void					WriteDemoTimingBlock();
 	void					WriteDemoBuffer();
-	bool					ReadDemoBuffer(std::string &theError);//UNICODE
+	bool					ReadDemoBuffer(SexyString&theError);//UNICODE
 	void					DemoSyncBuffer(Buffer* theBuffer);
-	void					DemoSyncString(std::string* theString);
+	void					DemoSyncString(SexyString* theString);
 	void					DemoSyncInt(int* theInt);
 	void					DemoSyncBool(bool* theBool);
-	void					DemoAssertStringEqual(const std::string& theString);
+	void					DemoAssertStringEqual(const SexyString& theString);
 	void					DemoAssertIntEqual(int theInt);
-	void					DemoAddMarker(const std::string& theString);
+	void					DemoAddMarker(const SexyString& theString);
 	void					DemoRegisterHandle(HANDLE theHandle);
 	void					DemoWaitForHandle(HANDLE theHandle);
 	bool					DemoCheckHandle(HANDLE theHandle);
 	
 
 	// Registry access methods
-	bool					RegistryGetSubKeys(const std::string& theKeyName, StringVector* theSubKeys);
-	bool					RegistryReadString(const std::string& theValueName, std::string* theString);
-	bool					RegistryReadInteger(const std::string& theValueName, int* theValue);
-	bool					RegistryReadBoolean(const std::string& theValueName, bool* theValue);
-	bool					RegistryReadData(const std::string& theValueName, uchar* theValue, ulong* theLength);
-	bool					RegistryWriteString(const std::string& theValueName, const std::string& theString);
-	bool					RegistryWriteInteger(const std::string& theValueName, int theValue);
-	bool					RegistryWriteBoolean(const std::string& theValueName, bool theValue);
-	bool					RegistryWriteData(const std::string& theValueName, const uchar* theValue, ulong theLength);	
-	bool					RegistryEraseKey(const std::string& theKeyName);
-	void					RegistryEraseValue(const std::string& theValueName);
+	bool					RegistryGetSubKeys(const SexyString& theKeyName, StringVector* theSubKeys);
+	bool					RegistryReadString(const SexyString& theValueName, SexyString* theString);
+	bool					RegistryReadInteger(const SexyString& theValueName, int* theValue);
+	bool					RegistryReadBoolean(const SexyString& theValueName, bool* theValue);
+	bool					RegistryReadData(const SexyString& theValueName, uchar* theValue, ulong* theLength);
+	bool					RegistryWriteString(const SexyString& theValueName, const SexyString& theString);
+	bool					RegistryWriteInteger(const SexyString& theValueName, int theValue);
+	bool					RegistryWriteBoolean(const SexyString& theValueName, bool theValue);
+	bool					RegistryWriteData(const SexyString& theValueName, const uchar* theValue, ulong theLength);
+	bool					RegistryEraseKey(const SexyString& theKeyName);
+	void					RegistryEraseValue(const SexyString& theValueName);
 
 	// File access methods
 	bool					WriteBufferToFile(const SexyString& theFileName, const Buffer* theBuffer);

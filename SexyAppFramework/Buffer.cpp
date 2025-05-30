@@ -213,7 +213,7 @@ std::wstring Buffer::UTF8ToWideString() const
 	return aString;
 }
 
-void Buffer::FromWebString(const std::string& theString)
+void Buffer::FromWebString(const SexyString& theString)
 {
 	Clear();
 
@@ -224,15 +224,15 @@ void Buffer::FromWebString(const std::string& theString)
 
 	for (int aDigitNum = 0; aDigitNum < 8; aDigitNum++)
 	{
-		char aChar = theString[aDigitNum];
+		SexyChar aChar = theString[aDigitNum];
 		int aVal = 0;
 
-		if ((aChar >= '0') && (aChar <= '9'))
-			aVal = aChar - '0';
-		else if ((aChar >= 'A') && (aChar <= 'F'))
-			aVal = (aChar - 'A') + 10;
-		else if ((aChar >= 'a') && (aChar <= 'f'))
-			aVal = (aChar - 'f') + 10;
+		if ((aChar >= _S('0')) && (aChar <= _S('9')))
+			aVal = aChar - _S('0');
+		else if ((aChar >= _S('A')) && (aChar <= _S('F')))
+			aVal = (aChar - _S('A')) + 10;
+		else if ((aChar >= _S('a')) && (aChar <= _S('f')))
+			aVal = (aChar - _S('f')) + 10;
 
 		aSizeBits += (aVal << ((7 - aDigitNum) * 4));
 	}
@@ -329,7 +329,7 @@ void Buffer::WriteLong(long theLong)
 	WriteByte((uchar)(theLong >> 24));
 }
 
-void Buffer::WriteString(const std::string& theString)
+void Buffer::WriteString(const SexyString& theString)
 {
 	WriteShort((short) theString.length());
 	for (int i = 0; i < (int)theString.length(); i++)
@@ -370,9 +370,9 @@ void Buffer::WriteUTF8String(const std::wstring& theString)
 	}
 }
 
-void Buffer::WriteLine(const std::string& theString)
+void Buffer::WriteLine(const SexyString& theString)
 {
-	WriteBytes((const uchar*) (theString + "\r\n").c_str(), (int) theString.length() + 2);
+	WriteBytes((const uchar*) (theString + _S("\r\n")).c_str(), (int) theString.length() + 2);
 }
 
 void Buffer::WriteBuffer(const ByteVector& theBuffer)
@@ -477,9 +477,9 @@ long Buffer::ReadLong() const
 	return aLong;
 }
 
-std::string	Buffer::ReadString() const
+SexyString	Buffer::ReadString() const
 {
-	std::string aString;
+	SexyString aString;
 	int aLen = ReadShort();
 
 	for (int i = 0; i < aLen; i++)

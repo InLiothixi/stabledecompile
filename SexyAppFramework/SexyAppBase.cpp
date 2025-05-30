@@ -115,16 +115,27 @@ unsigned char gDraggingCursorData[] = {
 static DDImage* gFPSImage = NULL; 
 
 //////////////////////////////////////////////////////////////////////////
-
-typedef HRESULT (WINAPI *SHGetFolderPathFunc)(HWND, int, HANDLE, DWORD, LPTSTR);
-void* GetSHGetFolderPath(const char* theDLL, HMODULE* theMod)
+#ifdef _USE_WIDE_STRING
+typedef HRESULT(WINAPI* SHGetFolderPathFunc)(HWND, int, HANDLE, DWORD, LPWSTR);
+#else 
+typedef HRESULT(WINAPI* SHGetFolderPathFunc)(HWND, int, HANDLE, DWORD, LPTSTR);
+#endif
+void* GetSHGetFolderPath(const SexyChar* theDLL, HMODULE* theMod)
 {
+#ifdef _USE_WIDE_STRING
+	HMODULE aMod = LoadLibraryW(theDLL);
+#else 
 	HMODULE aMod = LoadLibrary(theDLL);
+#endif
 	SHGetFolderPathFunc aFunc = NULL;
 
 	if (aMod != NULL)
 	{
-		*((void**)&aFunc) = (void*)GetProcAddress(aMod, "SHGetFolderPathA");
+#ifdef _USE_WIDE_STRING
+		*((void**)&aFunc) = (void*)GetProcAddress(aMod, "SHGetFolderPathW");
+#else 
+		* ((void**)&aFunc) = (void*)GetProcAddress(aMod, "SHGetFolderPathA");
+#endif
 		if (aFunc == NULL)
 		{
 			FreeLibrary(aMod);
@@ -159,16 +170,20 @@ SexyAppBase::SexyAppBase()
 #endif
 
 	// Extract product version
-	char aPath[_MAX_PATH];
+	SexyChar aPath[_MAX_PATH];
+#ifdef _USE_WIDE_STRING
+	GetModuleFileNameW(NULL, aPath, 256);
+#else
 	GetModuleFileName(NULL, aPath, 256);
+#endif
 	mProductVersion = GetProductVersion(aPath);	
-	mChangeDirTo = GetFileDir(StringToSexyString(aPath));
+	mChangeDirTo = GetFileDir(aPath);
 
 	mNoDefer = false;	
 	mFullScreenPageFlip = true; // should we page flip in fullscreen?
 	mTimeLoaded = GetTickCount();
 	mSEHOccured = false;
-	mProdName = "Product";
+	mProdName = _S("Product");
 	mTitle = _S("SexyApp");
 	mShutdown = false;
 	mExitToTop = false;
@@ -288,11 +303,11 @@ SexyAppBase::SexyAppBase()
 	mWidescreenAware = false;
 	mEnableWindowAspect = false;
 	mWindowAspect.Set(4, 3);
-	mIsWideWindow = false;
 #ifdef _USE_WIDE_STRING
 	mIsWideWindow = true;
+#else
+	mIsWideWindow = false;
 #endif
-
 
 	int i;
 
@@ -306,20 +321,20 @@ SexyAppBase::SexyAppBase()
 		mAdd8BitMaxTable[i] = 255;
 	
 	// Set default strings.  Init could read in overrides from partner.xml
-	SetString("DIALOG_BUTTON_OK",		L"OK");
-	SetString("DIALOG_BUTTON_CANCEL",	L"CANCEL");
+	SetString(_S("DIALOG_BUTTON_OK"),		L"OK");
+	SetString(_S("DIALOG_BUTTON_CANCEL"),	L"CANCEL");
 
-	SetString("UPDATE_CHECK_TITLE",		L"Update Check");
-	SetString("UPDATE_CHECK_BODY",		L"Checking if there are any updates available for this product ...");
+	SetString(_S("UPDATE_CHECK_TITLE"),		L"Update Check");
+	SetString(_S("UPDATE_CHECK_BODY"),		L"Checking if there are any updates available for this product ...");
 
-	SetString("UP_TO_DATE_TITLE",		L"Up to Date");	
-	SetString("UP_TO_DATE_BODY",		L"There are no updates available for this product at this time.");
-	SetString("NEW_VERSION_TITLE",		L"New Version");
-	SetString("NEW_VERSION_BODY",		L"There is an update available for this product.  Would you like to visit the web site to download it?");
+	SetString(_S("UP_TO_DATE_TITLE"),		L"Up to Date");
+	SetString(_S("UP_TO_DATE_BODY"),		L"There are no updates available for this product at this time.");
+	SetString(_S("NEW_VERSION_TITLE"),		L"New Version");
+	SetString(_S("NEW_VERSION_BODY"),		L"There is an update available for this product.  Would you like to visit the web site to download it?");
 	
 
-	mDemoPrefix = "sexyapp";
-	mDemoFileName = mDemoPrefix + ".dmo";
+	mDemoPrefix = _S("sexyapp");
+	mDemoFileName = mDemoPrefix + _S(".dmo");
 	mPlayingDemoBuffer = false;
 	mManualShutdown = false;
 	mRecordingDemoBuffer = false;
@@ -383,7 +398,7 @@ SexyAppBase::~SexyAppBase()
 	{
 		bool writeToRegistry = true;
 		bool is3D = false;
-		bool is3DOptionSet = RegistryReadBoolean("Is3D", &is3D);
+		bool is3DOptionSet = RegistryReadBoolean(_S("Is3D"), &is3D);
 		if(!is3DOptionSet) // should we write the option?
 		{
 			if(!Is3DAccelerationRecommended()) // may need to prompt user if he wants to keep 3d acceleration on
@@ -392,12 +407,12 @@ SexyAppBase::~SexyAppBase()
 				{
 					showedMsgBox = true;
 					int aResult = MessageBox(NULL,
-									GetString("HARDWARE_ACCEL_SWITCHED_ON", 
+									GetString(_S("HARDWARE_ACCEL_SWITCHED_ON"), 
 															_S("Hardware Acceleration was switched on during this session.\r\n")
 															_S("If this resulted in slower performance, it should be switched off.\r\n")
 															_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
-									(StringToSexyString(mCompanyName) + _S(" ") +
-									 GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation"))).c_str(),
+									(mCompanyName + _S(" ") +
+									 GetString(_S("HARDWARE_ACCEL_CONFIRMATION"), _S("Hardware Acceleration Confirmation"))).c_str(),
 									MB_YESNO | MB_ICONQUESTION);
 
 					mDDInterface->mIs3D = aResult == IDYES ? true : false;
@@ -410,23 +425,23 @@ SexyAppBase::~SexyAppBase()
 		}
 
 		if (writeToRegistry)
-			RegistryWriteBoolean("Is3D", mDDInterface->mIs3D);
+			RegistryWriteBoolean(_S("Is3D"), mDDInterface->mIs3D);
 	}
 
 	extern bool gD3DInterfacePreDrawError;
 	if (!showedMsgBox && gD3DInterfacePreDrawError && !IsScreenSaver())
 	{
 		int aResult = MessageBox(NULL, 
-						GetString("HARDWARE_ACCEL_NOT_WORKING", 
+						GetString(_S("HARDWARE_ACCEL_NOT_WORKING"),
 									_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
 									_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
 									_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
-						(StringToSexyString(mCompanyName) + _S(" ") +
-						 GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation"))).c_str(),
+						(mCompanyName + _S(" ") +
+						 GetString(_S("HARDWARE_ACCEL_CONFIRMATION"), _S("Hardware Acceleration Confirmation"))).c_str(),
 						MB_YESNO | MB_ICONQUESTION);
 
 		if (aResult==IDNO)
-			RegistryWriteBoolean("Is3D", false);
+			RegistryWriteBoolean(_S("Is3D"), false);
 	}
 
 
@@ -547,13 +562,13 @@ bool SexyAppBase::AppCanRestore()
 	return !mIsDisabled;
 }
 
-bool SexyAppBase::ReadDemoBuffer(std::string &theError)
+bool SexyAppBase::ReadDemoBuffer(SexyString &theError)
 {
-	FILE* aFP = fopen(mDemoFileName.c_str(), "rb");
+	FILE* aFP = sexyfopen(mDemoFileName.c_str(), _S("rb"));
 
 	if (aFP == NULL)
 	{
-		theError = "Demo file not found: " + mDemoFileName;
+		theError = _S("Demo file not found: ") + mDemoFileName;
 		return false;
 	}
 
@@ -566,7 +581,7 @@ bool SexyAppBase::ReadDemoBuffer(std::string &theError)
 	DBG_ASSERTE(aFileID == DEMO_FILE_ID);
 	if (aFileID != DEMO_FILE_ID)
 	{
-		theError = "Invalid demo file.";
+		theError = _S("Invalid demo file.");
 		return false;
 	}
 
@@ -581,14 +596,14 @@ bool SexyAppBase::ReadDemoBuffer(std::string &theError)
 	fread(&aStrLen, 2, 1, aFP);
 	if (aStrLen > 255)
 		aStrLen = 255;
-	char aStr[256];
+	SexyChar aStr[256];
 	fread(aStr, 1, aStrLen, aFP);
-	aStr[aStrLen] = '\0';
+	aStr[aStrLen] = _S('\0');
 
 	DBG_ASSERTE(mProductVersion == aStr);
 	if (mProductVersion != aStr)
 	{
-		theError = "This demo file appears to be for '" + std::string(aStr) + "'";
+		theError = _S("This demo file appears to be for '") + SexyString(aStr) + _S("'");
 		return false;
 	}
 
@@ -607,7 +622,7 @@ bool SexyAppBase::ReadDemoBuffer(std::string &theError)
 
 		if (aSize >= aBytesLeft)
 		{
-			theError = "Invalid demo file.";
+			theError = _S("Invalid demo file.");
 			return false;
 		}
 
@@ -630,7 +645,7 @@ bool SexyAppBase::ReadDemoBuffer(std::string &theError)
 
 		if (i!=aNumItems)
 		{
-			theError = "Invalid demo file.";
+			theError = _S("Invalid demo file.");
 			return false;
 		}
 
@@ -645,7 +660,7 @@ bool SexyAppBase::ReadDemoBuffer(std::string &theError)
 	
 	if (aBytesLeft <= 0)
 	{
-		theError = "Invalid demo file.";
+		theError = _S("Invalid demo file.");
 		return false;
 	}
 
@@ -664,7 +679,7 @@ void SexyAppBase::WriteDemoBuffer()
 {
 	if (mRecordingDemoBuffer)
 	{
-		FILE* aFP = fopen(mDemoFileName.c_str(), "w+b");
+		FILE* aFP = sexyfopen(mDemoFileName.c_str(), _S("w+b"));
 
 		if (aFP != NULL)
 		{
@@ -729,7 +744,7 @@ void SexyAppBase::DemoSyncBuffer(Buffer* theBuffer)
 	}
 }
 
-void SexyAppBase::DemoSyncString(std::string* theString)
+void SexyAppBase::DemoSyncString(SexyString* theString)
 {
 	Buffer aBuffer;
 	aBuffer.WriteString(*theString);
@@ -753,7 +768,7 @@ void SexyAppBase::DemoSyncBool(bool* theBool)
 	*theBool = aBuffer.ReadBoolean();
 }
 
-void SexyAppBase::DemoAssertStringEqual(const std::string& theString)
+void SexyAppBase::DemoAssertStringEqual(const SexyString& theString)
 {
 	if (mPlayingDemoBuffer)
 	{
@@ -766,7 +781,7 @@ void SexyAppBase::DemoAssertStringEqual(const std::string& theString)
 		DBG_ASSERTE(!mDemoIsShortCmd);
 		DBG_ASSERTE(mDemoCmdNum == DEMO_ASSERT_STRING_EQUAL);
 
-		std::string aString = mDemoBuffer.ReadString();
+		SexyString aString = mDemoBuffer.ReadString();
 		DBG_ASSERTE(aString == theString);
 	}
 	else if (mRecordingDemoBuffer)
@@ -778,7 +793,7 @@ void SexyAppBase::DemoAssertStringEqual(const std::string& theString)
 	}
 }
 
-void SexyAppBase::DemoAddMarker(const std::string& theString)
+void SexyAppBase::DemoAddMarker(const SexyString& theString)
 {
 	if (mPlayingDemoBuffer)
 	{
@@ -1045,12 +1060,12 @@ void SexyAppBase::LostFocus()
 {	
 }
 
-void SexyAppBase::URLOpenFailed(const std::string& theURL)
+void SexyAppBase::URLOpenFailed(const SexyString& theURL)
 {
 	mIsOpeningURL = false;
 }
 
-void SexyAppBase::URLOpenSucceeded(const std::string& theURL)
+void SexyAppBase::URLOpenSucceeded(const SexyString& theURL)
 {	
 	mIsOpeningURL = false;
 
@@ -1058,7 +1073,7 @@ void SexyAppBase::URLOpenSucceeded(const std::string& theURL)
 		Shutdown();	
 }
 
-bool SexyAppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
+bool SexyAppBase::OpenURL(const SexyString& theURL, bool shutdownOnOpen)
 {
 	if ((!mIsOpeningURL) || (theURL != mOpeningURL))
 	{
@@ -1067,7 +1082,7 @@ bool SexyAppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
 		mOpeningURL = theURL;
 		mOpeningURLTime = GetTickCount();		
 
-		if ((int) ShellExecuteA(NULL, "open", theURL.c_str(), NULL, NULL, SW_SHOWNORMAL) > 32)
+		if ((int) ShellExecute(NULL, _S("open"), theURL.c_str(), NULL, NULL, SW_SHOWNORMAL) > 32)
 		{
 			return true;
 		}
@@ -1081,9 +1096,25 @@ bool SexyAppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
 	return true;
 }
 
-std::string SexyAppBase::GetProductVersion(const std::string& thePath)
+SexyString SexyAppBase::GetProductVersion(const SexyString& thePath)
 {	
 	// Dynamically Load Version.dll
+#ifdef _USE_WIDE_STRING
+	typedef DWORD(APIENTRY* GetFileVersionInfoSizeFunc)(LPWSTR lptstrFilename, LPDWORD lpdwHandle);
+	typedef BOOL(APIENTRY* GetFileVersionInfoFunc)(LPWSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData);
+	typedef BOOL(APIENTRY* VerQueryValueFunc)(const LPVOID pBlock, LPWSTR lpSubBlock, LPVOID* lplpBuffer, PUINT puLen);
+
+	static GetFileVersionInfoSizeFunc aGetFileVersionInfoSizeFunc = NULL;
+	static GetFileVersionInfoFunc aGetFileVersionInfoFunc = NULL;
+	static VerQueryValueFunc aVerQueryValueFunc = NULL;
+
+	if (aGetFileVersionInfoSizeFunc == NULL)
+	{
+		aGetFileVersionInfoSizeFunc = (GetFileVersionInfoSizeFunc)GetProcAddress(gVersionDLL, "GetFileVersionInfoSizeW");
+		aGetFileVersionInfoFunc = (GetFileVersionInfoFunc)GetProcAddress(gVersionDLL, "GetFileVersionInfoW");
+		aVerQueryValueFunc = (VerQueryValueFunc)GetProcAddress(gVersionDLL, "VerQueryValueW");
+	}
+#else
 	typedef DWORD (APIENTRY *GetFileVersionInfoSizeFunc)(LPSTR lptstrFilename, LPDWORD lpdwHandle);
 	typedef BOOL (APIENTRY *GetFileVersionInfoFunc)(LPSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData);
 	typedef BOOL (APIENTRY *VerQueryValueFunc)(const LPVOID pBlock, LPSTR lpSubBlock, LPVOID * lplpBuffer, PUINT puLen);
@@ -1098,25 +1129,26 @@ std::string SexyAppBase::GetProductVersion(const std::string& thePath)
 		aGetFileVersionInfoFunc = (GetFileVersionInfoFunc)GetProcAddress(gVersionDLL,"GetFileVersionInfoA");
 		aVerQueryValueFunc = (VerQueryValueFunc)GetProcAddress(gVersionDLL,"VerQueryValueA");
 	}
+#endif
 
 	// Get Product Version
-	std::string aProductVersion;
+	SexyString aProductVersion;
 	
-	uint aSize = aGetFileVersionInfoSizeFunc((char*) thePath.c_str(), 0);
+	uint aSize = aGetFileVersionInfoSizeFunc((SexyChar*) thePath.c_str(), 0);
 	if (aSize > 0)		
 	{
 		uchar* aVersionBuffer = new uchar[aSize];
-		aGetFileVersionInfoFunc((char*) thePath.c_str(), 0, aSize, aVersionBuffer);
-		char* aBuffer;
+		aGetFileVersionInfoFunc((SexyChar*) thePath.c_str(), 0, aSize, aVersionBuffer);
+		SexyChar* aBuffer;
 		if (aVerQueryValueFunc(aVersionBuffer, 
-				  "\\StringFileInfo\\040904B0\\ProductVersion", 
+				  _S("\\StringFileInfo\\040904B0\\ProductVersion"), 
 				  (void**) &aBuffer, 
 				  &aSize))
 		{
 			aProductVersion = aBuffer;
 		}
 		else if (aVerQueryValueFunc(aVersionBuffer, 
-				  "\\StringFileInfo\\040904E4\\ProductVersion", 
+				  _S("\\StringFileInfo\\040904E4\\ProductVersion"), 
 				  (void**) &aBuffer, 
 				  &aSize))
 		{
@@ -1154,22 +1186,33 @@ void SexyAppBase::TakeScreenshot()
 	MkDir(anImageDir);
 	anImageDir += _S("/");
 
-	WIN32_FIND_DATAA aData;
+#ifdef _USE_WIDE_STRING
+	WIN32_FIND_DATAW aData;
 	int aMaxId = 0;
 	SexyString anImagePrefix = _S("image");
-	HANDLE aHandle = FindFirstFile((anImageDir + _S("*.png")).c_str(), &aData);
+	HANDLE aHandle = FindFirstFileW((anImageDir + _S("*.png")).c_str(), &aData);
+#else 
+	WIN32_FIND_DATAA aData;
+	int aMaxId = 0;
+	SexyString anImagePrefix = "image";
+	HANDLE aHandle = FindFirstFileA((anImageDir + "*.png").c_str(), &aData);
+#endif
 	if (aHandle!=INVALID_HANDLE_VALUE)
 	{
 		do {
 			int aNum = 0;
-			if (sexysscanf(StringToSexyString(aData.cFileName).c_str(), (anImagePrefix + _S("%d.png")).c_str(), &aNum) == 1)
+			if (sexysscanf(aData.cFileName, (anImagePrefix + _S("%d.png")).c_str(), &aNum) == 1)
 			{
 				if (aNum>aMaxId)
 					aMaxId = aNum;
 			}
 
 		} 
-		while(FindNextFileA(aHandle,&aData));
+#ifdef _USE_WIDE_STRING
+		while(FindNextFileW(aHandle,&aData));
+#else 
+		while (FindNextFileA(aHandle, &aData));
+#endif
 		FindClose(aHandle);
 	}
 
@@ -1241,16 +1284,16 @@ void SexyAppBase::TakeScreenshot()
 
 void SexyAppBase::DumpProgramInfo()
 {
-	Deltree(GetAppDataFolder() + "_dump");
+	Deltree(GetAppDataFolder() + _S("_dump"));
 
 	for (;;)
 	{
-		if (mkdir((GetAppDataFolder() + "_dump").c_str()))
+		if (sexymkdir((GetAppDataFolder() + _S("_dump")).c_str()))
 			break;
 		Sleep(100);
 	}
 
-	std::fstream aDumpStream((GetAppDataFolder() + "_dump\\imagelist.html").c_str(), std::ios::out);
+	std::fstream aDumpStream((GetAppDataFolder() + _S("_dump\\imagelist.html")).c_str(), std::ios::out);
 
 	time_t aTime;
 	time(&aTime);
@@ -1336,11 +1379,11 @@ void SexyAppBase::DumpProgramInfo()
 	{
 		MemoryImage* aMemoryImage = aSortedItr->second;				
 
-		char anImageName[256];
-		sprintf(anImageName, "img%04d.png", anImgNum);
+		SexyChar anImageName[256];
+		sexysprintf(anImageName, _S("img%04d.png"), anImgNum);
 
-		char aThumbName[256];
-		sprintf(aThumbName, "thumb%04d.jpg", anImgNum);
+		SexyChar aThumbName[256];
+		sexysprintf(aThumbName, _S("thumb%04d.jpg"), anImgNum);
 		
 		aDumpStream << "<TR>" << std::endl;
 
@@ -1439,7 +1482,7 @@ void SexyAppBase::DumpProgramInfo()
 				*(aThumbBitsPtr++) = aBits[aSrcX + (aSrcY*aCopiedImage.mWidth)];
 			}
 
-		ImageLib::WriteJPEGImage((GetAppDataFolder() + std::string("_dump\\") + aThumbName).c_str(), &anImageLibImage);
+		ImageLib::WriteJPEGImage((GetAppDataFolder() + SexyString(_S("_dump\\")) + aThumbName).c_str(), &anImageLibImage);
 
 		// Write high resolution image
 
@@ -1448,7 +1491,7 @@ void SexyAppBase::DumpProgramInfo()
 		anFullImage.mWidth = aCopiedImage.GetWidth();
 		anFullImage.mHeight = aCopiedImage.GetHeight();
 
-		ImageLib::WritePNGImage((GetAppDataFolder() + std::string("_dump\\") + anImageName).c_str(), &anFullImage);
+		ImageLib::WritePNGImage((GetAppDataFolder() + SexyString(_S("_dump\\")) + anImageName).c_str(), &anFullImage);
 
 		anFullImage.mBits = NULL;
 
@@ -1486,7 +1529,7 @@ double SexyAppBase::GetLoadingThreadProgress()
 	return min(mCompletedLoadingThreadTasks / (double) mNumLoadingThreadTasks, 1.0);
 }
 
-bool SexyAppBase::RegistryWrite(const std::string& theValueName, ulong theType, const uchar* theValue, ulong theLength)
+bool SexyAppBase::RegistryWrite(const SexyString& theValueName, ulong theType, const uchar* theValue, ulong theLength)
 {
 	if (mRegKey.length() == 0)
 		return false;
@@ -1507,13 +1550,13 @@ bool SexyAppBase::RegistryWrite(const std::string& theValueName, ulong theType, 
 
 	HKEY aGameKey;
 	
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
-	std::string aValueName;
+	SexyString aKeyName = RemoveTrailingSlash(_S("SOFTWARE\\") + mRegKey);
+	SexyString aValueName;
 
-	int aSlashPos = (int) theValueName.rfind('\\');
+	int aSlashPos = (int) theValueName.rfind(_S('\\'));
 	if (aSlashPos != -1)
 	{
-		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
+		aKeyName += _S("\\") + theValueName.substr(0, aSlashPos);
 		aValueName = theValueName.substr(aSlashPos + 1);
 	}
 	else
@@ -1521,6 +1564,30 @@ bool SexyAppBase::RegistryWrite(const std::string& theValueName, ulong theType, 
 		aValueName = theValueName;
 	}
 
+#ifdef _USE_WIDE_STRING
+	int aResult = RegOpenKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
+	if (aResult != ERROR_SUCCESS)
+	{
+		ulong aDisp;
+		aResult = RegCreateKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, _S("Key"), REG_OPTION_NON_VOLATILE,
+			KEY_ALL_ACCESS, NULL, &aGameKey, &aDisp);
+	}
+
+	if (aResult != ERROR_SUCCESS)
+	{
+		if (mRecordingDemoBuffer)
+		{
+			WriteDemoTimingBlock();
+			mDemoBuffer.WriteNumBits(0, 1);
+			mDemoBuffer.WriteNumBits(DEMO_REGISTRY_WRITE, 5);
+			mDemoBuffer.WriteNumBits(0, 1); // failure
+		}
+
+		return false;
+	}
+
+	RegSetValueExW(aGameKey, aValueName.c_str(), 0, theType, theValue, theLength);
+#else 
 	int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
 	if (aResult != ERROR_SUCCESS)
 	{
@@ -1541,8 +1608,9 @@ bool SexyAppBase::RegistryWrite(const std::string& theValueName, ulong theType, 
 
 		return false;
 	}
-		
+
 	RegSetValueExA(aGameKey, aValueName.c_str(), 0, theType, theValue, theLength);
+#endif
 	RegCloseKey(aGameKey);
 
 	if (mRecordingDemoBuffer)
@@ -1556,46 +1624,46 @@ bool SexyAppBase::RegistryWrite(const std::string& theValueName, ulong theType, 
 	return true;
 }
 
-bool SexyAppBase::RegistryWriteString(const std::string& theValueName, const std::string& theString)
+bool SexyAppBase::RegistryWriteString(const SexyString& theValueName, const SexyString& theString)
 {
 	return RegistryWrite(theValueName, REG_SZ, (uchar*) theString.c_str(), theString.length());
 }
 
-bool SexyAppBase::RegistryWriteInteger(const std::string& theValueName, int theValue)
+bool SexyAppBase::RegistryWriteInteger(const SexyString& theValueName, int theValue)
 {
 	return RegistryWrite(theValueName, REG_DWORD, (uchar*) &theValue, sizeof(int));
 }
 
-bool SexyAppBase::RegistryWriteBoolean(const std::string& theValueName, bool theValue)
+bool SexyAppBase::RegistryWriteBoolean(const SexyString& theValueName, bool theValue)
 {
 	int aValue = theValue ? 1 : 0;
 	return RegistryWrite(theValueName, REG_DWORD, (uchar*) &aValue, sizeof(int));
 }
 
-bool SexyAppBase::RegistryWriteData(const std::string& theValueName, const uchar* theValue, ulong theLength)
+bool SexyAppBase::RegistryWriteData(const SexyString& theValueName, const uchar* theValue, ulong theLength)
 {
 	return RegistryWrite(theValueName, REG_BINARY, (uchar*) theValue, theLength);
 }
 
 void SexyAppBase::WriteToRegistry()
 {	
-	RegistryWriteInteger("MusicVolume", (int) (mMusicVolume * 100));
-	RegistryWriteInteger("SfxVolume", (int) (mSfxVolume * 100));
-	RegistryWriteInteger("Muted", (mMuteCount - mAutoMuteCount > 0) ? 1 : 0);
-	RegistryWriteInteger("ScreenMode", mIsWindowed ? 0 : 1);
-	RegistryWriteInteger("PreferredX", mPreferredX);
-	RegistryWriteInteger("PreferredY", mPreferredY);
-	RegistryWriteInteger("PreferredWIDTH", mPreferredWIDTH);
-	RegistryWriteInteger("PreferredHEIGHT", mPreferredHEIGHT);
-	RegistryWriteInteger("PreferredMAXIMIZED", mPreferredMAXIMIZED);
-	RegistryWriteInteger("CustomCursors", mCustomCursorsEnabled ? 1 : 0);		
-	RegistryWriteInteger("InProgress", 0);
-	RegistryWriteBoolean("WaitForVSync", mWaitForVSync);	
+	RegistryWriteInteger(_S("MusicVolume"), (int) (mMusicVolume * 100));
+	RegistryWriteInteger(_S("SfxVolume"), (int) (mSfxVolume * 100));
+	RegistryWriteInteger(_S("Muted"), (mMuteCount - mAutoMuteCount > 0) ? 1 : 0);
+	RegistryWriteInteger(_S("ScreenMode"), mIsWindowed ? 0 : 1);
+	RegistryWriteInteger(_S("PreferredX"), mPreferredX);
+	RegistryWriteInteger(_S("PreferredY"), mPreferredY);
+	RegistryWriteInteger(_S("PreferredWIDTH"), mPreferredWIDTH);
+	RegistryWriteInteger(_S("PreferredHEIGHT"), mPreferredHEIGHT);
+	RegistryWriteInteger(_S("PreferredMAXIMIZED"), mPreferredMAXIMIZED);
+	RegistryWriteInteger(_S("CustomCursors"), mCustomCursorsEnabled ? 1 : 0);		
+	RegistryWriteInteger(_S("InProgress"), 0);
+	RegistryWriteBoolean(_S("WaitForVSync"), mWaitForVSync);	
 }
 
-bool SexyAppBase::RegistryEraseKey(const std::string& _theKeyName)
+bool SexyAppBase::RegistryEraseKey(const SexyString& _theKeyName)
 {
-	std::string theKeyName = _theKeyName;
+	SexyString theKeyName = _theKeyName;
 	if (mRegKey.length() == 0)
 		return false;
 
@@ -1613,9 +1681,13 @@ bool SexyAppBase::RegistryEraseKey(const std::string& _theKeyName)
 		return mDemoBuffer.ReadNumBits(1, false) != 0;		
 	}	
 	
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey) + "\\" + theKeyName;
+	SexyString aKeyName = RemoveTrailingSlash(_S("SOFTWARE\\") + mRegKey) + _S("\\") + theKeyName;
 
+#ifdef _USE_WIDE_STRING
+	int aResult = RegDeleteKeyW(HKEY_CURRENT_USER, aKeyName.c_str());
+#else
 	int aResult = RegDeleteKeyA(HKEY_CURRENT_USER, aKeyName.c_str());
+#endif
 	if (aResult != ERROR_SUCCESS)
 	{
 		if (mRecordingDemoBuffer)
@@ -1640,20 +1712,20 @@ bool SexyAppBase::RegistryEraseKey(const std::string& _theKeyName)
 	return true;
 }
 
-void SexyAppBase::RegistryEraseValue(const std::string& _theValueName)
+void SexyAppBase::RegistryEraseValue(const SexyString& _theValueName)
 {
-	std::string theValueName = _theValueName;
+	SexyString theValueName = _theValueName;
 	if (mRegKey.length() == 0)
 		return;
 
 	HKEY aGameKey;	
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
-	std::string aValueName;
+	SexyString aKeyName = RemoveTrailingSlash(_S("SOFTWARE\\") + mRegKey);
+	SexyString aValueName;
 
-	int aSlashPos = (int) theValueName.rfind('\\');
+	int aSlashPos = (int) theValueName.rfind(_S('\\'));
 	if (aSlashPos != -1)
 	{
-		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
+		aKeyName += _S("\\") + theValueName.substr(0, aSlashPos);
 		aValueName = theValueName.substr(aSlashPos + 1);
 	}
 	else
@@ -1661,15 +1733,24 @@ void SexyAppBase::RegistryEraseValue(const std::string& _theValueName)
 		aValueName = theValueName;
 	}
 
+#ifdef _USE_WIDE_STRING
+	int aResult = RegOpenKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
+	if (aResult == ERROR_SUCCESS)
+	{
+		RegDeleteValueW(aGameKey, aValueName.c_str());
+		RegCloseKey(aGameKey);
+	}
+#else
 	int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
 	if (aResult == ERROR_SUCCESS)
-	{		
+	{
 		RegDeleteValueA(aGameKey, aValueName.c_str());
 		RegCloseKey(aGameKey);
 	}
+#endif
 }
 
-bool SexyAppBase::RegistryGetSubKeys(const std::string& theKeyName, StringVector* theSubKeys)
+bool SexyAppBase::RegistryGetSubKeys(const SexyString& theKeyName, StringVector* theSubKeys)
 {
 	theSubKeys->clear();
 
@@ -1702,16 +1783,23 @@ bool SexyAppBase::RegistryGetSubKeys(const std::string& theKeyName, StringVector
 	{
 		HKEY aKey;
 		
-		std::string aKeyName = RemoveTrailingSlash(RemoveTrailingSlash("SOFTWARE\\" + mRegKey) + "\\" + theKeyName);	
+		SexyString aKeyName = RemoveTrailingSlash(RemoveTrailingSlash(_S("SOFTWARE\\") + mRegKey) + _S("\\") + theKeyName);
+#ifdef _USE_WIDE_STRING
+		int aResult = RegOpenKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ, &aKey);
+#else 
 		int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ, &aKey);
+#endif
 		
 		if (aResult == ERROR_SUCCESS)
 		{		
 			for (int anIdx = 0; ; anIdx++)
 			{
-				char aStr[1024];
-
+				SexyChar aStr[1024];
+#ifdef _USE_WIDE_STRING
+				aResult = RegEnumKeyW(aKey, anIdx, aStr, 1024);
+#else
 				aResult = RegEnumKeyA(aKey, anIdx, aStr, 1024);
+#endif
 				if (aResult != ERROR_SUCCESS)
 					break;
 
@@ -1749,12 +1837,12 @@ bool SexyAppBase::RegistryGetSubKeys(const std::string& theKeyName, StringVector
 	}
 }
 
-bool SexyAppBase::RegistryRead(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength)
+bool SexyAppBase::RegistryRead(const SexyString& theValueName, ulong* theType, uchar* theValue, ulong* theLength)
 {
 	return RegistryReadKey(theValueName, theType, theValue, theLength, HKEY_CURRENT_USER);
 }
 
-bool SexyAppBase::RegistryReadKey(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength, HKEY theKey)
+bool SexyAppBase::RegistryReadKey(const SexyString& theValueName, ulong* theType, uchar* theValue, ulong* theLength, HKEY theKey)
 {
 	if (mRegKey.length() == 0)
 		return false;
@@ -1795,13 +1883,13 @@ bool SexyAppBase::RegistryReadKey(const std::string& theValueName, ulong* theTyp
 	{		
 		HKEY aGameKey;
 
-		std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
-		std::string aValueName;
+		SexyString aKeyName = RemoveTrailingSlash(_S("SOFTWARE\\") + mRegKey);
+		SexyString aValueName;
 
-		int aSlashPos = (int) theValueName.rfind('\\');
+		int aSlashPos = (int) theValueName.rfind(_S('\\'));
 		if (aSlashPos != -1)
 		{
-			aKeyName += "\\" + theValueName.substr(0, aSlashPos);
+			aKeyName += _S("\\") + theValueName.substr(0, aSlashPos);
 			aValueName = theValueName.substr(aSlashPos + 1);
 		}
 		else
@@ -1809,10 +1897,17 @@ bool SexyAppBase::RegistryReadKey(const std::string& theValueName, ulong* theTyp
 			aValueName = theValueName;
 		}		
 
+#ifdef _USE_WIDE_STRING
+		if (RegOpenKeyExW(theKey, aKeyName.c_str(), 0, KEY_READ, &aGameKey) == ERROR_SUCCESS)
+		{
+			if (RegQueryValueExW(aGameKey, aValueName.c_str(), 0, theType, (uchar*)theValue, theLength) == ERROR_SUCCESS)
+			{
+#else
 		if (RegOpenKeyExA(theKey, aKeyName.c_str(), 0, KEY_READ, &aGameKey) == ERROR_SUCCESS)
 		{
 			if (RegQueryValueExA(aGameKey, aValueName.c_str(), 0, theType, (uchar*) theValue, theLength) == ERROR_SUCCESS)
 			{
+#endif
 				if (mRecordingDemoBuffer)
 				{
 					WriteDemoTimingBlock();
@@ -1843,9 +1938,9 @@ bool SexyAppBase::RegistryReadKey(const std::string& theValueName, ulong* theTyp
 	}
 }
 
-bool SexyAppBase::RegistryReadString(const std::string& theKey, std::string* theString)
+bool SexyAppBase::RegistryReadString(const SexyString& theKey, SexyString* theString)
 {
-	char aStr[1024];
+	SexyChar aStr[1024];
 	
 	ulong aType;	
 	ulong aLen = sizeof(aStr) - 1;
@@ -1861,7 +1956,7 @@ bool SexyAppBase::RegistryReadString(const std::string& theKey, std::string* the
 	return true;
 }
 
-bool SexyAppBase::RegistryReadInteger(const std::string& theKey, int* theValue)
+bool SexyAppBase::RegistryReadInteger(const SexyString& theKey, int* theValue)
 {
 	ulong aType;
 	ulong aLong;
@@ -1876,7 +1971,7 @@ bool SexyAppBase::RegistryReadInteger(const std::string& theKey, int* theValue)
 	return true;
 }
 
-bool SexyAppBase::RegistryReadBoolean(const std::string& theKey, bool* theValue)
+bool SexyAppBase::RegistryReadBoolean(const SexyString& theKey, bool* theValue)
 {
 	int aValue;
 	if (!RegistryReadInteger(theKey, &aValue))
@@ -1886,7 +1981,7 @@ bool SexyAppBase::RegistryReadBoolean(const std::string& theKey, bool* theValue)
 	return true;
 }
 
-bool SexyAppBase::RegistryReadData(const std::string& theKey, uchar* theValue, ulong* theLength)
+bool SexyAppBase::RegistryReadData(const SexyString& theKey, uchar* theValue, ulong* theLength)
 {		
 	ulong aType;
 	ulong aLen = *theLength;
@@ -1902,40 +1997,40 @@ bool SexyAppBase::RegistryReadData(const std::string& theKey, uchar* theValue, u
 void SexyAppBase::ReadFromRegistry()
 {
 	mReadFromRegistry = true;
-	mRegKey = SexyStringToString(GetString("RegistryKey", StringToSexyString(mRegKey)));
+	mRegKey = GetString(_S("RegistryKey"), mRegKey);
 
 	if (mRegKey.length() == 0)
 		return;				
 
 	int anInt;
-	if (RegistryReadInteger("MusicVolume", &anInt))
+	if (RegistryReadInteger(_S("MusicVolume"), &anInt))
 		mMusicVolume = anInt / 100.0;
 	
-	if (RegistryReadInteger("SfxVolume", &anInt))
+	if (RegistryReadInteger(_S("SfxVolume"), &anInt))
 		mSfxVolume = anInt / 100.0;
 
-	if (RegistryReadInteger("Muted", &anInt))
+	if (RegistryReadInteger(_S("Muted"), &anInt))
 		mMuteCount = anInt;
 
-	if (RegistryReadInteger("ScreenMode", &anInt))
+	if (RegistryReadInteger(_S("ScreenMode"), &anInt))
 		mIsWindowed = anInt == 0;
 
-	RegistryReadInteger("PreferredX", &mPreferredX);
-	RegistryReadInteger("PreferredY", &mPreferredY);
-	RegistryReadInteger("PreferredWIDTH", &mPreferredWIDTH);
-	RegistryReadInteger("PreferredHEIGHT", &mPreferredHEIGHT);
-	RegistryReadBoolean("PreferredMAXIMIZED", &mPreferredMAXIMIZED);
+	RegistryReadInteger(_S("PreferredX"), &mPreferredX);
+	RegistryReadInteger(_S("PreferredY"), &mPreferredY);
+	RegistryReadInteger(_S("PreferredWIDTH"), &mPreferredWIDTH);
+	RegistryReadInteger(_S("PreferredHEIGHT"), &mPreferredHEIGHT);
+	RegistryReadBoolean(_S("PreferredMAXIMIZED"), &mPreferredMAXIMIZED);
 
-	if (RegistryReadInteger("CustomCursors", &anInt))
+	if (RegistryReadInteger(_S("CustomCursors"), &anInt))
 		EnableCustomCursors(anInt != 0);	
 			
-	RegistryReadBoolean("WaitForVSync", &mWaitForVSync);	
+	RegistryReadBoolean(_S("WaitForVSync"), &mWaitForVSync);
 
-	if (RegistryReadInteger("InProgress", &anInt))
+	if (RegistryReadInteger(_S("InProgress"), &anInt))
 		mLastShutdownWasGraceful = anInt == 0;
 		
 	if (!IsScreenSaver())
-		RegistryWriteInteger("InProgress", 1);	
+		RegistryWriteInteger(_S("InProgress"), 1);
 }
 
 bool SexyAppBase::WriteBytesToFile(const SexyString& theFileName, const void *theData, unsigned long theDataLen)
@@ -2021,7 +2116,7 @@ bool SexyAppBase::ReadBufferFromFile(const SexyString& theFileName, Buffer* theB
 	}
 	else
 	{
-		PFILE* aFP = p_fopen(theFileName.c_str(), "rb");
+		PFILE* aFP = p_fopen(theFileName.c_str(), _S("rb"));
 
 		if (aFP == NULL)
 		{
@@ -2064,7 +2159,7 @@ bool SexyAppBase::ReadBufferFromFile(const SexyString& theFileName, Buffer* theB
 	}
 }
 
-bool SexyAppBase::FileExists(const std::string& theFileName)
+bool SexyAppBase::FileExists(const SexyString& theFileName)
 {
 	if (mPlayingDemoBuffer)
 	{
@@ -2082,7 +2177,7 @@ bool SexyAppBase::FileExists(const std::string& theFileName)
 	}
 	else
 	{
-		PFILE* aFP = p_fopen(theFileName.c_str(), "rb");
+		PFILE* aFP = p_fopen(theFileName.c_str(), _S("rb"));
 
 		if (mRecordingDemoBuffer)
 		{
@@ -2100,12 +2195,15 @@ bool SexyAppBase::FileExists(const std::string& theFileName)
 	}
 }
 
-bool SexyAppBase::EraseFile(const std::string& theFileName)
+bool SexyAppBase::EraseFile(const SexyString& theFileName)
 {
 	if (mPlayingDemoBuffer)
 		return true;
-
+#ifdef _USE_WIDE_STRING
+	return DeleteFileW(theFileName.c_str()) != 0;
+#else
 	return DeleteFileA(theFileName.c_str()) != 0;
+#endif
 }
 
 void SexyAppBase::SEHOccured()
@@ -2116,24 +2214,24 @@ void SexyAppBase::SEHOccured()
 	EnforceCursor();
 }
 
-std::string SexyAppBase::GetGameSEHInfo()
+SexyString SexyAppBase::GetGameSEHInfo()
 {
 	int aSecLoaded = (GetTickCount() - mTimeLoaded) / 1000;
 
-	char aTimeStr[16];
-	sprintf(aTimeStr, "%02d:%02d:%02d", (aSecLoaded/60/60), (aSecLoaded/60)%60, aSecLoaded%60);
+	SexyChar aTimeStr[16];
+	sexysprintf(aTimeStr, _S("%02d:%02d:%02d"), (aSecLoaded/60/60), (aSecLoaded/60)%60, aSecLoaded%60);
 	
-	char aThreadIdStr[16];
-	sprintf(aThreadIdStr, "%X", mPrimaryThreadId);
+	SexyChar aThreadIdStr[16];
+	sexysprintf(aThreadIdStr, _S("%X"), mPrimaryThreadId);
 
-	std::string anInfoString = 
-		"Product: " + mProdName + "\r\n" +
-		"Version: " + mProductVersion + "\r\n";
+	SexyString anInfoString = 
+		_S("Product: ") + mProdName + _S("\r\n") +
+		_S("Version: ") + mProductVersion + _S("\r\n");
 
 	anInfoString +=
-		"Time Loaded: " + std::string(aTimeStr) + "\r\n"
-		"Fullscreen: " + (mIsWindowed ? std::string("No") : std::string("Yes")) + "\r\n"
-		"Primary ThreadId: " + aThreadIdStr + "\r\n";	
+		_S("Time Loaded: ") + SexyString(aTimeStr) + _S("\r\n")
+		_S("Fullscreen: ") + (mIsWindowed ? SexyString(_S("No")) : SexyString(_S("Yes"))) + _S("\r\n")
+		_S("Primary ThreadId: ") + aThreadIdStr + _S("\r\n");
 
 	return anInfoString;						
 }
@@ -2324,7 +2422,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 			{
 				if (mForceWindowed)
 				{
-					Popup(GetString("PLEASE_SET_COLOR_DEPTH", _S("Please set your desktop color depth to 16 bit."))); 
+					Popup(GetString(_S("PLEASE_SET_COLOR_DEPTH"), _S("Please set your desktop color depth to 16 bit."))); 
 					Shutdown();
 					return;
 				}
@@ -2709,18 +2807,19 @@ bool SexyAppBase::DrawDirtyStuff()
 	}
 }
 
-void SexyAppBase::LogScreenSaverError(const std::string &theError)
+void SexyAppBase::LogScreenSaverError(const SexyString &theError)
 {
 	static bool firstTime = true;
-	char aBuf[512];
+	SexyChar aBuf[512];
 
-	const char *aFlag = firstTime?"w":"a+";
+	const SexyChar*aFlag = firstTime?_S("w"):_S("a+");
 	firstTime = false;
 
-	FILE *aFile = fopen("ScrError.txt",aFlag);
+	FILE *aFile = sexyfopen(_S("ScrError.txt"),aFlag);
 	if (aFile != NULL)
 	{
-		fprintf(aFile,"%s %s %u\n",theError.c_str(),_strtime(aBuf),GetTickCount());
+		
+		sexyfprintf(aFile,_S("%s %s %u\n"),theError.c_str(),sexy_strtime(aBuf),GetTickCount());
 		fclose(aFile);
 	}
 }
@@ -2752,7 +2851,7 @@ void SexyAppBase::EndPopup()
 	}
 }
 
-int SexyAppBase::MsgBox(const std::string& theText, const std::string& theTitle, int theFlags)
+int SexyAppBase::MsgBox(const SexyString& theText, const SexyString& theTitle, int theFlags)
 {
 //	if (mDDInterface && mDDInterface->mDD)
 //		mDDInterface->mDD->FlipToGDISurface();
@@ -2763,7 +2862,7 @@ int SexyAppBase::MsgBox(const std::string& theText, const std::string& theTitle,
 	}
 
 	BeginPopup();
-	int aResult = MessageBoxA(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
+	int aResult = MessageBox(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
 	EndPopup();
 
 	return aResult;
@@ -2775,7 +2874,7 @@ int SexyAppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitl
 //		mDDInterface->mDD->FlipToGDISurface();
 	if (IsScreenSaver())
 	{
-		LogScreenSaverError(WStringToString(theText));
+		LogScreenSaverError(theText);
 		return IDOK;
 	}
 
@@ -2786,7 +2885,7 @@ int SexyAppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitl
 	return aResult;
 }
 
-void SexyAppBase::Popup(const std::string& theString)
+void SexyAppBase::Popup(const SexyString& theString)
 {
 	if (IsScreenSaver())
 	{
@@ -2796,7 +2895,7 @@ void SexyAppBase::Popup(const std::string& theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		::MessageBoxA(mHWnd, theString.c_str(), SexyStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+		::MessageBox(mHWnd, theString.c_str(), GetString(_S("FATAL_ERROR"), _S("FATAL ERROR")).c_str(), MB_APPLMODAL | MB_ICONSTOP);
 	EndPopup();
 }
 
@@ -2804,13 +2903,13 @@ void SexyAppBase::Popup(const std::wstring& theString)
 {
 	if (IsScreenSaver())
 	{
-		LogScreenSaverError(WStringToString(theString));
+		LogScreenSaverError(theString);
 		return;
 	}
 
 	BeginPopup();
 	if (!mShutdown)
-		::MessageBoxW(mHWnd, theString.c_str(), SexyStringToWString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+		::MessageBoxW(mHWnd, theString.c_str(), GetString(_S("FATAL_ERROR"), _S("FATAL ERROR")).c_str(), MB_APPLMODAL | MB_ICONSTOP);
 	EndPopup();
 }
 
@@ -2825,10 +2924,14 @@ void SexyAppBase::SafeDeleteWidget(Widget* theWidget)
 BOOL CALLBACK EnumCloseThing2(HWND hwnd, LPARAM lParam)
 {
 	//CloseWindow(hwnd);
-	char aClassName[256];
+	SexyChar aClassName[256];
+#ifdef _USE_WIDE_STRING
+	if (GetClassNameW(hwnd, aClassName, 256) != 0)
+#else
 	if (GetClassNameA(hwnd, aClassName, 256) != 0)
+#endif
 	{
-		if (strcmp(aClassName, "Internet Explorer_Server") == 0)
+		if (sexystrcmp(aClassName, _S("Internet Explorer_Server")) == 0)
 		{
 			DestroyWindow(hwnd);			
 		}
@@ -2844,10 +2947,14 @@ BOOL CALLBACK EnumCloseThing2(HWND hwnd, LPARAM lParam)
 BOOL CALLBACK EnumCloseThing(HWND hwnd, LPARAM lParam)
 {
 	//CloseWindow(hwnd);
-	char aClassName[256];
+	SexyChar aClassName[256];
+#ifdef _USE_WIDE_STRING
+	if (GetClassNameW(hwnd, aClassName, 256) != 0)
+#else
 	if (GetClassNameA(hwnd, aClassName, 256) != 0)
+#endif
 	{
-		if (strcmp(aClassName, "AmWBC_WClass") == 0)
+		if (sexystrcmp(aClassName, _S("AmWBC_WClass")) == 0)
 		{
 			EnumChildWindows(hwnd, EnumCloseThing2, lParam);
 		}
@@ -3038,10 +3145,16 @@ static INT_PTR CALLBACK JumpToTimeDialogProc(HWND hwnd, UINT msg, WPARAM wParam,
 					GetWindowTextA(anEdit,aBuf,500);
 
 					HKEY aGameKey;
-					std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + gSexyAppBase->mRegKey);
+					SexyString aKeyName = RemoveTrailingSlash(_S("SOFTWARE\\") + gSexyAppBase->mRegKey);
+#ifdef _USE_WIDE_STRING
+					if (RegOpenKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ | KEY_WRITE, &aGameKey) == ERROR_SUCCESS)
+					{
+						RegSetValueExW(aGameKey, _S("DemoJumpTime"), 0, REG_SZ, (const BYTE*)aBuf, strlen(aBuf) + 1);
+#else
 					if (RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ | KEY_WRITE, &aGameKey) == ERROR_SUCCESS)
 					{
 						RegSetValueExA(aGameKey, "DemoJumpTime", 0, REG_SZ, (const BYTE*)aBuf, strlen(aBuf)+1);
+#endif
 						RegCloseKey(aGameKey);
 					}
 
@@ -6441,8 +6554,8 @@ void SexyAppBase::Init()
 	if (gDDrawDLL==NULL || gDSoundDLL==NULL)
 	{
 		MessageBox(NULL, 
-						GetString("APP_REQUIRES_DIRECTX", _S("This application requires DirectX to run.  You can get DirectX at http://www.microsoft.com/directx")).c_str(),
-						GetString("YOU_NEED_DIRECTX", _S("You need DirectX")).c_str(), 
+						GetString(_S("APP_REQUIRES_DIRECTX"), _S("This application requires DirectX to run.  You can get DirectX at http://www.microsoft.com/directx")).c_str(),
+						GetString(_S("YOU_NEED_DIRECTX"), _S("You need DirectX")).c_str(), 
 						MB_OK | MB_ICONERROR);
 		DoExit(0);
 	}	
@@ -6453,17 +6566,17 @@ void SexyAppBase::Init()
 	if (CheckForVista())
 	{
 		HMODULE aMod;
-		SHGetFolderPathFunc aFunc = (SHGetFolderPathFunc)GetSHGetFolderPath("shell32.dll", &aMod);
+		SHGetFolderPathFunc aFunc = (SHGetFolderPathFunc)GetSHGetFolderPath(_S("shell32.dll"), &aMod);
 		if (aFunc == NULL || aMod == NULL)
-			SHGetFolderPathFunc aFunc = (SHGetFolderPathFunc)GetSHGetFolderPath("shfolder.dll", &aMod);
+			SHGetFolderPathFunc aFunc = (SHGetFolderPathFunc)GetSHGetFolderPath(_S("shfolder.dll"), &aMod);
 
 		if (aMod != NULL)
 		{
-			char aPath[MAX_PATH];
+			SexyChar aPath[MAX_PATH];
 			aFunc(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, aPath);
 
-			std::string aDataPath = RemoveTrailingSlash(aPath) + "\\" + mFullCompanyName + "\\" + mProdName;
-			SetAppDataFolder(aDataPath + "\\");
+			SexyString aDataPath = RemoveTrailingSlash(aPath) + _S("\\") + mFullCompanyName + _S("\\") + mProdName;
+			SetAppDataFolder(aDataPath + _S("\\"));
 			//MkDir(aDataPath);
 			//AllowAllAccess(aDataPath);
 			if (mDemoFileName.length() < 2 || (mDemoFileName[1] != ':' && mDemoFileName[2] != '\\'))
@@ -6489,20 +6602,24 @@ void SexyAppBase::Init()
 
 	// Change directory
 	if (!ChangeDirHook(mChangeDirTo.c_str()))
-		chdir(mChangeDirTo.c_str());
+		sexychdir(mChangeDirTo.c_str());
 
 
 	WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-	if (GetFileAttributesEx("resource.pak", GetFileExInfoStandard, &fileInfo) != 0)
+#ifdef _USE_WIDE_STRING
+	if (GetFileAttributesExW(_S("resource.pak"), GetFileExInfoStandard, &fileInfo) != 0)
+#else
+	if (GetFileAttributesExA("resource.pak", GetFileExInfoStandard, &fileInfo) != 0)
+#endif
 		gPakInterface->AddPakFile(_S("resource.pak"));
 
-	gPakInterface->AddPakFile(_S("resource.pak"));
+	gPakInterface->AddPakFile(_S("main.pak"));
 
 	// Create a message we can use to talk to ourselves inter-process
-	mNotifyGameMessage = RegisterWindowMessage((_S("Notify") + StringToSexyString(mProdName)).c_str());
+	mNotifyGameMessage = RegisterWindowMessage((_S("Notify") + mProdName).c_str());
 
 	// Create a globally unique mutex
-	mMutex = CreateMutex(NULL, TRUE, (StringToSexyString(mProdName) + _S("Mutex")).c_str());
+	mMutex = CreateMutex(NULL, TRUE, (mProdName + _S("Mutex")).c_str());
 	if (::GetLastError() == ERROR_ALREADY_EXISTS)
 		HandleGameAlreadyRunning();
 
@@ -6512,7 +6629,7 @@ void SexyAppBase::Init()
 	// Set up demo recording stuff
 	if (mPlayingDemoBuffer)
 	{
-		std::string anError;
+		SexyString anError;
 		if (!ReadDemoBuffer(anError))
 		{
 			mPlayingDemoBuffer = false;
@@ -6584,7 +6701,11 @@ void SexyAppBase::Init()
 		wc.cbWndExtra = 0;
 		wc.hbrBackground = NULL;
 		wc.hCursor = NULL;
+#ifdef _USE_WIDE_STRING
+		wc.hIcon = ::LoadIconW(gHInstance, _S("IDI_MAIN_ICON"));
+#else 
 		wc.hIcon = ::LoadIconA(gHInstance, "IDI_MAIN_ICON");
+#endif
 		wc.hInstance = gHInstance;
 		wc.lpfnWndProc = WindowProc;
 		wc.lpszClassName = _S("MainWindow");
@@ -6722,13 +6843,13 @@ void SexyAppBase::HandleGameAlreadyRunning()
 	}
 }
 
-void SexyAppBase::CopyToClipboard(const std::string& theString)
+void SexyAppBase::CopyToClipboard(const SexyString& theString)
 {
 	if (mPlayingDemoBuffer)
 		return;
 
 	HGLOBAL				aGlobalHandle;
-	char*				theData;	
+	SexyChar*				theData;	
 	WCHAR*				theWData;
 
 	if (OpenClipboard(mHWnd))
@@ -6736,29 +6857,37 @@ void SexyAppBase::CopyToClipboard(const std::string& theString)
 		EmptyClipboard();
 
 		aGlobalHandle = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, theString.length()+1);
-		theData = (char*) GlobalLock(aGlobalHandle);
-		strcpy(theData, theString.c_str());
+		theData = (SexyChar*) GlobalLock(aGlobalHandle);
+		sexystrcpy(theData, theString.c_str());
 		GlobalUnlock(aGlobalHandle);
 		SetClipboardData(CF_TEXT, aGlobalHandle);
 		SetClipboardData(CF_OEMTEXT, aGlobalHandle);		
 		SetClipboardData(CF_LOCALE, aGlobalHandle);
 
+#ifdef _USE_WIDE_STRING
+		int sizeInBytes = (theString.length() + 1) * sizeof(WCHAR);
+		HGLOBAL aGlobalHandle = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, sizeInBytes);
+		WCHAR* theWData = (WCHAR*)GlobalLock(aGlobalHandle);
+		memcpy(theWData, theString.c_str(), sizeInBytes);
+		GlobalUnlock(aGlobalHandle);
+		SetClipboardData(CF_UNICODETEXT, aGlobalHandle);
+#else
 		int aSize = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, theString.c_str(), theString.length(), NULL, 0);
 		aGlobalHandle = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, (aSize + 1) * sizeof(WCHAR));
-		theWData = (WCHAR*) GlobalLock(aGlobalHandle);
+		theWData = (WCHAR*)GlobalLock(aGlobalHandle);
 		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, theString.c_str(), theString.length(), theWData, aSize);
 		theWData[aSize] = '\0';
 		GlobalUnlock(aGlobalHandle);
 		SetClipboardData(CF_UNICODETEXT, aGlobalHandle);
-		
+#endif // ! _USE_WIDE_STRING
 		CloseClipboard();
 	}
 }
 
-std::string	SexyAppBase::GetClipboard()
+SexyString	SexyAppBase::GetClipboard()
 {
 	HGLOBAL				aGlobalHandle;	
-	std::string			aString;
+	SexyString		aString;
 
 	if (!mPlayingDemoBuffer)
 	{
@@ -6801,7 +6930,7 @@ void SexyAppBase::EnableCustomCursors(bool enabled)
 	EnforceCursor();
 }
 
-Sexy::DDImage* SexyAppBase::GetImage(const std::string& theFileName, bool commitBits)
+Sexy::DDImage* SexyAppBase::GetImage(const SexyString& theFileName, bool commitBits)
 {	
 	ImageLib::Image* aLoadedImage = ImageLib::GetImage(theFileName, true);
 	
@@ -7425,7 +7554,7 @@ void SexyAppBase::Set3DAcclerated(bool is3D, bool reinit)
 		}
 		else if (aResult != DDInterface::RESULT_OK)
 		{
-			Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) + StringToSexyString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
+			Popup(GetString(_S("FAILED_INIT_DIRECTDRAW"), _S("Failed to initialize DirectDraw: ")) + StringToSexyString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
 			DoExit(1);
 		}
 
@@ -7494,10 +7623,10 @@ void SexyAppBase::Set3DAcclerated(bool is3D, bool reinit)
 	}
 }
 
-SharedImageRef SexyAppBase::GetSharedImage(const std::string& theFileName, const std::string& theVariant, bool* isNew)
+SharedImageRef SexyAppBase::GetSharedImage(const SexyString& theFileName, const SexyString& theVariant, bool* isNew)
 {	
-	std::string anUpperFileName = StringToUpper(theFileName);
-	std::string anUpperVariant = StringToUpper(theVariant);
+	SexyString anUpperFileName = StringToUpper(theFileName);
+	SexyString anUpperVariant = StringToUpper(theVariant);
 
 	std::pair<SharedImageMap::iterator, bool> aResultPair;
 	SharedImageRef aSharedImageRef;
@@ -7514,7 +7643,7 @@ SharedImageRef SexyAppBase::GetSharedImage(const std::string& theFileName, const
 	if (aResultPair.second)
 	{
 		// Pass in a '!' as the first char of the file name to create a new image
-		if ((theFileName.length() > 0) && (theFileName[0] == '!'))
+		if ((theFileName.length() > 0) && (theFileName[0] == _S('!')))
 			aSharedImageRef.mSharedImage->mImage = new DDImage(mDDInterface);
 		else
 			aSharedImageRef.mSharedImage->mImage = GetImage(theFileName,false);
