@@ -5828,7 +5828,7 @@ void Board::UpdateZombieSpawning()
 	const bool isLastFlag = mCurrentWave == mNumWaves - 1;
 	const int health = TotalZombiesHealthInWave(mCurrentWave - 1);
 	const bool isFlag = IsFlagWave(mCurrentWave);
-	bool allowedToSkip = health <= mZombieHealthToNextWave && !isFlag;
+	bool allowedToSkip = health <= mZombieHealthToNextWave && (!isFlag || isLastFlag && mApp->IsSurvivalMode());
 	allowedToSkip |= health <= 0 && isFlag && (!mApp->IsSurvivalMode() || isLastFlag);
 
 	if (mZombieCountDown > 200 && mZombieCountDownStart - mZombieCountDown > 400 && allowedToSkip)
