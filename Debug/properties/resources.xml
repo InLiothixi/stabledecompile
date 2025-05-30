@@ -16,6 +16,7 @@
   <Image id="LOADBAR_DIRT" path="LoadBar_dirt" />
   <Image id="LOADBAR_GRASS" path="LoadBar_grass" />
   <Image id="PVZ_LOGO" path="PvZ_Logo" />
+  <Image id="SUBLOGO" path="sublogo" cols="5"/>
 
   <SetDefaults path="reanim" idprefix="IMAGE_REANIM_" />
   <Image id="SODROLLCAP" path="SodRollCap" />

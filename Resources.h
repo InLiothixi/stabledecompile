@@ -18,6 +18,7 @@ namespace Sexy
         IMAGE_LOADBAR_DIRT_ID,
         IMAGE_LOADBAR_GRASS_ID,
         IMAGE_PVZ_LOGO_ID,
+        IMAGE_SUBLOGO_ID,
         IMAGE_REANIM_SODROLLCAP_ID,
         FONT_BRIANNETOD16_ID,
         SOUND_BUTTONCLICK_ID,
@@ -1218,6 +1219,7 @@ namespace Sexy
     extern int          SOUND_SUKHBIR;                                          //0x6A7718
     extern Image* IMAGE_ZOMBIE_BOSS_FIREBALL_PARTICLES;                   //0x6A771C
     extern Image* IMAGE_PVZ_LOGO;                                         //0x6A7720
+    extern Image* IMAGE_SUBLOGO;
     extern Image* IMAGE_BACKGROUND5;                                      //0x6A7724
     extern int          SOUND_DIRT_RISE;                                        //0x6A7728
     extern Image* IMAGE_DIRTSMALL;                                        //0x6A772C
