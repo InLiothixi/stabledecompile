@@ -440,7 +440,7 @@ public:
 	int						GetCursor();
 	void					EnableCustomCursors(bool enabled);	
 	virtual DDImage*		GetImage(const SexyString& theFileName, bool commitBits = true);
-	virtual SharedImageRef	GetSharedImage(const SexyString& theFileName, const SexyString& theVariant = L"", bool* isNew = NULL);
+	virtual SharedImageRef	GetSharedImage(const SexyString& theFileName, const SexyString& theVariant = _S(""), bool* isNew = NULL);
 
 	void					CleanSharedImages();
 	void					PrecacheAdditive(MemoryImage* theImage);

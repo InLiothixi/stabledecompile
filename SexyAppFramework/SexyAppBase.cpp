@@ -2874,7 +2874,11 @@ int SexyAppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitl
 //		mDDInterface->mDD->FlipToGDISurface();
 	if (IsScreenSaver())
 	{
+#ifdef _USE_WIDE_STRING
 		LogScreenSaverError(theText);
+#else
+		LogScreenSaverError(WStringToSexyString(theText));
+#endif
 		return IDOK;
 	}
 
@@ -2903,13 +2907,25 @@ void SexyAppBase::Popup(const std::wstring& theString)
 {
 	if (IsScreenSaver())
 	{
+#ifdef _USE_WIDE_STRING
 		LogScreenSaverError(theString);
+#else
+		LogScreenSaverError(WStringToSexyString(theString));
+#endif
 		return;
 	}
 
 	BeginPopup();
 	if (!mShutdown)
-		::MessageBoxW(mHWnd, theString.c_str(), GetString(_S("FATAL_ERROR"), _S("FATAL ERROR")).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+	{
+#ifdef _USE_WIDE_STRING
+		SexyString err = GetString(_S("FATAL_ERROR"), _S("FATAL ERROR")).c_str();
+		::MessageBoxW(mHWnd, theString.c_str(), err, MB_APPLMODAL | MB_ICONSTOP);
+#else
+		SexyString err = GetString(_S("FATAL_ERROR"), _S("FATAL ERROR"));
+		::MessageBoxA(mHWnd, WStringToSexyStringFast(theString).c_str(), SexyStringToStringFast(err).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+#endif
+	}
 	EndPopup();
 }
 
