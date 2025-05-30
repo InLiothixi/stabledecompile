@@ -124,7 +124,7 @@ LawnApp::LawnApp()
 	mAutoStartLoadingThread = false;
 	mDebugKeysEnabled = false;
 	mProdName = "PlantsVsZombies";
-	SexyString aTitleName = _S("植物大战僵尸");
+	SexyString aTitleName = _S("Plants vs. Zombies");
 #ifdef _DEBUG
 	aTitleName += _S(" ") + StringToSexyString(mProductVersion);
 	aTitleName += _S(" DEBUG");
