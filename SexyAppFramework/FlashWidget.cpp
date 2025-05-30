@@ -555,7 +555,7 @@ public:
 	HRESULT FSCommand (_bstr_t command, _bstr_t args)
 	{
 		if (mFlashWidget->mFlashListener != NULL)
-			mFlashWidget->mFlashListener->FlashCommand(mFlashWidget->mId, (char*) command, (char*) args);
+			mFlashWidget->mFlashListener->FlashCommand(mFlashWidget->mId, (SexyChar*) command, (SexyChar*) args);
 		return S_OK;
 	}	
 };
@@ -1082,9 +1082,9 @@ void FlashWidget::DrawFlashBackground(Graphics* g)
 	}
 }
 
-bool FlashWidget::StartAnimation(const std::string& theFileName)
+bool FlashWidget::StartAnimation(const SexyString& theFileName)
 {
-	std::string aFullPath = GetFullPath(theFileName);
+	SexyString aFullPath = GetFullPath(theFileName);
 	
 	_bstr_t bstr((char*) aFullPath.c_str());		
 	mFlashInterface->put_Movie(bstr); // you have to change the path here	
@@ -1179,35 +1179,35 @@ int FlashWidget::GetCurrentFrame()
 	return aCurrentFrame;
 }
 
-std::string FlashWidget::GetCurrentLabel(const std::string& theTimeline)
+SexyString FlashWidget::GetCurrentLabel(const SexyString& theTimeline)
 {
 	BSTR aBStr = L"";
 	if (mFlashInterface != NULL)
 		mFlashInterface->TCurrentLabel(_bstr_t(theTimeline.c_str()), &aBStr);
-	return (const char*) _bstr_t(aBStr);
+	return (const SexyChar*) _bstr_t(aBStr);
 }
 
-void FlashWidget::CallFrame(const std::string& theTimeline, int theFrameNum)
+void FlashWidget::CallFrame(const SexyString& theTimeline, int theFrameNum)
 {
 	if (mFlashInterface != NULL)
 		mFlashInterface->TCallFrame(_bstr_t(theTimeline.c_str()), theFrameNum);
 }
 
-void FlashWidget::CallLabel(const std::string& theTimeline, const std::string& theLabel)
+void FlashWidget::CallLabel(const SexyString& theTimeline, const SexyString& theLabel)
 {
 	if (mFlashInterface != NULL)
 		mFlashInterface->TCallLabel(_bstr_t(theTimeline.c_str()), _bstr_t(theLabel.c_str()));
 }
 
-std::string FlashWidget::GetVariable(const std::string& theName)
+SexyString FlashWidget::GetVariable(const SexyString& theName)
 {
 	BSTR aBStr = L"";
 	if (mFlashInterface != NULL)
 		mFlashInterface->GetVariable(_bstr_t(theName.c_str()), &aBStr);
-	return (const char*) _bstr_t(aBStr);
+	return (const SexyChar*) _bstr_t(aBStr);
 }
 
-void FlashWidget::SetVariable(const std::string& theName, const std::string& theValue)
+void FlashWidget::SetVariable(const SexyString& theName, const SexyString& theValue)
 {
 	if (mFlashInterface != NULL)
 		mFlashInterface->SetVariable(_bstr_t(theName.c_str()), _bstr_t(theValue.c_str()));

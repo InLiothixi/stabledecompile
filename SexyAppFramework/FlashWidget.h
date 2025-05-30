@@ -25,7 +25,7 @@ class FlashListener
 {
 public:
 	virtual void			FlashAnimEnded(int theId) {}
-	virtual void			FlashCommand(int theId, const std::string& theCommand, const std::string& theParam) {}
+	virtual void			FlashCommand(int theId, const SexyString& theCommand, const SexyString& theParam) {}
 };
 
 class FlashWidget : public Widget
@@ -87,7 +87,7 @@ public:
 	
 	static double			GetFlashVersion();
 
-	bool					StartAnimation(const std::string& theFileName);	
+	bool					StartAnimation(const SexyString& theFileName);
 	void					SetQuality(int theQuality);
 	void					Pause();
 	void					Unpause();
@@ -97,11 +97,11 @@ public:
 	void					Forward();	
 	void					GotoFrame(int theFrameNum);
 	int						GetCurrentFrame();
-	std::string				GetCurrentLabel(const std::string& theTimeline);
-	void					CallFrame(const std::string& theTimeline, int theFrameNum);
-	void					CallLabel(const std::string& theTimeline, const std::string& theLabel);
-	std::string				GetVariable(const std::string& theName);
-	void					SetVariable(const std::string& theName, const std::string& theValue);
+	SexyString				GetCurrentLabel(const SexyString& theTimeline);
+	void					CallFrame(const SexyString& theTimeline, int theFrameNum);
+	void					CallLabel(const SexyString& theTimeline, const SexyString& theLabel);
+	SexyString				GetVariable(const SexyString& theName);
+	void					SetVariable(const SexyString& theName, const SexyString& theValue);
 		
 	virtual void			Resize(int theX, int theY, int theWidth, int theHeight);
 	
