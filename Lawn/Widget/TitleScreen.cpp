@@ -62,7 +62,7 @@ void TitleScreen::DrawToPreload(Graphics* g)
 //0x48D730
 void TitleScreen::Draw(Graphics* g)
 {
-	mCoolTimer = (mCoolTimer + 1) % 21;
+	mCoolTimer = (mCoolTimer + 1) % 22;
 
 	g->SetLinearBlend(true);
 
@@ -153,7 +153,7 @@ void TitleScreen::Draw(Graphics* g)
 		aLogoY = TodAnimateCurve(60, 50, mTitleStateCounter, 10, 15, CURVE_BOUNCE);
 	}
 	g->DrawImage(IMAGE_PVZ_LOGO, mWidth / 2 - IMAGE_PVZ_LOGO->mWidth / 2, aLogoY);
-	g->DrawImageCel(Sexy::IMAGE_SUBLOGO, mWidth / 2 - Sexy::IMAGE_SUBLOGO->GetCelWidth() / 2, aLogoY + Sexy::IMAGE_PVZ_LOGO->mHeight - 10, int((mCoolTimer / 21.0f) * 5));
+	g->DrawImageCel(Sexy::IMAGE_SUBLOGO, mWidth / 2 - Sexy::IMAGE_SUBLOGO->GetCelWidth() / 2, aLogoY + Sexy::IMAGE_PVZ_LOGO->mHeight - 10, int((mCoolTimer / 21.0f) * 4));
 
 	int aGrassX = mStartButton->mX - 4;
 	int aGrassY = mStartButton->mY - 17;
