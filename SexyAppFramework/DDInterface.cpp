@@ -443,6 +443,9 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 
 		aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, mFullscreenBits);
 
+		if (aResult == DDERR_INVALIDPIXELFORMAT)
+			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, 32); // todo: remove this incase this did not do anything... 32 bit fallback
+
 		if (GotDXError(aResult, "SetDisplayMode FullScreen"))
 			return RESULT_DISPCHANGE_FAIL;
 

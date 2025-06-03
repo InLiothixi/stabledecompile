@@ -446,8 +446,9 @@ bool D3DTester::CheckRegistry()
 	if (RegQueryValueExA(mRegKey, "Version", 0, &aType, (uchar*) &aVersion, &aSize) != ERROR_SUCCESS)
 		return false;
 
-	if (aVersion != TEST_VERSION)
-		return false;
+	// todo: check if this affects everyone
+	//if (aVersion != TEST_VERSION)
+	//	return false;
 
 	// Check Min Vid Memory
 	DWORD aMinVidMemory = 0;
@@ -610,6 +611,7 @@ bool D3DTester::IsSupportedCard(const char *theDisplayDesc)
 	return found;
 }
 
+// todo: you fucking changed this u skibidiot. undo it if it did nothing...
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 bool D3DTester::Init(HWND theHWND, LPDIRECTDRAW7 theDDraw)
@@ -674,10 +676,15 @@ bool D3DTester::Init(HWND theHWND, LPDIRECTDRAW7 theDDraw)
 		{
 			dwTotal += (aBPP/8)*aWidth*aHeight;
 			dwTotal /= (1024*1024);
-			if (dwTotal < mMinVidMemory)
+			/*if (dwTotal < mMinVidMemory)
 				return Fail("Not enough video memory.");
 			else if (dwTotal < mRecommendedVidMemory)
-				Warn("Low video memory.");
+				Warn("Low video memory.");*/
+
+			if (dwTotal < mMinVidMemory)
+				Warn("Detected video memory below minimum threshold.");
+			else if (dwTotal < mRecommendedVidMemory)
+				Warn("Video memory is below recommended level.");
 		}
 
 		// Check registry to see if we've already done the test
@@ -734,11 +741,19 @@ bool D3DTester::Init(HWND theHWND, LPDIRECTDRAW7 theDDraw)
 		mTestImage.Create(ddsd.dwWidth,ddsd.dwHeight);
 
 
-		CheckDXError(mD3D7->CreateDevice(IID_IDirect3DHALDevice, mPrimarySurface, &mD3DDevice7),"CreateDevice");
+		//CheckDXError(mD3D7->CreateDevice(IID_IDirect3DHALDevice, mPrimarySurface, &mD3DDevice7),"CreateDevice");
+		HRESULT hr = mD3D7->CreateDevice(IID_IDirect3DHALDevice, mPrimarySurface, &mD3DDevice7);
+		if (FAILED(hr)) {
+			Warn("HAL device failed, trying RGB software device.");
+			hr = mD3D7->CreateDevice(IID_IDirect3DRGBDevice, mPrimarySurface, &mD3DDevice7);
+			if (FAILED(hr)) {
+				return Fail("No compatible Direct3D device found (HAL and RGB both failed).");
+			}
+		}
 
 		DWORD aFormat = 0;
 		CheckDXError(mD3DDevice7->EnumTextureFormats(PixelFormatsCallback,&aFormat),"EnumTextureFormats");
-		if (!(aFormat & PixelFormat_A8R8G8B8))
+		/*if (!(aFormat & PixelFormat_A8R8G8B8))
 		{
 			Warn("A8R8G8B8 texture format not supported.");
 			if (!(aFormat & PixelFormat_A4R4G4B4))
@@ -747,7 +762,22 @@ bool D3DTester::Init(HWND theHWND, LPDIRECTDRAW7 theDDraw)
 			gD3DTestHas32BitTexture = false;
 		}
 		else
+			gD3DTestHas32BitTexture = true;*/
+		if (aFormat & PixelFormat_A8R8G8B8)
+		{
 			gD3DTestHas32BitTexture = true;
+		}
+		else if (aFormat & PixelFormat_A4R4G4B4)
+		{
+			gD3DTestHas32BitTexture = false;
+			Warn("32-bit textures not supported. Falling back to A4R4G4B4.");
+		}
+		else
+		{
+			Warn("No supported texture formats (A8R8G8B8 or A4R4G4B4). Continuing without texture format check.");
+			gD3DTestHas32BitTexture = false;
+		}
+
 
 		// Create Texture Surface
 		DDSURFACEDESC2 aDesc;

@@ -237,6 +237,10 @@ void CursorObject::Draw(Graphics* g)
 
         break;
     }
+
+    case CursorType::CURSOR_TYPE_BUTTER:
+        g->DrawImageF(Sexy::IMAGE_REANIM_CORNPULT_BUTTER, 11, 21);
+        break;
     }
 }
 

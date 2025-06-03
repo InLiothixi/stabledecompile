@@ -187,7 +187,7 @@ AwardScreen::AwardScreen(LawnApp* theApp, AwardType theAwardType, bool theShowin
 	}
 	else if (mApp->HasFinishedAdventure()) // @Patoke: change case
 	{
-		ReportAchievement::GiveAchievement(mApp, HomeSecurity, false); // @Patoke: add achievement
+		ReportAchievement::GiveAchievement(mApp, AchievementId::HomeSecurity, false); // @Patoke: add achievement
 		mStartButton->SetLabel(_S("[CONTINUE_BUTTON]"));
 		mMenuButton->mBtnNoDraw = true;
 		mMenuButton->mDisabled = true;
@@ -199,10 +199,8 @@ AwardScreen::AwardScreen(LawnApp* theApp, AwardType theAwardType, bool theShowin
 	else
 		mStartButton->SetLabel(_S("[NEXT_LEVEL_BUTTON]"));
 
-	// @Patoke: implemented
-	if (mApp->IsAdventureMode() && mApp->EarnedGoldTrophy()) {
-		ReportAchievement::GiveAchievement(mApp, NovelPeasPrize, false);
-	}
+	if (mApp->EarnedGoldTrophy()) 
+		ReportAchievement::GiveAchievement(mApp, AchievementId::NovelPeasPrize, false);
 
 	if (mApp->IsFirstTimeAdventureMode() && aLevel == 25 && mApp->IsTrialStageLocked() && !mApp->mPlayerInfo->mHasSeenUpsell)
 	{

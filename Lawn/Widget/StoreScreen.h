@@ -52,6 +52,7 @@ public:
     bool                        mGoToTreeNow;                   //+0x22D
     bool                        mPurchasedFullVersion;          //+0x22E
     bool                        mTrialLockedWhenStoreOpened;    //+0x22F
+    int                         mCrazyDaveLastTalkIndex;
 
 public:
     StoreScreen(LawnApp* theApp);

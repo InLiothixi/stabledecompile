@@ -3298,188 +3298,188 @@ NEW USER
 [DEBUG_PLAY]
 (Debug Play)
 
-[HOME_LAWN_SECURITY]  
+[HOME_LAWN_SECURITY_TITLE]  
 Home Lawn Security  
 
 [HOME_LAWN_SECURITY_DESCRIPTION]  
 Complete Adventure Mode.  
 
-[NOBEL_PEAS_PRIZE]  
+[NOBEL_PEAS_PRIZE_TITLE]  
 Nobel Peas Prize  
 
 [NOBEL_PEAS_PRIZE_DESCRIPTION]  
 Get the golden sunflower trophy.  
 
-[BETTER_OFF_DEAD]  
+[BETTER_OFF_DEAD_TITLE]  
 Better Off Dead  
 
 [BETTER_OFF_DEAD_DESCRIPTION]  
 Get to a streak of 10 in I, Zombie Endless.  
 
-[CHINA_SHOP]  
+[CHINA_SHOP_TITLE]  
 China Shop  
 
 [CHINA_SHOP_DESCRIPTION]  
 Get to a streak of 15 in Vasebreaker Endless.  
 
-[SPUDOW]  
+[SPUDOW_TITLE]  
 SPUDOW!  
 
 [SPUDOW_DESCRIPTION]  
 Blow up a zombie using a Potato Mine.  
 
-[EXPLODONATOR]  
+[EXPLODONATOR_TITLE]  
 Explodonator  
 
 [EXPLODONATOR_DESCRIPTION]  
 Take out 10 full-sized zombies with a single Cherry Bomb.  
 
-[MORTICULTURALIST]  
+[MORTICULTURALIST_TITLE]  
 Morticulturalist  
 
 [MORTICULTURALIST_DESCRIPTION]  
 Collect all 49 plants (including plants from Crazy Dave's shop).  
 
-[DONT_PEA_IN_THE_POOL]  
+[DONT_PEA_IN_THE_POOL_TITLE]  
 Don't Pea in the Pool  
 
 [DONT_PEA_IN_THE_POOL_DESCRIPTION]  
 Complete a daytime pool level without using pea shooters of any kind.  
 
-[ROLL_SOME_HEADS]  
+[ROLL_SOME_HEADS_TITLE]  
 Roll Some Heads  
 
 [ROLL_SOME_HEADS_DESCRIPTION]  
-Complete a daytime pool level without using pea shooters of any kind.  
+Bowl over 5 zombies with a single Wall-Nut.
 
-[GROUNDED]  
+[GROUNDED_TITLE]  
 Grounded  
 
 [GROUNDED_DESCRIPTION]  
 Defeat a normal roof level without using any catapult plants.  
 
-[ZOMBOLOGIST]  
+[ZOMBOLOGIST_TITLE]  
 Zombologist  
 
 [ZOMBOLOGIST_DESCRIPTION]  
 Discover the Yeti zombie.  
 
-[PENNY_PINCHER]  
+[PENNY_PINCHER_TITLE]  
 Penny Pincher  
 
 [PENNY_PINCHER_DESCRIPTION]  
 Pick up 30 coins in a row on a single level without letting any disappear.  
 
-[SUNNY_DAYS]  
+[SUNNY_DAYS_TITLE]  
 Sunny Days  
 
 [SUNNY_DAYS_DESCRIPTION]  
 Get 8000 sun during a single level.  
 
-[POPCORN_PARTY]  
+[POPCORN_PARTY_TITLE]  
 Popcorn Party  
 
 [POPCORN_PARTY_DESCRIPTION]  
 Defeat 2 Gargantuars with Corn Cob missiles in a single level.  
 
-[GOOD_MORNING]  
+[GOOD_MORNING_TITLE]  
 Good Morning  
 
 [GOOD_MORNING_DESCRIPTION]  
 Complete a daytime level by planting only Mushrooms and Coffee Beans.  
 
-[NO_FUNGUS_AMONG_US]  
+[NO_FUNGUS_AMONG_US_TITLE]  
 No Fungus Among Us  
 
 [NO_FUNGUS_AMONG_US_DESCRIPTION]  
 Complete a nighttime level without planting any Mushrooms.  
 
-[BEYOND_THE_GRAVE]  
+[BEYOND_THE_GRAVE_TITLE]  
 Beyond the Grave  
 
 [BEYOND_THE_GRAVE_DESCRIPTION]  
 Beat all 20 mini games.  
 
-[IMMORTAL]  
+[IMMORTAL_TITLE]  
 Immortal  
 
 [IMMORTAL_DESCRIPTION]  
 Survive 20 waves of pure zombie ferocity.  
 
-[TOWERING_WISDOM]  
+[TOWERING_WISDOM_TITLE]  
 Towering Wisdom  
 
 [TOWERING_WISDOM_DESCRIPTION]  
 Grow the Tree of Wisdom to 100 feet.  
 
-[MUSTACHE_MODE]  
+[MUSTACHE_MODE_TITLE]  
 Mustache Mode  
 
 [MUSTACHE_MODE_DESCRIPTION]  
 Enable Mustache Mode.  
 
-[DISCO_IS_UNDEAD]  
+[DISCO_IS_UNDEAD_TITLE]  
 Disco is Undead  
 
 [DISCO_IS_UNDEAD_DESCRIPTION]  
 Hypnotize the lead zombie dancer.  
 
-[SULTAN_OF_SPIN]  
+[SULTAN_OF_SPIN_TITLE]  
 Sultan of Spin  
 
 [SULTAN_OF_SPIN_DESCRIPTION]  
 Upgrade all of your plants in Beghouled Twist.  
 
-[DISRESPECT_THE_DEAD]  
+[DISRESPECT_THE_DEAD_TITLE]  
 Disrespect The Dead  
 
 [DISRESPECT_THE_DEAD_DESCRIPTION]  
 Remove 10 graves during a single nighttime level.  
 
-[HEAVY_WEAPONS]  
+[HEAVY_WEAPONS_TITLE]  
 Heavy Weapons  
 
 [HEAVY_WEAPONS_DESCRIPTION]  
 Complete Last Stand using only Cob Cannons to kill zombies.  
 
-[ZEN_PROFIT]  
+[ZEN_PROFIT_TITLE]  
 Zen Profit  
 
 [ZEN_PROFIT_DESCRIPTION]  
 Earn a total of 100,000 coins through your Zen Garden.  
 
-[MAY_NOT_CONTAIN_NUTS]  
+[MAY_NOT_CONTAIN_NUTS_TITLE]  
 May Not Contain Nuts  
 
 [MAY_NOT_CONTAIN_NUTS_DESCRIPTION]  
 Defeat a nighttime level without using Wall-nuts or Tall-nuts.  
 
-[EVEN_MORTICULTURALIST]  
+[EVEN_MORTICULTURALIST_TITLE]  
 Even Morticulturalist  
 
 [EVEN_MORTICULTURALIST_DESCRIPTION]  
 Use every Plant at least once.  
 
-[BEAT_IT]  
+[BEAT_IT_TITLE]  
 Beat It  
 
 [BEAT_IT_DESCRIPTION]  
 Defeat a Dancing Zombie before he summons Backup Dancers.  
 
-[GOLD_FARMER]  
+[GOLD_FARMER_TITLE]  
 Gold Farmer  
 
 [GOLD_FARMER_DESCRIPTION]  
 Plant 5 Marigolds and a Gold Magnet in a single level.  
 
-[FACE_TO_FACE]  
+[FACE_TO_FACE_TITLE]  
 Face To Face  
 
 [FACE_TO_FACE_DESCRIPTION]  
 Complete a level with Digger Zombies without any of them reaching the left side of your lawn.  
 
 [FREE_PLANTING_CHEAT]
-Free
+Free!
 
 [BACK]
 Back
@@ -3488,15 +3488,15 @@ Back
 Select Language
 
 [CRAZY_DAVE_4000]
-{NO_CLICK}{MOUTH_BIG_OH}You just bought the final plant!
+{MOUTH_BIG_OH}You just bought the final plant!
 [CRAZY_DAVE_4001]
-{NO_CLICK}{SCREAM}You're an all-plant haver, by gum!
+{SCREAM}You're an all-plant haver, by gum!
 [CRAZY_DAVE_4002]
-{NO_CLICK}Why isn't there a word for that kind of achievement?
+Why isn't there a word for that kind of achievement?
 [CRAZY_DAVE_4003]
-{NO_CLICK}I've got it... 
+I've got it... 
 [CRAZY_DAVE_4004]
-{NO_CLICK}{SHAKE}Morticulturalist!!!{MOUTH_BIG_SMILE}
+{SHAKE}Morticulturalist!!!{MOUTH_BIG_SMILE}
 
 [ADVICE_HEAT_WAVE]
 Slide plants around to fend off zombies!
@@ -3506,3 +3506,36 @@ SHOUT!
 
 [SCORE_LABEL]
 SCORE
+
+[FOG_OF_WAR]
+Fog of War
+
+[HEAT_WAVE]
+Heat Wave
+
+[BOMB_ALL_TOGETHER]
+Bomb All Together
+
+[BUTTERED_POPCORN]
+Buttered Popcorn
+
+[CRAZY_DAVE_4010]
+BUTTERED POPCORN! {SCREAM}
+
+[CRAZY_DAVE_4011]
+Keep those zombies at bay by touching them with your buttered fingers!
+
+[CRAZY_DAVE_4012]
+Then let 'em have it with your cob cannons!
+
+[VASE_BREAKER]
+Vase Breaker
+
+[HOMERUN_DERBY]
+Homerun Derby
+
+[HEAVY_WEAPON]
+Heavy Weapon
+
+[ZOMBIE_TRAP]
+Zombie Trap

@@ -2686,6 +2686,9 @@ bool LawnApp::IsScaryPotterLevel()
 	if (mGameMode >= GameMode::GAMEMODE_SCARY_POTTER_1 && mGameMode <= GameMode::GAMEMODE_SCARY_POTTER_ENDLESS)
 		return true;
 
+	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
+		return true;
+
 	return IsAdventureMode() && mPlayerInfo->mLevel == 35;
 }
 
@@ -2750,7 +2753,8 @@ bool LawnApp::IsChallengeWithoutSeedBank()
 		IsScaryPotterLevel() || 
 		mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || 
 		mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
-		mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE;
+		mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN;
 }
 
 bool LawnApp::IsNight()

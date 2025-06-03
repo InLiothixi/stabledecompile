@@ -557,6 +557,11 @@ void Challenge::StartLevel()
 		mBoard->DisplayAdvice(_S("[ADVICE_HEAT_WAVE]"), MESSAGE_STYLE_HINT_FAST, ADVICE_NONE);
 		mChallengeStateCounter = 2000;
 	}
+
+	if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+	{
+		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_BUTTER;
+	}
 }
 
 //0x420150
@@ -1353,6 +1358,13 @@ bool Challenge::MouseDown(int x, int y, int theClickCount, HitResult* theHitResu
 		return true;
 	}
 
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && theHitResult->mObjectType == OBJECT_TYPE_NONE &&
+		mBoard->mCursorObject->mCursorType == CURSOR_TYPE_BUTTER && theClickCount >= 0)
+	{
+		MouseDownButterAZombie(x, y);
+		return true;
+	}
+
 	return false;
 }
 
@@ -1394,6 +1406,11 @@ void Challenge::ClearCursor()
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_GLOVE;
+	}
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+	{
+		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_BUTTER;
 	}
 }
 
@@ -2809,6 +2826,20 @@ void Challenge::InitZombieWaves()
 	{
 		//
 	}
+	else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_PAIL] = true;
+		aList[ZOMBIE_POLEVAULTER] = true;
+		aList[ZOMBIE_NEWSPAPER] = true;
+		aList[ZOMBIE_DOLPHIN_RIDER] = true;
+		aList[ZOMBIE_FOOTBALL] = true;
+		aList[ZOMBIE_LADDER] = true;
+		aList[ZOMBIE_DOOR] = true;
+		aList[ZOMBIE_JACK_IN_THE_BOX] = true;
+		aList[ZOMBIE_GARGANTUAR] = true;
+	}
 	else
 	{
 		aList[ZOMBIE_NORMAL] = true;
@@ -3998,7 +4029,7 @@ void Challenge::ScaryPotterPopulate()
 		}
 	}
 
-	if (mApp->IsAdventureMode() && mBoard->mLevel == 35)
+	if (mApp->IsAdventureMode() && mBoard->mLevel == 35 || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
 	{
 		switch (mSurvivalStage)
 		{
@@ -4258,7 +4289,7 @@ void Challenge::ScaryPotterPopulate()
 			}
 
 			if (mSurvivalStage == 15) // @Patoke: add achievement
-				ReportAchievement::GiveAchievement(mApp, ChinaShop, true);
+				ReportAchievement::GiveAchievement(mApp, AchievementId::ChinaShop, true);
 
 			break;
 		}
@@ -4354,10 +4385,11 @@ int Challenge::ScaryPotterCountPots()
 //0x429930
 bool Challenge::PuzzleIsAwardStage()
 {
-	if (mApp->IsAdventureMode())
+	if (mApp->IsAdventureMode() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
 		return false;
 
 	int aGoal = mApp->mGameMode == GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS ? 3 : mApp->mGameMode == GAMEMODE_SCARY_POTTER_ENDLESS ? 10 : 1;
+
 	return mSurvivalStage % aGoal == 0;
 }
 
@@ -4832,7 +4864,7 @@ void Challenge::IZombieInitLevel()
 	case GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS:
 	{
 		if (mSurvivalStage == 10) // @Patoke: add achievement
-			ReportAchievement::GiveAchievement(mApp, BetterOffDead, true);
+			ReportAchievement::GiveAchievement(mApp, AchievementId::BetterOffDead, true);
 
 		int aFormationHit = RandRangeInt(0, 4);
 
@@ -5649,7 +5681,7 @@ void Challenge::TreeOfWisdomGrow()
 	}
 
 	if (aTreeSize == 100) // @Patoke: add achievement
-		ReportAchievement::GiveAchievement(mApp, ToweringWisdom, true);
+		ReportAchievement::GiveAchievement(mApp, AchievementId::ToweringWisdom, true);
 }
 
 //0x42D360
@@ -6127,5 +6159,26 @@ void Challenge::HeatWaveUpdate()
 	{
 		if (mChallengeStateCounter < 2000)
 			mChallengeStateCounter++;
+	}
+}
+
+void Challenge::MouseDownButterAZombie(int theX, int theY)
+{
+	Zombie* aZombie = nullptr;
+	Zombie* aTopZombie = nullptr;
+	while (mBoard->IterateZombies(aZombie)) {
+		if (!aZombie->IsDeadOrDying() && aZombie->mButteredCounter == 0) {
+			Rect aZombieRect = aZombie->GetZombieRect();
+			if (GetCircleRectOverlap(theX, theY, 45, aZombieRect)) {
+				if (aTopZombie == nullptr || aZombie->mRenderOrder >= aTopZombie->mRenderOrder) {
+					aTopZombie = aZombie;
+				}
+			}
+		}
+	}
+
+	if (aTopZombie) {
+		mApp->PlayFoley(FOLEY_BUTTER);
+		aTopZombie->ApplyButter();
 	}
 }

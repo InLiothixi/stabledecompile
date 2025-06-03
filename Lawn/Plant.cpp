@@ -2768,7 +2768,7 @@ void Plant::UpdateBowling()
         }
 
         mX -= aSpeed;
-        if (mX > 800)
+        if (mX > 800 + mWidth * (aBodyReanim->mOverlayMatrix.m00 - 1))
             Die();
     }
 
@@ -2879,7 +2879,7 @@ void Plant::UpdateBowling()
                 mApp->PlayFoley(FoleyType::FOLEY_SPAWN_SUN);
                 mBoard->AddCoin(aPosX, aPosY, CoinType::COIN_GOLD, CoinMotion::COIN_MOTION_COIN);
                 if (!mApp->IsIZombieLevel())
-                    ReportAchievement::GiveAchievement(mApp, RollSomeHeads, true); // @Patoke: add achievement
+                    ReportAchievement::GiveAchievement(mApp, AchievementId::RollSomeHeads, true); // @Patoke: add achievement
             }
         }
 
@@ -5208,7 +5208,7 @@ void Plant::DoSpecial()
 
         if (mBoard->KillAllZombiesInRadius(mRow, aPosX, aPosY, 115, 1, true, aDamageRangeFlags) >= 10)
             if (!mApp->IsIZombieLevel())
-                ReportAchievement::GiveAchievement(mApp, Explodonator, true); // @Patoke: add achievement
+                ReportAchievement::GiveAchievement(mApp, AchievementId::Explodonator, true); // @Patoke: add achievement
 
         TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, (int)RenderLayer::RENDER_LAYER_TOP, ParticleEffect::PARTICLE_POWIE);
         Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
@@ -5296,7 +5296,7 @@ void Plant::DoSpecial()
         mApp->PlaySample(SOUND_POTATO_MINE);
         if (mBoard->RawKillAllZombiesInRadius(mRow, aPosX, aPosY, 60, 0, false, aDamageRangeFlags) >= 1) // aDamageRangeFlag
             if (!mApp->IsIZombieLevel())
-                ReportAchievement::GiveAchievement(mApp, Spudow, true); // @Patoke: add achievement
+                ReportAchievement::GiveAchievement(mApp, AchievementId::Spudow, true); // @Patoke: add achievement
 
         int aRenderPosition = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PARTICLE, mRow, 0);
         TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX + 20.0f, aPosY, aRenderPosition, ParticleEffect::PARTICLE_POTATO_MINE);

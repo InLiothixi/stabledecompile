@@ -1515,6 +1515,8 @@ void Zombie::PogoBreak(unsigned int theDamageFlags)
             for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
             {
                 TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
+                aEmitter->mSystemCenter.y += mAltitude;
+                aEmitter->mSystemCenter.y -= 30.0f;
                 aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
             }
             
@@ -3173,26 +3175,6 @@ void Zombie::UpdateZombieBackupDancer()
         if (mPhaseCounter != 0)
             return;
 
-
-        Zombie* aLeader = nullptr;
-        if (mZombieType == ZombieType::ZOMBIE_DANCER)
-        {
-            aLeader = this;
-        }
-        else
-        {
-            aLeader = mBoard->ZombieTryToGet(mRelatedZombieID);
-        }
-
-        if (aLeader)
-        {
-            mOriginalAnimRate = aLeader->mOriginalAnimRate;
-            mApp->ReanimationTryToGet(mBodyReanimID)->mAnimRate = mApp->ReanimationTryToGet(aLeader->mBodyReanimID)->mAnimRate;
-            mVelX = aLeader->mVelX;
-            UpdateAnimSpeed();
-        }
-        
-
         if (IsOnHighGround())
         {
             mAltitude = HIGH_GROUND_HEIGHT;
@@ -3257,18 +3239,6 @@ void Zombie::UpdateZombieDancer()
             mZombiePhase = ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS;
             PlayZombieReanim("anim_point", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
             PickRandomSpeed();
-
-            for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
-            {
-                Zombie* aDancer = mBoard->ZombieTryToGet(mFollowerZombieID[i]);
-                if (aDancer)
-                {
-                    aDancer->mOriginalAnimRate = mOriginalAnimRate;
-                    mApp->ReanimationTryToGet(aDancer->mBodyReanimID)->mAnimRate = mApp->ReanimationTryToGet(mBodyReanimID)->mAnimRate;
-                    aDancer->mVelX = mVelX;
-                    aDancer->UpdateAnimSpeed();
-                }
-            }
         }
     }
     else if (mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS || mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS_WITH_LIGHT)
@@ -3296,23 +3266,6 @@ void Zombie::UpdateZombieDancer()
             mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
             PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 20, 18.0f);
             UpdateAnimSpeed();
-
-            for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
-            {
-                Zombie* aDancer = mBoard->ZombieTryToGet(mFollowerZombieID[i]);
-                if (aDancer)
-                {
-                    if (!aDancer->mIsEating && aDancer->mHasHead && !aDancer->IsDeadOrDying())
-                    {
-                        aDancer->mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
-                        aDancer->PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 20, 18.0f);
-                    }
-                    aDancer->mOriginalAnimRate = mOriginalAnimRate;
-                    mApp->ReanimationTryToGet(aDancer->mBodyReanimID)->mAnimRate = mApp->ReanimationTryToGet(mBodyReanimID)->mAnimRate;
-                    aDancer->mVelX = mVelX;
-                    aDancer->UpdateAnimSpeed();
-                }
-            }
         }
 
         ZombiePhase aDancerPhase = GetDancerPhase();
@@ -3324,23 +3277,6 @@ void Zombie::UpdateZombieDancer()
             {
                 mZombiePhase = aDancerPhase;
                 PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
-
-                /*if (!IsDeadOrDying())
-                {
-                    if (mIsEating) break;
-                    
-                    for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
-                    {
-                        Zombie* aDancer = mBoard->ZombieTryToGet(mFollowerZombieID[i]);
-                        if (aDancer)
-                        {
-                            aDancer->mOriginalAnimRate = mOriginalAnimRate;
-                            mApp->ReanimationTryToGet(aDancer->mBodyReanimID)->mAnimRate = mApp->ReanimationTryToGet(mBodyReanimID)->mAnimRate;
-                            aDancer->mVelX = mVelX;
-                            aDancer->UpdateAnimSpeed();
-                        }
-                    }
-                }*/
                 break;
             }
             case ZombiePhase::PHASE_DANCER_WALK_TO_RAISE:
@@ -3770,7 +3706,17 @@ void Zombie::DropPole()
 
     mZombiePhase = ZombiePhase::PHASE_POLEVAULTER_POST_VAULT;
     mZombieAttackRect = Rect(50, 0, 20, 115);
-    StartWalkAnim(0);
+    
+    if (!IsDeadOrDying()) {
+        if (mIsEating)
+        {
+            PlayZombieReanim("anim_eat", ReanimLoopType::REANIM_LOOP, 20, 0.0f);
+        }
+        else
+        {
+            StartWalkAnim(0);
+        }
+    }
 }
 
 bool Zombie::CanLoseBodyParts()
@@ -3892,6 +3838,10 @@ void Zombie::DropHead(unsigned int theDamageFlags)
         for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
         {
             TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
+            if (mZombieType == ZombieType::ZOMBIE_POGO)
+            {
+                aEmitter->mSystemCenter.y += mAltitude;
+            }
             aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
         }
        
@@ -4354,7 +4304,7 @@ bool Zombie::ZombieNotWalking()
             aLeader = mBoard->ZombieTryToGet(mRelatedZombieID);
         }
 
-        if (aLeader && !aLeader->IsDeadOrDying())
+        if (aLeader)
         {
             if (aLeader->IsImmobilizied() || aLeader->mIsEating ||
                 aLeader->mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS ||
@@ -5075,7 +5025,7 @@ void Zombie::CheckForBoardEdge()
 //0x52B340
 void Zombie::UpdatePlaying()
 {
-    //TOD_ASSERT(mBodyHealth > 0 || mZombiePhase == ZombiePhase::PHASE_BOBSLED_CRASHING);
+    TOD_ASSERT(mBodyHealth > 0 || mZombiePhase == ZombiePhase::PHASE_BOBSLED_CRASHING);
 
     mGroanCounter--;
     int aZombiesCount = mBoard->mZombies.mSize;
@@ -7481,7 +7431,7 @@ void Zombie::ApplyAnimRate(float theAnimRate)
     Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
     if (aBodyReanim)
     {
-        aBodyReanim->mAnimRate = IsMovingAtChilledSpeed() ? theAnimRate * 0.5f : theAnimRate;
+        aBodyReanim->mAnimRate = IsMovingAtChilledSpeed() && mZombiePhase != ZombiePhase::PHASE_ZOMBIE_DYING ? theAnimRate * 0.5f : theAnimRate;
     }
 }
 
@@ -7706,13 +7656,6 @@ void Zombie::StopEating()
         else
         {
             aLeader = mBoard->ZombieTryToGet(mRelatedZombieID);
-        }
-
-        if (aLeader)
-        {
-            mOriginalAnimRate = 18.0f;
-            mApp->ReanimationTryToGet(mBodyReanimID)->mAnimRate = 18.0f;
-            // mVelX = aLeader->mVelX;
         }
     }
 
@@ -8199,7 +8142,7 @@ bool Zombie::TrySpawnLevelAward()
         else if (mApp->TrophiesNeedForGoldSunflower() == 1)
         {
             aCoinType = CoinType::COIN_AWARD_GOLD_SUNFLOWER;
-            ReportAchievement::GiveAchievement(mApp, NovelPeasPrize, false);
+            ReportAchievement::GiveAchievement(mApp, AchievementId::NovelPeasPrize, false);
         }
         else
         {
@@ -8224,7 +8167,7 @@ bool Zombie::TrySpawnLevelAward()
     }
 
     
-    if (mApp->IsAdventureMode()) {
+    if (mApp->IsAdventureMode() && mApp->mPlayerInfo->GetLevel() % 5 != 0) {
         if (mBoard->StageIsDayWithPool() && !mBoard->mPeaShooterUsed) {
             ReportAchievement::GiveAchievement(mApp, AchievementId::DontPea, true);
         }
@@ -9875,20 +9818,10 @@ void Zombie::MowDown()
 
     DropShield(0U);
     DropHelm(0U);
-    if (mZombieType == ZombieType::ZOMBIE_POGO)
-    {
-        PogoBreak(0U);
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_FLAG)
+
+    if (mZombieType == ZombieType::ZOMBIE_FLAG)
     {
         DropFlag();
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER)
-    {
-        if (mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT || mZombiePhase == PHASE_POLEVAULTER_IN_VAULT)
-            DropZombiePole();
-        DropPole();
-        
     }
     else if (mZombieType == ZombieType::ZOMBIE_NEWSPAPER || mZombieType == ZombieType::ZOMBIE_BALLOON)
     {
@@ -9896,6 +9829,7 @@ void Zombie::MowDown()
     }
     else if (mZombieType == ZombieType::ZOMBIE_POGO)
     {
+        PogoBreak(0U);
         DropHead(0U);
         mAltitude = 0.0f;
     }
@@ -10335,7 +10269,7 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
     }
 
     float aDeathAnimRate;
-    const char* aDeathTrackName = "anim_death";
+    char* aDeathTrackName = "anim_death";
 
     if (mZombieType == ZombieType::ZOMBIE_FOOTBALL || mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL || mZombieType == ZombieType::ZOMBIE_BUNGEE)
     {
@@ -10395,7 +10329,6 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
             aDeathAnimRate = 24.0f;
             aDeathTrackName = "anim_landdeath";
         }
-      
     }
     else
     {
@@ -10423,10 +10356,7 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
         aDeathTrackName = "anim_death2";
     }
    
-   // PlayZombieReanim(aDeathTrackName, ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, aDeathAnimRate);
-
-    if (aBodyReanim)
-        aBodyReanim->PlayReanim(aDeathTrackName, ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, aDeathAnimRate);
+    PlayZombieReanim(aDeathTrackName, ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, aDeathAnimRate);
 
     ReanimShowPrefix("anim_tongue", RENDER_GROUP_HIDDEN);
 
@@ -12341,8 +12271,8 @@ void Zombie::DropPogoGlasses()
         for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
         {
             TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
-            aEmitter->mSystemCenter.y += 21.0f;
-            aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
+            aEmitter->mSystemCenter.y += 21.0f + mAltitude;
+            aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie) ;
         }
 
         OverrideParticleColor(aParticle);

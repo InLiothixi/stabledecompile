@@ -236,6 +236,8 @@ public:
     void                    HeatWaveUpdate();
 
     GridItem*               GetPortalLeftRight(int theGridX, int theGridY, bool theToLeft = true);
+
+    void                    MouseDownButterAZombie(int theX, int theY);
 };
 
 extern SeedType gArtChallengeWallnut[6][9];

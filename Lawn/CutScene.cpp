@@ -189,6 +189,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 	else if (theZombieType == ZombieType::ZOMBIE_BALLOON)
 	{
 		aZombie->mY -= 30;
+		aZombie->mPosY -= 30;
 	}
 }
 
@@ -669,6 +670,26 @@ void CutScene::PlaceLawnItems()
 			mBoard->NewPlant(1, 3, SeedType::SEED_LILYPAD, SeedType::SEED_NONE);
 		}
 	}
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+	{
+		if (mBoard->CanPlantAt(0, 0, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
+		{
+			mBoard->NewPlant(0, 0, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		}
+		if (mBoard->CanPlantAt(0, 1, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
+		{
+			mBoard->NewPlant(0, 1, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		}
+		if (mBoard->CanPlantAt(0, 4, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
+		{
+			mBoard->NewPlant(0, 4, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		}
+		if (mBoard->CanPlantAt(0, 5, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
+		{
+			mBoard->NewPlant(0, 5, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		}
+	}
 }
 
 //0x43A710
@@ -789,6 +810,7 @@ void CutScene::StartLevelIntro()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 		mApp->IsIZombieLevel() ||
 		mApp->IsWhackAZombieLevel() ||
 		mApp->IsScaryPotterLevel())
@@ -903,6 +925,10 @@ void CutScene::StartLevelIntro()
 			mBoard->mStoreButton->mBtnNoDraw = true;
 		}
 	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+	{
+		mCrazyDaveDialogStart = 4010;
+	}
 	if (mCrazyDaveDialogStart != -1)
 	{
 		mCrazyDaveTime = TimeEarlyDaveLeaveEnd - TimePanRightStart;
@@ -940,7 +966,7 @@ void CutScene::StartLevelIntro()
 		return;
 	}
 
-	if (mApp->IsFinalBossLevel() || mApp->IsScaryPotterLevel() || mApp->IsWallnutBowlingLevel())
+	if (mApp->IsFinalBossLevel() || mApp->IsScaryPotterLevel() || mApp->IsWallnutBowlingLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
 	{
 		PreloadResources();
 		PlaceLawnItems();
@@ -1446,6 +1472,7 @@ void CutScene::ShowShovel()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 		mApp->IsIZombieLevel())
 		return;
 

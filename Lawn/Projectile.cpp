@@ -766,7 +766,7 @@ void Projectile::UpdateLobMotion()
 		}
 
 		if (mBoard->mGargantuarsKillsByCornCob >= 2) {
-			ReportAchievement::GiveAchievement(mApp, PopcornParty, true);
+			ReportAchievement::GiveAchievement(mApp, AchievementId::PopcornParty, true);
 		}
 
 		DoImpact(nullptr);

@@ -1203,7 +1203,7 @@ void Coin::Collect()
                 StartFade();
             }
         }
-        else if (mApp->IsScaryPotterLevel())
+        else if (mApp->IsScaryPotterLevel() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
         {
             if (mType == CoinType::COIN_TROPHY || mType == CoinType::COIN_AWARD_MONEY_BAG)
             {

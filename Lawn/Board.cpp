@@ -599,7 +599,7 @@ void Board::PutInMissingZombies(int theWaveNumber, ZombiePicker* theZombiePicker
 {
 	for (ZombieType aZombieType = ZombieType::ZOMBIE_NORMAL; aZombieType < ZombieType::NUM_ZOMBIE_TYPES; aZombieType = (ZombieType)((int)aZombieType + 1))
 	{
-		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] <= 0 && aZombieType != ZombieType::ZOMBIE_YETI && CanZombieSpawnOnLevel(aZombieType, mLevel))
+		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] > 0 && aZombieType != ZombieType::ZOMBIE_YETI && (CanZombieSpawnOnLevel(aZombieType, mLevel) || !mApp->IsAdventureMode()))
 		{
 			PutZombieInWave(aZombieType, theWaveNumber, theZombiePicker);
 		}
@@ -639,7 +639,8 @@ void Board::PickZombieWaves()
 		else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || aGameMode == GameMode::GAMEMODE_CHALLENGE_AIR_RAID ||
 				 aGameMode == GameMode::GAMEMODE_CHALLENGE_GRAVE_DANGER || aGameMode == GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY ||
 				 aGameMode == GameMode::GAMEMODE_CHALLENGE_PORTAL_COMBAT || aGameMode == GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS ||
-				 aGameMode == GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL || aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+				 aGameMode == GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL || aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+				 aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
 			mNumWaves = 20;
 		else if (mApp->IsStormyNightLevel() || mApp->IsLittleTroubleLevel() || mApp->IsBungeeBlitzLevel() ||
 				 aGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->IsShovelLevel() || aGameMode == GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS_2 ||
@@ -736,6 +737,10 @@ void Board::PickZombieWaves()
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN)
 		{
 			aZombiePoints *= 6;
+		}
+		else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+		{
+			aZombiePoints *= 5;
 		}
 		else if (mApp->IsLittleTroubleLevel() || mApp->IsWallnutBowlingLevel())
 		{
@@ -1057,6 +1062,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_8:
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_9:
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS:
+	case GameMode::GAMEMODE_CHALLENGE_VASEBREAKER:
 		mBackground = BackgroundType::BACKGROUND_2_NIGHT;
 		break;
 
@@ -1071,6 +1077,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_UPSELL:
 	case GameMode::GAMEMODE_INTRO:
 	case GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE:
+	case GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN:
 		mBackground = BackgroundType::BACKGROUND_3_POOL;
 		break;
 
@@ -1442,15 +1449,22 @@ void Board::InitSurvivalStage()
 Rect Board::GetShovelButtonRect()
 {
 	Rect aRect(GetSeedBankExtraWidth() + 456, mSeedBank->mY, Sexy::IMAGE_SHOVELBANK->GetWidth(), Sexy::IMAGE_SEEDBANK->GetHeight());
+
 	if (mApp->IsChallengeWithoutSeedBank() && !mApp->IsScaryPotterLevel())
 	{
 		aRect.mX = 10;
 		aRect.mY = 0;
 	}
+
 	if (mApp->IsSlotMachineLevel() || mApp->IsSquirrelLevel())
-	{
 		aRect.mX = 600;
-	}
+	
+	if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerInfo->GetLevel() == 5 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
+		aRect.mY = 0;
+	
+	if (mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
+		aRect.mY = mSeedBank->mY;
+
 	return aRect;
 }
 
@@ -1464,6 +1478,11 @@ void Board::GetZenButtonRect(GameObjectType theObjectType, Rect& theRect)
 	// 此处为了防止误用返回值而出现问题，故删除其返回值，如需调用可按照如下方式：
 	// Rect aButtonRect = GetShovelButtonRect();
 	// GetZenButtonRect(xxx, aButtonRect);
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
+	{
+		theRect.mY = 0;
+	}
 
 	if (mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
 	{
@@ -1798,13 +1817,17 @@ void Board::InitLawnMowers()
 	if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||
 		aGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 		aGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND || aGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
+		aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 		mApp->IsSquirrelLevel() || mApp->IsIZombieLevel() || (StageHasRoof() && !mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_ROOF_CLEANER]))
 		return;
 
 	for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
 	{
+		if (aRow == 5 && (mApp->IsAdventureMode() && mLevel == 35 || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER))
+			continue;
+
 		if ((aGameMode == GameMode::GAMEMODE_CHALLENGE_RESODDED && aRow <= 4) || 
-			(mApp->IsAdventureMode() && mLevel == 35) ||   // 这里原版没有对于行的判断，故冒险模式 4-5 关卡有 6 行小推车
+			(mApp->IsAdventureMode() && mLevel == 35 || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER) ||   // 这里原版没有对于行的判断，故冒险模式 4-5 关卡有 6 行小推车
 			(!mApp->IsScaryPotterLevel() && mPlantRow[aRow] != PlantRowType::PLANTROW_DIRT))  // 除冒险模式 4-5 关卡外的破罐者模式关卡无小推车
 		{
 			LawnMower* aLawnMower = mLawnMowers.DataArrayAlloc();
@@ -1839,13 +1862,10 @@ void Board::StartLevel()
 	mApp->mLastLevelStats->Reset();
 	mChallenge->StartLevel();
 
-	// @Patoke: implemented, i think it's intentional to cause an underflow here?
-	unsigned int aSurvivalStage = mApp->mGameMode - GAMEMODE_SURVIVAL_ENDLESS_STAGE_1;
-	if (aSurvivalStage <= 4) {
-		if (GetSurvivalFlagsCompleted() >= 20) {
-			// if ( !*(mApp->mPlayerInfo + 53) ) todo @Patoke: add this?
+	if (mApp->IsSurvivalEndless(mApp->mGameMode)) 
+	{
+		if (GetSurvivalFlagsCompleted() >= 20) 
 			ReportAchievement::GiveAchievement(mApp, AchievementId::Immortal, true);
-		}
 	}
 
 
@@ -2344,7 +2364,8 @@ Plant* Board::AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedTyp
 	if (theSeedType == SeedType::SEED_MARIGOLD) mMarigoldCount++;
 	else if (theSeedType == SeedType::SEED_GOLD_MAGNET)	mGoldMagnetCount++;
 
-	if (mApp->IsAdventureMode()) {
+	//if (mApp->IsAdventureMode()) does not have to be adventure I guess...
+	{
 		if (mMarigoldCount == 5 && mGoldMagnetCount == 1) {
 			ReportAchievement::GiveAchievement(mApp, AchievementId::GoldFarmer, true);
 		}
@@ -2911,7 +2932,7 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 	// @Patoke: implemented
 	if (theZombieType == ZombieType::ZOMBIE_YETI) {
 		if (mApp->IsAdventureMode() && mLevel == 40 && theFromWave >= 0)
-			ReportAchievement::GiveAchievement(mApp, Zombologist, true);
+			ReportAchievement::GiveAchievement(mApp, AchievementId::Zombologist, true);
 	}
 
 	if (theZombieType == ZombieType::ZOMBIE_DIGGER) {
@@ -3315,6 +3336,10 @@ void Board::UpdateCursor()
 			aHideCursor = true;
 		}
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE)
+		{
+			aHideCursor = true;
+		}
+		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER)
 		{
 			aHideCursor = true;
 		}
@@ -4599,7 +4624,8 @@ bool Board::MouseHitTest(int x, int y, HitResult* theHitResult)
 	}
 
 	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_NORMAL || mCursorObject->mCursorType == CursorType::CURSOR_TYPE_HAMMER || 
-		mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+		mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER)
 	{
 		Coin* aCoin = nullptr;
 		Coin* aTopCoin = nullptr;
@@ -5034,6 +5060,9 @@ bool Board::CanInteractWithBoardButtons()
 		return false;
 
 	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+		return true;
+
+	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
 		return true;
 
 	if (mCursorObject->mCursorType != CursorType::CURSOR_TYPE_NORMAL && 
@@ -5616,6 +5645,9 @@ bool Board::IsFinalScaryPotterStage()
 	{
 		return mChallenge->mSurvivalStage == 2;
 	}
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
+		return mChallenge->mSurvivalStage == 2;
 	
 	return !mApp->IsEndlessScaryPotter(mApp->mGameMode);
 }
@@ -5676,6 +5708,7 @@ void Board::UpdateSunSpawning()
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 		mApp->IsIZombieLevel() ||
 		mApp->IsScaryPotterLevel() || 
 		mApp->IsSquirrelLevel() || 
@@ -6266,16 +6299,43 @@ void Board::Update()
 
 		if (mHeld) {
 			bool doUpdateCursor = false;
-			HitResult aHitResult;
-			MouseHitTest(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY, &aHitResult);
-			if (aHitResult.mObject && aHitResult.mObjectType == GameObjectType::OBJECT_TYPE_COIN)
+
+			if (mApp->mGameScene == GameScenes::SCENE_PLAYING)
 			{
-				Coin* aCoin = (Coin*)(aHitResult.mObject);
-				if (aCoin && aCoin->mBoard)
+				HitResult aHitResult;
+				MouseHitTest(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY, &aHitResult);
+				if (aHitResult.mObject && aHitResult.mObjectType == GameObjectType::OBJECT_TYPE_COIN)
 				{
-					aCoin->MouseDown(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY, 1);
-					doUpdateCursor = true;
+					Coin* aCoin = (Coin*)(aHitResult.mObject);
+					if (aCoin && aCoin->mBoard)
+					{
+						aCoin->MouseDown(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY, 1);
+						doUpdateCursor = true;
+					}
 				}
+
+				// Swiping really nerfs this level
+				/*if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && mCursorObject->mCursorType != CursorType::CURSOR_TYPE_COBCANNON_TARGET)
+				{
+					Zombie* aZombie = nullptr;
+					Zombie* aTopZombie = nullptr;
+					while (IterateZombies(aZombie)) {
+						if (!aZombie->IsDeadOrDying() && aZombie->mButteredCounter == 0) {
+							Rect aZombieRect = aZombie->GetZombieRect();
+							if (GetCircleRectOverlap(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY, 45, aZombieRect)) {
+								if (aTopZombie == nullptr || aZombie->mRenderOrder >= aTopZombie->mRenderOrder) {
+									aTopZombie = aZombie;
+								}
+							}
+						}
+					}
+
+					if (aTopZombie) {
+						mApp->PlayFoley(FOLEY_BUTTER);
+						aTopZombie->ApplyButter();
+						doUpdateCursor = true;
+					}
+				}*/
 			}
 
 			if (doUpdateCursor) UpdateCursor();
@@ -8632,7 +8692,7 @@ void Board::SetMustacheMode(bool theEnableMustache)
 	mApp->mMustacheMode = theEnableMustache;
 
 	if (mApp->mGameScene == SCENE_PLAYING)
-		ReportAchievement::GiveAchievement(mApp, MustacheMode, true);
+		ReportAchievement::GiveAchievement(mApp, AchievementId::MustacheMode, true);
 
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
@@ -9625,7 +9685,7 @@ void Board::AddSunMoney(int theAmount)
 	}
 	if (mSunMoney >= 8000)
 		// if ( !*(mApp->mPlayerInfo + 48) ) todo @Patoke: figure this out
-		ReportAchievement::GiveAchievement(mApp, SunnyDays, true);
+		ReportAchievement::GiveAchievement(mApp, AchievementId::SunnyDays, true);
 }
 
 //0x41B980

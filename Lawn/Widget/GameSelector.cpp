@@ -1364,7 +1364,7 @@ void GameSelector::KeyDown(KeyCode theKey)
 	{
 		mApp->PlayFoley(FoleyType::FOLEY_POLEVAULT);
 		mApp->mMustacheMode = !mApp->mMustacheMode;
-		ReportAchievement::GiveAchievement(mApp, MustacheMode, false);
+		ReportAchievement::GiveAchievement(mApp, AchievementId::MustacheMode, false);
 		return;
 	}
 	if (mApp->mSuperMowerCheck->Check(theKey) || mApp->mSuperMowerCheck2->Check(theKey))

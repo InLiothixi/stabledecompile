@@ -70,6 +70,7 @@ StoreScreen::StoreScreen(LawnApp* theApp) : Dialog(nullptr, nullptr, DIALOG_STOR
     Resize(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
     mPottedPlantSpecs.InitializePottedPlant(SEED_MARIGOLD);
     mPottedPlantSpecs.mDrawVariation = (DrawVariation)RandRangeInt(VARIATION_MARIGOLD_WHITE, VARIATION_MARIGOLD_LIGHT_GREEN);
+    mCrazyDaveLastTalkIndex = -1;
 
     mBackButton = new NewLawnButton(nullptr, StoreScreen::StoreScreen_Back, this);
     mBackButton->mDoFinger = true;
@@ -549,7 +550,7 @@ void StoreScreen::SetBubbleText(int theCrazyDaveMessage, int theTime, bool theCl
 void StoreScreen::UpdateMouse()
 {
     mMouseOverItem = STORE_ITEM_INVALID;
-    if (mStoreTime < 120 || mBubbleClickToContinue || mHatchTimer > 0 || mWaitForDialog) return;
+    if (mStoreTime < 120 || mBubbleClickToContinue || mHatchTimer > 0 || mWaitForDialog || mCrazyDaveLastTalkIndex != -1) return;
     int aMouseX = mApp->mWidgetManager->mLastMouseX - mX, aMouseY = mApp->mWidgetManager->mLastMouseY - mY;
     bool aShowFinger = false;
     for (int aItemPos = 0; aItemPos < MAX_PAGE_SPOTS; aItemPos++)
@@ -737,15 +738,22 @@ void StoreScreen::Update()
                 mBubbleCountDown--;
                 if (mBubbleCountDown == 0)
                 {
-                    if (mApp->mSoundSystem->IsFoleyPlaying(FOLEY_CRAZY_DAVE_SHORT) || 
+                    if (mCrazyDaveLastTalkIndex >= 4000 && mCrazyDaveLastTalkIndex < 4004)
+                    {
+                        mCrazyDaveLastTalkIndex++;
+                        SetBubbleText(mCrazyDaveLastTalkIndex, 0, true);
+                    }
+                    else if (mApp->mSoundSystem->IsFoleyPlaying(FOLEY_CRAZY_DAVE_SHORT) || 
                         mApp->mSoundSystem->IsFoleyPlaying(FOLEY_CRAZY_DAVE_LONG) ||
                         mApp->mSoundSystem->IsFoleyPlaying(FOLEY_CRAZY_DAVE_EXTRA_LONG))
                     {
                         mBubbleCountDown = 1;
+                        mCrazyDaveLastTalkIndex = -1;
                     }
                     else
                     {
                         mApp->CrazyDaveStopTalking();
+                        mCrazyDaveLastTalkIndex = -1;
                     }
                 }
             }
@@ -1070,12 +1078,14 @@ void StoreScreen::PurchaseItem(StoreItem theStoreItem)
             }
 
             if (aGiveAchievement) {
-                ReportAchievement::GiveAchievement(mApp, Morticulturalist, false); // @Patoke: add achievement
-                SetBubbleText(4000, 800, false);
+                ReportAchievement::GiveAchievement(mApp, AchievementId::Morticulturalist, false); // @Patoke: add achievement
+                SetBubbleText(4000, 0, true);
+                mCrazyDaveLastTalkIndex = 4000;
                 // todo @Patoke: add these?
                 //*(a2 + 412) = 150;
                 //*(a2 + 416) = 0;
                 //*(a2 + 584) = 1;
+                // what are those (ToT)
             }
 
             mApp->WriteCurrentUserConfig();
