@@ -384,6 +384,7 @@ bool D3DInterface::PreDraw()
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_SRCBLEND,  D3DBLEND_SRCALPHA); 
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA); 
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_LIGHTING , FALSE);
+		mD3DDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, TRUE);
 
 		// filter states 
 		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFG_POINT); 
@@ -997,11 +998,11 @@ void TextureData::CreateTextures(MemoryImage *theImage, LPDIRECT3DDEVICE7 theDev
 	//theImage->mD3DFlags = D3DImageFlag_UseA4R4G4B4;
 
 	theImage->CommitBits();
-	if (!theImage->mHasAlpha && !theImage->mHasTrans && (gSupportedPixelFormats & PixelFormat_R5G6B5))
-	{
-		if (!(theImage->mD3DFlags & D3DImageFlag_UseA8R8G8B8))
-			aFormat = PixelFormat_R5G6B5;
-	}
+	//if (!theImage->mHasAlpha && !theImage->mHasTrans && (gSupportedPixelFormats & PixelFormat_R5G6B5))
+	//{
+	//	if (!(theImage->mD3DFlags & D3DImageFlag_UseA8R8G8B8))
+	//		aFormat = PixelFormat_R5G6B5;
+	//}
 
 	LPDIRECTDRAWPALETTE aDDPalette = NULL;
 	if (theImage->mColorIndices != NULL && (gSupportedPixelFormats & PixelFormat_Palette8))

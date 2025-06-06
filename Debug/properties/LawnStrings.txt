@@ -3520,7 +3520,7 @@ Bomb All Together
 Buttered Popcorn
 
 [CRAZY_DAVE_4010]
-BUTTERED POPCORN! {SCREAM}
+{SHAKE}BUTTERED POPCORN! {SCREAM}{MOUTH_BIG_SMILE}
 
 [CRAZY_DAVE_4011]
 Keep those zombies at bay by touching them with your buttered fingers!

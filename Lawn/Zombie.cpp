@@ -7004,6 +7004,8 @@ void Zombie::Draw(Graphics* g)
 
     g->ClearClipRect();
 
+    //TodDrawString(g, "Fruko", 40, -15, Sexy::FONT_DWARVENTODCRAFT18, Color::White, DS_ALIGN_CENTER);
+
     if (mZombieType != ZombieType::ZOMBIE_BOSS && IsOnBoard() && mApp->mShowHealthBar && mHasHead && !IsDeadOrDying() && !mApp->IsWhackAZombieLevel() &&
         (EffectedByDamage(1U) || EffectedByDamage(2U) || EffectedByDamage(4U) || EffectedByDamage(8U) || EffectedByDamage(129U) && mMindControlled)
         ) {
