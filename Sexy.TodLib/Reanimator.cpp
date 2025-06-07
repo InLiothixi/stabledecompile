@@ -1315,8 +1315,8 @@ void Reanimation::PlayReanim(const char* theTrackName, ReanimLoopType theLoopTyp
 //0x473C60
 void Reanimation::ParseAttacherTrack(const ReanimatorTransform& theTransform, AttacherInfo& theAttacherInfo)
 {
-	theAttacherInfo.mReanimName = _S("");
-	theAttacherInfo.mTrackName = _S("");
+	theAttacherInfo.mReanimName = "";
+	theAttacherInfo.mTrackName = "";
 	theAttacherInfo.mAnimRate = 12.0f;
 	theAttacherInfo.mLoopType = ReanimLoopType::REANIM_LOOP;
 	if (theTransform.mFrame == -1.0f)  // 如果是空白帧
@@ -1324,11 +1324,11 @@ void Reanimation::ParseAttacherTrack(const ReanimatorTransform& theTransform, At
 
 	/* 附属轨道名称格式：attacher__REANIMNAME__TRACKNAME[TAG1][TAG2]…… */
 
-	const SexyChar* aReanimName = sexystrstr(StringToSexyString(theTransform.mText).c_str(), _S("__"));  // 指向动画名称前的双下划线
+	const char* aReanimName = strstr(theTransform.mText, "__");  // 指向动画名称前的双下划线
 	if (aReanimName == nullptr)  // 如果字符串中不含双下划线
 		return;
-	const SexyChar* aTags = sexystrstr(aReanimName + 2, _S("["));  // 动画名称之后，指向 TAG 前的中括号
-	const SexyChar* aTrackName = sexystrstr(aReanimName + 2, _S("__"));  // 动画名称之后，指向轨道名称前的双下划线
+	const char* aTags = strstr(aReanimName + 2, "[");  // 动画名称之后，指向 TAG 前的中括号
+	const char* aTrackName = strstr(aReanimName + 2, "__");  // 动画名称之后，指向轨道名称前的双下划线
 	if (aTags && aTrackName && ((uintptr_t)aTags < (uintptr_t)aTrackName))  // 如果“[”之后还有双下划线，则字符串非法
 		return;
 
@@ -1347,23 +1347,22 @@ void Reanimation::ParseAttacherTrack(const ReanimatorTransform& theTransform, At
 
 	while (aTags)  // 读取每个 TAG
 	{
-		const SexyChar* aTagEnds = sexystrstr(aTags + 1, _S("]"));
+		const char* aTagEnds = strstr(aTags + 1, "]");
 		if (aTagEnds == nullptr)  // 如果没有右中括号
 			break;
-		
-		SexyString aCode(aTags + 1, aTagEnds - aTags - 1);  // 取中括号内的文本
-		if (sexysscanf(aCode.c_str(), _S("%f"), &theAttacherInfo.mAnimRate) != 1)  // 尝试将文本作为浮点数扫描，如果扫描成功则将结果作为动画速率
+
+		std::string aCode(aTags + 1, aTagEnds - aTags - 1);  // 取中括号内的文本
+		if (sscanf_s(aCode.c_str(), "%f", &theAttacherInfo.mAnimRate) != 1)  // 尝试将文本作为浮点数扫描，如果扫描成功则将结果作为动画速率
 		{
-			if (aCode.compare(_S("hold")) == 0)
+			if (aCode.compare("hold") == 0)
 				theAttacherInfo.mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
-			else if (aCode.compare(_S("once")) == 0)
+			else if (aCode.compare("once") == 0)
 				theAttacherInfo.mLoopType = ReanimLoopType::REANIM_PLAY_ONCE;
 		}
 
-		aTags = sexystrstr(aTagEnds + 1, _S("["));  // 继续寻找下一个 TAG 的左中括号
+		aTags = strstr(aTagEnds + 1, "[");  // 继续寻找下一个 TAG 的左中括号
 	}
 }
-
 //0x473EB0
 void Reanimation::AttacherSynchWalkSpeed(int theTrackIndex, Reanimation* theAttachReanim, AttacherInfo& theAttacherInfo)
 {
