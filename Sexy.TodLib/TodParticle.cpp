@@ -948,6 +948,88 @@ bool TodParticleEmitter::GetRenderParams(TodParticle* theParticle, ParticleRende
 	return true;
 }
 
+static void RGB_to_HSL(float r, float g, float b, float& h, float& s, float& l)
+{
+	float maxval = max(r, g);
+	maxval = max(maxval, b);
+	float minval = min(r, g);
+	minval = min(minval, b);
+
+	l = (minval + maxval) / 2;  //luminosity
+	if (l <= 0.0f)
+		return;
+
+	float delta = maxval - minval;
+	s = delta;
+	if (s <= 0.0f)
+		return;
+	s /= ((l <= 0.5f) ? (minval + maxval) : (2.0f - minval - maxval));  //saturation
+
+	float r2 = (maxval - r) / delta;
+	float g2 = (maxval - g) / delta;
+	float b2 = (maxval - b) / delta;
+	if (maxval == r)
+		h = ((g == minval) ? (5.0f + b2) : (1.0f - g2));
+	else if (maxval == g)
+		h = ((b == minval) ? (1.0f + r2) : (3.0f - b2));
+	else
+		h = ((r == minval) ? (3.0f + g2) : (5.0f - r2));
+	h /= 6.0f;  //hue
+}
+
+static void HSL_to_RGB(float h, float sl, float l, float& r, float& g, float& b)
+{
+	float v = (l <= 0.5f) ? (l * (1.0f + sl)) : (l + sl - l * sl);
+	if (v <= 0.0f)
+	{
+		r = 0.0f;
+		g = 0.0f;
+		b = 0.0f;
+		return;
+	}
+
+	float y = 2 * l - v;
+	float sv = (v - y) / v;
+	h *= 6.0f;
+	int sextant = ClampInt((int)h, 0, 5);
+	float vsf = v * sv * (h - sextant);
+	float x = y + vsf;
+	float z = v - vsf;
+
+	switch (sextant)
+	{
+	case 0:	r = v;	g = x;	b = y;	break;
+	case 1:	r = z;	g = v;	b = y;	break;
+	case 2:	r = y;	g = v;	b = x;	break;
+	case 3:	r = y;	g = z;	b = v;	break;
+	case 4:	r = x;	g = y;	b = v;	break;
+	case 5:	r = v;	g = y;	b = z;	break;
+	}
+}
+
+Color FilterColorDoLumSat(const Color& color, float theLum, float theSat)
+{
+	float b = (float)color.mBlue / 255;
+	float g = (float)color.mGreen / 255;
+	float r = (float)color.mRed / 255;
+	int a = color.mAlpha;
+
+	float h, s, l;
+	RGB_to_HSL(r, g, b, h, s, l);
+	s *= theSat;
+	l *= theLum;
+	HSL_to_RGB(h, s, l, r, g, b);
+
+	Color result(
+		ClampInt(r * 255, 0, 255),
+		ClampInt(g * 255, 0, 255),
+		ClampInt(b * 255, 0, 255),
+		a
+	);
+
+	return result;
+}
+
 //0x517E20
 void RenderParticle(Graphics* g, TodParticle* theParticle, const Color& theColor, ParticleRenderParams* theParams, TodTriangleGroup* theTriangleGroup)
 {
@@ -1011,6 +1093,15 @@ void RenderParticle(Graphics* g, TodParticle* theParticle, const Color& theColor
 		Color anOldColor = g->GetColor();
 		int anOldDrawMode = g->GetDrawMode();
 		g->SetColor(theColor);
+
+		if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WASHED_OUT)
+			g->SetColor(FilterColorDoLumSat(theColor, 1.8f, 0.2f));
+		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT)
+			g->SetColor(FilterColorDoLumSat(theColor, 1.2f, 0.3f));
+		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
+			g->SetColor(Color::White);
+		
+
 		g->FillRect(-g->mTransX, -g->mTransY, BOARD_WIDTH, BOARD_HEIGHT);
 		g->SetColor(anOldColor);
 		g->SetDrawMode(anOldDrawMode);
@@ -1052,6 +1143,13 @@ void TodParticleEmitter::DrawParticle(Graphics* g, TodParticle* theParticle, Tod
 		{
 			aParams.mPosX += g->mTransX;
 			aParams.mPosY += g->mTransY;
+
+			if (aParams.mFilterEffect == FilterEffect::FILTER_EFFECT_WASHED_OUT)
+				aColor = FilterColorDoLumSat(aColor, 1.8f, 0.2f);
+			else if (aParams.mFilterEffect == FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT)
+				aColor = FilterColorDoLumSat(aColor, 1.2f, 0.3f);
+			else if (aParams.mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
+				aColor = Color::White;
 
 			TodParticle* aParticle;
 			if (mImageOverride || mEmitterDef->mImage)  // 粒子有贴图时，渲染该粒子

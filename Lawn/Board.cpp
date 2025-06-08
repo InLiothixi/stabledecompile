@@ -599,7 +599,15 @@ void Board::PutInMissingZombies(int theWaveNumber, ZombiePicker* theZombiePicker
 {
 	for (ZombieType aZombieType = ZombieType::ZOMBIE_NORMAL; aZombieType < ZombieType::NUM_ZOMBIE_TYPES; aZombieType = (ZombieType)((int)aZombieType + 1))
 	{
-		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] > 0 && aZombieType != ZombieType::ZOMBIE_YETI && (CanZombieSpawnOnLevel(aZombieType, mLevel) || !mApp->IsAdventureMode()))
+		bool isZombieAllowedToSpawn = false;
+
+		if (!mApp->IsAdventureMode())
+			isZombieAllowedToSpawn = GetZombieDefinition(aZombieType).mPickWeight > 0;
+		else
+			isZombieAllowedToSpawn = CanZombieSpawnOnLevel(aZombieType, mLevel);
+		
+
+		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] > 0 && aZombieType != ZombieType::ZOMBIE_YETI && isZombieAllowedToSpawn)
 		{
 			PutZombieInWave(aZombieType, theWaveNumber, theZombiePicker);
 		}
@@ -5858,13 +5866,16 @@ void Board::UpdateZombieSpawning()
 		return;
 	}
 
-	const bool isLastFlag = mCurrentWave == mNumWaves - 1;
-	const int health = TotalZombiesHealthInWave(mCurrentWave - 1);
-	const bool isFlag = IsFlagWave(mCurrentWave);
-	bool allowedToSkip = health <= mZombieHealthToNextWave && (!isFlag || isLastFlag && mApp->IsSurvivalMode());
-	allowedToSkip |= health <= 0 && isFlag && (!mApp->IsSurvivalMode() || isLastFlag);
+	const int currentWaveHealth = TotalZombiesHealthInWave(mCurrentWave - 1);
+	const bool isFinalWave = (mCurrentWave - 1 == mNumWaves);
+	const bool isCurrentWaveWeakerThanNext = (currentWaveHealth <= mZombieHealthToNextWave);
+	const bool isNextWaveFlag = IsFlagWave(mCurrentWave);
+	bool canSkipWave = false;
+	canSkipWave = isCurrentWaveWeakerThanNext && !isNextWaveFlag;
+	canSkipWave |= (mZombieHealthToNextWave == 0 && isFinalWave);
+	canSkipWave |= (currentWaveHealth <= 0);
 
-	if (mZombieCountDown > 200 && mZombieCountDownStart - mZombieCountDown > 400 && allowedToSkip)
+	if (mZombieCountDown > 200 && mZombieCountDownStart - mZombieCountDown > 400 && canSkipWave)
 	{
 		mZombieCountDown = 200;
 	}
@@ -8078,7 +8089,7 @@ void Board::ClearFogAroundPlant(Plant* thePlant, int theSize)
 			int aDistY = abs(y - thePlant->mRow);
 			if (theSize == 4)
 			{
-				if (aDistX > 2 || aDistY > 1 && y < MAX_GRID_SIZE_Y)
+				if (aDistX > 3 || aDistY > 1 && y < MAX_GRID_SIZE_Y)
 				{
 					continue;
 				}

@@ -245,7 +245,7 @@ SexyAppBase::SexyAppBase()
 	mSysCursor = true;	
 	mForceFullscreen = false;
 	mForceWindowed = false;
-	mHasFocus = true;			
+	mHasFocus = false;			
 	mCustomCursorsEnabled = false;	
 	mCustomCursorDirty = false;
 	mOverrideCursor = NULL;
@@ -5052,13 +5052,13 @@ void SexyAppBase::MakeWindow()
 				aPlaceY = aDesktopRect.bottom - aHeight - aSpacing;
 		}
 
-		if (!isMaximized && mPreferredWIDTH != -1 && mIsWindowed && !mFullScreenWindow)
+		if (!isMaximized && mIsWindowed && !mFullScreenWindow)
 		{
 			RECT aRect2;
 			aRect2.left = 0;
 			aRect2.top = 0;
-			aRect2.right = mPreferredWIDTH;
-			aRect2.bottom = mPreferredHEIGHT;
+			aRect2.right = mPreferredWIDTH != -1 ? mPreferredWIDTH : 800;
+			aRect2.bottom = mPreferredHEIGHT != -1 ? mPreferredHEIGHT : 600;
 
 			BOOL worked2 = AdjustWindowRect(&aRect2, aWindowStyle, FALSE);
 
@@ -5223,13 +5223,13 @@ void SexyAppBase::MakeWindow()
 		}
 	}
 
-	if (mIsWindowed && !mFullScreenWindow && mPreferredWIDTH != -1)
+	if (mIsWindowed && !mFullScreenWindow)
 	{
-		int adjustedWidth = mPreferredWIDTH;
-		int adjustedHeight = mPreferredHEIGHT;
+		int adjustedWidth = mPreferredWIDTH != -1 ? mPreferredWIDTH : 800;
+		int adjustedHeight = mPreferredHEIGHT != -1 ? mPreferredHEIGHT : 600;
 
-		int originWidth = mPreferredWIDTH;
-		int originHeight = mPreferredHEIGHT;
+		int originWidth = adjustedWidth;
+		int originHeight = adjustedHeight;
 		const float WRatio = 4.0f / 3.0f;
 		const float HRatio = 3.0f / 4.0f;
 
@@ -5243,14 +5243,14 @@ void SexyAppBase::MakeWindow()
 			adjustedHeight = stretchHeight;
 		}
 
-		if (mPreferredMAXIMIZED) {
+		/*if (mPreferredMAXIMIZED) {
 			RECT aWindowRect;
 			GetClientRect(gSexyAppBase->mHWnd, &aWindowRect);
 			adjustedWidth = aWindowRect.right;
 			adjustedHeight = aWindowRect.bottom;
 			originWidth = aWindowRect.right;
 			originHeight = aWindowRect.bottom;
-		}
+		}*/
 
 		if (gSexyAppBase->mWidescreenAware)
 		{

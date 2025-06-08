@@ -4479,7 +4479,7 @@ void Challenge::ScaryPotterOpenPot(GridItem* theScaryPot)
 		theScaryPot->mGridItemState == GRIDITEM_STATE_SCARY_POT_LEAF ? PARTICLE_VASE_SHATTER_LEAF :
 		theScaryPot->mGridItemState == GRIDITEM_STATE_SCARY_POT_ZOMBIE ? PARTICLE_VASE_SHATTER_ZOMBIE :
 		PARTICLE_VASE_SHATTER;
-	mApp->AddTodParticle(aXPos + 20, aYPos, RENDER_LAYER_TOP, anEffect);
+	mApp->AddTodParticle(aXPos + 20, aYPos, /*RENDER_LAYER_TOP*/ Board::MakeRenderOrder(RENDER_LAYER_PARTICLE, theScaryPot->mGridY, 0), anEffect);
 }
 
 //0x429DB0

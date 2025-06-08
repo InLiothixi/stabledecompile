@@ -404,6 +404,26 @@ void Coin::CoinInitialize(int theX, int theY, CoinType theCoinType, CoinMotion t
     {
         PlayLaunchSound();
     }
+
+    if (mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
+    {
+        float aOffsetX = 0.0f;
+        float aOffsetY = 0.0f;
+        if (mType == CoinType::COIN_DIAMOND)
+        {
+            aOffsetX = 18.0f - 18.0f * mScale;
+            aOffsetY = 13.0f - 13.0f * mScale;
+        }
+
+        AttachmentUpdateAndMove(mAttachmentID, mPosX + aOffsetX, mPosY + aOffsetY);
+        AttachmentOverrideColor(mAttachmentID, GetColor());
+        AttachmentOverrideScale(mAttachmentID, mScale);
+
+        if ((!mHitGround || mIsBeingCollected) && (mType == CoinType::COIN_SILVER || mType == CoinType::COIN_GOLD))
+        {
+            AttachmentOverrideColor(mAttachmentID, Color(0, 0, 0, 0));  // 运动中的金币和银币使用贴图，故以此法隐藏附件的动画
+        }
+    }
 }
 
 bool Coin::IsMoney(CoinType theType)
@@ -630,7 +650,7 @@ void Coin::UpdateCollected()
     }
     else if (IsMoney())
     {
-        aDestX = 39;
+        aDestX = 49;//39;
         aDestY = 558;
 
         if (mApp->GetDialog((int)Dialogs::DIALOG_STORE))

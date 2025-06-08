@@ -115,7 +115,6 @@ void ReanimatorCache::UpdateReanimationForVariation(Reanimation* theReanim, Draw
 		}
 		case DrawVariation::VARIATION_KERNELPULT_WITH_BUTTER:
 		case DrawVariation::VARIATION_SUNSHROOM_BIG:
-		case DrawVariation::VARIATION_SUNSHROOM_SMALL:
 		case DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE1:
 		case DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE2:
 			break;
@@ -304,10 +303,6 @@ MemoryImage* ReanimatorCache::MakeCachedPlantFrame(SeedType theSeedType, DrawVar
 	else if (theDrawVariation == DrawVariation::VARIATION_SUNSHROOM_BIG)
 	{
 		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_bigidle", theDrawVariation, theFilterVariation);
-	}
-	else if (theDrawVariation == DrawVariation::VARIATION_SUNSHROOM_SMALL)
-	{
-		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation);
 	}
 	else
 	{

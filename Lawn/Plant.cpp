@@ -1275,7 +1275,8 @@ void Plant::UpdateProductionPlant()
                 Reanimation* aCoinReanim = mApp->ReanimationTryToGet(aCoin->mReanimationID);
                 Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
                 if (aBodyReanim && aCoinReanim && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                    aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
+                    aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
+                   
                 }
             }
             else
@@ -1284,7 +1285,7 @@ void Plant::UpdateProductionPlant()
                 Reanimation* aCoinReanim = mApp->ReanimationTryToGet(aCoin->mReanimationID);
                 Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
                 if (aBodyReanim && aCoinReanim && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                    aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
+                    aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
                 }
             }
         }
@@ -1294,7 +1295,7 @@ void Plant::UpdateProductionPlant()
             Reanimation* aCoinReanim = mApp->ReanimationTryToGet(aCoin->mReanimationID);
             Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
             if (aBodyReanim && aCoinReanim && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
+                aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
             }
         }
         else if (mSeedType == SeedType::SEED_TWINSUNFLOWER)
@@ -1305,8 +1306,8 @@ void Plant::UpdateProductionPlant()
             Reanimation* aCoinReanim2 = mApp->ReanimationTryToGet(aCoin2->mReanimationID);
             Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
             if (aBodyReanim && aCoinReanim && aCoinReanim2 && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
-                aCoin2->mFilterEffect = aBodyReanim->mFilterEffect;
+                aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
+                aCoin2->mFilterEffect = aCoinReanim2->mFilterEffect = aBodyReanim->mFilterEffect;
             }
         }
         else if (mSeedType == SeedType::SEED_MARIGOLD)
@@ -1315,7 +1316,7 @@ void Plant::UpdateProductionPlant()
             Reanimation* aCoinReanim = mApp->ReanimationTryToGet(aCoin->mReanimationID);
             Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
             if (aBodyReanim && aCoinReanim && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
+                aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
             }
         }
 
@@ -1327,7 +1328,7 @@ void Plant::UpdateProductionPlant()
                 Reanimation* aCoinReanim = mApp->ReanimationTryToGet(aCoin->mReanimationID);
                 Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
                 if (aBodyReanim && aCoinReanim && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                    aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
+                    aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
                 }
             }
             else if (mSeedType == SeedType::SEED_MARIGOLD)
@@ -1336,7 +1337,7 @@ void Plant::UpdateProductionPlant()
                 Reanimation* aCoinReanim = mApp->ReanimationTryToGet(aCoin->mReanimationID);
                 Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
                 if (aBodyReanim && aCoinReanim && aBodyReanim->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
-                    aCoin->mFilterEffect = aBodyReanim->mFilterEffect;
+                    aCoin->mFilterEffect = aCoinReanim->mFilterEffect = aBodyReanim->mFilterEffect;
                 }
             }
         }
@@ -4580,14 +4581,9 @@ void Plant::Draw(Graphics* g)
         }
         else  if (mSeedType == SeedType::SEED_SUNSHROOM)
         {
-            if (mState == STATE_SUNSHROOM_SMALL) 
-            {
-                drawVar = DrawVariation::VARIATION_SUNSHROOM_SMALL;
-            }
-            else 
-            {
+            if (mState == STATE_SUNSHROOM_BIG) 
                 drawVar = DrawVariation::VARIATION_SUNSHROOM_BIG;
-            }
+            
         }
 
         bool aDrawPumpkinBack = false;
@@ -5422,6 +5418,15 @@ void Plant::ImitaterMorph()
     {
         aHeadReanim3->mFilterEffect = aFilter;
     }
+
+    if (mImitaterType == SeedType::SEED_PLANTERN)
+    {
+        if (!IsOnBoard() || mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
+        {
+            aPlant->AddAttachedParticle(mX + 40, mY + 40, (int)RenderLayer::RENDER_LAYER_FOG + 1, ParticleEffect::PARTICLE_LANTERN_SHINE);
+        }
+    }
+
 }
 
 //0x466CA0
