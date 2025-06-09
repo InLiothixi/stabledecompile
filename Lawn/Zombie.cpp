@@ -9926,7 +9926,7 @@ void Zombie::ApplyBurn()
         mZombiePhase == ZombiePhase::PHASE_DIGGER_RISING || 
         mZombiePhase == ZombiePhase::PHASE_DIGGER_RISE_WITHOUT_AXE || 
         mZombiePhase == ZombiePhase::PHASE_ZOMBIE_MOWERED || 
-        mInPool ||
+        mInPool && mAltitude <= -40 * mScaleZombie ||
         mYampolineCounter > 0)
     {
         //DieWithLoot();

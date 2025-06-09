@@ -1470,8 +1470,11 @@ Rect Board::GetShovelButtonRect()
 	if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerInfo->GetLevel() == 5 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
 		aRect.mY = 0;
 	
-	if (mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
-		aRect.mY = mSeedBank->mY;
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
+	{
+		aRect.mX = 0;
+		aRect.mY = 0;
+	}
 
 	return aRect;
 }
@@ -1487,32 +1490,6 @@ void Board::GetZenButtonRect(GameObjectType theObjectType, Rect& theRect)
 	// Rect aButtonRect = GetShovelButtonRect();
 	// GetZenButtonRect(xxx, aButtonRect);
 
-	if (mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
-	{
-		theRect.mY = 0;
-	}
-
-	if (mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
-	{
-		if (theObjectType == GameObjectType::OBJECT_TYPE_NEXT_GARDEN)
-		{
-			theRect.mX = 30;
-		}
-		//return theRect;
-	}
-
-	theRect.mX = 30;
-
-	if (mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_FERTILIZER] > 0 && 
-		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_BUG_SPRAY] > 0 &&
-		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_PHONOGRAPH] > 0 &&
-		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_GARDENING_GLOVE] > 0 &&
-		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_WHEEL_BARROW] > 0 &&
-		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_CHOCOLATE] - PURCHASE_COUNT_OFFSET > 0)
-	{
-		theRect.mX = 0;
-	}
-
 	bool usable = true;
 	for (int anObject = GameObjectType::OBJECT_TYPE_WATERING_CAN; anObject <= GameObjectType::OBJECT_TYPE_NEXT_GARDEN; anObject++)
 	{
@@ -1520,11 +1497,12 @@ void Board::GetZenButtonRect(GameObjectType theObjectType, Rect& theRect)
 		if (!CanUseGameObject((GameObjectType)anObject))
 		{
 			usable = false;
+			break;
 		}
 	}
-	if (usable)
+	if (usable || theObjectType == GameObjectType::OBJECT_TYPE_TREE_FOOD)
 	{
-		theRect.mX = 0;
+		theRect.mX = 30;
 	}
 
 	for (int anObject = GameObjectType::OBJECT_TYPE_WATERING_CAN; anObject < theObjectType; anObject++)
@@ -2528,8 +2506,9 @@ Plant* Board::GetTopPlantAt(int theGridX, int theGridY, PlantPriority thePriorit
 	case PlantPriority::TOPPLANT_ONLY_FLYING:					return aPlantOnLawn.mFlyingPlant;
 	case PlantPriority::TOPPLANT_ONLY_PUMPKIN:					return aPlantOnLawn.mPumpkinPlant;
 	case PlantPriority::TOPPLANT_ONLY_UNDER_PLANT:				return aPlantOnLawn.mUnderPlant;
-	default:													/*TOD_ASSERT();*/ return nullptr;
+	default:													TOD_ASSERT();
 	}
+	//unreachable();
 }
 
 //0x40D3A0
@@ -4625,7 +4604,8 @@ bool Board::MouseHitTest(int x, int y, HitResult* theHitResult)
 			mCursorObject->mCursorType == CursorType::CURSOR_TYPE_HAMMER)
 			return true;
 	}
-	if (mShowShovel && aShovelButtonRect.Contains(x, y) && CanInteractWithBoardButtons())
+	if (mShowShovel && aShovelButtonRect.Contains(x, y) && CanInteractWithBoardButtons() &&
+		mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
 	{
 		theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_SHOVEL;
 		return true;
@@ -4703,6 +4683,7 @@ bool Board::MouseHitTest(int x, int y, HitResult* theHitResult)
 				{
 					GetZenButtonRect(aTool, aButtonRect);
 				}
+
 
 				if (aButtonRect.Contains(x, y))
 				{
@@ -7484,6 +7465,7 @@ void Board::DrawZenButtons(Graphics* g)
 			continue;
 
 		Rect aButtonRect = GetShovelButtonRect();
+
 		if (aTool == GameObjectType::OBJECT_TYPE_NEXT_GARDEN)
 		{
 			aButtonRect.mX = 564;
@@ -9980,8 +9962,9 @@ int Board::LeftFogColumn()
 	if (mLevel == 31)													return 6;
 	if (mLevel >= 32 && mLevel <= 36)									return 5;
 	if (mLevel >= 37 && mLevel <= 40)									return 4;
-	return 6;
-	//TOD_ASSERT();
+	TOD_ASSERT();
+
+	//unreachable();
 }
 
 //0x41C210
@@ -10882,9 +10865,9 @@ int Board::GetNumWavesPerSurvivalStage()
 		return 20;
 	}
 
-	return 0;
+	TOD_ASSERT();
 
-	//TOD_ASSERT();
+	//unreachable();
 }
 
 //0x41DA50
@@ -10922,7 +10905,8 @@ bool Board::CanUseGameObject(GameObjectType theGameObject)
 {
 	if (mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
 	{
-		return theGameObject == GameObjectType::OBJECT_TYPE_TREE_FOOD || theGameObject == GameObjectType::OBJECT_TYPE_NEXT_GARDEN && mApp->mGameScene == GameScenes::SCENE_PLAYING;
+		return theGameObject == GameObjectType::OBJECT_TYPE_TREE_FOOD || 
+			theGameObject == GameObjectType::OBJECT_TYPE_NEXT_GARDEN && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mCrazyDaveState == CrazyDaveState::CRAZY_DAVE_OFF);
 	}
 	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
 	{
@@ -10973,9 +10957,9 @@ bool Board::CanUseGameObject(GameObjectType theGameObject)
 		return false;
 	}
 
-	return false;
-	
-	//TOD_ASSERT();
+	TOD_ASSERT();
+
+	//unreachable();
 }
 
 void Board::ShakeBoard(int theShakeAmountX, int theShakeAmountY)

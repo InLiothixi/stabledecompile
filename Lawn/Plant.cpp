@@ -4095,7 +4095,7 @@ float PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedTy
             doFloating = true;
         }
     }
-    else if (theBoard->IsPoolSquare(theCol, theRow) || theBoard->mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
+    else if (theBoard->IsPoolSquare(theCol, theRow) || theBoard->mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM && !gLawnApp->GetDialog((int)Dialogs::DIALOG_STORE))
     {
         doFloating = true;
     }

@@ -489,8 +489,8 @@ void TodDrawStringMatrix(Graphics* g, const Font* theFont, const SexyMatrix3& th
 		{
 			aNextChar = aFont->GetMappedChar(aFinalString[aCharNum + 1]);
 		}
-
 		int aMaxXPos = aCurXPos;
+		int aLayerCount = 0;
 		for (auto aKernItr = aFont->mActiveLayerList.begin(); aKernItr != aFont->mActiveLayerList.end(); aKernItr++)
 		{
 			FontLayer* aLayer = aKernItr->mBaseFontLayer;
@@ -545,7 +545,12 @@ void TodDrawStringMatrix(Graphics* g, const Font* theFont, const SexyMatrix3& th
 			aColor.mGreen = min(aLayer->mColorAdd.mGreen + theColor.mGreen * aLayer->mColorMult.mGreen / 255, 255);
 			aColor.mBlue = min(aLayer->mColorAdd.mBlue + theColor.mBlue * aLayer->mColorMult.mBlue / 255, 255);
 			aColor.mAlpha = min(aLayer->mColorAdd.mAlpha + theColor.mAlpha * aLayer->mColorMult.mAlpha / 255, 255);
-			int anOrder = aCharData->mOrder + aLayer->mBaseOrder;
+
+			int aBaseOrder = aLayer->mBaseOrder;
+			if (!aBaseOrder) aBaseOrder = aLayerCount++;
+			int anOrder = aBaseOrder + aCharData->mOrder;
+
+			//int anOrder = aCharData->mOrder + aLayer->mBaseOrder;
 
 			if (aCurPoolIdx >= POOL_SIZE)
 				break;

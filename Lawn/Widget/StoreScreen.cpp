@@ -1068,7 +1068,7 @@ void StoreScreen::PurchaseItem(StoreItem theStoreItem)
             }
 
             // @Patoke: implemented
-            bool aGiveAchievement = true;
+            bool aGiveAchievement = mApp->mPlayerInfo && !mApp->mPlayerInfo->mEarnedAchievements[AchievementId::Morticulturalist];
             for (int i = STORE_ITEM_PLANT_GATLINGPEA; i <= STORE_ITEM_PLANT_IMITATER; i++) {
                 if (!mApp->SeedTypeAvailable(SeedType(SEED_GATLINGPEA + i)))
                 {
