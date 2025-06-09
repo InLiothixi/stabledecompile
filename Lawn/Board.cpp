@@ -1494,13 +1494,13 @@ void Board::GetZenButtonRect(GameObjectType theObjectType, Rect& theRect)
 	for (int anObject = GameObjectType::OBJECT_TYPE_WATERING_CAN; anObject <= GameObjectType::OBJECT_TYPE_NEXT_GARDEN; anObject++)
 	{
 		// 只要有一个按钮不可用，则所有可用按钮排列的起始横坐标为 30
-		if (!CanUseGameObject((GameObjectType)anObject))
+		if (anObject != GameObjectType::OBJECT_TYPE_TREE_FOOD && !CanUseGameObject((GameObjectType)anObject))
 		{
 			usable = false;
 			break;
 		}
 	}
-	if (usable || theObjectType == GameObjectType::OBJECT_TYPE_TREE_FOOD)
+	if (!usable || theObjectType == GameObjectType::OBJECT_TYPE_TREE_FOOD)
 	{
 		theRect.mX = 30;
 	}
