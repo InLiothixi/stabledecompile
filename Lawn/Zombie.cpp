@@ -7132,8 +7132,6 @@ bool Zombie::CanTargetPlant(Plant* thePlant, ZombieAttackType theAttackType)
 
     if (theAttackType == ZombieAttackType::ATTACKTYPE_CHEW)
     {
-        if (thePlant->mSeedType == SEED_POTATOMINE) return false; 
-
         Plant* aTopPlant = mBoard->GetTopPlantAt(thePlant->mPlantCol, thePlant->mRow, PlantPriority::TOPPLANT_EATING_ORDER);
         if (aTopPlant != thePlant && aTopPlant && CanTargetPlant(aTopPlant, theAttackType))
         {
@@ -7143,8 +7141,6 @@ bool Zombie::CanTargetPlant(Plant* thePlant, ZombieAttackType theAttackType)
 
     if (theAttackType == ZombieAttackType::ATTACKTYPE_VAULT)
     {
-        if (thePlant->mSeedType == SEED_POTATOMINE) return false;
-
         Plant* aTopPlant = mBoard->GetTopPlantAt(thePlant->mPlantCol, thePlant->mRow, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
         if (aTopPlant != thePlant && aTopPlant && CanTargetPlant(aTopPlant, theAttackType))
         {
