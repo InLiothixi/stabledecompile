@@ -343,7 +343,6 @@ void LawnApp::Shutdown()
 		}
 
 		FilterEffectDisposeForApp();
-		SmoothenedDisposeForApp();
 		TodParticleFreeDefinitions();
 		ReanimatorFreeDefinitions();
 		TrailFreeDefinitions();
