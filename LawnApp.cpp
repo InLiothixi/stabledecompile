@@ -159,22 +159,6 @@ LawnApp::LawnApp()
 	mDarknessEffect = nullptr;
 	mVoiceVolume = 0.0f;
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
-
-	mBoardL = luaL_newstate();
-	luaL_openlibs(mBoardL);
-	luaL_dofile(mBoardL, "mods/Board.lua");
-	lua_register(mBoardL, "PutZombieInWave", PutZombieInWaveL);
-	lua_register(mBoardL, "TodStringTranslate", TodStringTranslateL);
-	lua_register(mBoardL, "ChangeBackground", ChangeBackgroundL);
-	lua_register(mBoardL, "ChangeMusic", ChangeMusicL);
-
-	mMusicL = luaL_newstate();
-	luaL_openlibs(mMusicL);
-	luaL_dofile(mMusicL, "mods/Music.lua");
-
-	mChallengeL = luaL_newstate();
-	luaL_openlibs(mChallengeL);
-	luaL_dofile(mChallengeL, "mods/Challenge.lua");
 }
 
 //0x44EDD0、0x44EDF0
@@ -357,15 +341,6 @@ void LawnApp::Shutdown()
 
 			mPortAudioStream = nullptr;
 		}
-
-		lua_close(mBoardL);
-		mBoardL = nullptr;
-
-		lua_close(mMusicL);
-		mMusicL = nullptr;
-
-		lua_close(mChallengeL);
-		mChallengeL = nullptr;
 
 		SexyAppBase::Shutdown();
 
@@ -1404,7 +1379,7 @@ void LawnApp::Init()
 	mTitleScreen->Resize(0, 0, mWidth, mHeight);
 	mWidgetManager->AddWidget(mTitleScreen);
 	mWidgetManager->SetFocus(mTitleScreen);
-
+	
 #ifdef _DEBUG
 	int aDuration = mTimer.GetDuration();
 	TodTrace("loading: 'profiles' %d ms", aDuration);
@@ -1933,8 +1908,9 @@ void LawnApp::LoadingThreadProc()
 	TodHesitationBracket aHesitationResources("Resources");
 	TodHesitationTrace("loading thread start");
 
-	LoadGroup("LoadingImages", 9);
 	LoadGroup("LoadingFonts", 54);
+	LoadGroup("LoadingImages", 9);
+	LoadGroup("LoadingSounds", 54);
 
 	if (mLoadingFailed || mShutdown || mCloseRequest)
 		return;
@@ -1962,7 +1938,7 @@ void LawnApp::LoadingThreadProc()
 		mDarknessEffect->mBits[i] = 0xFF000000;
 	}
 	mDarknessEffect->mBits[CAUSTIC_IMAGE_WIDTH * CAUSTIC_IMAGE_HEIGHT] = MEMORYCHECK_ID;
-
+	
 	TodFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));
 
 	TodTrace("loading '%s' %d ms", "stuff", (int)aTimer.GetDuration());
@@ -1971,289 +1947,21 @@ void LawnApp::LoadingThreadProc()
 	TrailLoadDefinitions(gLawnTrailArray, LENGTH(gLawnTrailArray));
 	TodTrace("loading '%s' %d ms", "trail", (int)aTimer.GetDuration());
 	aTimer.Start();
-
 	TodHesitationTrace("trail");
+
 	TodParticleLoadDefinitions(gLawnParticleArray, LENGTH(gLawnParticleArray));
-	aDuration = max(aTimer.GetDuration(), 0);
+	//aDuration = max(aTimer.GetDuration(), 0);
 	aTimer.Start();
 
-	// @Inliothixie: implemented
-	//aTimer.Start();
-	TodHesitationTrace("zombatar");
-	//mNumLoadingThreadTasks += 1935;
-	mNumLoadingThreadTasks += 18;
-	TodLoadResources("DelayLoad_Zombatar");
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	TodHesitationTrace("levelselector");
-	//mNumLoadingThreadTasks += 1935;
-	mNumLoadingThreadTasks += 135;
-	TodLoadResources("DelayLoad_LevelSelector");
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	TodHesitationTrace("gameselector spotlight");
-	mNumLoadingThreadTasks += 68;
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTORSCREEN_SPOTLIGHT, true);
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	if (mPlayerInfo && mPlayerInfo->mLevel == 1 && IsFirstTimeAdventureMode() && !SaveFileExists())
-	{
-		TodHesitationTrace("credits");
-		mNumLoadingThreadTasks += 198;
-		TodLoadResources("DelayLoad_Credits");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background1");
-		mNumLoadingThreadTasks += 27;
-		TodLoadResources("DelayLoad_Background1");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background3");
-		mNumLoadingThreadTasks += 27;
-		TodLoadResources("DelayLoad_Background3");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("backgroundunsodded");
-		mNumLoadingThreadTasks += 9;
-		TodLoadResources("DelayLoad_BackgroundUnsodded");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SODROLL, true);
-		mNumLoadingThreadTasks += 68;
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-	}
-	else if (HasFinishedAdventure())
-	{
-		TodHesitationTrace("credits");
-		mNumLoadingThreadTasks += 198;
-		TodLoadResources("DelayLoad_Credits");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("backgroundunsodded");
-		mNumLoadingThreadTasks += 9;
-		TodLoadResources("DelayLoad_BackgroundUnsodded");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SODROLL, true);
-		mNumLoadingThreadTasks += 68;
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background1");
-		mNumLoadingThreadTasks += 27;
-		TodLoadResources("DelayLoad_Background1");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background2");
-		mNumLoadingThreadTasks += 27;
-		TodLoadResources("DelayLoad_Background2");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background3");
-		mNumLoadingThreadTasks += 27;
-		TodLoadResources("DelayLoad_Background3");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background4");
-		mNumLoadingThreadTasks += 45;
-		TodLoadResources("DelayLoad_Background4");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background5");
-		mNumLoadingThreadTasks += 18;
-		TodLoadResources("DelayLoad_Background5");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background5");
-		mNumLoadingThreadTasks += 18;
-		TodLoadResources("DelayLoad_Background5");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("background6");
-		mNumLoadingThreadTasks += 18;
-		TodLoadResources("DelayLoad_Background6");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("portals");
-		mNumLoadingThreadTasks += 136;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_PORTAL_CIRCLE, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_PORTAL_SQUARE, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("hammer");
-		mNumLoadingThreadTasks += 68;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_HAMMER, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-		
-		TodHesitationTrace("rain");
-		mNumLoadingThreadTasks += 136;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_RAIN_CIRCLE, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_RAIN_SPLASH, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-	}
-
-	TodHesitationTrace("lawnmower");
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_LAWNMOWER, true);
-	mNumLoadingThreadTasks += 68;
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	TodHesitationTrace("coins");
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_COIN_SILVER, true);
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_COIN_GOLD, true);
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_DIAMOND, true);
-	mNumLoadingThreadTasks += 204;
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	TodHesitationTrace("awardscreen");
-	mNumLoadingThreadTasks += 9;
-	TodLoadResources("DelayLoad_AwardScreen");
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	TodHesitationTrace("challengescreen");
-	mNumLoadingThreadTasks += 72;
-	TodLoadResources("DelayLoad_ChallengeScreen");
-	aDuration = max(aTimer.GetDuration(), 0);
-	aTimer.Start();
-
-	if (CanShowZenGarden()) {
-		TodHesitationTrace("zengarden");
-		mNumLoadingThreadTasks += 18;
-		TodLoadResources("DelayLoad_GreenHouseGarden");
-		TodLoadResources("DelayLoad_GreenHouseOverlay");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("zen plants");
-		mNumLoadingThreadTasks += 136;
-		Plant::PreloadPlantResources(SeedType::SEED_SPROUT);
-		Plant::PreloadPlantResources(SeedType::SEED_MARIGOLD);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("zen utilities");
-		mNumLoadingThreadTasks += 340;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_WATERINGCAN, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_FERTILIZER, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_BUGSPRAY, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_PHONOGRAPH, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_STINKY, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		if (mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_TREE_OF_WISDOM]) {
-			TodHesitationTrace("Tree of wisdom");
-			mNumLoadingThreadTasks += 204;
-			ReanimatorEnsureDefinitionLoaded(REANIM_TREEOFWISDOM, true);
-			ReanimatorEnsureDefinitionLoaded(REANIM_TREEOFWISDOM_CLOUDS, true);
-			ReanimatorEnsureDefinitionLoaded(REANIM_TREEOFWISDOM_TREEFOOD, true);
-			aDuration = max(aTimer.GetDuration(), 0);
-			aTimer.Start();
-		}
-
-		if (mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_AQUARIUM_GARDEN]) {
-			TodHesitationTrace("aquarium");
-			mNumLoadingThreadTasks += 27;
-			TodLoadResources("DelayLoad_Zombiquarium");
-			aDuration = max(aTimer.GetDuration(), 0);
-			aTimer.Start();
-		}
-
-		if (mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_MUSHROOM_GARDEN]) {
-			TodHesitationTrace("mushroom");
-			mNumLoadingThreadTasks += 9;
-			TodLoadResources("DelayLoad_MushroomGarden");
-			aDuration = max(aTimer.GetDuration(), 0);
-			aTimer.Start();
-		}
-	}
-
-	if (CanShowStore()) {
-		TodHesitationTrace("store");
-		mNumLoadingThreadTasks += 488;
-		TodLoadResources("DelayLoad_Store");
-		ReanimatorEnsureDefinitionLoaded(REANIM_CRAZY_DAVE, true);
-		ReanimatorEnsureDefinitionLoaded(REANIM_ZENGARDEN_FERTILIZER, true);
-		Plant::PreloadPlantResources(SeedType::SEED_GATLINGPEA);
-		Plant::PreloadPlantResources(SeedType::SEED_TWINSUNFLOWER);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		TodHesitationTrace("rake");
-		mNumLoadingThreadTasks += 68;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_RAKE, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-
-		TodHesitationTrace("roof cleaner");
-		mNumLoadingThreadTasks += 68;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ROOF_CLEANER, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-
-		TodHesitationTrace("pool cleaner");
-		mNumLoadingThreadTasks += 136;
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SPLASH, true);
-		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_POOL_CLEANER, true);
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-
-		if (!CanShowZenGarden()) {
-			TodHesitationTrace("zen shop");
-			mNumLoadingThreadTasks += 340;
-			ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_WATERINGCAN, true);
-			ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_FERTILIZER, true);
-			ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_BUGSPRAY, true);
-			ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZENGARDEN_PHONOGRAPH, true);
-			ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_STINKY, true);
-			aDuration = max(aTimer.GetDuration(), 0);
-			aTimer.Start();
-		}
-	}
-
-	if (CanShowAlmanac()) 
-	{
-		TodHesitationTrace("almanac");
-		mNumLoadingThreadTasks += 162;
-		TodLoadResources("DelayLoad_Almanac");
-		aDuration = max(aTimer.GetDuration(), 0);
-		aTimer.Start();
-	}
-	
 	PreloadForUser();
 	
 	if (mLoadingFailed || mShutdown || mCloseRequest)
 		return;
 
-	aDuration = max(aTimer.GetDuration(), 0);
+	//aDuration = max(aTimer.GetDuration(), 0);
 	aTimer.Start();
 
-	GetNumPreloadingTasks();
-	LoadGroup("LoadingSounds", 54);
+	//GetNumPreloadingTasks();
 	TodHesitationTrace("finished loading");
 }
 
@@ -2282,7 +1990,16 @@ void LawnApp::LoadingCompleted()
 	mTitleScreen = nullptr;
 
 	mResourceManager->DeleteImage("IMAGE_TITLESCREEN");
-	ShowGameSelector();
+	if (IsScreenSaver()) 
+	{
+		KillBoard();
+		mZenGarden->UpdatePlantNeeds();
+		PreNewGame(GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN, false);
+	}
+	else
+	{
+		ShowGameSelector();
+	}
 }
 
 //0x452D80
@@ -3575,19 +3292,11 @@ void LawnApp::DrawCrazyDave(Graphics* g)
 //0x455670
 int LawnApp::GetNumPreloadingTasks()
 {
-	int aTaskCount = 10;
+	int aTaskCount = IsScreenSaver() ? 0 : 13;
 	if (mPlayerInfo)
 	{
 		for (SeedType i = SeedType::SEED_PEASHOOTER; i < SeedType::NUM_SEED_TYPES; i = (SeedType)((int)i + 1))
 		{
-			if (mPlayerInfo->mLevel == 1 && !SaveFileExists() && !HasFinishedAdventure())
-			{
-				if (i == SeedType::SEED_PEASHOOTER || i == SeedType::SEED_LILYPAD || i == SeedType::SEED_SUNFLOWER || i == SeedType::SEED_TORCHWOOD ||
-					i == SeedType::SEED_THREEPEATER || i == SeedType::SEED_SPIKEWEED || i == SeedType::SEED_TANGLEKELP)
-					aTaskCount++;
-				continue;
-			}
-
 			if (SeedTypeAvailable(i) || HasFinishedAdventure())
 			{
 				aTaskCount++;
@@ -3597,13 +3306,7 @@ int LawnApp::GetNumPreloadingTasks()
 
 		for (ZombieType i = ZombieType::ZOMBIE_NORMAL; i < ZombieType::NUM_ZOMBIE_TYPES;i = (ZombieType)((int)i + 1))
 		{
-			if (mPlayerInfo->mLevel == 1 && !SaveFileExists() && !HasFinishedAdventure())
-			{
-				if (i == ZombieType::ZOMBIE_NORMAL || i == ZombieType::ZOMBIE_TRAFFIC_CONE || i == ZombieType::ZOMBIE_PAIL || i == ZombieType::ZOMBIE_CATAPULT ||
-					i == ZombieType::ZOMBIE_SNORKEL || i == ZombieType::ZOMBIE_FOOTBALL)
-					aTaskCount++;
-				continue;
-			}
+			if (IsScreenSaver()) break;
 
 			if (HasFinishedAdventure() || mPlayerInfo->mLevel >= GetZombieDefinition(i).mStartingLevel)
 			{
@@ -3632,83 +3335,50 @@ void LawnApp::PreloadForUser()
 		return;
 	}
 
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_PUFF, true);
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_LAWN_MOWERED_ZOMBIE, true);
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_READYSETPLANT, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_PUFF].mTracks.tracks == nullptr ||
-		&gReanimatorDefArray[(int)ReanimationType::REANIM_LAWN_MOWERED_ZOMBIE].mTracks.tracks == nullptr ||
-		&gReanimatorDefArray[(int)ReanimationType::REANIM_READYSETPLANT].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 204; // 68
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_FINAL_WAVE, true);
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SUN, true);
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TEXT_FADE_ON, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_FINAL_WAVE].mTracks.tracks == nullptr ||
-		&gReanimatorDefArray[(int)ReanimationType::REANIM_SUN].mTracks.tracks == nullptr ||
-		&gReanimatorDefArray[(int)ReanimationType::REANIM_TEXT_FADE_ON].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 204; // 68
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_ZOMBIE].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE_NEWSPAPER, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_ZOMBIE_NEWSPAPER].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTOR_SCREEN, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_SELECTOR_SCREEN].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68; // 340
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE_HAND, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_ZOMBIE_HAND].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
+	if (!IsScreenSaver())
+	{
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_PUFF, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_LAWN_MOWERED_ZOMBIE, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_READYSETPLANT, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68; // 204
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_FINAL_WAVE, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SUN, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TEXT_FADE_ON, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68; // 204
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68;
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE_NEWSPAPER, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68; // 393
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTOR_SCREEN, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 340; // 340
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE_HAND, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68;
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TEXT_SLIDE_ON, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68;
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TEXT_SLIDE_DOWN, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68;
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTORSCREEN_SPOTLIGHT, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 68;
+	}
 
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIE_NEWSPAPER, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_ZOMBIE_NEWSPAPER].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_LADDER, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_LADDER].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_GARGANTUAR, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_GARGANTUAR].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TEXT_SLIDE_ON, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_TEXT_SLIDE_ON].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TEXT_SLIDE_DOWN, true);
-	if (&gReanimatorDefArray[(int)ReanimationType::REANIM_TEXT_SLIDE_DOWN].mTracks.tracks == nullptr)
-		mCompletedLoadingThreadTasks += 68;
-
+	if (mPlayerInfo)
 	{
 		for (SeedType i = SeedType::SEED_PEASHOOTER; i < SeedType::NUM_SEED_TYPES; i = (SeedType)((int)i + 1))
 		{
-			if (!mPlayerInfo  || mPlayerInfo && mPlayerInfo->mLevel <= 1 && !HasFinishedAdventure() && !SaveFileExists())
-			{
-				if (i == SeedType::SEED_PEASHOOTER || i == SeedType::SEED_LILYPAD || i == SeedType::SEED_SUNFLOWER || i == SeedType::SEED_TORCHWOOD ||
-					i == SeedType::SEED_THREEPEATER || i == SeedType::SEED_SPIKEWEED || i == SeedType::SEED_TANGLEKELP)
-				{
-					if (Plant::PreloadPlantResources(i)  &&mCompletedLoadingThreadTasks < aNumTasks)
-					{
-						mCompletedLoadingThreadTasks += 68;
-					}
-
-					if (mTitleScreen && mTitleScreen->mQuickLoadKey != KeyCode::KEYCODE_UNKNOWN)
-					{
-						TodTrace("preload canceled\n");
-						mNumLoadingThreadTasks = aNumTasks;
-						return;
-					}
-
-					if (mShutdown || mCloseRequest)
-					{
-						return;
-					}
-				}
-				continue;
-			}
-
 			if (SeedTypeAvailable(i) || HasFinishedAdventure())
 			{
-				if (Plant::PreloadPlantResources(i) && mCompletedLoadingThreadTasks < aNumTasks)
+				Plant::PreloadPlantResources(i);
+				if (mCompletedLoadingThreadTasks < aNumTasks)
 				{
-					TodTrace(StrFormat("Plant ID: %d\n", i).c_str());
 					mCompletedLoadingThreadTasks += 68;
 				}
 
@@ -3728,57 +3398,33 @@ void LawnApp::PreloadForUser()
 
 		for (ZombieType i = ZombieType::ZOMBIE_NORMAL; i < ZombieType::NUM_ZOMBIE_TYPES;i = (ZombieType)((int)i + 1))
 		{
-			if (!mPlayerInfo || mPlayerInfo && mPlayerInfo->mLevel <= 1 && !HasFinishedAdventure() && !SaveFileExists())
+			if (IsScreenSaver()) break;
+
+			if (mPlayerInfo->mLevel >= GetZombieDefinition(i).mStartingLevel || HasFinishedAdventure())
 			{
-				if (i == ZombieType::ZOMBIE_NORMAL || i == ZombieType::ZOMBIE_TRAFFIC_CONE || i == ZombieType::ZOMBIE_PAIL || i == ZombieType::ZOMBIE_CATAPULT ||
-					i == ZombieType::ZOMBIE_SNORKEL || i == ZombieType::ZOMBIE_FOOTBALL)
+				if (i == ZombieType::ZOMBIE_BOSS && i == ZombieType::ZOMBIE_CATAPULT && i == ZombieType::ZOMBIE_GARGANTUAR ||
+					i == ZombieType::ZOMBIE_DIGGER && i == ZombieType::ZOMBIE_ZAMBONI)
 				{
-					
-					if (Zombie::PreloadZombieResources(i) && mCompletedLoadingThreadTasks < aNumTasks)
-					{
-						mCompletedLoadingThreadTasks += 68;
-					}
-
-					if (mTitleScreen && mTitleScreen->mQuickLoadKey != KeyCode::KEYCODE_UNKNOWN)
-					{
-						TodTrace("preload canceled\n");
-						mNumLoadingThreadTasks = aNumTasks;
-						return;
-					}
-
-					if (mShutdown || mCloseRequest)
-					{
-						return;
-					}
+					continue;
 				}
-				continue;
-				
-			}
-			if (!HasFinishedAdventure() && (!mPlayerInfo || mPlayerInfo && mPlayerInfo->mLevel < GetZombieDefinition(i).mStartingLevel))
-			{
-				continue;
-			}
-			/*if (i == ZombieType::ZOMBIE_BOSS || i == ZombieType::ZOMBIE_CATAPULT || i == ZombieType::ZOMBIE_GARGANTUAR ||
-				i == ZombieType::ZOMBIE_DIGGER || i == ZombieType::ZOMBIE_ZAMBONI)
-			{
-				continue;
-			}*/
 
-			if (Zombie::PreloadZombieResources(i) && mCompletedLoadingThreadTasks < aNumTasks)
-			{
-				mCompletedLoadingThreadTasks += 68;
-			}
+				Zombie::PreloadZombieResources(i);
+				if (mCompletedLoadingThreadTasks < aNumTasks)
+				{
+					mCompletedLoadingThreadTasks += 68;
+				}
 
-			if (mTitleScreen && mTitleScreen->mQuickLoadKey != KeyCode::KEYCODE_UNKNOWN)
-			{
-				TodTrace("preload canceled\n");
-				mNumLoadingThreadTasks = aNumTasks;
-				return;
-			}
+				if (mTitleScreen && mTitleScreen->mQuickLoadKey != KeyCode::KEYCODE_UNKNOWN)
+				{
+					TodTrace("preload canceled\n");
+					mNumLoadingThreadTasks = aNumTasks;
+					return;
+				}
 
-			if (mShutdown || mCloseRequest)
-			{
-				return;
+				if (mShutdown || mCloseRequest)
+				{
+					return;
+				}
 			}
 		}
 	}
@@ -4155,7 +3801,7 @@ void LawnApp::KillLanguageScreen()
 
 bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 {
-	return theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE;
+	return theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE || theGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && gLawnApp->IsScreenSaver();
 }
 
 bool LawnApp::ChallengeHasScores(GameMode theGameMode)

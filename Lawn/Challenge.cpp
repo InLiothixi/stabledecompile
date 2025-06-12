@@ -2286,6 +2286,16 @@ void Challenge::Update()
 	{
 		HeatWaveUpdate();
 	}
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
+	{
+		if (mApp->IsScreenSaver() && mApp->mZenGarden->IsStinkySleeping())
+		{
+			float rms = mApp->mVoiceVolume / SHOUT_THRESHOLD;
+			if (rms >= 0.4f)
+				mApp->mZenGarden->WakeStinky();
+		}
+	}
 	
 	Reanimation* aReanim = mApp->ReanimationTryToGet(mReanimChallenge);
 	if (aReanim && aReanim->mIsAttachment)
@@ -2851,18 +2861,6 @@ void Challenge::InitZombieWaves()
 		aGameMode != GameMode::GAMEMODE_CHALLENGE_POGO_PARTY && aGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE &&
 		aGameMode != GameMode::GAMEMODE_CHALLENGE_AIR_RAID)
 		aList[ZOMBIE_YETI] = true;
-
-	lua_getglobal(mApp->mChallengeL, "getAllowedZombies");
-	lua_pushinteger(mApp->mChallengeL, aGameMode);
-	lua_pcall(mApp->mChallengeL, 1, 1, 0);
-	lua_pushnil(mApp->mChallengeL);
-	while (lua_next(mApp->mChallengeL, -2) != 0) {
-		int type = (int)lua_tointeger(mApp->mChallengeL, -2);
-		bool allowed = lua_toboolean(mApp->mChallengeL, -1) != 0;
-		mBoard->mZombieAllowed[type] = allowed;
-		lua_pop(mApp->mChallengeL, 1);
-	}
-	lua_pop(mApp->mChallengeL, 1);
 }
 
 //0x425DA0
@@ -6095,7 +6093,8 @@ void Challenge::HeatWaveUpdate()
 	if (shoutAllowed)
 	{
 		float rms = mApp->mVoiceVolume / SHOUT_THRESHOLD;
-		bool isVolumeMet = rms >= 0.8f || mApp->mWidgetManager->mKeyDown[GetKeyCodeFromName("q")];
+
+		bool isVolumeMet = rms >= 0.8f;
 
 		if (shoutAllowed && isVolumeMet && mShoutingCounter < 100)
 		{

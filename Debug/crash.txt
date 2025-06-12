@@ -1,18 +1,16 @@
-Exception: Access Violation (code 0xc0000005) at address 00E637D0 in thread 46AC
-Module: PlantsVsZombies.exe
-Logical Address: 0001:000027D0
+Exception: Access Violation (code 0xc0000005) at address 6C08236D in thread 71BC
+Module: lua54.dll
+Logical Address: 0001:0000136D
 
-004FEFD8 00E637D0 std::_Container_base12::_Orphan_all+30
-Params: 0073B71C 0073B6A0 0020F000 01144999
+0093F0B8 6C08236D lua_getglobal+1D
+Params: 01371E10 01371E10 0093F10C 07F1F5D8
 
-004FEFE8 00E88F8C std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >::_Tidy_deallocate+C
-Params: BFCB3E26 00000020 0073B6A0 007131C8
+StackWalk failed (error 299)
 
-
-EAX:00000038 EBX:0020F000 ECX:004FF12C EDX:00212000 ESI:0073B6A0 EDI:004FF048
-EIP:00E637D0 ESP:004FEFD8  EBP:004FF090
+EAX:08FA0001 EBX:FDFDFDFD ECX:01371E10 EDX:0000002B ESI:0107C3A4 EDI:0000002B
+EIP:6C08236D ESP:0093EFC0  EBP:0093F0B8
 CS:0023 SS:002B DS:002B ES:002B FS:0053 GS:002B
-Flags:00210202
+Flags:00010206
 
 Windows Ver: NT 6.2  Build 9200
 DDraw Ver: 10.0.22621.1
@@ -20,8 +18,8 @@ DSound Ver: 10.0.22621.1
 
 Product: PlantsVsZombies
 Version: 1.2.0.1096
-Time Loaded: 00:00:01
+Time Loaded: 00:00:12
 Fullscreen: Yes
-Primary ThreadId: 46AC
+Primary ThreadId: 71BC
 Times Played: 0
 

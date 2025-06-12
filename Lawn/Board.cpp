@@ -658,19 +658,6 @@ void Board::PickZombieWaves()
 			mNumWaves = 40;
 	}
 
-	//if (mApp->mBoardL)
-	{
-		lua_getglobal(mApp->mBoardL, "GetNumWaves");
-		lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-		lua_pushinteger(mApp->mBoardL, mLevel);
-		lua_pushinteger(mApp->mBoardL, mNumWaves);
-		lua_pushinteger(mApp->mBoardL, mChallenge->mSurvivalStage);
-		lua_pcall(mApp->mBoardL, 4, 1, 0);
-		int gNumWaves = lua_tointeger(mApp->mBoardL, -1);
-		if (gNumWaves > -1) mNumWaves = gNumWaves;
-		lua_pop(mApp->mBoardL, 1);
-	}
-
 	// ====================================================================================================
 	// ▲ 一些准备工作
 	// ====================================================================================================
@@ -766,20 +753,6 @@ void Board::PickZombieWaves()
 		{
 			aZombiePoints *= 2;
 		}
-
-		//if (mApp->mBoardL)
-		{
-			lua_getglobal(mApp->mBoardL, "GetZombiePoints");
-			lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-			lua_pushinteger(mApp->mBoardL, mLevel);
-			lua_pushinteger(mApp->mBoardL, aWave);
-			lua_pushinteger(mApp->mBoardL, aZombiePoints);
-			lua_pushinteger(mApp->mBoardL, mChallenge->mSurvivalStage);
-			lua_pcall(mApp->mBoardL, 5, 1, 0);
-			int gZombiePoints = lua_tointeger(mApp->mBoardL, -1);
-			if (gZombiePoints > -1) aZombiePoints = gZombiePoints;
-			lua_pop(mApp->mBoardL, 1);
-		}
 		
 		// ------------------------------------------------------------------------------------------------
 		// △ 向出怪列表中加入固定刷出的僵尸
@@ -811,22 +784,6 @@ void Board::PickZombieWaves()
 			{
 				PutZombieInWave(aIntroZombieType, aWave, &aZombiePicker);
 			}
-		}
-
-		//if (mApp->mBoardL)
-		{
-			lua_getglobal(mApp->mBoardL, "PickZombieWaves");
-			lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-			lua_pushinteger(mApp->mBoardL, mLevel);
-			lua_pushinteger(mApp->mBoardL, aWave);
-			lua_pushinteger(mApp->mBoardL, aZombiePoints);
-			lua_pushinteger(mApp->mBoardL, mChallenge->mSurvivalStage);
-			lua_pushboolean(mApp->mBoardL, aIsFlagWave);
-			lua_pushboolean(mApp->mBoardL, aIsFinalWave);
-			lua_pushlightuserdata(mApp->mBoardL, this);
-			lua_pushlightuserdata(mApp->mBoardL, &aZombiePicker);
-			lua_pcall(mApp->mBoardL, 9, 0, 0);
-			lua_pop(mApp->mBoardL, 0);
 		}
 
 		// 5-10 关卡的最后一波加入一只伽刚特尔
@@ -1139,15 +1096,6 @@ void Board::PickBackground()
 		TOD_ASSERT();
 		break;
 	}
-
-	lua_getglobal(mApp->mBoardL, "GetBackground");
-	lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-	lua_pushinteger(mApp->mBoardL, mLevel);
-	lua_pushinteger(mApp->mBoardL, mBackground);
-	lua_pcall(mApp->mBoardL, 3, 1, 0);
-	int gBackground = luaL_checkinteger(mApp->mBoardL, 1);
-	if (gBackground > -1)	mBackground = (BackgroundType)gBackground;
-	lua_pop(mApp->mBoardL, 1);
 
 	LoadBackgroundImages();
 
@@ -3232,6 +3180,8 @@ PlantingReason Board::CanPlantAt(int theGridX, int theGridY, SeedType theSeedTyp
 //0x40E520
 void Board::UpdateCursor()
 {
+	if (mApp->IsScreenSaver()) return;
+
 	int aMouseX = mApp->mWidgetManager->mLastMouseX - mX;
 	int aMouseY = mApp->mWidgetManager->mLastMouseY - mY;
 	bool aShowFinger = false;
@@ -3563,7 +3513,7 @@ void Board::UpdateMousePosition()
 //0x40EF00
 void Board::UpdateToolTip()
 {
-	if (!mApp->mWidgetManager->mMouseIn || !mApp->mActive || mTimeStopCounter > 0 || mApp->GetDialogCount() > 0 || 
+	if (mApp->IsScreenSaver() || !mApp->mWidgetManager->mMouseIn || !mApp->mActive || mTimeStopCounter > 0 || mApp->GetDialogCount() > 0 || 
 #ifdef DO_FIX_BUGS
 		mApp->mGameScene != GameScenes::SCENE_PLAYING && !mCutScene->mSeedChoosing
 #else
@@ -4835,6 +4785,10 @@ void Board::PickUpTool(GameObjectType theObjectType)
 void Board::MouseDown(int x, int y, int theClickCount)
 {
 	Widget::MouseDown(x, y, theClickCount);
+
+	if (mApp->IsScreenSaver())
+		return;
+
 	mIgnoreMouseUp = !CanInteractWithBoardButtons();
 	if (mTimeStopCounter > 0)
 		return;
@@ -4980,6 +4934,8 @@ void Board::MouseDown(int x, int y, int theClickCount)
 //0x412330
 void Board::ClearCursor()
 {
+	if (mApp->IsScreenSaver()) return;
+
 	if (mAdvice->mDuration > 0)
 	{
 		if (mHelpIndex == AdviceType::ADVICE_PLANT_GRAVEBUSTERS_ON_GRAVES ||
@@ -5074,6 +5030,8 @@ void Board::MouseUp(int x, int y, int theClickCount)
 		mIgnoreMouseUp = false;
 		return;
 	}
+
+	if (mApp->IsScreenSaver())	return;
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED && mChallenge->MouseUp(x, y) && theClickCount > 0)
 		return;
@@ -6243,15 +6201,6 @@ void Board::UpdateGame()
 	}
 
 	UpdateProgressMeter();
-
-	lua_getglobal(mApp->mBoardL, "UpdateGame");
-	lua_pushlightuserdata(mApp->mBoardL, this);
-	lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-	lua_pushinteger(mApp->mBoardL, mLevel);
-	lua_pushinteger(mApp->mBoardL, mCurrentWave);
-	lua_pushinteger(mApp->mBoardL, mChallenge->mSurvivalStage);
-	lua_pcall(mApp->mBoardL, 5, 0, 0);
-	lua_pop(mApp->mBoardL, 0);
 }
 
 //0x415D40
@@ -7388,15 +7337,6 @@ void Board::DrawLevel(Graphics* g)
 			}
 		}
 	}
-
-	lua_getglobal(mApp->mBoardL, "GetLevelName");
-	lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-	lua_pushinteger(mApp->mBoardL, mLevel);
-	lua_pushstring(mApp->mBoardL, SexyStringToString(aLevelStr).c_str());
-	lua_pcall(mApp->mBoardL, 3, 1, 0);
-	const char* gName = lua_tostring(mApp->mBoardL, -1);
-	if (gName)	aLevelStr = StringToSexyString(gName);
-	lua_pop(mApp->mBoardL, 1);
 	
 	// ====================================================================================================
 	// ▲ 正式开始绘制关卡名称字符串
@@ -7608,7 +7548,7 @@ void Board::DrawShovel(Graphics* g)
 		}
 	}
 
-	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
+	if (!mApp->IsScreenSaver() && (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM))
 	{
 		DrawZenButtons(g);
 	}
@@ -7942,13 +7882,13 @@ void Board::DrawUIBottom(Graphics* g)
 
 	if (mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON)
 	{
-		if (mSeedBank->BeginDraw(g))
+		if (!mApp->IsScreenSaver() && mSeedBank->BeginDraw(g))
 		{
 			mSeedBank->Draw(g);
 			mSeedBank->EndDraw(g);
 		}
 
-		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && mApp->mGameScene == SCENE_PLAYING) {
+		if ((mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE) && mApp->mGameScene == SCENE_PLAYING) {
 			int aCelWidth = Sexy::IMAGE_FLAGMETER->GetCelWidth();
 			int aCelHeight = Sexy::IMAGE_FLAGMETER->GetCelHeight();
 			int posX = 340 - aCelWidth / 2, posY = 41;
@@ -8003,7 +7943,7 @@ void Board::DrawUIBottom(Graphics* g)
 	}
 
 	DrawShovel(g);
-	if (!StageHasFog())
+	if (!mApp->IsScreenSaver() && !StageHasFog())
 	{
 		DrawTopRightUI(g);
 	}
@@ -8484,7 +8424,7 @@ void Board::DrawUITop(Graphics* g)
 
 	//DrawUIBottom(g);
 
-	if (StageHasFog())
+	if (!mApp->IsScreenSaver() && StageHasFog())
 	{
 		DrawTopRightUI(g);
 	}
@@ -8501,7 +8441,7 @@ void Board::DrawUITop(Graphics* g)
 		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 	}
 
-	if (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
+	if (!mApp->IsScreenSaver() && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM))
 	{
 		DrawProgressMeter(g);
 		DrawLevel(g);

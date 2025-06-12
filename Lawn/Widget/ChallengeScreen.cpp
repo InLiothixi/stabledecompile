@@ -490,15 +490,6 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 
 			SexyString aName = TodStringTranslate(aDef.mChallengeName);
 
-			lua_getglobal(mApp->mBoardL, "GetLevelName");
-			lua_pushinteger(mApp->mBoardL, aDef.mChallengeMode);
-			lua_pushinteger(mApp->mBoardL, mApp->mPlayerInfo->GetLevel());
-			lua_pushstring(mApp->mBoardL, SexyStringToString(aName).c_str());
-			lua_pcall(mApp->mBoardL, 3, 1, 0);
-			const char* gName = lua_tostring(mApp->mBoardL, -1);
-			if (gName)	aName = StringToSexyString(gName);
-			lua_pop(mApp->mBoardL, 1);
-
 			if (aChallengeButton->mDisabled || (theChallengeIndex == mUnlockChallengeIndex && mUnlockState == UNLOCK_SHAKING))
 			{
 				aName = _S("?");

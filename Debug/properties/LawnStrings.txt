@@ -119,7 +119,7 @@ Tangle Kelp
 Aquatic plant that pulls a zombie underwater
 
 [JALAPENO]
-Jalapeño
+Jalapeno
 
 [JALAPENO_TOOLTIP]
 Destroys an entire lane of zombies

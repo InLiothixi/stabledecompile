@@ -18,6 +18,7 @@ int slideDownCounter = 0;
 
 // GOTY @Inliothixi
 QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
+	TodLoadResources("DelayLoad_LevelSelector");
 	mApp = theApp;
 	mWidth = BOARD_WIDTH;
 	mHeight = BOARD_HEIGHT;

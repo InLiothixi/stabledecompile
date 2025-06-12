@@ -120,6 +120,8 @@ public:
     /*inline*/ bool         IsStinkyHighOnChocolate();
     void                    StinkyAnimRateUpdate(GridItem* theStinky);
     /*inline*/ bool         PlantCanBeWatered(Plant* thePlant);
+    bool                    SimulateOfflineGain();
+    bool                    IsStinkyAsleep(time_t theTime);
 };
 
 #endif

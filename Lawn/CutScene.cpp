@@ -1007,15 +1007,6 @@ void CutScene::StartLevelIntro()
 		}
 	}
 
-	lua_getglobal(mApp->mBoardL, "GetLevelName");
-	lua_pushinteger(mApp->mBoardL, mApp->mGameMode);
-	lua_pushinteger(mApp->mBoardL, mBoard->mLevel);
-	lua_pushstring(mApp->mBoardL, SexyStringToString(aHouseMessage).c_str());
-	lua_pcall(mApp->mBoardL, 3, 1, 0);
-	const char* gName = lua_tostring(mApp->mBoardL, -1);
-	if (gName)	aHouseMessage = StringToSexyString(gName);
-	lua_pop(mApp->mBoardL, 1);
-
 	aHouseMessage = TodReplaceString(aHouseMessage, _S("{PLAYER}"), mApp->mPlayerInfo->mName);
 	if (!aHouseMessage.empty())
 	{
@@ -1468,7 +1459,8 @@ void CutScene::AnimateBoard()
 //0x43C140
 void CutScene::ShowShovel()
 {
-	if (mApp->IsWhackAZombieLevel() || 
+	if (mApp->IsScreenSaver() || 
+		mApp->IsWhackAZombieLevel() || 
 		mApp->IsWallnutBowlingLevel() || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||

@@ -175,18 +175,24 @@ void Music::LoadSong(MusicFile theMusicFile, const std::string& theFileName)
 void Music::MusicTitleScreenInit()
 {
 	LoadSong(MusicFile::MUSIC_FILE_MAIN_MUSIC, "sounds\\mainmusic.mo3");
-	MakeSureMusicIsPlaying(MusicTune::MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME);
+
+	if (!mApp->IsScreenSaver())
+		MakeSureMusicIsPlaying(MusicTune::MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME);
 }
 
 //0x45A980
 void Music::MusicInit()
 {
 
-#ifdef _CMD
-	//int aNumLoadingTasks = mApp->mCompletedLoadingThreadTasks + GetNumLoadingTasks();
+#ifdef _DEBUG
+	int aNumLoadingTasks = mApp->mCompletedLoadingThreadTasks + GetNumLoadingTasks();
 #endif 
 	LoadSong(MusicFile::MUSIC_FILE_DRUMS, "sounds\\mainmusic.mo3");
 	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;///*内测版*/800;
+
+	if (mApp->IsScreenSaver())
+		return;
+
 	LoadSong(MusicFile::MUSIC_FILE_HIHATS, "sounds\\mainmusic.mo3"); // Originally: "sounds\\mainmusic_hihats.mo3" (Hihats have missing instruments in MUSIC_TUNE_POOL_WATERYGRAVES)
 	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;///*内测版*/800;
 	if (mApp->HasFinishedAdventure()) 
@@ -194,9 +200,9 @@ void Music::MusicInit()
 		LoadSong(MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN, "sounds\\ZombiesOnYourLawn.ogg");
 		mApp->mCompletedLoadingThreadTasks += /*原版*/3500;///*内测版*/800;
 	}
-#ifdef _CMD
-		//if (mApp->mCompletedLoadingThreadTasks != aNumLoadingTasks)
-		//	TodTrace("Didn't calculate loading task count correctly!!!!");
+#ifdef _DEBUG
+	if (mApp->mCompletedLoadingThreadTasks != aNumLoadingTasks)
+		TodTrace("Didn't calculate loading task count correctly!!!!");
 #endif
 	LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON, "sounds\\grassthemoon.ogg");
 	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
@@ -800,13 +806,6 @@ void Music::StartGameMusic()
 		mTune = MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF;
 	}
 
-	lua_getglobal(mApp->mMusicL, "GetGameMusic");
-	lua_pushinteger(mApp->mMusicL, mApp->mGameMode);
-	lua_pushinteger(mApp->mMusicL, mApp->mPlayerInfo->GetLevel());
-	lua_pcall(mApp->mMusicL, 2, 1, 0);
-	int gMusic = luaL_checkinteger(mApp->mMusicL, 1);
-	if (gMusic > -1) mTune = (MusicTune)gMusic;
-	lua_pop(mApp->mMusicL, 1);
 	MakeSureMusicIsPlaying(mTune);
 }
 

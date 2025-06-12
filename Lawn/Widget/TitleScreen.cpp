@@ -378,8 +378,17 @@ void TitleScreen::Update()
 		mLoadingThreadComplete = true;
 		mStartButton->SetDisabled(false);
 
-		if (mQuickLoadKey == KeyCode::KEYCODE_ASCIIEND)
+		if (mApp->IsScreenSaver())
 		{
+			mApp->LoadingCompleted();
+		}
+		else if (/*mApp->IsScreenSaver() ||*/ mQuickLoadKey == KeyCode::KEYCODE_ASCIIEND)
+		{
+			/*mApp->LoadingCompleted();
+			mApp->KillGameSelector();
+			mApp->PreNewGame(GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN, false);
+			return;*/
+
 			mApp->FastLoad(GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN);
 		}
 		else if (mQuickLoadKey == (KeyCode)0x4D)
@@ -471,6 +480,8 @@ void TitleScreen::Update()
 				aSproutReanim->SetPosition(aPosX - 21.0f, aPosY);
 			}
 
+			if (mApp->IsScreenSaver()) continue;
+
 			if (i == 4)
 			{
 				mApp->PlaySample(SOUND_LOADINGBAR_FLOWER);
@@ -527,6 +538,8 @@ void TitleScreen::ButtonDepress(int theId)
 //0x48E650
 void TitleScreen::MouseDown(int x, int y, int theClickCount)
 {
+	if (mApp->IsScreenSaver()) return;
+
 	if (mLoadingThreadComplete)
 	{
 		mApp->PlaySample(Sexy::SOUND_BUTTONCLICK);
@@ -537,6 +550,8 @@ void TitleScreen::MouseDown(int x, int y, int theClickCount)
 //0x48E690
 void TitleScreen::KeyDown(KeyCode theKey)
 {
+	if (mApp->IsScreenSaver()) return;
+
 	if (mLoadingThreadComplete)
 	{
 		mApp->PlaySample(Sexy::SOUND_BUTTONCLICK);

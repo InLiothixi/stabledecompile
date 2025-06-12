@@ -13,6 +13,7 @@
 
 // GOTY @Inliothixi
 ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
+	TodLoadResources("DelayLoad_Zombatar");
 	mApp = theApp;
 	mWidth = BOARD_WIDTH;
 	mHeight = BOARD_HEIGHT;
@@ -32,7 +33,7 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	mBackButton->mTranslateY = 0;
 
 	/*mNavigationID = 0;
-	TodLoadResources("DelayLoad_Zombatar");
+	
 
 	mFinishButton = MakeNewButton(
 		FinishButton,

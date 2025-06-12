@@ -42,8 +42,6 @@
 
 #include "memmgr.h"
 
-#include <portaudio.h>
-
 using namespace Sexy;
 
 const int DEMO_FILE_ID = 0x42BEEF78;
@@ -1647,6 +1645,7 @@ bool SexyAppBase::RegistryWriteData(const SexyString& theValueName, const uchar*
 
 void SexyAppBase::WriteToRegistry()
 {	
+	if (IsScreenSaver())	return;
 	RegistryWriteInteger(_S("MusicVolume"), (int) (mMusicVolume * 100));
 	RegistryWriteInteger(_S("SfxVolume"), (int) (mSfxVolume * 100));
 	RegistryWriteInteger(_S("Muted"), (mMuteCount - mAutoMuteCount > 0) ? 1 : 0);
@@ -1785,9 +1784,9 @@ bool SexyAppBase::RegistryGetSubKeys(const SexyString& theKeyName, StringVector*
 		
 		SexyString aKeyName = RemoveTrailingSlash(RemoveTrailingSlash(_S("SOFTWARE\\") + mRegKey) + _S("\\") + theKeyName);
 #ifdef _USE_WIDE_STRING
-		int aResult = RegOpenKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ, &aKey);
+		int aResult = RegOpenKeyExW(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ | KEY_WOW64_64KEY, &aKey);
 #else 
-		int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ, &aKey);
+		int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ | KEY_WOW64_64KEY, &aKey);
 #endif
 		
 		if (aResult == ERROR_SUCCESS)
@@ -6235,7 +6234,7 @@ void SexyAppBase::ShowResourceError(bool doExit)
 	Popup(mResourceManager->GetErrorText());	
 	if (doExit)
 		DoExit(0);
-}
+	}
 
 bool SexyAppBase::GetBoolean(const std::string& theId)
 {
@@ -6459,6 +6458,8 @@ static int GetMaxDemoFileNum(const std::string& theDemoPrefix, int theMaxToKeep,
 
 void SexyAppBase::HandleCmdLineParam(const std::string& theParamName, const std::string& theParamValue)
 {
+	bool isDigits = !theParamName.empty() && std::all_of(theParamName.begin(), theParamName.end(), ::isdigit);
+
 	if (theParamName == "-play")
 	{
 		mPlayingDemoBuffer = true;
@@ -6510,7 +6511,7 @@ void SexyAppBase::HandleCmdLineParam(const std::string& theParamName, const std:
 		char* a = 0;
 		*a = '!';		
 	}
-	else if (theParamName == "-screensaver")
+	else if (theParamName == "-screensaver" || theParamName == "/s" || theParamName == "/p" || theParamName == "/S" || theParamName == "/P" || isDigits)
 	{
 		mIsScreenSaver = true;
 	}
@@ -6604,13 +6605,15 @@ void SexyAppBase::Init()
 		}
 	}
 	
-#ifdef _DEBUG
 	if (!mCmdLineParsed)
 		DoParseCmdLine();
-#endif
 
 	if (IsScreenSaver())	
-		mOnlyAllowOneCopyToRun = false;	
+	{
+		mOnlyAllowOneCopyToRun = false;
+		mFullScreenWindow = true;
+		mIsWindowed = false;
+	}
 
 
 	if(gHInstance==NULL)
@@ -6619,7 +6622,6 @@ void SexyAppBase::Init()
 	// Change directory
 	if (!ChangeDirHook(mChangeDirTo.c_str()))
 		sexychdir(mChangeDirTo.c_str());
-
 
 	WIN32_FILE_ATTRIBUTE_DATA fileInfo;
 #ifdef _USE_WIDE_STRING

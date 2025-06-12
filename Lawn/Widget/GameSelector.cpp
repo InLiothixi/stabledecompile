@@ -409,14 +409,6 @@ GameSelector::GameSelector(LawnApp* theApp)
 	mLevelSelectorWidget = new QuickplayWidget(this->mApp);
 	mLevelSelectorWidget->Move(mApp->mWidth, 0);
 	TodHesitationTrace("gameselectorinit");
-
-	/*lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
-	luaL_dofile(L, "mods/TitleScreen.lua");
-	lua_getglobal(L, "SPLASH");
-	mSplash = lua_tostring(L, -1);
-	lua_pop(L, 1);
-	lua_close(L);*/
 }
 
 //0x449D00¡¢0x449D20

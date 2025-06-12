@@ -141,9 +141,7 @@ public:
 	Sexy::MemoryImage*				mDarknessEffect;
 	PaStream*						mPortAudioStream;
 	float							mVoiceVolume;
-	lua_State*						mBoardL;
-	lua_State*						mMusicL;
-	lua_State*						mChallengeL;
+	//lua_State*						L;
 
 public:
 	LawnApp();
