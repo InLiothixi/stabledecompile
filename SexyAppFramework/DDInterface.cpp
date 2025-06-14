@@ -437,20 +437,11 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 
 		OutputDebug(_S("Display is           %4lu x %4lu [%2d:%2d]\n"), mDisplayWidth, mDisplayHeight, mDisplayAspect.mNumerator, mDisplayAspect.mDenominator);
 
-		aResult = mDD->SetCooperativeLevel(theWindow, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT);
+		aResult = mDD->SetCooperativeLevel(theWindow, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN);
 		if (GotDXError(aResult, "SetCooperativeLevel FullScreen"))
 			return RESULT_EXCLUSIVE_FAIL;
 
 		aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, mFullscreenBits);
-
-		if (FAILED(aResult) && mFullscreenBits != 8)
-			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, 8);
-
-		if (FAILED(aResult) && mFullscreenBits != 15)
-			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, 15);
-
-		if (FAILED(aResult) && mFullscreenBits != 24)
-			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, 24);
 
 		if(FAILED(aResult) && mFullscreenBits != 32)
 			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, 32); // todo: remove this incase this did not do anything... 32 bit fallback

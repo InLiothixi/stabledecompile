@@ -3478,9 +3478,6 @@ Face To Face
 [FACE_TO_FACE_DESCRIPTION]  
 Complete a level with Digger Zombies without any of them reaching the left side of your lawn.  
 
-[FREE_PLANTING_CHEAT]
-Free!
-
 [BACK]
 Back
 

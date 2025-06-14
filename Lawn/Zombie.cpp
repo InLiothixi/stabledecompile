@@ -9188,7 +9188,6 @@ float Zombie::GetPosYBasedOnRow(int theRow)
 Zombie::~Zombie()
 {
     AttachmentDie(mAttachmentID);
-    mApp->RemoveParticle(mHeadParticleID);
     StopZombieSound();
 }
 
