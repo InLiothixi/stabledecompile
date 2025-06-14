@@ -6281,6 +6281,7 @@ void Zombie::DrawReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, int t
         aExtraAdditiveColor = aHighlightColor;
         aEnableExtraAdditiveDraw = true;
     }
+
     aBodyReanim->mColorOverride = aColorOverride;
     aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
     aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;

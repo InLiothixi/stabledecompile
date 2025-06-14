@@ -272,6 +272,7 @@ void TodParticleEmitter::TodEmitterInitialize(float theX, float theY, TodParticl
 	mSystemAge = -1;
 	mDead = false;
 	mColorOverride = Sexy::Color::White;
+	mExtraAdditiveColor = Sexy::Color::White;
 	mSystemCenter.x = theX;
 	mSystemCenter.y = theY;
 	mFrameOverride = -1;
@@ -901,6 +902,10 @@ bool TodParticleEmitter::GetRenderParams(TodParticle* theParticle, ParticleRende
 	theParams->mGreen = aParticleGreen * aSystemGreen * aEmitter->mColorOverride.mGreen * aBrightness;
 	theParams->mBlue = aParticleBlue * aSystemBlue * aEmitter->mColorOverride.mBlue * aBrightness;
 	theParams->mAlpha = aParticleAlpha * aSystemAlpha * aEmitter->mColorOverride.mAlpha; // thanks to those who reported this silly
+	theParams->mExtraAdditiveRed = aParticleAlpha * aSystemAlpha * aEmitter->mExtraAdditiveColor.mRed * aBrightness;
+	theParams->mExtraAdditiveGreen = aParticleAlpha * aSystemAlpha * aEmitter->mExtraAdditiveColor.mGreen * aBrightness;
+	theParams->mExtraAdditiveBlue = aParticleAlpha * aSystemAlpha * aEmitter->mExtraAdditiveColor.mBlue * aBrightness;
+	theParams->mExtraAdditiveAlpha = aParticleAlpha * aSystemAlpha * ClampInt(aEmitter->mColorOverride.mAlpha * aEmitter->mExtraAdditiveColor.mAlpha / 255, 0, 255);
 	theParams->mPosX = theParticle->mPosition.x;
 	theParams->mPosY = theParticle->mPosition.y;
 	float aParticleScale = aEmitter->ParticleTrackEvaluate(aDef->mParticleScale, theParticle, ParticleTracks::TRACK_PARTICLE_SCALE);
@@ -1119,10 +1124,100 @@ void RenderParticle(Graphics* g, TodParticle* theParticle, const Color& theColor
 		);
 
 		theTriangleGroup->AddTriangle(g, aImage, aTransform, g->mClipRect, theColor, aDrawMode, aSrcRect);
-		if (aEmitter->mExtraAdditiveDrawOverride)
-			theTriangleGroup->AddTriangle(g, aImage, aTransform, g->mClipRect, theColor, Graphics::DRAWMODE_ADDITIVE, aSrcRect);
 	}
 }
+
+void RenderParticleAdditive(Graphics* g, TodParticle* theParticle, const Color& theColor, ParticleRenderParams* theParams, TodTriangleGroup* theTriangleGroup)
+{
+	TodParticleEmitter* aEmitter = theParticle->mParticleEmitter;
+	register TodEmitterDefinition* aEmitterDef = aEmitter->mEmitterDef;
+	Image* aImage = aEmitter->mImageOverride != nullptr ? aEmitter->mImageOverride : aEmitterDef->mImage;  // 优先使用覆写贴图，无覆写贴图则使用定义的贴图
+	if (aImage == nullptr)
+		return;  // 不存在贴图时，取消绘制
+
+	if (theParams->mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
+		aImage = FilterEffectGetImage(aImage, theParams->mFilterEffect);
+	}
+
+	int aCelWidth = aImage->GetCelWidth();
+	int aCelHeight = aImage->GetCelHeight();
+	int aFrame = aEmitter->mFrameOverride;
+	if (aFrame == -1)  // 如果未定义覆写帧
+	{
+		if (FloatTrackIsSet(aEmitterDef->mAnimationRate))  // 如果定义了动画速率
+			aFrame = ClampInt(theParticle->mAnimationTimeValue * aEmitterDef->mImageFrames, 0, aEmitterDef->mImageFrames - 1);  // 动画时间值（循环率） * 总帧数得到当前帧
+		else if (aEmitterDef->mAnimated)
+			aFrame = ClampInt(theParticle->mParticleTimeValue * aEmitterDef->mImageFrames, 0, aEmitterDef->mImageFrames - 1);  // 粒子时间值 * 总帧数得到当前帧
+		else
+			aFrame = theParticle->mImageFrame;  // 帧固定的粒子，直接取其贴图帧
+	}
+	aFrame += aEmitterDef->mImageCol;  // 当前帧加上定义中的图像起始列，得到当前帧在贴图中的列数
+	if (aFrame >= aImage->mNumCols)
+		aFrame = aImage->mNumCols - 1;
+
+	Rect aSrcRect(aFrame * aCelWidth, min(aEmitterDef->mImageRow, aImage->mNumRows - 1) * aCelHeight, aCelWidth, aCelHeight);
+	float aClipTop = TodParticleEmitter::ParticleTrackEvaluate(aEmitterDef->mClipTop, theParticle, ParticleTracks::TRACK_PARTICLE_CLIP_TOP);
+	float aClipBottom = TodParticleEmitter::ParticleTrackEvaluate(aEmitterDef->mClipBottom, theParticle, ParticleTracks::TRACK_PARTICLE_CLIP_BOTTOM);
+	float aClipLeft = TodParticleEmitter::ParticleTrackEvaluate(aEmitterDef->mClipLeft, theParticle, ParticleTracks::TRACK_PARTICLE_CLIP_LEFT);
+	float aClipRight = TodParticleEmitter::ParticleTrackEvaluate(aEmitterDef->mClipRight, theParticle, ParticleTracks::TRACK_PARTICLE_CLIP_RIGHT);
+	TOD_ASSERT(aClipTop >= 0.0f && aClipTop <= 1.0f);
+	TOD_ASSERT(aClipBottom >= 0.0f && aClipBottom <= 1.0f);
+	TOD_ASSERT(aClipLeft >= 0.0f && aClipLeft <= 1.0f);
+	TOD_ASSERT(aClipRight >= 0.0f && aClipRight <= 1.0f);
+	theParams->mPosX += aClipLeft * aCelWidth;
+	theParams->mPosY += aClipTop * aCelHeight;
+	aSrcRect.mX += FloatRoundToInt(aClipLeft * aCelWidth);
+	aSrcRect.mY += FloatRoundToInt(aClipTop * aCelHeight);
+	aSrcRect.mWidth -= FloatRoundToInt(aCelWidth * (aClipLeft + aClipRight));
+	aSrcRect.mHeight -= FloatRoundToInt(aCelHeight * (aClipBottom + aClipTop));  // 以上根据裁剪各方向的比例调整源矩形
+	TOD_ASSERT(aSrcRect.mX == aCelWidth * aFrame + FloatRoundToInt(aClipLeft * aCelWidth));
+	TOD_ASSERT(aSrcRect.mY == aCelHeight * aEmitterDef->mImageRow + FloatRoundToInt(aClipTop * aCelHeight));
+	TOD_ASSERT(aSrcRect.mX >= 0 && aSrcRect.mX < 10000);
+	TOD_ASSERT(aSrcRect.mY >= 0 && aSrcRect.mY < 10000);
+
+	if (TestBit(aEmitterDef->mParticleFlags, (int)ParticleFlags::PARTICLE_ALIGN_TO_PIXELS))  // 坐标对齐至整数像素点
+	{
+		theParams->mPosX = FloatRoundToInt(theParams->mPosX);
+		theParams->mPosY = FloatRoundToInt(theParams->mPosY);
+	}
+	int aDrawMode = g->mDrawMode;
+	if (TestBit(aEmitterDef->mParticleFlags, (int)ParticleFlags::PARTICLE_ADDITIVE))  // 使用叠加模式
+		aDrawMode = Graphics::DRAWMODE_ADDITIVE;
+	if (TestBit(aEmitterDef->mParticleFlags, (int)ParticleFlags::PARTICLE_FULLSCREEN))  // 全屏模式
+	{
+		theTriangleGroup->DrawGroup(g);
+		Color anOldColor = g->GetColor();
+		int anOldDrawMode = g->GetDrawMode();
+		g->SetColor(theColor);
+
+		if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WASHED_OUT)
+			g->SetColor(FilterColorDoLumSat(theColor, 1.8f, 0.2f));
+		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT)
+			g->SetColor(FilterColorDoLumSat(theColor, 1.2f, 0.3f));
+		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
+			g->SetColor(Color::White);
+
+
+		g->FillRect(-g->mTransX, -g->mTransY, BOARD_WIDTH, BOARD_HEIGHT);
+		g->SetColor(anOldColor);
+		g->SetDrawMode(anOldDrawMode);
+	}
+	else
+	{
+		SexyMatrix3 aTransform;
+		TodScaleRotateTransformMatrix(
+			aTransform,
+			theParams->mPosX,
+			theParams->mPosY,
+			theParams->mSpinPosition,
+			theParams->mParticleScale,
+			theParams->mParticleStretch * theParams->mParticleScale
+		);
+
+		theTriangleGroup->AddTriangle(g, aImage, aTransform, g->mClipRect, theColor, Graphics::DRAWMODE_ADDITIVE, aSrcRect);
+	}
+}
+
 
 //0x518210
 void TodParticleEmitter::DrawParticle(Graphics* g, TodParticle* theParticle, TodTriangleGroup* theTriangleGroup)
@@ -1139,6 +1234,12 @@ void TodParticleEmitter::DrawParticle(Graphics* g, TodParticle* theParticle, Tod
 			ClampInt(FloatRoundToInt(aParams.mBlue), 0, 255), 
 			ClampInt(FloatRoundToInt(aParams.mAlpha), 0, 255)
 		);
+		Color aExtraAdditiveColor(
+			ClampInt(FloatRoundToInt(aParams.mExtraAdditiveRed), 0, 255),
+			ClampInt(FloatRoundToInt(aParams.mExtraAdditiveGreen), 0, 255),
+			ClampInt(FloatRoundToInt(aParams.mExtraAdditiveBlue), 0, 255),
+			ClampInt(FloatRoundToInt(aParams.mExtraAdditiveAlpha), 0, 255)
+		);
 		if (aColor.mAlpha > 0)  // 不透明度为 0 时，不绘制
 		{
 			aParams.mPosX += g->mTransX;
@@ -1148,8 +1249,6 @@ void TodParticleEmitter::DrawParticle(Graphics* g, TodParticle* theParticle, Tod
 				aColor = FilterColorDoLumSat(aColor, 1.8f, 0.2f);
 			else if (aParams.mFilterEffect == FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT)
 				aColor = FilterColorDoLumSat(aColor, 1.2f, 0.3f);
-			else if (aParams.mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
-				aColor = Color::White;
 
 			TodParticle* aParticle;
 			if (mImageOverride || mEmitterDef->mImage)  // 粒子有贴图时，渲染该粒子
@@ -1157,7 +1256,11 @@ void TodParticleEmitter::DrawParticle(Graphics* g, TodParticle* theParticle, Tod
 			else  // 粒子没有贴图时，尝试渲染交叉混合来源的粒子
 				aParticle = mParticleSystem->mParticleHolder->mParticles.DataArrayTryToGet((unsigned int)theParticle->mCrossFadeParticleID);
 			if (aParticle != nullptr)
+			{
 				RenderParticle(g, aParticle, aColor, &aParams, theTriangleGroup);
+				if (aParticle->mParticleEmitter->mExtraAdditiveDrawOverride)
+					RenderParticleAdditive(g, aParticle, aExtraAdditiveColor, &aParams, theTriangleGroup);
+			}
 		}
 	}
 }
@@ -1219,6 +1322,16 @@ void TodParticleSystem::OverrideColor(const char* theEmitterName, const Color& t
 		TodParticleEmitter* aEmitter = mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
 		if (theEmitterName == nullptr || stricmp(theEmitterName, aEmitter->mEmitterDef->mName) == 0)
 			aEmitter->mColorOverride = theColor;
+	}
+}
+
+void TodParticleSystem::OverrideExtraAdditiveColor(const char* theEmitterName, const Color& theColor)
+{
+	for (TodListNode<ParticleEmitterID>* aNode = mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
+	{
+		TodParticleEmitter* aEmitter = mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
+		if (theEmitterName == nullptr || stricmp(theEmitterName, aEmitter->mEmitterDef->mName) == 0)
+			aEmitter->mExtraAdditiveColor = theColor;
 	}
 }
 

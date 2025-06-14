@@ -214,6 +214,7 @@ void Attachment::PropogateColor(const Color& theColor, bool theEnableAdditiveCol
 			if (aParticleSystem)
 			{
 				aParticleSystem->OverrideColor(nullptr, theColor);
+				aParticleSystem->OverrideExtraAdditiveColor(nullptr, theAdditiveColor);
 				aParticleSystem->OverrideExtraAdditiveDraw(nullptr, theEnableAdditiveColor);
 			}
 			break;

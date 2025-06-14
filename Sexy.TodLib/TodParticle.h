@@ -278,6 +278,10 @@ public:
 	float							mGreen;
 	float							mBlue;
 	float							mAlpha;
+    float                           mExtraAdditiveRed;
+    float                           mExtraAdditiveGreen;
+    float                           mExtraAdditiveBlue;
+    float                           mExtraAdditiveAlpha;
 	float							mParticleScale;
 	float							mParticleStretch;
 	float							mSpinPosition;
@@ -322,6 +326,7 @@ public:
 	float							mSystemLastTimeValue;											//+0x34
 	bool							mDead;															//+0x38
 	Sexy::Color						mColorOverride;													//+0x3C
+    Sexy::Color						mExtraAdditiveColor;
 	bool							mExtraAdditiveDrawOverride;										//+0x4C
 	float							mScaleOverride;													//+0x50
 	Sexy::Image*					mImageOverride;													//+0x54
@@ -378,6 +383,7 @@ public:
     void							Draw(Graphics* g);
     void							SystemMove(float theX, float theY);
     void							OverrideColor(const char* theEmitterName, const Color& theColor);
+    void							OverrideExtraAdditiveColor(const char* theEmitterName, const Color& theColor);
     void							OverrideExtraAdditiveDraw(const char* theEmitterName, bool theEnableExtraAdditiveDraw);
     void							OverrideImage(const char* theEmitterName, Image* theImage);
     void							OverrideFrame(const char* theEmitterName, int theFrame);
