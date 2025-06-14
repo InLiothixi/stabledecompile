@@ -306,6 +306,8 @@ SexyAppBase::SexyAppBase()
 #else
 	mIsWideWindow = false;
 #endif
+	mIsPreviewSaver = false;
+	mPreviewHWnd = NULL;
 
 	int i;
 
@@ -3511,7 +3513,12 @@ static bool ScreenSaverWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (gSexyAppBase!=NULL && gSexyAppBase->IsScreenSaver())
+	if (gSexyAppBase != NULL && gSexyAppBase->IsPreviewSaver())
+	{
+		gSexyAppBase->DoExit(0);
+		return TRUE;
+	}
+	else if (gSexyAppBase!=NULL && gSexyAppBase->IsScreenSaver())
 	{
 		LRESULT aResult;
 		if (ScreenSaverWindowProc(hWnd,uMsg,wParam,lParam,aResult))
@@ -4991,10 +4998,15 @@ void SexyAppBase::MakeWindow()
 		mWidgetManager->mImage = NULL;
 	}
 
+	if (IsScreenSaver()) {
+		mTitle = _S("Zen Garden");
+		mIsWindowed = false;
+		mFullScreenWindow = true;
+	}
 
 	if ((mPlayingDemoBuffer) || (mIsWindowed && !mFullScreenWindow))
 	{
-		DWORD aWindowStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_POPUP;	
+		DWORD aWindowStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_POPUP;
 
 		if (mEnableMaximizeButton)
 		{
@@ -5013,7 +5025,7 @@ void SexyAppBase::MakeWindow()
 		aRect.top = 0;
 		aRect.right = mWidth;
 		aRect.bottom = mHeight;
-		
+
 		BOOL worked = AdjustWindowRect(&aRect, aWindowStyle, FALSE);
 
 		int aWidth = aRect.right - aRect.left;
@@ -5025,7 +5037,7 @@ void SexyAppBase::MakeWindow()
 
 		int aPlaceX = 64;
 		int aPlaceY = 64;
-		
+
 		if (isMaximized)
 		{
 			aPlaceX = 0;
@@ -5046,7 +5058,7 @@ void SexyAppBase::MakeWindow()
 
 			if (aPlaceX + aWidth >= aDesktopRect.right - aSpacing)
 				aPlaceX = aDesktopRect.right - aWidth - aSpacing;
-			
+
 			if (aPlaceY + aHeight >= aDesktopRect.bottom - aSpacing)
 				aPlaceY = aDesktopRect.bottom - aHeight - aSpacing;
 		}
@@ -5095,14 +5107,14 @@ void SexyAppBase::MakeWindow()
 				NULL,
 				NULL,
 				gHInstance,
-				0);	
+				0);
 		}
-		
+
 		if (!isMaximized && mPreferredX == -1 && mIsWindowed && !mFullScreenWindow)
-		{				
-			::MoveWindow(mHWnd, 
-				aDesktopRect.left + ((aDesktopRect.right - aDesktopRect.left) - aWidth)/2, 
-				aDesktopRect.top + (int) (((aDesktopRect.bottom - aDesktopRect.top) - aHeight)*0.382), 
+		{
+			::MoveWindow(mHWnd,
+				aDesktopRect.left + ((aDesktopRect.right - aDesktopRect.left) - aWidth) / 2,
+				aDesktopRect.top + (int)(((aDesktopRect.bottom - aDesktopRect.top) - aHeight) * 0.382),
 				aWidth, aHeight, FALSE);
 		}
 
@@ -5145,7 +5157,7 @@ void SexyAppBase::MakeWindow()
 
 		mIsPhysWindowed = false;
 	}
-
+	
 	/*char aStr[256];
 	sprintf(aStr, "HWND: %d\r\n", mHWnd);
 	OutputDebugString(aStr);*/
@@ -5154,6 +5166,14 @@ void SexyAppBase::MakeWindow()
 #elif defined(WIN32)
 	SetWindowLongW(mHWnd, GWL_USERDATA, (LONG) this);
 #endif
+
+	if (IsPreviewSaver()) {
+		SetParent(mHWnd, (HWND)mPreviewHWnd);
+		SetWindowLong(mHWnd, GWL_STYLE, WS_VISIBLE | WS_CHILD);
+		RECT rc;
+		GetClientRect((HWND)mPreviewHWnd, &rc);
+		MoveWindow(mHWnd, 0, 0, rc.right, rc.bottom, TRUE);
+	}
 
 	if (mDDInterface == NULL)
 	{
@@ -6458,7 +6478,7 @@ static int GetMaxDemoFileNum(const std::string& theDemoPrefix, int theMaxToKeep,
 
 void SexyAppBase::HandleCmdLineParam(const std::string& theParamName, const std::string& theParamValue)
 {
-	bool isDigits = !theParamName.empty() && std::all_of(theParamName.begin(), theParamName.end(), ::isdigit);
+	const bool aIsPreviewParameter = theParamName.rfind("/p", 0) == 0 || theParamName.rfind("/P", 0) == 0 || !theParamName.empty() && std::all_of(theParamName.begin(), theParamName.end(), ::isdigit);
 
 	if (theParamName == "-play")
 	{
@@ -6511,9 +6531,30 @@ void SexyAppBase::HandleCmdLineParam(const std::string& theParamName, const std:
 		char* a = 0;
 		*a = '!';		
 	}
-	else if (theParamName == "-screensaver" || theParamName == "/s" || theParamName == "/p" || theParamName == "/S" || theParamName == "/P" || isDigits)
+	else if (theParamName == "-screensaver" ||
+		theParamName.rfind("/s") == 0 || theParamName.rfind("/S") == 0 ||
+		aIsPreviewParameter ||
+		theParamName.rfind("/c") == 0 || theParamName.rfind("/C") == 0)
 	{
 		mIsScreenSaver = true;
+		
+		if (aIsPreviewParameter)
+		{
+			mIsPreviewSaver = true;
+
+			try {
+				std::string winCode = theParamName;
+				if (theParamName.rfind("/p", 0) == 0 || theParamName.rfind("/P", 0) == 0) {
+					winCode = winCode.substr(2);
+					size_t nSpace = winCode.find_first_not_of(" \t");
+					if (nSpace != std::string::npos)
+						winCode = winCode.substr(nSpace);
+				}
+				//mPreviewHWnd = (HWND)(uintptr_t)std::stoull(winCode);
+			}
+			catch (...) {}
+
+		}
 	}
 	else if (theParamName == "-changedir")
 	{
@@ -6611,10 +6652,7 @@ void SexyAppBase::Init()
 	if (IsScreenSaver())	
 	{
 		mOnlyAllowOneCopyToRun = false;
-		mFullScreenWindow = true;
-		mIsWindowed = false;
 	}
-
 
 	if(gHInstance==NULL)
 		gHInstance = (HINSTANCE)GetModuleHandle(NULL);
@@ -7696,4 +7734,9 @@ void SexyAppBase::CleanSharedImages()
 
 		mCleanupSharedImages = false;
 	}
+}
+
+bool SexyAppBase::IsPreviewSaver()
+{
+	return IsScreenSaver() && mIsPreviewSaver;
 }

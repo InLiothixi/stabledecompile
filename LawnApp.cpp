@@ -51,7 +51,6 @@
 
 #include "Lawn/SeedPacket.h"
 
-
 #include "portaudio.h"
 #include <lua.hpp>
 
@@ -156,7 +155,6 @@ LawnApp::LawnApp()
 	mDRM = nullptr;
 	mShowHealthBar = false;
 	mPlayerController = new PlayerController();
-	mDarknessEffect = nullptr;
 	mVoiceVolume = 0.0f;
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
 }
@@ -299,11 +297,6 @@ void LawnApp::Shutdown()
 			mPoolEffect->PoolEffectDispose();
 			delete mPoolEffect;
 			mPoolEffect = nullptr;
-		}
-
-		if (mDarknessEffect)
-		{
-			delete mDarknessEffect;
 		}
 
 		if (mZenGarden)
@@ -1928,17 +1921,6 @@ void LawnApp::LoadingThreadProc()
 	mReanimatorCache = new ReanimatorCache();
 	mReanimatorCache->ReanimatorCacheInitialize();
 
-	mDarknessEffect = new MemoryImage(this);
-	mDarknessEffect->mWidth = BOARD_WIDTH;
-	mDarknessEffect->mHeight = BOARD_HEIGHT;
-	mDarknessEffect->mBits = new unsigned long[BOARD_WIDTH * BOARD_HEIGHT];
-	mDarknessEffect->mHasTrans = true;
-	mDarknessEffect->mHasAlpha = true;
-	for (int i = 0; i < BOARD_WIDTH * BOARD_HEIGHT; ++i) {
-		mDarknessEffect->mBits[i] = 0xFF000000;
-	}
-	mDarknessEffect->mBits[CAUSTIC_IMAGE_WIDTH * CAUSTIC_IMAGE_HEIGHT] = MEMORYCHECK_ID;
-	
 	TodFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));
 
 	TodTrace("loading '%s' %d ms", "stuff", (int)aTimer.GetDuration());

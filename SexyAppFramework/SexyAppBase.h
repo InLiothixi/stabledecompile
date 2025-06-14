@@ -328,6 +328,8 @@ public:
 #endif
 
 	LONG					mOldWndProc;
+	bool					mIsPreviewSaver;
+	HWND					mPreviewHWnd;
 
 protected:	
 	void					RehupFocus();
@@ -571,6 +573,8 @@ public:
 	bool					IsScreenSaver();
 	virtual bool			AppCanRestore();
 	static LRESULT CALLBACK	WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	
+
+	bool					IsPreviewSaver();
 };
 
 extern SexyAppBase* gSexyAppBase;

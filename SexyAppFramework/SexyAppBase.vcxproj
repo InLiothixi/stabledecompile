@@ -70,7 +70,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include</IncludePath>
-    <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)lua;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
   </PropertyGroup>
@@ -104,9 +103,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <UseFullPaths>true</UseFullPaths>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -118,11 +115,11 @@
       <IntelJCCErratum>true</IntelJCCErratum>
       <CreateHotpatchableImage>true</CreateHotpatchableImage>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
       <OpenMPSupport>true</OpenMPSupport>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_WIN_32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

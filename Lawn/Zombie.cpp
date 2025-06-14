@@ -8603,12 +8603,15 @@ void Zombie::DropShield(unsigned int theDamageFlags)
         }
     }
 
-    if (aParticle)
+    if (!TestBit(theDamageFlags, (int)DamageFlags::DAMAGE_DOESNT_LEAVE_BODY))
     {
-        for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
+        if (aParticle)
         {
-            TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
-            aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
+            for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
+            {
+                TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
+                aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
+            }
         }
     }
 

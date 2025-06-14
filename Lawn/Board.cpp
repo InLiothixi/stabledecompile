@@ -5810,9 +5810,9 @@ void Board::UpdateZombieSpawning()
 	const bool isCurrentWaveWeakerThanNext = (currentWaveHealth <= mZombieHealthToNextWave);
 	const bool isNextWaveFlag = IsFlagWave(mCurrentWave);
 	bool canSkipWave = false;
-	canSkipWave = isCurrentWaveWeakerThanNext && !isNextWaveFlag;
+	canSkipWave = isCurrentWaveWeakerThanNext && !isNextWaveFlag && mCurrentWave != 0;
 	canSkipWave |= (mZombieHealthToNextWave == 0 && isFinalWave);
-	canSkipWave |= (currentWaveHealth <= 0);
+	canSkipWave |= (currentWaveHealth <= 0 && mCurrentWave != 0);
 
 	if (mZombieCountDown > 200 && mZombieCountDownStart - mZombieCountDown > 400 && canSkipWave)
 	{
@@ -7859,6 +7859,8 @@ void Board::DrawUIBottom(Graphics* g)
 {
 	if (mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
 	{
+		bool isFastStretch = g->mFastStretch;
+		g->mFastStretch = !mApp->Is3DAccelerated();
 		int aWaveTime = abs(mMainCounter / 8 % 22 - 11);
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->DrawImageCel(Sexy::IMAGE_WAVESIDE, 0, 40, aWaveTime);
@@ -7867,10 +7869,14 @@ void Board::DrawUIBottom(Graphics* g)
 		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 480, 40, aWaveTime);
 		TodDrawImageCelScaled(g, Sexy::IMAGE_WAVESIDE, 800- Sexy::IMAGE_WAVESIDE->mWidth, 40, 0, aWaveTime, -1.0f, 1.0f);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+		g->mFastStretch = isFastStretch;
+
 	}
 
 	if (mBackground == BackgroundType::BACKGROUND_GREENHOUSE || mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
 	{
+		bool isFastStretch = g->mFastStretch;
+		g->mFastStretch = !mApp->Is3DAccelerated();
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->DrawImage(
 			IMAGE_BACKGROUND_GREENHOUSE_OVERLAY, 
@@ -7878,6 +7884,7 @@ void Board::DrawUIBottom(Graphics* g)
 			Rect(0, 0, IMAGE_BACKGROUND_GREENHOUSE_OVERLAY->mWidth, IMAGE_BACKGROUND_GREENHOUSE_OVERLAY->mHeight)
 		);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+		g->mFastStretch = isFastStretch;
 	}
 
 	if (mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON)

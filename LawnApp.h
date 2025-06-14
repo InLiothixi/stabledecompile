@@ -7,6 +7,7 @@
 
 #include "portaudio.h"
 #include <lua.hpp>
+#include "SexyAppFramework/DDImage.h"
 
 #include "SexyAppFramework/Common.h"
 
@@ -138,7 +139,6 @@ public:
 	bool							mShowHealthBar;
 	PlayerController*				mPlayerController;
 	bool							mFlowersPlucked[3];
-	Sexy::MemoryImage*				mDarknessEffect;
 	PaStream*						mPortAudioStream;
 	float							mVoiceVolume;
 	//lua_State*						L;
