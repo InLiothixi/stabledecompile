@@ -16,6 +16,7 @@ public:
 	PlantID					mCobCannonPlantID;		//+0x40
 	int						mHammerDownCounter;		//+0x44
 	ReanimationID			mReanimCursorID;		//+0x48
+	ReanimationID			mPreviewCursorID;
 
 public:
 	CursorObject();

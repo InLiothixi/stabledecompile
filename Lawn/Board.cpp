@@ -7860,7 +7860,7 @@ void Board::DrawUIBottom(Graphics* g)
 	if (mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
 	{
 		bool isFastStretch = g->mFastStretch;
-		g->mFastStretch = false;
+		g->mFastStretch = !mApp->Is3DAccelerated();
 		int aWaveTime = abs(mMainCounter / 8 % 22 - 11);
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->DrawImageCel(Sexy::IMAGE_WAVESIDE, 0, 40, aWaveTime);
@@ -7876,7 +7876,7 @@ void Board::DrawUIBottom(Graphics* g)
 	if (mBackground == BackgroundType::BACKGROUND_GREENHOUSE || mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
 	{
 		bool isFastStretch = g->mFastStretch;
-		g->mFastStretch = false;
+		g->mFastStretch = !mApp->Is3DAccelerated();
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->DrawImage(
 			IMAGE_BACKGROUND_GREENHOUSE_OVERLAY, 

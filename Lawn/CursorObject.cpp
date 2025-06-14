@@ -21,6 +21,7 @@ CursorObject::CursorObject()
     mCobCannonPlantID = PlantID::PLANTID_NULL;
     mGlovePlantID = PlantID::PLANTID_NULL;
     mReanimCursorID = ReanimationID::REANIMATIONID_NULL;
+    mPreviewCursorID = ReanimationID::REANIMATIONID_NULL;
     
     if (mApp->IsWhackAZombieLevel())
     {
