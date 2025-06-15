@@ -237,10 +237,10 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 8, 0, g->mScaleX, g->mScaleY);
 	}
-	/*else if (aSeedType == SeedType::SEED_KERNELPULT && g->mScaleX <= 1.0f)
+	else if (aSeedType == SeedType::SEED_KERNELPULT && g->mScaleX <= 1.0f)
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 9, 0, g->mScaleX, g->mScaleY);
-	}*/
+	}
 	else if (aSeedType == SeedType::SEED_MELONPULT && g->mScaleX <= 1.0f)
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 10, 0, g->mScaleX, g->mScaleY);

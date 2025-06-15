@@ -4575,10 +4575,10 @@ void Plant::Draw(Graphics* g)
         {
             aOffsetY -= 20.0f;
         }
-        else if (mSeedType == SeedType::SEED_KERNELPULT && mState == PlantState::STATE_KERNELPULT_BUTTER)
+        /*else if (mSeedType == SeedType::SEED_KERNELPULT && mState == PlantState::STATE_KERNELPULT_BUTTER)
         {
             drawVar = DrawVariation::VARIATION_KERNELPULT_WITH_BUTTER;
-        }
+        }*/
         else  if (mSeedType == SeedType::SEED_SUNSHROOM)
         {
             if (mState == STATE_SUNSHROOM_BIG) 
@@ -4939,10 +4939,10 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
         aOffsetX += aSeedG.mScaleX * 80.0f;
         aSeedG.mScaleX *= -1.0f;
     }
-    if (aSeedType == SeedType::SEED_KERNELPULT)
+    /*if (aSeedType == SeedType::SEED_KERNELPULT)
     {
         aDrawVariation = DrawVariation::VARIATION_KERNELPULT_WITH_BUTTER;
-    }
+    }*/
     if (aSeedType == SeedType::SEED_SEASHROOM)
     {
         aOffsetY += 3.535f;
