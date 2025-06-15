@@ -444,7 +444,7 @@ void MessageWidget::Draw(Graphics* g)
 		if (mMessageStyle == MessageStyle::MESSAGE_STYLE_HOUSE_NAME)
 		{
 			SexyString aSubStr;
-			if (mApp->IsSurvivalMode() && mApp->mBoard->mChallenge->mSurvivalStage > 0)
+			if ((mApp->IsSurvivalMode() || mApp->IsLastStand()) && mApp->mBoard->mChallenge->mSurvivalStage > 0)
 			{
 				int aFlags = mApp->mBoard->GetNumWavesPerSurvivalStage() * mApp->mBoard->mChallenge->mSurvivalStage / mApp->mBoard->GetNumWavesPerFlag();
 				SexyString aFlagStr = mApp->Pluralize(aFlags, _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));

@@ -558,7 +558,7 @@ void CutScene::PlaceStreetZombies()
 	}
 
 	// 谁笑到最后关卡，除雪人僵尸外，所有允许出怪的僵尸类型至少计入 1 只僵尸
-	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	if (mApp->IsLastStand())
 	{
 		for (int aZombieType = 0; aZombieType < (int)ZombieType::NUM_ZOMBIE_TYPES; aZombieType++)
 		{
@@ -695,7 +695,7 @@ void CutScene::PlaceLawnItems()
 //0x43A710
 bool CutScene::IsSurvivalRepick()
 {
-	return (mApp->IsSurvivalMode() && mBoard->mChallenge->mSurvivalStage > 0 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO); 
+	return ((mApp->IsSurvivalMode() || mApp->IsLastStand()) && mBoard->mChallenge->mSurvivalStage > 0 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO);
 }
 
 //0x43A740
@@ -719,7 +719,7 @@ bool CutScene::IsNonScrollingCutscene()
 //0x43A7B0
 bool CutScene::IsScrolledLeftAtStart()
 {
-	if (mBoard->mChallenge->mSurvivalStage > 0 && mApp->IsSurvivalMode())
+	if (mBoard->mChallenge->mSurvivalStage > 0 && (mApp->IsSurvivalMode() || mApp->IsLastStand()))
 		return false;  // 非首轮的生存模式的过场，屏幕滚动从屏幕中央开始
 
 	return !IsNonScrollingCutscene();
@@ -810,7 +810,7 @@ void CutScene::StartLevelIntro()
 		mApp->IsSquirrelLevel() ||
 		mApp->IsWallnutBowlingLevel() ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
-		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND ||
+		mApp->IsLastStand() ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
@@ -1591,6 +1591,20 @@ void CutScene::Update()
 
 		ShowShovel();
 		mApp->StartPlaying();
+		if (mApp->IsLastStand())
+		{
+			mBoard->mChallenge->mChallengeState = STATECHALLENGE_NORMAL;
+			mBoard->mSeedBank->RefreshAllPackets();
+			Plant* aPlant = nullptr;
+			while (mBoard->IteratePlants(aPlant))
+			{
+				if (aPlant->mState == STATE_CHOMPER_DIGESTING || aPlant->mState == STATE_COBCANNON_ARMING ||
+					aPlant->mState == STATE_MAGNETSHROOM_SUCKING || aPlant->mState == STATE_MAGNETSHROOM_CHARGING)
+				{
+					aPlant->mStateCountdown = min(aPlant->mStateCountdown, 200);
+				}
+			}
+		}
 		return;
 	}
 

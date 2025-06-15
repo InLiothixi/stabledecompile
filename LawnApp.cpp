@@ -1649,6 +1649,13 @@ void LawnApp::CheckForGameEnd()
 		}
 		
 	}
+	else if (IsLastStandEndless(mGameMode))
+	{
+		mBoard->mNukeCounter = 0;
+		mBoard->mChallenge->mSurvivalStage++;
+		KillGameSelector();
+		mBoard->InitSurvivalStage();
+	}
 	else if (IsSurvivalMode())
 	{
 		if (mBoard->IsFinalSurvivalStage())
@@ -2751,7 +2758,7 @@ bool LawnApp::HasBeatenChallenge(GameMode theGameMode)
 	{
 		return mPlayerInfo->mChallengeRecords[aChallengeIndex] >= SURVIVAL_HARD_FLAGS;
 	}
-	if (IsSurvivalEndless(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsEndlessIZombie(theGameMode))
+	if (IsSurvivalEndless(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsEndlessIZombie(theGameMode) || IsLastStandEndless(theGameMode))
 	{
 		return false;
 	}
@@ -3788,7 +3795,7 @@ bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 
 bool LawnApp::ChallengeHasScores(GameMode theGameMode)
 {
-	return IsEndlessIZombie(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsSurvivalEndless(theGameMode);
+	return IsEndlessIZombie(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsSurvivalEndless(theGameMode) || IsLastStandEndless(theGameMode);
 }
 
 int LawnApp::PutZombieInWaveL(lua_State* L)
@@ -3942,4 +3949,16 @@ int LawnApp::ChangeMusicL(lua_State* L)
 	int input = luaL_checkinteger(L, 2);
 	board->mApp->mMusic->MakeSureMusicIsPlaying((MusicTune)input);
 	return 0;
+}
+
+bool LawnApp::IsLastStand() {
+	bool aIsLastStand = mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND;
+	aIsLastStand |= IsLastStandEndless(mGameMode);
+	return aIsLastStand;
+}
+
+bool LawnApp::IsLastStandEndless(GameMode theGameMode)
+{
+	int aLevel = theGameMode - GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_1;
+	return aLevel >= 0 && aLevel <= 4;
 }

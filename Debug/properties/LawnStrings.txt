@@ -3201,11 +3201,11 @@ Replay level?
 [REPLAY_LEVEL_BODY]
 Do you wish to replay level 3-4?
 
-[QUICKPLAY]
-Quickplay
-
-[LIMBO]
+[LIMBO_PAGE]
 Limbo
+
+[LAST_STAND_PAGE]
+Last Stand Page
 
 [SKIP_CUTSCENE_BUTTON]
 Skip Cutscene
@@ -3536,3 +3536,18 @@ Heavy Weapon
 
 [ZOMBIE_TRAP]
 Zombie Trap
+
+[LAST_STAND_DAY_ENDLESS]
+Last Stand: Day (Endless)
+
+[LAST_STAND_NIGHT_ENDLESS]
+Last Stand: Night (Endless)
+
+[LAST_STAND_POOL_ENDLESS]
+Last Stand: Pool (Endless)
+
+[LAST_STAND_FOG_ENDLESS]
+Last Stand: Fog (Endless)
+
+[LAST_STAND_ROOF_ENDLESS]
+Last Stand: Roof (Endless)

@@ -477,7 +477,7 @@ void Challenge::StartLevel()
 			_S("[ADVICE_SURVIVE_ENDLESS]");
 		mBoard->DisplayAdvice(aMessage, MESSAGE_STYLE_HINT_FAST, ADVICE_SURVIVE_FLAGS);
 	}
-	if (aGameMode == GAMEMODE_CHALLENGE_LAST_STAND && mSurvivalStage == 0)
+	if (mSurvivalStage == 0)
 	{
 		mBoard->DisplayAdvice(TodReplaceNumberString(_S("[ADVICE_SURVIVE_FLAGS]"), _S("{FLAGS}"), LAST_STAND_FLAGS), MESSAGE_STYLE_BIG_MIDDLE_FAST, ADVICE_SURVIVE_FLAGS);
 	}
@@ -2278,7 +2278,7 @@ void Challenge::Update()
 		mApp->PlayFoley(FOLEY_FLOOP);
 		mApp->PlaySample(Sexy::SOUND_LOSEMUSIC);
 	}
-	if (mApp->mGameMode == GAMEMODE_CHALLENGE_LAST_STAND)
+	if (mApp->IsLastStand())
 	{
 		LastStandUpdate();
 	}
@@ -2602,7 +2602,7 @@ void Challenge::InitZombieWavesSurvival()
 		if (mBoard->IsZombieTypePoolOnly(aRandZombie) && !mBoard->StageHasPool())									continue;
 		if (mBoard->StageHasRoof() && (aRandZombie == ZOMBIE_DIGGER || aRandZombie == ZOMBIE_DANCER))				continue;
 		if (mBoard->StageHasGraveStones() && aRandZombie == ZOMBIE_ZAMBONI)											continue;
-		if (!mBoard->StageHasRoof() && !mApp->IsSurvivalEndless(mApp->mGameMode) && aRandZombie == ZOMBIE_BUNGEE)	continue;
+		if (!mBoard->StageHasRoof() && !mApp->IsSurvivalEndless(mApp->mGameMode) && !mApp->IsLastStandEndless(mApp->mGameMode) && aRandZombie == ZOMBIE_BUNGEE)	continue;
 		if (mBoard->GetSurvivalFlagsCompleted() < 10 && aRandZombie >= ZOMBIE_REDEYE_GARGANTUAR)								continue;
 		if (mApp->IsSurvivalNormal(mApp->mGameMode) && aRandZombie > ZOMBIE_SNORKEL)								continue;
 		if (mBoard->IsZombieTypeSpawnedOnly(aRandZombie) || Zombie::IsZombotany(aRandZombie) ||
@@ -2850,6 +2850,35 @@ void Challenge::InitZombieWaves()
 		aList[ZOMBIE_JACK_IN_THE_BOX] = true;
 		aList[ZOMBIE_GARGANTUAR] = true;
 	}
+	else if (mApp->IsLastStandEndless(mApp->mGameMode))
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_NEWSPAPER] = true;
+
+		if (mSurvivalStage >= 1)	aList[ZOMBIE_POLEVAULTER] = true;
+		if (mSurvivalStage >= 2)	aList[ZOMBIE_PAIL] = true;
+		if (mSurvivalStage >= 3)	aList[ZOMBIE_DOOR] = true;
+		if (mSurvivalStage >= 4)	aList[ZOMBIE_SNORKEL] = true;
+		if (mSurvivalStage >= 5)	aList[ZOMBIE_DOLPHIN_RIDER] = true;
+		if (mSurvivalStage >= 6)	aList[ZOMBIE_FOOTBALL] = true;
+		if (mSurvivalStage >= 7)	aList[ZOMBIE_BALLOON] = true;
+		if (mSurvivalStage >= 8)	aList[ZOMBIE_JACK_IN_THE_BOX] = true;
+		if (mSurvivalStage >= 9)	aList[ZOMBIE_BUNGEE] = true;
+		if (mSurvivalStage >= 10)	aList[ZOMBIE_LADDER] = true;
+		if (mSurvivalStage >= 11)	aList[ZOMBIE_CATAPULT] = true;
+		if (mSurvivalStage >= 12)	aList[ZOMBIE_ZAMBONI] = true;
+		if (mSurvivalStage >= 13)	aList[ZOMBIE_DIGGER] = true;
+		if (mSurvivalStage >= 14)	aList[ZOMBIE_GARGANTUAR] = true;
+		if (mSurvivalStage >= 20)	
+		{
+			aList[ZOMBIE_REDEYE_GARGANTUAR] = true;
+			aList[ZOMBIE_BLACK_FOOTBALL] = true;
+			aList[ZOMBIE_TRASHCAN] = true;
+			aList[ZOMBIE_PROPELLER] = true;
+			aList[ZOMBIE_DOG_WALKER] = true;
+		}
+	}
 	else
 	{
 		aList[ZOMBIE_NORMAL] = true;
@@ -3053,7 +3082,7 @@ bool Challenge::UpdateZombieSpawning()
 			mApp->IsIZombieLevel() ||
 			mApp->IsSquirrelLevel() ||
 			mApp->IsScaryPotterLevel() ||
-			(mApp->mGameMode == GAMEMODE_CHALLENGE_LAST_STAND && mChallengeState != STATECHALLENGE_LAST_STAND_ONSLAUGHT);
+			(mApp->IsLastStand() && mChallengeState != STATECHALLENGE_LAST_STAND_ONSLAUGHT);
 	}
 }
 

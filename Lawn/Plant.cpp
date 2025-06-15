@@ -1253,7 +1253,7 @@ void Plant::UpdateProductionPlant()
             return;
     }
 
-    if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && mBoard->mChallenge->mChallengeState != ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT)
+    if (mApp->IsLastStand() && mBoard->mChallenge->mChallengeState != ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT)
         return;
 
     mLaunchCounter--;

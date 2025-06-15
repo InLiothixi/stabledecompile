@@ -8065,7 +8065,7 @@ bool Zombie::TrySpawnLevelAward()
     int aCenterX = aZombieRect.mX + aZombieRect.mWidth / 2;
     int aCenterY = aZombieRect.mY + aZombieRect.mHeight / 2;
 
-    if (!mBoard->IsSurvivalStageWithRepick())
+    if (!mBoard->IsSurvivalStageWithRepick() && !mBoard->IsLastStandStageWithRepick())
     {
         mBoard->RemoveAllZombies();
     }
@@ -8121,10 +8121,9 @@ bool Zombie::TrySpawnLevelAward()
         aCoinType = CoinType::COIN_NONE;
         mBoard->FadeOutLevel();
     }
-    else if (mBoard->IsLastStandStageWithRepick())
+    else if (mBoard->IsLastStandStageWithRepick() || mApp->IsLastStandEndless(mApp->mGameMode))
     {
         aCoinType = CoinType::COIN_NONE;
-
         mBoard->FadeOutLevel();
         mApp->PlayFoley(FoleyType::FOLEY_SPAWN_SUN);
         for (int i = 0; i < 10; i++)
@@ -8354,7 +8353,7 @@ void Zombie::BungeeDie()
 //0x530510
 void Zombie::DieNoLoot()
 {
-    if (IsOnBoard() && !mApp->GetDialog(DIALOG_ALMANAC) && mApp->ChallengeHasScores(mApp->mGameMode) && (mApp->IsScaryPotterLevel() || mApp->IsSurvivalMode())) {
+    if (IsOnBoard() && !mApp->GetDialog(DIALOG_ALMANAC) && mApp->ChallengeHasScores(mApp->mGameMode) && (mApp->IsScaryPotterLevel() || mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode))) {
         int points = ((mBodyMaxHealth + mHelmMaxHealth + mShieldMaxHealth + mFlyingMaxHealth - mBodyMaxHealth / 3) / 20 + 1) * 10;
         if (mHasObject && (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)) {
             points += 100;

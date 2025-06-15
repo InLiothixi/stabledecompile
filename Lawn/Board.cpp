@@ -58,7 +58,7 @@ Board::Board(LawnApp* theApp)
 
 	mApp->mEffectSystem->EffectSystemFreeAll();
 	mBoardRandSeed = mApp->mAppRandSeed;
-	if (mApp->IsSurvivalMode())
+	if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode))
 	{
 		mBoardRandSeed = Rand();
 	}
@@ -199,7 +199,7 @@ Board::Board(LawnApp* theApp)
 		mMenuButton->Resize(681, -10, 117, 46);
 	}
 
-	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	if (mApp->IsLastStand())
 	{
 		mStoreButton = new GameButton(1);
 		mStoreButton->mDrawStoneButton = true;
@@ -638,7 +638,7 @@ void Board::PickZombieWaves()
 	else
 	{
 		GameMode aGameMode = mApp->mGameMode;
-		if (mApp->IsSurvivalMode() || aGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+		if (mApp->IsSurvivalMode() || mApp->IsLastStand())
 			mNumWaves = GetNumWavesPerSurvivalStage();
 		else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || mApp->IsSquirrelLevel())
 			mNumWaves = 0;
@@ -692,7 +692,7 @@ void Board::PickZombieWaves()
 		// ------------------------------------------------------------------------------------------------
 		int& aZombiePoints = aZombiePicker.mZombiePoints;
 		// 根据关卡计算本波的基础僵尸点数
-		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+		if (mApp->IsLastStand())
 		{
 			aZombiePoints = (mChallenge->mSurvivalStage * GetNumWavesPerSurvivalStage() + aWave + 10) * 2 / 5 + 1;
 		}
@@ -792,7 +792,7 @@ void Board::PickZombieWaves()
 			PutZombieInWave(ZombieType::ZOMBIE_GARGANTUAR, aWave, &aZombiePicker);
 		}
 		// 冒险模式关卡的最后一波会出现本关卡可能出现的所有僵尸
-		if (/*mApp->IsAdventureMode()*/ /*!mApp->IsSurvivalMode() &&*/ aIsFinalWave)
+		if (/*mApp->IsAdventureMode()*/ !mApp->IsSurvivalMode() && mApp->IsLastStandEndless(mApp->mGameMode) && aIsFinalWave)
 		{
 			PutInMissingZombies(aWave, &aZombiePicker);
 		}
@@ -996,6 +996,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_ICE:
 	case GameMode::GAMEMODE_CHALLENGE_SHOVEL:
 	case GameMode::GAMEMODE_CHALLENGE_SQUIRREL:
+	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_1:
 		mBackground = BackgroundType::BACKGROUND_1_DAY;
 		break;
 
@@ -1028,6 +1029,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_9:
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS:
 	case GameMode::GAMEMODE_CHALLENGE_VASEBREAKER:
+	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_2:
 		mBackground = BackgroundType::BACKGROUND_2_NIGHT;
 		break;
 
@@ -1043,6 +1045,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_INTRO:
 	case GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE:
 	case GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN:
+	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_3:
 		mBackground = BackgroundType::BACKGROUND_3_POOL;
 		break;
 
@@ -1054,6 +1057,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL:
 	case GameMode::GAMEMODE_CHALLENGE_AIR_RAID:
 	case GameMode::GAMEMODE_CHALLENGE_STORMY_NIGHT:
+	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_4:
 		mBackground = BackgroundType::BACKGROUND_4_FOG;
 		break;
 
@@ -1064,6 +1068,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_POGO_PARTY:
 	case GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY:
 	case GameMode::GAMEMODE_CHALLENGE_BUNGEE_BLITZ:
+	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5:
 		mBackground = BackgroundType::BACKGROUND_5_ROOF;
 		break;
 
@@ -1489,7 +1494,7 @@ void Board::InitLevel()
 	{
 		mSunMoney = 0;
 	}
-	else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	else if (mApp->IsLastStand())
 	{
 		mSunMoney = 5000;
 	}
@@ -1750,7 +1755,7 @@ void Board::InitLawnMowers()
 	// 这里优化一下原版的代码，事先列举一些不创建小推车的关卡
 	if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||
 		aGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
-		aGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND || aGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
+		mApp->IsLastStand() || aGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
 		aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 		mApp->IsSquirrelLevel() || mApp->IsIZombieLevel() || (StageHasRoof() && !mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_ROOF_CLEANER]))
 		return;
@@ -1803,7 +1808,7 @@ void Board::StartLevel()
 	}
 
 
-	if (mApp->IsSurvivalMode() && mChallenge->mSurvivalStage > 0)
+	if ((mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode)) && mChallenge->mSurvivalStage > 0)
 	{
 		mApp->EraseFile(GetSavedGameName(mApp->mGameMode, mApp->mPlayerInfo->mId));
 		FreezeEffectsForCutscene(false);
@@ -1856,7 +1861,7 @@ void Board::UpdateLevelEndSequence()
 			}
 		}
 
-		if (mNextSurvivalStageCounter == 1 && mApp->IsSurvivalMode())
+		if (mNextSurvivalStageCounter == 1 && (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode)))
 		{
 			TryToSaveGame();
 		}
@@ -1879,7 +1884,7 @@ void Board::UpdateLevelEndSequence()
 				mChallenge->PuzzleNextStageClear();
 				mChallenge->IZombieInitLevel();
 			}
-			else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+			else if (mApp->IsLastStand() && !mApp->IsLastStandEndless(mApp->mGameMode))
 			{
 				ClearAdvice(AdviceType::ADVICE_NONE);
 			}
@@ -1986,7 +1991,7 @@ void Board::FadeOutLevel()
 	{
 		aNeedSoundEffect = false;
 	}
-	else if (IsSurvivalStageWithRepick() || IsLastStandStageWithRepick() || mApp->IsEndlessIZombie(mApp->mGameMode))
+	else if (IsSurvivalStageWithRepick() || IsLastStandStageWithRepick() || mApp->IsEndlessIZombie(mApp->mGameMode) || mApp->IsLastStandEndless(mApp->mGameMode))
 	{
 		aNeedSoundEffect = false;
 	}
@@ -2036,14 +2041,14 @@ void Board::FadeOutLevel()
 		return;
 	}
 
-	if (IsLastStandStageWithRepick())
+	if (IsLastStandStageWithRepick() && !mApp->IsLastStandEndless(mApp->mGameMode))
 	{
 		mNextSurvivalStageCounter = 500;
 		mChallenge->LastStandCompletedStage();
 		return;
 	}
 
-	if (!IsSurvivalStageWithRepick())
+	if (!IsSurvivalStageWithRepick() && !mApp->IsLastStandEndless(mApp->mGameMode))
 	{
 		RefreshSeedPacketFromCursor();
 		mApp->mLastLevelStats->mUnusedLawnMowers = CountUntriggerLawnMowers();
@@ -2063,6 +2068,20 @@ void Board::FadeOutLevel()
 		while (IterateCoins(aCoin))
 		{
 			aCoin->TryAutoCollectAfterLevelAward();
+		}
+	}
+	else if (mApp->IsLastStandEndless(mApp->mGameMode))
+	{
+		TOD_ASSERT(mApp->IsLastStand());
+		mNextSurvivalStageCounter = 500;
+		mApp->mMusic->FadeOut(500);
+		mApp->PlaySample(Sexy::SOUND_HUGE_WAVE);
+		SexyString aFlagStr = mApp->Pluralize(GetSurvivalFlagsCompleted(), _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
+		SexyString aMsg = TodReplaceString(_S("[SUCCESSFULLY_DEFENDED]"), _S("{FLAGS}"), aFlagStr);
+		DisplayAdvice(aMsg, MESSAGE_STYLE_BIG_MIDDLE_FAST, ADVICE_NONE);
+		for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
+		{
+			mIceTimer[aRow] = mNextSurvivalStageCounter;
 		}
 	}
 	else
@@ -2632,7 +2651,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ================================================================================================
 		GameMode aGameMode = mApp->mGameMode;
 		// 蹦极僵尸在无尽模式中仅在旗帜波出现
-		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && mApp->IsSurvivalEndless(aGameMode))
+		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(aGameMode)))
 		{
 			if (!IsFlagWave(theWaveIndex))
 			{
@@ -2644,7 +2663,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		{
 			int aFirstAllowedWave = aZombieDef.mFirstAllowedWave;
 			// 无尽模式中，僵尸最早可出现的波数逐渐前移
-			if (mApp->IsSurvivalEndless(aGameMode))
+			if (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(aGameMode))
 			{
 				int aFlags = GetSurvivalFlagsCompleted();
 				int aAllowedWave = aFirstAllowedWave - TodAnimateCurve(18, 50, aFlags, 0, 15, TodCurves::CURVE_LINEAR);
@@ -2660,7 +2679,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ▲ 生存模式中，根据当前旗帜数等重新计算僵尸的权重
 		// ================================================================================================
 		int aPickWeight = aZombieDef.mPickWeight;
-		if (mApp->IsSurvivalMode())
+		if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(aGameMode))
 		{
 			int aFlags = GetSurvivalFlagsCompleted();
 			// 伽刚特尔和雪橇车僵尸的每波出怪上限
@@ -2744,7 +2763,7 @@ bool Board::RowCanHaveZombieType(int theRow, ZombieType theZombieType, int theWa
 	}
 
 	int aCurrentWave = theWave;
-	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	if (mApp->IsLastStand() || mApp->IsSurvivalMode())
 	{
 		aCurrentWave += mChallenge->mSurvivalStage * GetNumWavesPerSurvivalStage();
 	}
@@ -4821,7 +4840,7 @@ void Board::MouseDown(int x, int y, int theClickCount)
 		{
 			mApp->PlaySample(Sexy::SOUND_TAP);
 		}
-		else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND || mApp->mGameMode == GameMode::GAMEMODE_UPSELL)
+		else if (mApp->IsLastStand() || mApp->mGameMode == GameMode::GAMEMODE_UPSELL)
 		{
 			mApp->PlaySample(Sexy::SOUND_GRAVEBUTTON);
 		}
@@ -5070,7 +5089,7 @@ void Board::MouseUp(int x, int y, int theClickCount)
 			{
 				mChallenge->TreeOfWisdomOpenStore();
 			}
-			else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+			else if (mApp->IsLastStand())
 			{
 				mChallenge->mChallengeState = ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT;
 				mStoreButton->mBtnNoDraw = true;
@@ -5479,7 +5498,7 @@ int Board::GetSurvivalFlagsCompleted()
 //0x413320
 void Board::SurvivalSaveScore()
 {
-	if (!mApp->IsSurvivalMode())
+	if (!mApp->IsSurvivalMode() && mApp->IsLastStandEndless(mApp->mGameMode))
 		return;
 
 	int aFlagsCompleted = GetSurvivalFlagsCompleted();
@@ -5539,7 +5558,7 @@ void Board::ZombiesWon(Zombie* theZombie)
 	{
 		aGameOverMsg = _S("[ZOMBIQUARIUM_DEATH_MESSAGE]");
 	}
-	else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	else if (mApp->IsLastStand())
 	{
 		SexyString aFlagStr = mApp->Pluralize(GetSurvivalFlagsCompleted(), _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
 		aGameOverMsg = TodReplaceString(_S("[LAST_STAND_DEATH_MESSAGE]"), _S("{FLAGS}"), aFlagStr);
@@ -5620,7 +5639,7 @@ bool Board::IsFinalSurvivalStage()
 
 bool Board::IsLastStandFinalStage()
 {
-	return mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && mChallenge->mSurvivalStage == LAST_STAND_FLAGS - 1;
+	return mApp->IsLastStand() && mChallenge->mSurvivalStage == LAST_STAND_FLAGS - 1;
 }
 
 //0x4139E0
@@ -5632,7 +5651,7 @@ bool Board::IsSurvivalStageWithRepick()
 //0x413A10
 bool Board::IsLastStandStageWithRepick()
 {
-	return mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && !IsLastStandFinalStage();
+	return mApp->IsLastStand() && !IsLastStandFinalStage();
 }
 
 //0x413A40
@@ -5653,7 +5672,7 @@ void Board::UpdateSunSpawning()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || 
-		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND || 
+		mApp->IsLastStand() || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 		mApp->IsIZombieLevel() ||
@@ -5686,7 +5705,7 @@ void Board::NextWaveComing()
 {
 	if (mCurrentWave + 1 == mNumWaves)
 	{
-		if (!IsSurvivalStageWithRepick() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_LAST_STAND && !mApp->IsContinuousChallenge())
+		if (!IsSurvivalStageWithRepick() && !mApp->IsLastStand() && !mApp->IsContinuousChallenge())
 		{
 			mApp->AddReanimation(0, 30, MakeRenderOrder(RenderLayer::RENDER_LAYER_ABOVE_UI, 0, 0), ReanimationType::REANIM_FINAL_WAVE);
 			mFinalWaveSoundCounter = 60;
@@ -5785,7 +5804,7 @@ void Board::UpdateZombieSpawning()
 		{
 			return;
 		}
-		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+		if (mApp->IsLastStand())
 		{
 			return;
 		}
@@ -5839,15 +5858,15 @@ void Board::UpdateZombieSpawning()
 			mZombieHealthToNextWave = 0;
 			mZombieCountDown = ZOMBIE_COUNTDOWN_BEFORE_REPICK + 1;
 		}
-		else if (IsFlagWave(mCurrentWave) && (mApp->IsWallnutBowlingLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND))
+		else if (IsFlagWave(mCurrentWave) && (mApp->IsWallnutBowlingLevel() || mApp->IsLastStand()))
 		{
 			mZombieHealthToNextWave = 0;
-			mZombieCountDown = ZOMBIE_COUNTDOWN_BEFORE_FLAG;
+			mZombieCountDown = mApp->IsLastStandEndless(mApp->mGameMode) ? ZOMBIE_COUNTDOWN_BEFORE_REPICK + 1 : ZOMBIE_COUNTDOWN_BEFORE_FLAG;
 		}
 		else
 		{
 			mZombieHealthToNextWave = RandRangeFloat(0.5f, 0.65f) * mZombieHealthWaveStart;
-			if (mApp->IsLittleTroubleLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND ||
+			if (mApp->IsLittleTroubleLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->IsLastStand() ||
 				mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 			{
 				mZombieCountDown = 750;
@@ -7313,7 +7332,7 @@ void Board::DrawLevel(Graphics* g)
 	else
 	{
 		aLevelStr = mApp->GetCurrentChallengeDef().mChallengeName;
-		if (mApp->IsSurvivalMode() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+		if (mApp->IsSurvivalMode() || mApp->IsLastStand())
 		{
 			int aFlags = GetSurvivalFlagsCompleted();
 			if (aFlags > 0)
@@ -7842,7 +7861,7 @@ void Board::DrawTopRightUI(Graphics* g)
 	mMenuButton->Draw(g);
 	g->SetColorizeImages(false);
 
-	if (mStoreButton && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	if (mStoreButton && !mApp->IsLastStand())
 	{
 		if (mTutorialState == TutorialState::TUTORIAL_ZEN_GARDEN_VISIT_STORE)
 		{
@@ -8453,7 +8472,7 @@ void Board::DrawUITop(Graphics* g)
 		DrawProgressMeter(g);
 		DrawLevel(g);
 	}
-	if (mStoreButton && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND)
+	if (mStoreButton && mApp->IsLastStand())
 	{
 		mStoreButton->Draw(g);
 	}
@@ -9084,7 +9103,7 @@ void Board::KeyChar(SexyChar theChar)
 	else if (theChar == _S('!'))
 	{
 		mApp->mBoardResult = BoardResult::BOARDRESULT_CHEAT;
-		if (IsLastStandStageWithRepick())
+		if (IsLastStandStageWithRepick() && !mApp->IsLastStandEndless(mApp->mGameMode))
 		{
 			if (mNextSurvivalStageCounter == 0)
 			{
@@ -9101,7 +9120,7 @@ void Board::KeyChar(SexyChar theChar)
 				FadeOutLevel();
 			}
 		}
-		else if (mApp->IsSurvivalMode())
+		else if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode))
 		{
 			if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
 			{
@@ -9125,7 +9144,7 @@ void Board::KeyChar(SexyChar theChar)
 	else if (theChar == _S('+'))
 	{
 		mApp->mBoardResult = BoardResult::BOARDRESULT_CHEAT;
-		if (IsLastStandStageWithRepick())
+		if (IsLastStandStageWithRepick() && !mApp->IsLastStandEndless(mApp->mGameMode))
 		{
 			if (mNextSurvivalStageCounter == 0)
 			{
@@ -9142,7 +9161,7 @@ void Board::KeyChar(SexyChar theChar)
 				FadeOutLevel();
 			}
 		}
-		else if (mApp->IsSurvivalEndless(mApp->mGameMode))
+		else if (mApp->IsSurvivalEndless(mApp->mGameMode) || mApp->IsLastStandEndless(mApp->mGameMode))
 		{
 			if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
 			{
@@ -9842,7 +9861,7 @@ bool Board::StageHasGraveStones()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_PORTAL_COMBAT ||
-		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND ||
+		mApp->IsLastStand() ||
 		mApp->IsIZombieLevel() ||
 		mApp->IsScaryPotterLevel())
 		return false;
@@ -10545,7 +10564,7 @@ void Board::DropLootPiece(int thePosX, int thePosY, int theDropFactor)
 	}
 	else
 	{
-		aPottedPlantChance = mApp->IsSurvivalEndless(mApp->mGameMode) ? 3 : 12;
+		aPottedPlantChance = mApp->IsSurvivalEndless(mApp->mGameMode) || mApp->IsLastStandEndless(mApp->mGameMode) ? 3 : 12;
 	}
 
 	int aChocolateChance = aPottedPlantChance;
@@ -10557,7 +10576,7 @@ void Board::DropLootPiece(int thePosX, int thePosY, int theDropFactor)
 		}
 		else
 		{
-			aChocolateChance = aPottedPlantChance + (mApp->IsSurvivalEndless(mApp->mGameMode) ? 9 : 36);
+			aChocolateChance = aPottedPlantChance + (mApp->IsSurvivalEndless(mApp->mGameMode) || mApp->IsLastStandEndless(mApp->mGameMode) ? 9 : 36);
 		}
 	}
 
@@ -10803,7 +10822,7 @@ int Board::KillAllZombiesInRadius(int theRow, int theX, int theY, int theRadius,
 //0x41DA10
 int Board::GetNumWavesPerSurvivalStage()
 {
-	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND || mApp->IsSurvivalNormal(mApp->mGameMode))
+	if (mApp->IsLastStand() || mApp->IsSurvivalNormal(mApp->mGameMode))
 	{
 		return 10;
 	}

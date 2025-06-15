@@ -187,7 +187,7 @@ void Coin::CoinInitialize(int theX, int theY, CoinType theCoinType, CoinMotion t
 
         mWidth = IMAGE_PRESENT->GetCelWidth();
         mHeight = IMAGE_PRESENT->GetCelHeight();
-        if (mApp->IsSurvivalEndless(mApp->mGameMode) || mApp->IsEndlessIZombie(mApp->mGameMode) || mApp->IsEndlessScaryPotter(mApp->mGameMode))
+        if (mApp->IsSurvivalEndless(mApp->mGameMode) || mApp->IsEndlessIZombie(mApp->mGameMode) || mApp->IsEndlessScaryPotter(mApp->mGameMode) || mApp->IsLastStandEndless(mApp->mGameMode))
         {
             SeedType aSeedType = mApp->mZenGarden->PickRandomSeedType();
             mPottedPlantSpec.InitializePottedPlant(aSeedType);
@@ -611,7 +611,7 @@ void Coin::UpdateFall()
         mPosX = FloatRoundToInt(mPosX);
 
 
-        if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_LAST_STAND || mBoard == nullptr || 
+        if (!mApp->IsLastStand() || mBoard == nullptr || 
             mBoard->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT)
         {
             if (!IsLevelAward() && !IsPresentWithAdvice())

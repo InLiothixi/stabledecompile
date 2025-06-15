@@ -338,6 +338,8 @@ public:
 	void							KillLanguageScreen();
 	static bool						ChallengeUsesMicrophone(GameMode theGameMode);
 	static bool						ChallengeHasScores(GameMode theGameMode);
+	bool							IsLastStand();
+	static /*inline*/ bool			IsLastStandEndless(GameMode theGameMode);
 
 	static int						AudioCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData);
 	
