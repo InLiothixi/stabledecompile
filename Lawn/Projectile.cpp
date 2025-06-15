@@ -411,7 +411,10 @@ void Projectile::CheckForCollision()
 			{
 				aParticle->OverrideColor(nullptr, mOverrideColor);
 				if (mEnableExtraAdditiveDraw)
+				{
+					aParticle->OverrideExtraAdditiveColor(nullptr, mExtraAdditiveColor);
 					aParticle->OverrideExtraAdditiveDraw(nullptr, true);
+				}
 			}
 			Die();
 		}
@@ -1141,7 +1144,10 @@ void Projectile::DoImpact(Zombie* theZombie)
 			{
 				aParticle->OverrideColor(nullptr, mOverrideColor);
 				if (mEnableExtraAdditiveDraw)
+				{
+					aParticle->OverrideExtraAdditiveColor(nullptr, mExtraAdditiveColor);
 					aParticle->OverrideExtraAdditiveDraw(nullptr, true);
+				}
 				if (mFilterEffect != FilterEffect::FILTER_EFFECT_NONE)
 					aParticle->OverrideFilterEffect(nullptr, mFilterEffect);
 			}
@@ -1157,7 +1163,10 @@ void Projectile::DoImpact(Zombie* theZombie)
 			{
 				aParticle->OverrideColor(nullptr, mOverrideColor);
 				if (mEnableExtraAdditiveDraw)
+				{
+					aParticle->OverrideExtraAdditiveColor(nullptr, mExtraAdditiveColor);
 					aParticle->OverrideExtraAdditiveDraw(nullptr, true);
+				}
 				if (mFilterEffect != FilterEffect::FILTER_EFFECT_NONE)
 					aParticle->OverrideFilterEffect(nullptr, mFilterEffect);
 			}
