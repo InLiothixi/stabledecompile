@@ -1436,22 +1436,6 @@ void Zombie::UpdateZombieBungee()
     }
     else if (mZombiePhase == ZombiePhase::PHASE_BUNGEE_AT_BOTTOM)
     {
-        if (mPhaseCounter == 58)
-        {
-            Plant* aPlant = mBoard->GetTopPlantAt(mTargetCol, mRow, PlantPriority::TOPPLANT_BUNGEE_ORDER);
-            if (aPlant && !aPlant->NotOnGround())
-            {
-                Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
-                if (aBodyReanim)
-                    aBodyReanim->PlayReanim("anim_grab", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
-
-                //PlayZombieReanim("anim_grab", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
-                mTargetPlantID = (PlantID)mBoard->mPlants.DataArrayGetID(aPlant);
-                //aPlant->mOnBungeeState = PlantOnBungeeState::GETTING_GRABBED_BY_BUNGEE;
-                mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
-            }
-        }
-
         if (mPhaseCounter <= 0)
         {
             BungeeStealTarget();
@@ -1461,7 +1445,7 @@ void Zombie::UpdateZombieBungee()
     else if (mZombiePhase == ZombiePhase::PHASE_BUNGEE_GRABBING)
     {
         Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
-        if (/*aBodyReanim->mLoopCount > 0 || */mPhaseCounter <= 0)
+        if (aBodyReanim->mLoopCount > 0)
         {
             BungeeLiftTarget();
             mZombiePhase = ZombiePhase::PHASE_BUNGEE_RISING;
@@ -1477,7 +1461,6 @@ void Zombie::UpdateZombieBungee()
     else if (mZombiePhase == ZombiePhase::PHASE_BUNGEE_RISING)
     {
         mAltitude += 8.0f;
-        Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
         if (mAltitude >= 600.0f)
         {
             DieNoLoot();
@@ -3737,7 +3720,7 @@ bool Zombie::CanLoseBodyParts()
 {
     return 
         mZombieType != ZombieType::ZOMBIE_ZAMBONI && 
-        /*mZombieType != ZombieType::ZOMBIE_BUNGEE &&*/
+        mZombieType != ZombieType::ZOMBIE_BUNGEE &&
         mZombieType != ZombieType::ZOMBIE_CATAPULT && 
         mZombieType != ZombieType::ZOMBIE_GARGANTUAR && 
         mZombieType != ZombieType::ZOMBIE_REDEYE_GARGANTUAR && 
@@ -10058,7 +10041,7 @@ void Zombie::ApplyBurn()
             BalloonPropellerHatSpin(false);
         }
 
-        if (mZombieType == ZOMBIE_POLEVAULTER)
+        /*if (mZombieType == ZOMBIE_POLEVAULTER)
         {
             if (mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT || mZombiePhase == PHASE_POLEVAULTER_IN_VAULT)                
                 DropZombiePole();
@@ -10072,7 +10055,7 @@ void Zombie::ApplyBurn()
         {
             DiggerLoseAxe();
             DropDiggerAxe();
-        }
+        }*/
     }
     else
     {
@@ -12446,7 +12429,7 @@ void Zombie::DropJackInTheBox()
 {
     StopZombieSound();
     PickRandomSpeed();
-    mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;
+    //mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;
     ReanimShowPrefix("Zombie_jackbox_box", RENDER_GROUP_HIDDEN);
     ReanimShowPrefix("Zombie_jackbox_handle", RENDER_GROUP_HIDDEN);
 

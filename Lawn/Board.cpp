@@ -2650,7 +2650,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ================================================================================================
 		GameMode aGameMode = mApp->mGameMode;
 		// 蹦极僵尸在无尽模式中仅在旗帜波出现
-		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && mApp->IsSurvivalEndless(aGameMode))
+		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(aGameMode)))
 		{
 			if (!IsFlagWave(theWaveIndex))
 			{
