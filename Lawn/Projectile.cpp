@@ -910,6 +910,11 @@ void Projectile::UpdateNormalMotion()
 		mPosY += mVelZ;
 	}
 
+	if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
+		Reanimation* aFirePeaReanim = FindReanimAttachment(mAttachmentID);
+		if (aFirePeaReanim) aFirePeaReanim->mOverlayMatrix.m00 = -1;
+	}
+
 	CheckForCollision();
 	CheckForHighGround();
 }
