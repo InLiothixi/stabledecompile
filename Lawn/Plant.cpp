@@ -861,40 +861,39 @@ void Plant::DoRowAreaDamage(int theDamage, unsigned int theDamageFlags)
                     !aZombie->IsDeadOrDying() && aZombie->mHasHead && aZombie->mZombieType != ZombieType::ZOMBIE_BOSS && 
                     aZombie->mZombieType != ZombieType::ZOMBIE_CATAPULT && aZombie->mZombieType != ZombieType::ZOMBIE_ZAMBONI)
                 {
-                    if (aZombie->mYampolineCounter == 0 && !aZombie->IsDeadOrDying() && aZombie->mHasHead) {
-                        aZombie->mYampolineCounter = 90;
-                        aZombie->UpdateAnimSpeed();
+                    aZombie->mYampolineCounter = 90;
+                    aZombie->UpdateAnimSpeed();
 
-                        if (aZombie->IsWalkingBackwards())  
-                        {
-                            aZombie->mYampolineVelX = -150;
+                    if (aZombie->IsWalkingBackwards())  
+                    {
+                        aZombie->mYampolineVelX = -150;
 
-                            Plant* aTarget = nullptr;
-                            aTarget = mBoard->GetTopPlantAt(mPlantCol + 1, mRow, PlantPriority::TOPPLANT_EATING_ORDER);
-                            if (aTarget && aTarget->mSeedType == SeedType::SEED_COBCANNON) {
-                                aZombie->mYampolineVelX -= 80;
-                            }
+                        Plant* aTarget = nullptr;
+                        aTarget = mBoard->GetTopPlantAt(mPlantCol + 1, mRow, PlantPriority::TOPPLANT_EATING_ORDER);
+                        if (aTarget && aTarget->mSeedType == SeedType::SEED_COBCANNON) {
+                            aZombie->mYampolineVelX -= 80;
                         }
-                        else                                
-                        {
-                            aZombie->mYampolineVelX = 150;
-
-                            Plant* aTarget = nullptr;
-                            aTarget = mBoard->GetTopPlantAt(mPlantCol - 1, mRow, PlantPriority::TOPPLANT_EATING_ORDER);
-                            if (aTarget && aTarget->mSeedType == SeedType::SEED_COBCANNON) {
-                                aZombie->mYampolineVelX += 80;
-                            }
-                        }
-
-                        if (aZombie->mZombieType == ZombieType::ZOMBIE_DOG_WALKER) {
-                            aZombie->UpdateZombieDogWalker();
-                        } else if (aZombie->mZombieType == ZombieType::ZOMBIE_DOG) {
-                            aZombie->UpdateZombieDog();
-                        }
-
-                        aZombie->mYampolineVelX /= 90;
-                        aZombie->mYampolineVelZ = 3.6f;
                     }
+                    else                                
+                    {
+                        aZombie->mYampolineVelX = 150;
+
+                        Plant* aTarget = nullptr;
+                        aTarget = mBoard->GetTopPlantAt(mPlantCol - 1, mRow, PlantPriority::TOPPLANT_EATING_ORDER);
+                        if (aTarget && aTarget->mSeedType == SeedType::SEED_COBCANNON) {
+                            aZombie->mYampolineVelX += 80;
+                        }
+                    }
+
+                    if (aZombie->mZombieType == ZombieType::ZOMBIE_DOG_WALKER) {
+                        aZombie->UpdateZombieDogWalker();
+                    } else if (aZombie->mZombieType == ZombieType::ZOMBIE_DOG) {
+                        aZombie->UpdateZombieDog();
+                    }
+
+                    aZombie->mYampolineVelX /= 90;
+                    aZombie->mYampolineVelZ = 3.6f;
+                    
                        
                     continue;
                 }

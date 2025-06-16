@@ -3844,6 +3844,13 @@ void Zombie::DropHead(unsigned int theDamageFlags)
             }
             aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
         }
+
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim)
+        {
+            aParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+            aParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
+        }
        
         if (mZombieType == ZombieType::ZOMBIE_DANCER)
         {
@@ -3925,6 +3932,8 @@ void Zombie::DropHead(unsigned int theDamageFlags)
         Image* aMustacheImage = aBodyReanim->GetImageOverride("Zombie_mustache");
         if (aMustacheParticle && aMustacheImage)
         {
+            aMustacheParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+            aMustacheParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
             aMustacheParticle->OverrideImage(nullptr, aMustacheImage);
         }
     }
@@ -3959,6 +3968,8 @@ void Zombie::DropHead(unsigned int theDamageFlags)
             OverrideParticleScale(aSunglassParticle);
             if (aSunglassParticle)
             {
+                aSunglassParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+                aSunglassParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
                 aSunglassParticle->OverrideFrame(nullptr, aFrame);
             }
         }
@@ -3966,8 +3977,8 @@ void Zombie::DropHead(unsigned int theDamageFlags)
     if (mBoard->mPinataMode && mZombiePhase != ZombiePhase::PHASE_ZOMBIE_MOWERED)
     {
         TodParticleSystem* aPinataParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, ParticleEffect::PARTICLE_ZOMBIE_PINATA);
-        OverrideParticleColor(aParticle);
-        OverrideParticleScale(aParticle);
+        //OverrideParticleColor(aParticle);
+        //OverrideParticleScale(aParticle);
     }
 
     mApp->PlayFoley(FoleyType::FOLEY_LIMBS_POP);
@@ -9909,6 +9920,15 @@ void Zombie::ApplyBurn()
         PogoBreak(0U);
         DropPogoGlasses();
     }
+    else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
+    {
+        DropJackInTheBox();
+    }
+    else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
+    {
+        DiggerLoseAxe();
+        DropDiggerAxe();
+    }
 
     if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_DYING || 
         mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || 
@@ -9927,11 +9947,11 @@ void Zombie::ApplyBurn()
         mInPool && mAltitude <= -40 * mScaleZombie ||
         mYampolineCounter > 0)
     {
-        //DieWithLoot();
-        TakeFlyingDamage(mFlyingHealth, 0U);
+        DieWithLoot();
+        /*TakeFlyingDamage(mFlyingHealth, 0U);
         TakeShieldDamage(mShieldHealth, 0U);
         TakeHelmDamage(mHelmHealth, 0U);
-        TakeBodyDamage(mBodyHealth, 0U);
+        TakeBodyDamage(mBodyHealth, 0U);*/
     }
     else if (mZombieType == ZOMBIE_BUNGEE || mZombieType == ZOMBIE_YETI || Zombie::IsZombotany(mZombieType) || IsBobsledTeamWithSled() || IsFlying() || !mHasHead || mZombieType == ZombieType::ZOMBIE_DOG)
     {

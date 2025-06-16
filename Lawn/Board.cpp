@@ -792,7 +792,7 @@ void Board::PickZombieWaves()
 			PutZombieInWave(ZombieType::ZOMBIE_GARGANTUAR, aWave, &aZombiePicker);
 		}
 		// 冒险模式关卡的最后一波会出现本关卡可能出现的所有僵尸
-		if (/*mApp->IsAdventureMode()*/ !mApp->IsSurvivalMode() && mApp->IsLastStandEndless(mApp->mGameMode) && aIsFinalWave)
+		if (/*mApp->IsAdventureMode()*/ /*!mApp->IsSurvivalMode() && mApp->IsLastStandEndless(mApp->mGameMode) &&*/ aIsFinalWave)
 		{
 			PutInMissingZombies(aWave, &aZombiePicker);
 		}
@@ -2074,7 +2074,6 @@ void Board::FadeOutLevel()
 	{
 		TOD_ASSERT(mApp->IsLastStand());
 		mNextSurvivalStageCounter = 500;
-		mApp->mMusic->FadeOut(500);
 		mApp->PlaySample(Sexy::SOUND_HUGE_WAVE);
 		SexyString aFlagStr = mApp->Pluralize(GetSurvivalFlagsCompleted(), _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
 		SexyString aMsg = TodReplaceString(_S("[SUCCESSFULLY_DEFENDED]"), _S("{FLAGS}"), aFlagStr);
@@ -2679,7 +2678,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ▲ 生存模式中，根据当前旗帜数等重新计算僵尸的权重
 		// ================================================================================================
 		int aPickWeight = aZombieDef.mPickWeight;
-		if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(aGameMode))
+		if (mApp->IsSurvivalMode())
 		{
 			int aFlags = GetSurvivalFlagsCompleted();
 			// 伽刚特尔和雪橇车僵尸的每波出怪上限
@@ -5498,7 +5497,7 @@ int Board::GetSurvivalFlagsCompleted()
 //0x413320
 void Board::SurvivalSaveScore()
 {
-	if (!mApp->IsSurvivalMode() && mApp->IsLastStandEndless(mApp->mGameMode))
+	if (!mApp->IsSurvivalMode() && !mApp->IsLastStandEndless(mApp->mGameMode))
 		return;
 
 	int aFlagsCompleted = GetSurvivalFlagsCompleted();

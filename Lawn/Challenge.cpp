@@ -477,7 +477,7 @@ void Challenge::StartLevel()
 			_S("[ADVICE_SURVIVE_ENDLESS]");
 		mBoard->DisplayAdvice(aMessage, MESSAGE_STYLE_HINT_FAST, ADVICE_SURVIVE_FLAGS);
 	}
-	if (mSurvivalStage == 0)
+	if (mApp->IsLastStand() && mApp->mSurvivalStage == 0)
 	{
 		mBoard->DisplayAdvice(TodReplaceNumberString(_S("[ADVICE_SURVIVE_FLAGS]"), _S("{FLAGS}"), LAST_STAND_FLAGS), MESSAGE_STYLE_BIG_MIDDLE_FAST, ADVICE_SURVIVE_FLAGS);
 	}
@@ -2867,16 +2867,16 @@ void Challenge::InitZombieWaves()
 		if (mSurvivalStage >= 9)	aList[ZOMBIE_BUNGEE] = true;
 		if (mSurvivalStage >= 10)	aList[ZOMBIE_LADDER] = true;
 		if (mSurvivalStage >= 11)	aList[ZOMBIE_CATAPULT] = true;
-		if (mSurvivalStage >= 12)	aList[ZOMBIE_ZAMBONI] = true;
+		/*if (mSurvivalStage >= 12)	aList[ZOMBIE_ZAMBONI] = true;*/
 		if (mSurvivalStage >= 13)	aList[ZOMBIE_DIGGER] = true;
 		if (mSurvivalStage >= 14)	aList[ZOMBIE_GARGANTUAR] = true;
 		if (mSurvivalStage >= 20)	
 		{
 			aList[ZOMBIE_REDEYE_GARGANTUAR] = true;
-			aList[ZOMBIE_BLACK_FOOTBALL] = true;
+			/*aList[ZOMBIE_BLACK_FOOTBALL] = true;
 			aList[ZOMBIE_TRASHCAN] = true;
 			aList[ZOMBIE_PROPELLER] = true;
-			aList[ZOMBIE_DOG_WALKER] = true;
+			aList[ZOMBIE_DOG_WALKER] = true;*/
 		}
 	}
 	else
