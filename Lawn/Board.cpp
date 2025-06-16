@@ -11045,7 +11045,7 @@ int Board::NukeBoard()
 	return aKilledZombies;
 }
 
-int Board::RawKillAllZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags)
+int Board::GetKilledlZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags)
 {
 	Zombie* aZombie = nullptr;
 	int aKilledZombies = 0; // @Patoke: implemented this
@@ -11068,7 +11068,7 @@ int Board::RawKillAllZombiesInRadius(int theRow, int theX, int theY, int theRadi
 				}
 				else
 				{
-					aZombie->TakeDamage(1800, 0U);
+					aZombie->TakeDamage(1800, 18U);
 				}
 
 				aKilledZombies++;

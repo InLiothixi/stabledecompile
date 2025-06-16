@@ -1049,7 +1049,6 @@ bool CutScene::IsBeforePreloading()
 void CutScene::CancelIntro()
 {
 	mApp->mWidgetManager->SetFocus(mBoard);
-
 	PreloadResources();
 	PlaceStreetZombies();
 	if (mCutsceneTime < mCrazyDaveTime + TimePanRightEnd)

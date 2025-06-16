@@ -814,7 +814,7 @@ void Music::GameMusicPause(bool thePause)
 {
 	if (thePause)
 	{
-		if (!mPaused && mCurMusicTune != MusicTune::MUSIC_TUNE_NONE)
+		if (!mPaused && mCurMusicTune != MusicTune::MUSIC_TUNE_NONE && mMusicInterface != NULL)
 		{
 			BassMusicInterface* aBass = (BassMusicInterface*)mMusicInterface;
 			auto anItr = aBass->mMusicMap.find(mCurMusicFileMain);

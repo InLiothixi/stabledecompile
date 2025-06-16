@@ -1827,7 +1827,7 @@ void LawnApp::UpdateFrames()
 		}
 
 		SexyApp::UpdateFrames();
-		if (mMusic)
+		if (mMusic && mMusic->mMusicInterface)
 			mMusic->MusicUpdate();
 		if (mLoadingThreadCompleted && mEffectSystem)
 		{

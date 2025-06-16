@@ -1719,14 +1719,14 @@ void Plant::DoSquashDamage()
         if ((aZombie->mRow == mRow || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) && aZombie->EffectedByDamage(aDamageRangeFlags))
         {
             Rect aZombieRect = aZombie->GetZombieRect();
-            if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL ? -20 : 0))
+            if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL || aZombie->mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL ? -20 : 0))
             {
-                aZombie->TakeDamage(1800, 1U); // 18U
+                aZombie->TakeDamage(1800, 18U); 
 
-                if (aZombie->CanLoseBodyParts() && aZombie->mHasArm && aZombie->mBodyHealth < 2 * aZombie->mBodyMaxHealth / 3)
+               /* if (aZombie->CanLoseBodyParts() && aZombie->mHasArm && aZombie->mBodyHealth < 2 * aZombie->mBodyMaxHealth / 3)
                 {
                     aZombie->DropArm(0U);
-                }
+                }*/
             }
         }
     }
@@ -5295,7 +5295,7 @@ void Plant::DoSpecial()
         aPosY = mY + mHeight / 2;
 
         mApp->PlaySample(SOUND_POTATO_MINE);
-        if (mBoard->RawKillAllZombiesInRadius(mRow, aPosX, aPosY, 60, 0, false, aDamageRangeFlags) >= 1) // aDamageRangeFlag
+        if (mBoard->GetKilledlZombiesInRadius(mRow, aPosX, aPosY, 60, 0, false, aDamageRangeFlags) >= 1) 
             if (!mApp->IsIZombieLevel())
                 ReportAchievement::GiveAchievement(mApp, AchievementId::Spudow, true); // @Patoke: add achievement
 

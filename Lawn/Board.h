@@ -499,7 +499,7 @@ public:
 	static /*inline*/ bool			IsZombieTypeSpawnedOnly(ZombieType theZombieType);
 
 	int								NukeBoard();
-	int								RawKillAllZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags);
+	int								GetKilledlZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags);
 
 	void							MovePlant(Plant* thePlant, int theGridX, int theGridY);
 
