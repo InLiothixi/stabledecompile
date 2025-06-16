@@ -4501,9 +4501,15 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
         aScale = 1.7f;
     }
 
-    if (mSeedType == SeedType::SEED_CHERRYHOVERBOMB || mSeedType == SeedType::SEED_STINGER)
+    if (mSeedType == SeedType::SEED_STINGER)
     {
         aShadowOffsetY += 90.0f;
+        if (mBoard && (mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_NORMAL_POSITION) || mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_PUMPKIN)))
+            return;
+    }
+    else if (mSeedType == SeedType::SEED_CHERRYHOVERBOMB)
+    {
+        aShadowOffsetY += 30.0f;
         if (mBoard && (mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_NORMAL_POSITION) || mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_PUMPKIN)))
             return;
     }

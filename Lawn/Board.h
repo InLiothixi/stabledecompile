@@ -186,6 +186,7 @@ public:
 	int								mBoardRandSeed;											//+0x561C
 	ParticleSystemID				mPoolSparklyParticleID;									//+0x5620
 	ReanimationID					mFwooshID[MAX_GRID_SIZE_Y][12];							//+0x5624
+	int								mFwooshCounterID[MAX_GRID_SIZE_Y];
 	int								mFwooshCountDown;										//+0x5744
 	int								mTimeStopCounter;										//+0x5748
 	bool							mDroppedFirstCoin;										//+0x574C

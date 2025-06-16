@@ -10098,6 +10098,11 @@ void Zombie::ApplyBurn()
             aCharredPosY -= 10.0f;
         }
 
+        if (mOnHighGround)
+        {
+            aCharredPosY -= HIGH_GROUND_HEIGHT;
+        }
+
         Reanimation* aCharredReanim = mApp->AddReanimation(aCharredPosX, aCharredPosY, mRenderOrder, aReanimType);
         aCharredReanim->mAnimRate *= RandRangeFloat(0.9f, 1.1f);
         if (mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING_WITHOUT_AXE)

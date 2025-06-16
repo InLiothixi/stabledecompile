@@ -140,6 +140,7 @@ Board::Board(LawnApp* theApp)
 	mGargantuarsKillsByCornCob = 0;
 	for (int y = 0; y < MAX_GRID_SIZE_Y; y++)
 	{
+		mFwooshCounterID[y] = 0;
 		for (int x = 0; x < 12; x++)
 		{
 			mFwooshID[y][x] = ReanimationID::REANIMATIONID_NULL;
@@ -1763,6 +1764,8 @@ void Board::InitLawnMowers()
 	for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
 	{
 		if (aRow == 5 && (mApp->IsAdventureMode() && mLevel == 35 || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER))
+			continue;
+		if (mBackground == BackgroundType::BACKGROUND_6 && aRow < 4)
 			continue;
 
 		if ((aGameMode == GameMode::GAMEMODE_CHALLENGE_RESODDED && aRow <= 4) || 
@@ -10692,6 +10695,8 @@ void Board::DoFwoosh(int theRow)
 
 		float aPosX = 750.0f * i / 11.0f + 10.0f;
 		float aPosY = GetPosYBasedOnRow(aPosX + 10.0f, theRow) - 10.0f;
+		if (mGridSquareType[PixelToGridXKeepOnBoard(aPosX + 75, aPosY)][theRow] == GridSquareType::GRIDSQUARE_HIGH_GROUND)
+			aPosY -= HIGH_GROUND_HEIGHT;
 		Reanimation* aFwoosh = mApp->AddReanimation(aPosX, aPosY, aRenderOrder, ReanimationType::REANIM_JALAPENO_FIRE);
 		aFwoosh->SetFramesForLayer("anim_flame");
 		aFwoosh->mLoopType = ReanimLoopType::REANIM_LOOP_FULL_LAST_FRAME;
@@ -10704,6 +10709,7 @@ void Board::DoFwoosh(int theRow)
 		mFwooshID[theRow][i] = mApp->ReanimationGetID(aFwoosh);
 	}
 	mFwooshCountDown = 100;
+	mFwooshCounterID[theRow] = 100;
 }
 
 //0x41D630
@@ -10712,9 +10718,9 @@ void Board::UpdateFwoosh()
 	if (mFwooshCountDown == 0)
 		return;
 
-	int aFwooshRemaining = TodAnimateCurve(50, 0, --mFwooshCountDown, 12, 0, TodCurves::CURVE_LINEAR);
 	for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
 	{
+		int aFwooshRemaining = TodAnimateCurve(50, 0, --mFwooshCounterID[aRow], 12, 0, TodCurves::CURVE_LINEAR);
 		for (int i = 0; i < 12 - aFwooshRemaining; i++)
 		{
 			Reanimation* aFwoosh = mApp->ReanimationTryToGet(mFwooshID[aRow][i]);
