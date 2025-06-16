@@ -197,7 +197,7 @@ SexyAppBase::SexyAppBase()
 	mPreferredHEIGHT = -1;
 	mPreferredMAXIMIZED = false;
 	mIsScreenSaver = false;
-	mAllowMonitorPowersave = false;
+	mAllowMonitorPowersave = true;
 	mHWnd = NULL;
 	mDDInterface = NULL;	
 	mMusicInterface = NULL;
