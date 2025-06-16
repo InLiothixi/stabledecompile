@@ -2650,7 +2650,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ================================================================================================
 		GameMode aGameMode = mApp->mGameMode;
 		// 蹦极僵尸在无尽模式中仅在旗帜波出现
-		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(aGameMode)))
+		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && mApp->IsSurvivalEndless(aGameMode))
 		{
 			if (!IsFlagWave(theWaveIndex))
 			{
@@ -2662,9 +2662,11 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		{
 			int aFirstAllowedWave = aZombieDef.mFirstAllowedWave;
 			// 无尽模式中，僵尸最早可出现的波数逐渐前移
-			if (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(aGameMode))
+			if (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(mApp->mGameMode))
 			{
 				int aFlags = GetSurvivalFlagsCompleted();
+				if (mApp->IsLastStand())
+					aFlags *= mChallenge->mSurvivalStage;
 				int aAllowedWave = aFirstAllowedWave - TodAnimateCurve(18, 50, aFlags, 0, 15, TodCurves::CURVE_LINEAR);
 				aFirstAllowedWave = max(aAllowedWave, 1);
 			}
@@ -2678,9 +2680,12 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ▲ 生存模式中，根据当前旗帜数等重新计算僵尸的权重
 		// ================================================================================================
 		int aPickWeight = aZombieDef.mPickWeight;
-		if (mApp->IsSurvivalMode())
+		if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode))
 		{
 			int aFlags = GetSurvivalFlagsCompleted();
+			if (mApp->IsLastStand())
+				aFlags *= mChallenge->mSurvivalStage;
+
 			// 伽刚特尔和雪橇车僵尸的每波出怪上限
 			if (aZombieType == ZombieType::ZOMBIE_GARGANTUAR || aZombieType == ZombieType::ZOMBIE_ZAMBONI)
 			{
@@ -5866,7 +5871,7 @@ void Board::UpdateZombieSpawning()
 		{
 			mZombieHealthToNextWave = RandRangeFloat(0.5f, 0.65f) * mZombieHealthWaveStart;
 			if (mApp->IsLittleTroubleLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->IsLastStand() ||
-				mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+				mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
 			{
 				mZombieCountDown = 750;
 			}

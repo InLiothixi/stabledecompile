@@ -1512,6 +1512,13 @@ void Zombie::PogoBreak(unsigned int theDamageFlags)
         TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_ZOMBIE_POGO);
         if (aParticle)
         {
+            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+            if (aBodyReanim)
+            {
+                aParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+                aParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
+            }
+
             for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
             {
                 TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
@@ -3675,12 +3682,19 @@ void Zombie::DropFlag()
     TodParticleSystem* aParticle = mApp->AddTodParticle(aFlagPosX + 6.0f - 16.75f, aFlagPosY - 45.0f - 18.025f, mRenderOrder + 1, ParticleEffect::PARTICLE_ZOMBIE_FLAG);
     if (aParticle)
     {
-            for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
-            {
-                TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
-                aEmitter->mSystemCenter.y += 63.025f;
-                aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
-            }
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim)
+        {
+            aParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+            aParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
+        }
+
+        for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
+        {
+            TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
+            aEmitter->mSystemCenter.y += 63.025f;
+            aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
+        }
 
 
         if (GetBodyDamageIndex() == 2) {
@@ -3848,8 +3862,21 @@ void Zombie::DropHead(unsigned int theDamageFlags)
         Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
         if (aBodyReanim)
         {
-            aParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
-            aParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
+            bool aExtraAdditiveDraw = false;
+            Color aExtraAdditiveColor = Color::White;
+            if (mMindControlled)
+            {
+                aExtraAdditiveColor = ZOMBIE_MINDCONTROLLED_COLOR;
+                aExtraAdditiveDraw = true;
+            }
+            if (mChilledCounter > 0 || mIceTrapCounter > 0)
+            {
+                aExtraAdditiveColor = Color(75, 75, 255);
+                aExtraAdditiveDraw = true;
+            }
+            
+            aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
+            aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
         }
        
         if (mZombieType == ZombieType::ZOMBIE_DANCER)
@@ -4132,6 +4159,25 @@ void Zombie::SetupReanimForLostArm(unsigned int theDamageFlags)
             {
                 TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
                 aEmitter->mSystemCenter.y -= 80 * (1 - mScaleZombie);
+            }
+
+            if (aBodyReanim)
+            {
+                bool aExtraAdditiveDraw = false;
+                Color aExtraAdditiveColor = Color::White;
+                if (mMindControlled)
+                {
+                    aExtraAdditiveColor = ZOMBIE_MINDCONTROLLED_COLOR;
+                    aExtraAdditiveDraw = true;
+                }
+                if (mChilledCounter > 0 || mIceTrapCounter > 0)
+                {
+                    aExtraAdditiveColor = Color(75, 75, 255);
+                    aExtraAdditiveDraw = true;
+                }
+
+                aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
+                aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
             }
 
             switch (mZombieType)
@@ -8508,7 +8554,7 @@ void Zombie::DropShield(unsigned int theDamageFlags)
     //ZombieDrawPosition aDrawPos;
     //GetDrawPos(aDrawPos);
 
-    TodParticleSystem* aParticle;
+    TodParticleSystem* aParticle = NULL;
 
     int aShieldDamageIndex = GetShieldDamageIndex();
     if (mShieldType == ShieldType::SHIELDTYPE_DOOR)
@@ -8618,6 +8664,26 @@ void Zombie::DropShield(unsigned int theDamageFlags)
     {
         if (aParticle)
         {
+            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+            if (aBodyReanim)
+            {
+                bool aExtraAdditiveDraw = false;
+                Color aExtraAdditiveColor = Color::White;
+                if (mMindControlled)
+                {
+                    aExtraAdditiveColor = ZOMBIE_MINDCONTROLLED_COLOR;
+                    aExtraAdditiveDraw = true;
+                }
+                if (mChilledCounter > 0 || mIceTrapCounter > 0)
+                {
+                    aExtraAdditiveColor = Color(75, 75, 255);
+                    aExtraAdditiveDraw = true;
+                }
+
+                aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
+                aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
+            }
+
             for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
             {
                 TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
@@ -8762,6 +8828,26 @@ void Zombie::DropHelm(unsigned int theDamageFlags)
 
         if (aParticle)
         {
+            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+            if (aBodyReanim)
+            {
+                bool aExtraAdditiveDraw = false;
+                Color aExtraAdditiveColor = Color::White;
+                if (mMindControlled)
+                {
+                    aExtraAdditiveColor = ZOMBIE_MINDCONTROLLED_COLOR;
+                    aExtraAdditiveDraw = true;
+                }
+                if (mChilledCounter > 0 || mIceTrapCounter > 0)
+                {
+                    aExtraAdditiveColor = Color(75, 75, 255);
+                    aExtraAdditiveDraw = true;
+                }
+
+                aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
+                aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
+            }
+
             for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
             {
                 TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
@@ -9944,7 +10030,7 @@ void Zombie::ApplyBurn()
         mZombiePhase == ZombiePhase::PHASE_DIGGER_RISING || 
         mZombiePhase == ZombiePhase::PHASE_DIGGER_RISE_WITHOUT_AXE || 
         mZombiePhase == ZombiePhase::PHASE_ZOMBIE_MOWERED || 
-        mInPool && mAltitude <= -40 * mScaleZombie ||
+        mInPool || 
         mYampolineCounter > 0)
     {
         DieWithLoot();
@@ -12223,6 +12309,26 @@ void Zombie::DropZombiePole()
     TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, PARTICLE_ZOMBIE_HEAD);
     if (aParticle)
     {
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim)
+        {
+            bool aExtraAdditiveDraw = false;
+            Color aExtraAdditiveColor = Color::White;
+            if (mMindControlled)
+            {
+                aExtraAdditiveColor = ZOMBIE_MINDCONTROLLED_COLOR;
+                aExtraAdditiveDraw = true;
+            }
+            if (mChilledCounter > 0 || mIceTrapCounter > 0)
+            {
+                aExtraAdditiveColor = Color(75, 75, 255);
+                aExtraAdditiveDraw = true;
+            }
+
+            aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
+            aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
+        }
+
         for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
         {
             TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
@@ -12270,6 +12376,25 @@ void Zombie::DropBalloonPropeller()
     TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, PARTICLE_ZOMBIE_BALLOON_HEAD);
     OverrideParticleColor(aParticle);
     OverrideParticleScale(aParticle);
+    Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+    if (aBodyReanim && aParticle)
+    {
+        bool aExtraAdditiveDraw = false;
+        Color aExtraAdditiveColor = Color::White;
+        if (mMindControlled)
+        {
+            aExtraAdditiveColor = ZOMBIE_MINDCONTROLLED_COLOR;
+            aExtraAdditiveDraw = true;
+        }
+        if (mChilledCounter > 0 || mIceTrapCounter > 0)
+        {
+            aExtraAdditiveColor = Color(75, 75, 255);
+            aExtraAdditiveDraw = true;
+        }
+
+        aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
+        aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
+    }
     aParticle->OverrideImage("Head", IMAGE_BLANK);
 }
 
@@ -12338,6 +12463,13 @@ void Zombie::DropJackInTheBox()
     TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, PARTICLE_ZOMBIE_HEAD);
     if (aParticle)
     {
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim)
+        {
+            aParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+            aParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
+        }
+
         for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
         {
             TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);
@@ -12365,6 +12497,13 @@ void Zombie::DropDiggerAxe()
     TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, PARTICLE_ZOMBIE_HEAD);
     if (aParticle)
     {
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim)
+        {
+            aParticle->OverrideExtraAdditiveDraw(nullptr, aBodyReanim->mEnableExtraAdditiveDraw);
+            aParticle->OverrideExtraAdditiveColor(nullptr, aBodyReanim->mExtraAdditiveColor);
+        }
+
         for (TodListNode<ParticleEmitterID>* aNode = aParticle->mEmitterList.mHead; aNode != nullptr; aNode = aNode->mNext)
         {
             TodParticleEmitter* aEmitter = aParticle->mParticleHolder->mEmitters.DataArrayGet((unsigned int)aNode->mValue);

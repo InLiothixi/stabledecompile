@@ -477,7 +477,7 @@ void Challenge::StartLevel()
 			_S("[ADVICE_SURVIVE_ENDLESS]");
 		mBoard->DisplayAdvice(aMessage, MESSAGE_STYLE_HINT_FAST, ADVICE_SURVIVE_FLAGS);
 	}
-	if (mApp->IsLastStand() && mApp->mSurvivalStage == 0)
+	if (mApp->IsLastStand() && mSurvivalStage == 0)
 	{
 		mBoard->DisplayAdvice(TodReplaceNumberString(_S("[ADVICE_SURVIVE_FLAGS]"), _S("{FLAGS}"), LAST_STAND_FLAGS), MESSAGE_STYLE_BIG_MIDDLE_FAST, ADVICE_SURVIVE_FLAGS);
 	}
@@ -2859,8 +2859,8 @@ void Challenge::InitZombieWaves()
 		if (mSurvivalStage >= 1)	aList[ZOMBIE_POLEVAULTER] = true;
 		if (mSurvivalStage >= 2)	aList[ZOMBIE_PAIL] = true;
 		if (mSurvivalStage >= 3)	aList[ZOMBIE_DOOR] = true;
-		if (mSurvivalStage >= 4)	aList[ZOMBIE_SNORKEL] = true;
-		if (mSurvivalStage >= 5)	aList[ZOMBIE_DOLPHIN_RIDER] = true;
+		if (mSurvivalStage >= 4 && mBoard->StageHasPool())	aList[ZOMBIE_SNORKEL] = true;
+		if (mSurvivalStage >= 5 && mBoard->StageHasPool())	aList[ZOMBIE_DOLPHIN_RIDER] = true;
 		if (mSurvivalStage >= 6)	aList[ZOMBIE_FOOTBALL] = true;
 		if (mSurvivalStage >= 7)	aList[ZOMBIE_BALLOON] = true;
 		if (mSurvivalStage >= 8)	aList[ZOMBIE_JACK_IN_THE_BOX] = true;
