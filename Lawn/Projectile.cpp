@@ -912,7 +912,7 @@ void Projectile::UpdateNormalMotion()
 
 	if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
 		Reanimation* aFirePeaReanim = FindReanimAttachment(mAttachmentID);
-		if (aFirePeaReanim) aFirePeaReanim->mOverlayMatrix.m00 = -1;
+		if (aFirePeaReanim) aFirePeaReanim->mOverlayMatrix.m00 = mMotionType == ProjectileMotion::MOTION_BACKWARDS ? -1 : 1;
 	}
 
 	CheckForCollision();

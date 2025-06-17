@@ -197,7 +197,7 @@ SexyAppBase::SexyAppBase()
 	mPreferredHEIGHT = -1;
 	mPreferredMAXIMIZED = false;
 	mIsScreenSaver = false;
-	mAllowMonitorPowersave = false;
+	mAllowMonitorPowersave = true;
 	mHWnd = NULL;
 	mDDInterface = NULL;	
 	mMusicInterface = NULL;
@@ -2614,6 +2614,7 @@ static void UpdateScreenSaverInfo(DWORD theTick)
 	static DWORD aPeriodicTick = 0;
 	static DWORD aScreenSaverTimeout = 60000;
 	static BOOL aScreenSaverEnabled = TRUE;
+	static BOOL aHasScreenSaver = TRUE;
 
 	if (theTick-aPeriodicTick > 10000)
 	{
@@ -2629,6 +2630,20 @@ static void UpdateScreenSaverInfo(DWORD theTick)
 			aTimeout = 1;
 
 		aScreenSaverTimeout = aTimeout*1000;
+
+		HKEY hKey;
+		aHasScreenSaver = FALSE;
+		if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop"), 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		{
+			TCHAR szValue[MAX_PATH] = { 0 };
+			DWORD dwSize = sizeof(szValue);
+			if (RegQueryValueEx(hKey, TEXT("SCRNSAVE.EXE"), NULL, NULL, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS)
+			{
+				if (szValue[0] != 0) // non-empty path
+					aHasScreenSaver = TRUE;
+			}
+			RegCloseKey(hKey);
+		}
 
 		if (!aScreenSaverEnabled)
 			gScreenSaverActive = false;
@@ -2648,7 +2663,7 @@ static void UpdateScreenSaverInfo(DWORD theTick)
 		}
 	}
 
-	if (!aScreenSaverEnabled)
+	if (!aScreenSaverEnabled || !aHasScreenSaver)
 		return;
 
 	DWORD anIdleTime = theTick - gSexyAppBase->mLastUserInputTick;
@@ -3879,7 +3894,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				return FALSE;
 		}
 
-		if (wParam==SC_SCREENSAVE && aSexyApp!=NULL && aSexyApp->mAllowMonitorPowersave && (!aSexyApp->mLoaded || !aSexyApp->mIsPhysWindowed))
+		if (wParam==SC_SCREENSAVE && aSexyApp!=NULL && (!aSexyApp->mLoaded || !aSexyApp->mIsPhysWindowed))
 			return FALSE;
 
 		/*
@@ -4019,10 +4034,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 		return 0;
 	}
 
-	if (gSexyAppBase->mIsWideWindow)
-		return DefWindowProcW(hWnd, uMsg, wParam, lParam);
-	else
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+	return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 }
 
 void SexyAppBase::HandleNotifyGameMessage(int theType, int theParam)
@@ -4833,14 +4845,14 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 				break;
 			case WM_TIMER:
 				if ((!gInAssert) && (!mSEHOccured) && (mRunning))
-				{	
+				{
 					DWORD aTimeNow = GetTickCount();
 					if (aTimeNow - mLastTimerTime > 500)
 						mLastBigDelayTime = aTimeNow;
-		
+
 					mLastTimerTime = aTimeNow;
 
-					if ((mIsOpeningURL) &&						
+					if ((mIsOpeningURL) &&
 						(aTimeNow - mLastBigDelayTime > 5000))
 					{
 						if ((aTimeNow - mOpeningURLTime > 8000) && (!mActive))
@@ -4848,70 +4860,25 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 							//TODO: Have some demo message thing
 							URLOpenSucceeded(mOpeningURL);
 						}
-						else if ((aTimeNow - mOpeningURLTime > 12000) && (mActive))						
+						else if ((aTimeNow - mOpeningURLTime > 12000) && (mActive))
 						{
 							URLOpenFailed(mOpeningURL);
 						}
 					}
 
-					POINT aULCorner = {0, 0};
+					POINT aULCorner = { 0, 0 };
 					::ClientToScreen(hWnd, &aULCorner);
 
-					RECT aRect;
-					GetClientRect(hWnd, &aRect);
-
-					POINT aBRCorner = {aRect.right, aRect.bottom};
+					POINT aBRCorner = { mDDInterface->mDisplayWidth, mDDInterface->mDisplayHeight };
 					::ClientToScreen(hWnd, &aBRCorner);
 
 					POINT aPoint;
-					::GetCursorPos(&aPoint);			
-					
+					::GetCursorPos(&aPoint);
+
 					HWND aWindow = ::WindowFromPoint(aPoint);
-
-					RECT aWindowRect;
-					::GetWindowRect(mHWnd, &aWindowRect);
-
-					const bool LEFT = aPoint.x == aWindowRect.left + 5 &&
-						aPoint.y >= aWindowRect.top && aPoint.y <= aWindowRect.bottom;
-					const bool RIGHT = aPoint.x == aWindowRect.right - 5 &&
-						aPoint.y >= aWindowRect.top && aPoint.y <= aWindowRect.bottom;
-
-					const bool UP = aPoint.y == aWindowRect.top + 5 &&
-						aPoint.x >= aWindowRect.left && aPoint.x <= aWindowRect.right;
-					const bool DOWN = aPoint.y ==  aWindowRect.bottom - 5 &&
-						aPoint.x >= aWindowRect.left && aPoint.x <= aWindowRect.right;
-
-					
 					bool isMouseIn = (aWindow == hWnd) &&
 						(aPoint.x >= aULCorner.x) && (aPoint.y >= aULCorner.y) &&
-						(aPoint.x <= aBRCorner.x) && (aPoint.y <= aBRCorner.y);
-
-					//f (!isMouseIn) 
-					{
-						if (LEFT && UP) {
-							::SetCursor(::LoadCursor(NULL, IDC_SIZENWSE));
-						}
-						else if (RIGHT && DOWN) {
-							::SetCursor(::LoadCursor(NULL, IDC_SIZENWSE));
-						}
-						else if (RIGHT && UP) {
-							::SetCursor(::LoadCursor(NULL, IDC_SIZENESW));
-						}
-						else if (LEFT && DOWN) {
-							::SetCursor(::LoadCursor(NULL, IDC_SIZENESW));
-						}
-						else if (LEFT || RIGHT) {
-							::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
-						}
-						else if (UP || DOWN) {
-							::SetCursor(::LoadCursor(NULL, IDC_SIZENS));
-						}
-						if (LEFT || RIGHT || UP || LEFT || mDDInterface->SetCursorImage(NULL))
-						{
-							mCustomCursorDirty = true;
-							break;
-						}
-					}
+						(aPoint.x < aBRCorner.x) && (aPoint.y < aBRCorner.y);
 
 					if (mMouseIn != isMouseIn)
 					{
@@ -4937,7 +4904,6 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 						mMouseIn = isMouseIn;
 						EnforceCursor();
 					}
-					
 				}
 				break;
 

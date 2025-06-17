@@ -3444,13 +3444,13 @@ void LawnApp::EnforceCursor()
 	switch (mCursorNum)
 	{
 	case CURSOR_POINTER:
-		//::SetCursor(LoadCursor(GetModuleHandle(NULL), MAKEINTRESOURCE(IDC_CURSOR1)));
-		::SetCursor(LoadCursor(NULL, IDC_ARROW));
+		::SetCursor(LoadCursor(GetModuleHandle(NULL), MAKEINTRESOURCE(IDC_CURSOR1)));
+		//::SetCursor(LoadCursor(NULL, IDC_ARROW));
 		return;
 
 	case CURSOR_HAND:
-		//::SetCursor(mHandCursor);
-		::SetCursor(LoadCursor(NULL, IDC_HAND));
+		::SetCursor(mHandCursor);
+		//::SetCursor(LoadCursor(NULL, IDC_HAND));
 		return;
 
 	case CURSOR_TEXT:
@@ -3458,8 +3458,8 @@ void LawnApp::EnforceCursor()
 		return;
 
 	case CURSOR_DRAGGING:
-		//::SetCursor(mDraggingCursor);
-		::SetCursor(LoadCursor(NULL, IDC_ARROW));
+		::SetCursor(mDraggingCursor);
+		//::SetCursor(LoadCursor(NULL, IDC_ARROW));
 		return;
 
 	case CURSOR_CIRCLE_SLASH:

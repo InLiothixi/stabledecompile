@@ -3106,7 +3106,7 @@ bool Zombie::NeedsMoreBackupDancers()
     for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
     {
         Zombie* aZombie = mBoard->ZombieTryToGet(mFollowerZombieID[i]);
-        if (aZombie == nullptr || aZombie && aZombie->IsDeadOrDying())
+        if (aZombie == nullptr)
         {
             if (i == 0 && !mBoard->RowCanHaveZombieType(mRow - 1, ZombieType::ZOMBIE_BACKUP_DANCER, mFromWave))
             {
