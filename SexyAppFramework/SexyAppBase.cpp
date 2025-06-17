@@ -197,7 +197,7 @@ SexyAppBase::SexyAppBase()
 	mPreferredHEIGHT = -1;
 	mPreferredMAXIMIZED = false;
 	mIsScreenSaver = false;
-	mAllowMonitorPowersave = true;
+	mAllowMonitorPowersave = false;
 	mHWnd = NULL;
 	mDDInterface = NULL;	
 	mMusicInterface = NULL;
@@ -3879,7 +3879,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				return FALSE;
 		}
 
-		if (wParam==SC_SCREENSAVE && aSexyApp!=NULL && (!aSexyApp->mLoaded || !aSexyApp->mIsPhysWindowed))
+		if (wParam==SC_SCREENSAVE && aSexyApp!=NULL && aSexyApp->mAllowMonitorPowersave && (!aSexyApp->mLoaded || !aSexyApp->mIsPhysWindowed))
 			return FALSE;
 
 		/*
