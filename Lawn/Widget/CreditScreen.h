@@ -120,6 +120,7 @@ public:
 	void					UpdateMovie();
 	void					PauseCredits();
 	void					PreLoadCredits();
+	void					HideScreenDoorInnerArms(Reanimation* theReanim, int aParentTrack);
 };
 
 void						DrawDisco(Graphics* g, float aCenterX, float aCenterY, float theTime);

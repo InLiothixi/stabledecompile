@@ -1129,6 +1129,7 @@ void CreditScreen::UpdateMovie()
     mApp->mEffectSystem->Update();
     mApp->mPoolEffect->PoolEffectUpdate();
     TurnOffTongues(aCreditsReanim, 0);
+    HideScreenDoorInnerArms(aCreditsReanim, 0);
 
     if (mCreditsPhase == CreditsPhase::CREDITS_MAIN1 && aCreditsReanim->mLoopCount > 0)
     {
@@ -1444,6 +1445,30 @@ void CreditScreen::TurnOffTongues(Reanimation* theReanim, int aParentTrack)
         }
     }
 }
+
+void CreditScreen::HideScreenDoorInnerArms(Reanimation* theReanim, int aParentTrack)
+{
+    if (theReanim->mDefinition == 0)return; //A SIMPLE FIX I MADE
+    for (int aTrackIndex = 0; aTrackIndex < theReanim->mDefinition->mTracks.count; aTrackIndex++)
+    {
+        ReanimatorTrackInstance* aTrackInstance = &theReanim->mTrackInstances[aTrackIndex];
+        if (theReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CREDITS_SCREEN_DOOR &&
+            aParentTrack % 4 != 1 && 
+            (stricmp(theReanim->mDefinition->mTracks.tracks[aTrackIndex].mName, "anim_innerarm1") == 0 ||
+            stricmp(theReanim->mDefinition->mTracks.tracks[aTrackIndex].mName, "anim_innerarm2") == 0 ||
+            stricmp(theReanim->mDefinition->mTracks.tracks[aTrackIndex].mName, "anim_innerarm3") == 0))
+        {
+            aTrackInstance->mRenderGroup = RENDER_GROUP_HIDDEN;
+        }
+
+        Reanimation* aAttachedReanim = FindReanimAttachment(aTrackInstance->mAttachmentID);
+        if (aAttachedReanim)
+        {
+            HideScreenDoorInnerArms(aAttachedReanim, aTrackIndex);
+        }
+    }
+}
+
 
 //0x437FC0
 void TodsHackyUnprotectedPerfTimer::SetStartTime(int theTimeMillisecondsAgo)
