@@ -1432,7 +1432,7 @@ void CreditScreen::TurnOffTongues(Reanimation* theReanim, int aParentTrack)
     for (int aTrackIndex = 0; aTrackIndex < theReanim->mDefinition->mTracks.count; aTrackIndex++)
     {
         ReanimatorTrackInstance* aTrackInstance = &theReanim->mTrackInstances[aTrackIndex];
-        if (theReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CREDITS_DANCE &&
+        if ((theReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CREDITS_DANCE || theReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CREDITS_CONEHEAD) &&
             aParentTrack % 4 != 1 && stricmp(theReanim->mDefinition->mTracks.tracks[aTrackIndex].mName, "anim_tongue") == 0)
         {
             aTrackInstance->mRenderGroup = RENDER_GROUP_HIDDEN;
