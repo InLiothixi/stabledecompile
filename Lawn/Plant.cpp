@@ -2642,7 +2642,11 @@ void Plant::UpdateGoldMagnetShroom()
                 int aValue = Coin::GetCoinValue(aCoinType);
                 mApp->mPlayerInfo->AddCoins(aValue);
                 mBoard->mCoinsCollected += aValue;
-                mApp->PlayFoley(FoleyType::FOLEY_COIN);
+
+                if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_DIAMOND)
+                    mApp->PlaySample(SOUND_DIAMOND);
+                else
+                    mApp->PlayFoley(FoleyType::FOLEY_COIN);
 
                 aMagnetItem->mItemType = MagnetItemType::MAGNET_ITEM_NONE;
             }
@@ -4354,17 +4358,17 @@ void Plant::DrawMagnetItems(Graphics* g)
                 TOD_ASSERT();
             }
 
-            if (aScale == 1.0f)
-            {
-                g->DrawImageCel(aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow);
-            }
-            else
-            {
-                TodDrawImageCelScaledF(g, aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow, aScale, aScale);
+                if (aScale == 1.0f)
+                {
+                    g->DrawImageCel(aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow);
+                }
+                else
+                {
+                    TodDrawImageCelScaledF(g, aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow, aScale, aScale);
+                }
             }
         }
     }
-}
 
 Image* Plant::GetImage(SeedType theSeedType)
 {
