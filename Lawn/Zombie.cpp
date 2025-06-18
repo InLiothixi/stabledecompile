@@ -7922,6 +7922,19 @@ void Zombie::StartMindControlled()
             mRelatedZombieID = ZombieID::ZOMBIEID_NULL;
         }
     }
+
+    if (mZombieType == ZombieType::ZOMBIE_YETI)
+    {
+        Rect aZombieRect = GetZombieRect();
+        int aCenterX = aZombieRect.mX + aZombieRect.mWidth / 2;
+        int aCenterY = aZombieRect.mY + aZombieRect.mHeight / 4;
+
+        mApp->PlayFoley(FoleyType::FOLEY_SPAWN_SUN);
+        Coin* mCoin = mBoard->AddCoin(aCenterX - 20, aCenterY, CoinType::COIN_DIAMOND, CoinMotion::COIN_MOTION_COIN);
+        mBoard->AddCoin(aCenterX - 30, aCenterY, CoinType::COIN_DIAMOND, CoinMotion::COIN_MOTION_COIN);
+        mBoard->AddCoin(aCenterX - 40, aCenterY, CoinType::COIN_DIAMOND, CoinMotion::COIN_MOTION_COIN);
+        mBoard->AddCoin(aCenterX - 50, aCenterY, CoinType::COIN_DIAMOND, CoinMotion::COIN_MOTION_COIN);
+    }
 }
 
 //0x52FB40
@@ -8249,7 +8262,7 @@ void Zombie::DropLoot()
     }
 
     TrySpawnLevelAward();
-    if (mDroppedLoot || mBoard->HasLevelAwardDropped() || !mBoard->CanDropLoot() || mZombieType == ZombieType::ZOMBIE_BOSS)
+    if (mDroppedLoot || mBoard->HasLevelAwardDropped() || !mBoard->CanDropLoot() || mZombieType == ZombieType::ZOMBIE_BOSS || mZombieType == ZombieType::ZOMBIE_YETI && mMindControlled)
         return;
 
     mDroppedLoot = true;
