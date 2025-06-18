@@ -2597,18 +2597,18 @@ void Challenge::InitZombieWavesSurvival()
 	int aCapacity = min(mSurvivalStage + 1, 9);
 	while (aCapacity > 0)
 	{
-		ZombieType aRandZombie = (ZombieType)aLevelRNG.Next((unsigned long)NUM_ZOMBIE_TYPES);
+		ZombieType aRandZombie = (ZombieType)aLevelRNG.Next((unsigned long)ZombieType::NUM_ZOMBIE_TYPES);
 		if (mBoard->mZombieAllowed[aRandZombie])																	continue;
 		if (mBoard->IsZombieTypePoolOnly(aRandZombie) && !mBoard->StageHasPool())									continue;
-		if (mBoard->StageHasRoof() && (aRandZombie == ZOMBIE_DIGGER || aRandZombie == ZOMBIE_DANCER))				continue;
-		if (mBoard->StageHasGraveStones() && aRandZombie == ZOMBIE_ZAMBONI)											continue;
-		if (!mBoard->StageHasRoof() && !mApp->IsSurvivalEndless(mApp->mGameMode) && !mApp->IsLastStandEndless(mApp->mGameMode) && aRandZombie == ZOMBIE_BUNGEE)	continue;
-		if (mBoard->GetSurvivalFlagsCompleted() < 10 && aRandZombie >= ZOMBIE_REDEYE_GARGANTUAR)								continue;
-		if (mApp->IsSurvivalNormal(mApp->mGameMode) && aRandZombie > ZOMBIE_SNORKEL)								continue;
+		if (mBoard->StageHasRoof() && (aRandZombie == ZombieType::ZOMBIE_DIGGER || aRandZombie == ZombieType::ZOMBIE_DANCER))				continue;
+		if (mBoard->StageHasGraveStones() && aRandZombie == ZombieType::ZOMBIE_ZAMBONI)											continue;
+		if (!mBoard->StageHasRoof() && !mApp->IsSurvivalEndless(mApp->mGameMode) && !mApp->IsLastStandEndless(mApp->mGameMode) && aRandZombie == ZombieType::ZOMBIE_BUNGEE)	continue;
+		if (mBoard->GetSurvivalFlagsCompleted() < 10 && aRandZombie >= ZombieType::ZOMBIE_REDEYE_GARGANTUAR)								continue;
+		if (mApp->IsSurvivalNormal(mApp->mGameMode) && aRandZombie > ZombieType::ZOMBIE_SNORKEL)								continue;
 		if (mBoard->IsZombieTypeSpawnedOnly(aRandZombie) || Zombie::IsZombotany(aRandZombie) ||
-			aRandZombie == ZOMBIE_DUCKY_TUBE || aRandZombie == ZOMBIE_YETI)											continue;
-
-		mBoard->mZombieAllowed[aRandZombie] = true;
+			aRandZombie == ZombieType::ZOMBIE_DUCKY_TUBE || aRandZombie == ZombieType::ZOMBIE_YETI || 
+			aRandZombie == ZombieType::ZOMBIE_PROPELLER || aRandZombie == ZombieType::ZOMBIE_DOG_WALKER || aRandZombie == ZombieType::ZOMBIE_DOG)
+			continue;
 		aCapacity--;
 	}
 }

@@ -2703,7 +2703,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 				}
 			}
 			// 红眼的旗帜波出怪上限和非旗帜波出怪总和上限
-			else if (aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR || aZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL || aZombieType == ZombieType::ZOMBIE_TRASHCAN || aZombieType == ZombieType::ZOMBIE_PROPELLER || aZombieType == ZombieType::ZOMBIE_DOG_WALKER)
+			else if (aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR || aZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL || aZombieType == ZombieType::ZOMBIE_TRASHCAN /*|| aZombieType == ZombieType::ZOMBIE_PROPELLER || aZombieType == ZombieType::ZOMBIE_DOG_WALKER*/)
 			{
 				if (IsFlagWave(theWaveIndex))
 				{
