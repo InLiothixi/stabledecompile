@@ -16,7 +16,8 @@ class ReanimCacheImageVariation
 public:
     SeedType                mSeedType;
     DrawVariation           mDrawVariation;
-    FilterVariation         mFilterVariation;
+    DrawFilterVariation     mFilterVariation;
+    unsigned int            mDrawBitVariation;
     MemoryImage*            mImage;
 };
 typedef TodList<ReanimCacheImageVariation> ImageVariationList;
@@ -37,16 +38,16 @@ public:
 
     void                    ReanimatorCacheInitialize();
     void                    ReanimatorCacheDispose();
-    void                    DrawCachedPlant(Graphics* g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation, bool isIZombieLevel = false, FilterVariation theFilterVariation = FilterVariation::FILTERVARIATION_NONE);
-    void                    DrawCachedMower(Graphics* g, float thePosX, float thePosY, LawnMowerType theMowerType, FilterVariation theFilterVariation = FilterVariation::FILTERVARIATION_NONE);
-    void                    DrawCachedZombie(Graphics* g, float thePosX, float thePosY, ZombieType theZombieType, FilterVariation theFilterVariation = FilterVariation::FILTERVARIATION_NONE);
+    void                    DrawCachedPlant(Graphics* g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE, unsigned int theBitVariation = 0U);
+    void                    DrawCachedMower(Graphics* g, float thePosX, float thePosY, LawnMowerType theMowerType, DrawFilterVariation theFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE);
+    void                    DrawCachedZombie(Graphics* g, float thePosX, float thePosY, ZombieType theZombieType, DrawFilterVariation theFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE);
     MemoryImage*            MakeBlankMemoryImage(int theWidth, int theHeight);
-    MemoryImage*            MakeCachedPlantFrame(SeedType theSeedType, DrawVariation theDrawVariation, FilterVariation theFilterVariation = FilterVariation::FILTERVARIATION_NONE);
+    MemoryImage*            MakeCachedPlantFrame(SeedType theSeedType, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE, unsigned int theBitVariation = 0U);
     MemoryImage*            MakeCachedMowerFrame(LawnMowerType theMowerType);
     MemoryImage*            MakeCachedZombieFrame(ZombieType theZombieType);
     /*inline*/ void         GetPlantImageSize(SeedType theSeedType, int& theOffsetX, int& theOffsetY, int& theWidth, int& theHeight);
-    void                    DrawReanimatorFrame(Graphics* g, float thePosX, float thePosY, ReanimationType theReanimationType, const char* theTrackName, DrawVariation theDrawVariation, FilterVariation theFilterVariation = FilterVariation::FILTERVARIATION_NONE);
-    void                    UpdateReanimationForVariation(Reanimation* theReanim, DrawVariation theDrawVariation, FilterVariation theFilterVariation = FilterVariation::FILTERVARIATION_NONE);
+    void                    DrawReanimatorFrame(Graphics* g, float thePosX, float thePosY, ReanimationType theReanimationType, const char* theTrackName, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE, unsigned int theBitVariation = 0U);
+    void                    UpdateReanimationForVariation(Reanimation* theReanim, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE);
 };
 
 #endif

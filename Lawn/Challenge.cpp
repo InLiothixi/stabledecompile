@@ -4415,9 +4415,12 @@ bool Challenge::PuzzleIsAwardStage()
 	if (mApp->IsAdventureMode() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
 		return false;
 
-	int aGoal = mApp->mGameMode == GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS ? 3 : mApp->mGameMode == GAMEMODE_SCARY_POTTER_ENDLESS ? 10 : 1;
+	if (mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS && mSurvivalStage < 2)
+		return false;
 
-	return mSurvivalStage % aGoal == 0;
+	int aGoal = mApp->mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS ? 3 : mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS ? 10 : 1;
+
+	return mSurvivalStage % aGoal == 0 || mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS && mSurvivalStage == 3;
 }
 
 //0x429980

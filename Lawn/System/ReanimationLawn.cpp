@@ -12,7 +12,7 @@
 #include "../../Sexy.TodLib/FilterEffect.h"
 
 //0x46EF00
-void ReanimatorCache::UpdateReanimationForVariation(Reanimation* theReanim, DrawVariation theDrawVariation, FilterVariation theFilterVariation)
+void ReanimatorCache::UpdateReanimationForVariation(Reanimation* theReanim, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation)
 {
 	if (theDrawVariation >= DrawVariation::VARIATION_MARIGOLD_WHITE && theDrawVariation <= DrawVariation::VARIATION_MARIGOLD_LIGHT_GREEN)
 	{
@@ -115,9 +115,15 @@ void ReanimatorCache::UpdateReanimationForVariation(Reanimation* theReanim, Draw
 		}
 		case DrawVariation::VARIATION_KERNELPULT_WITH_BUTTER:
 		case DrawVariation::VARIATION_SUNSHROOM_BIG:
+			break;
 		case DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE1:
 		case DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE2:
+		{
+			theReanim->AssignRenderGroupToPrefix("Pumpkin_back", RENDER_GROUP_HIDDEN);
+			Image* aOverride = theDrawVariation == DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE1 ? IMAGE_REANIM_PUMPKIN_DAMAGE1 : IMAGE_REANIM_PUMPKIN_DAMAGE3;
+			theReanim->SetImageOverride("Pumpkin_front", aOverride);
 			break;
+		}
 		default:
 			TOD_ASSERT(false);
 			break;
@@ -126,7 +132,7 @@ void ReanimatorCache::UpdateReanimationForVariation(Reanimation* theReanim, Draw
 }
 
 //0x46F100
-void ReanimatorCache::DrawReanimatorFrame(Graphics* g, float thePosX, float thePosY, ReanimationType theReanimationType, const char* theTrackName, DrawVariation theDrawVariation, FilterVariation theFilterVariation)
+void ReanimatorCache::DrawReanimatorFrame(Graphics* g, float thePosX, float thePosY, ReanimationType theReanimationType, const char* theTrackName, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation, unsigned int theDrawBitVariation)
 {
 	Reanimation aReanim;
 	aReanim.ReanimationInitializeType(thePosX, thePosY, theReanimationType);
@@ -157,23 +163,55 @@ void ReanimatorCache::DrawReanimatorFrame(Graphics* g, float thePosX, float theP
 		UpdateReanimationForVariation(&aReanim, theDrawVariation);
 	}
 
-	if (theFilterVariation != FilterVariation::FILTERVARIATION_NONE)
+	if (theFilterVariation != DrawFilterVariation::FILTERVARIATION_NONE)
 	{
 		switch (theFilterVariation)
 		{
-		case FilterVariation::FILTERVARIATION_WASHED_OUT:
+		case DrawFilterVariation::FILTERVARIATION_WASHED_OUT:
 			aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_WASHED_OUT;
 			break;
-		case FilterVariation::FILTERVARIATION_LESS_WASHED_OUT:
+		case DrawFilterVariation::FILTERVARIATION_LESS_WASHED_OUT:
 			aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT;
 			break;
-		case FilterVariation::FILTERVARIATION_WHITE:
+		case DrawFilterVariation::FILTERVARIATION_WHITE:
 			aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT;
 			break;
 		}
 	}
 
-	aReanim.Draw(g);
+	if (TestBit(theDrawBitVariation, (int)DrawBitVariation::BITVARIATION_IZOMBIE))
+	{
+		g->SetColorizeImages(true);
+		aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_WHITE;
+
+		float aOffsetX = g->mTransX, aOffsetY = g->mTransY;
+		g->mTransX = aOffsetX + 4;
+		g->mTransY = aOffsetY + 4;
+		g->SetColor(Color(122, 86, 58));
+		aReanim.Draw(g);
+
+		g->mTransX = aOffsetX + 2;
+		g->mTransY = aOffsetY + 2;
+		g->SetColor(Color(171, 135, 107));
+		aReanim.Draw(g);
+
+		g->mTransX = aOffsetX - 2;
+		g->mTransY = aOffsetY - 2;
+		g->SetColor(Color(171, 135, 107));
+		aReanim.Draw(g);
+
+		g->mTransX = aOffsetX;
+		g->mTransY = aOffsetY;
+		g->SetColor(Color(255, 201, 160));
+		aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_NONE;
+		aReanim.Draw(g);
+		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+		g->SetColorizeImages(false);
+	}
+	else
+	{
+		aReanim.Draw(g);
+	}
 }
 
 //0x46F280
@@ -271,7 +309,7 @@ MemoryImage* ReanimatorCache::MakeCachedMowerFrame(LawnMowerType theMowerType)
 }
 
 //0x46F550
-MemoryImage* ReanimatorCache::MakeCachedPlantFrame(SeedType theSeedType, DrawVariation theDrawVariation, FilterVariation theFilterVariation)
+MemoryImage* ReanimatorCache::MakeCachedPlantFrame(SeedType theSeedType, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation, unsigned int theDrawBitVariation)
 {
 	int aOffsetX, aOffsetY, aWidth, aHeight;
 	GetPlantImageSize(theSeedType, aOffsetX, aOffsetY, aWidth, aHeight);
@@ -286,43 +324,43 @@ MemoryImage* ReanimatorCache::MakeCachedPlantFrame(SeedType theSeedType, DrawVar
 	{
 		aMemoryGraphics.mScaleX = 0.85f;
 		aMemoryGraphics.mScaleY = 0.85f;
-		DrawReanimatorFrame(&aMemoryGraphics, -(int)(aOffsetX - 12.0f), -(int)(aOffsetY - 12.0f), aPlantDef.mReanimationType, "anim_armed", theDrawVariation, theFilterVariation);
+		DrawReanimatorFrame(&aMemoryGraphics, -(int)(aOffsetX - 12.0f), -(int)(aOffsetY - 12.0f), aPlantDef.mReanimationType, "anim_armed", theDrawVariation, theFilterVariation, theDrawBitVariation);
 	}
 	else if (theSeedType == SeedType::SEED_INSTANT_COFFEE)
 	{
 		aMemoryGraphics.mScaleX = 0.8f;
 		aMemoryGraphics.mScaleY = 0.8f;
-		DrawReanimatorFrame(&aMemoryGraphics, -(int)(aOffsetX - 12.0f), -(int)(aOffsetY - 12.0f), aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation);
+		DrawReanimatorFrame(&aMemoryGraphics, -(int)(aOffsetX - 12.0f), -(int)(aOffsetY - 12.0f), aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation, theDrawBitVariation);
 	}
 	else if (theSeedType == SeedType::SEED_EXPLODE_O_NUT)
 	{
 		aMemoryGraphics.SetColorizeImages(true);
 		aMemoryGraphics.SetColor(Color(255, 64, 64));
-		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation);
+		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation, theDrawBitVariation);
 	}
 	else if (theDrawVariation == DrawVariation::VARIATION_SUNSHROOM_BIG)
 	{
-		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_bigidle", theDrawVariation, theFilterVariation);
+		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_bigidle", theDrawVariation, theFilterVariation, theDrawBitVariation);
 	}
 	else
 	{
-		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation);
+		DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_idle", theDrawVariation, theFilterVariation, theDrawBitVariation);
 
 		if (theSeedType == SeedType::SEED_PEASHOOTER || theSeedType == SeedType::SEED_SNOWPEA || theSeedType == SeedType::SEED_REPEATER ||
 			theSeedType == SeedType::SEED_LEFTPEATER || theSeedType == SeedType::SEED_GATLINGPEA)
 		{
-			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle", theDrawVariation, theFilterVariation);
+			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle", theDrawVariation, theFilterVariation, theDrawBitVariation);
 		}
 		else if (theSeedType == SeedType::SEED_SPLITPEA)
 		{
-			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle", theDrawVariation, theFilterVariation);
-			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_splitpea_idle", theDrawVariation, theFilterVariation);
+			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle", theDrawVariation, theFilterVariation, theDrawBitVariation);
+			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_splitpea_idle", theDrawVariation, theFilterVariation, theDrawBitVariation);
 		}
 		else if (theSeedType == SeedType::SEED_THREEPEATER)
 		{
-			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle1", theDrawVariation, theFilterVariation);
-			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle3", theDrawVariation, theFilterVariation);
-			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle2", theDrawVariation, theFilterVariation);
+			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle1", theDrawVariation, theFilterVariation, theDrawBitVariation);
+			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle3", theDrawVariation, theFilterVariation, theDrawBitVariation);
+			DrawReanimatorFrame(&aMemoryGraphics, -aOffsetX, -aOffsetY, aPlantDef.mReanimationType, "anim_head_idle2", theDrawVariation, theFilterVariation, theDrawBitVariation);
 		}
 	}
 
@@ -519,7 +557,7 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 			aPosX += 50;
 		}
 
-		DrawReanimatorFrame(&aMemoryGraphics, aPosX, aPosY, aZombieDef.mReanimationType, aTrackName, DrawVariation::VARIATION_NORMAL);
+		DrawReanimatorFrame(&aMemoryGraphics, aPosX, aPosY, aZombieDef.mReanimationType, aTrackName, DrawVariation::VARIATION_NORMAL, DrawFilterVariation::FILTERVARIATION_NONE, DrawBitVariation::BITVARIATION_NONE);
 	}
 	return aMemoryImage;
 }
@@ -555,7 +593,7 @@ void ReanimatorCache::ReanimatorCacheDispose()
 
 
 //0x46FFB0
-void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation, bool isIZombieLevel, FilterVariation theFilterVariation)
+void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation, unsigned int theDrawBitVariation)
 {
 	TOD_ASSERT(theSeedType >= 0 && theSeedType < SeedType::NUM_SEED_TYPES);
 
@@ -565,7 +603,8 @@ void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY,
 		for (TodListNode<ReanimCacheImageVariation>* aNode = mImageVariationList.mHead; aNode != nullptr; aNode = aNode->mNext)
 		{
 			ReanimCacheImageVariation& aImageVariation = aNode->mValue;
-			if (aImageVariation.mSeedType == theSeedType && aImageVariation.mDrawVariation == theDrawVariation && aImageVariation.mFilterVariation == theFilterVariation)
+			if (aImageVariation.mSeedType == theSeedType && aImageVariation.mDrawVariation == theDrawVariation && aImageVariation.mFilterVariation == theFilterVariation &&
+				aImageVariation.mDrawBitVariation == theDrawBitVariation)
 			{
 				aImage = aImageVariation.mImage;
 				break;
@@ -574,21 +613,23 @@ void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY,
 
 		if (aImage == nullptr)
 		{
-			aImage = MakeCachedPlantFrame(theSeedType, theDrawVariation, theFilterVariation);
+			aImage = MakeCachedPlantFrame(theSeedType, theDrawVariation, theFilterVariation, theDrawBitVariation);
 			ReanimCacheImageVariation aNewImageVariation;
 			aNewImageVariation.mSeedType = theSeedType;
 			aNewImageVariation.mDrawVariation = theDrawVariation;
 			aNewImageVariation.mFilterVariation = theFilterVariation;
+			aNewImageVariation.mDrawBitVariation = theDrawBitVariation;
 			aNewImageVariation.mImage = aImage;
 			mImageVariationList.AddHead(aNewImageVariation);
 		}
 	}
-	else if (theFilterVariation != FilterVariation::FILTERVARIATION_NONE)
+	else if (theFilterVariation != DrawFilterVariation::FILTERVARIATION_NONE)
 	{
 		for (TodListNode<ReanimCacheImageVariation>* aNode = mImageVariationList.mHead; aNode != nullptr; aNode = aNode->mNext)
 		{
 			ReanimCacheImageVariation& aImageVariation = aNode->mValue;
-			if (aImageVariation.mSeedType == theSeedType && aImageVariation.mDrawVariation == DrawVariation::VARIATION_NORMAL && aImageVariation.mFilterVariation == theFilterVariation)
+			if (aImageVariation.mSeedType == theSeedType && aImageVariation.mDrawVariation == DrawVariation::VARIATION_NORMAL && aImageVariation.mFilterVariation == theFilterVariation &&
+				aImageVariation.mDrawBitVariation == theDrawBitVariation)
 			{
 				aImage = aImageVariation.mImage;
 				break;
@@ -597,11 +638,37 @@ void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY,
 
 		if (aImage == nullptr)
 		{
-			aImage = MakeCachedPlantFrame(theSeedType, DrawVariation::VARIATION_NORMAL, theFilterVariation);
+			aImage = MakeCachedPlantFrame(theSeedType, DrawVariation::VARIATION_NORMAL, theFilterVariation, theDrawBitVariation);
 			ReanimCacheImageVariation aNewImageVariation;
 			aNewImageVariation.mSeedType = theSeedType;
 			aNewImageVariation.mDrawVariation = DrawVariation::VARIATION_NORMAL;
 			aNewImageVariation.mFilterVariation = theFilterVariation;
+			aNewImageVariation.mDrawBitVariation = theDrawBitVariation;
+			aNewImageVariation.mImage = aImage;
+			mImageVariationList.AddHead(aNewImageVariation);
+		}
+	}
+	else if (theDrawBitVariation != DrawBitVariation::BITVARIATION_NONE)
+	{
+		for (TodListNode<ReanimCacheImageVariation>* aNode = mImageVariationList.mHead; aNode != nullptr; aNode = aNode->mNext)
+		{
+			ReanimCacheImageVariation& aImageVariation = aNode->mValue;
+			if (aImageVariation.mSeedType == theSeedType && aImageVariation.mDrawVariation == DrawVariation::VARIATION_NORMAL && 
+				aImageVariation.mFilterVariation == DrawFilterVariation::FILTERVARIATION_NONE && aImageVariation.mDrawBitVariation == theDrawBitVariation)
+			{
+				aImage = aImageVariation.mImage;
+				break;
+			}
+		}
+
+		if (aImage == nullptr)
+		{
+			aImage = MakeCachedPlantFrame(theSeedType, DrawVariation::VARIATION_NORMAL, theFilterVariation, theDrawBitVariation);
+			ReanimCacheImageVariation aNewImageVariation;
+			aNewImageVariation.mSeedType = theSeedType;
+			aNewImageVariation.mDrawVariation = DrawVariation::VARIATION_NORMAL;
+			aNewImageVariation.mFilterVariation = DrawFilterVariation::FILTERVARIATION_NONE;
+			aNewImageVariation.mDrawBitVariation = theDrawBitVariation;
 			aNewImageVariation.mImage = aImage;
 			mImageVariationList.AddHead(aNewImageVariation);
 		}
@@ -611,7 +678,7 @@ void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY,
 		aImage = mPlantImages[(int)theSeedType];
 		if (aImage == nullptr)
 		{
-			aImage = MakeCachedPlantFrame(theSeedType, DrawVariation::VARIATION_NORMAL, FilterVariation::FILTERVARIATION_NONE);
+			aImage = MakeCachedPlantFrame(theSeedType, DrawVariation::VARIATION_NORMAL, DrawFilterVariation::FILTERVARIATION_NONE);
 			mPlantImages[(int)theSeedType] = aImage;
 		}
 	}
@@ -619,7 +686,7 @@ void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY,
 	int aOffsetX, aOffsetY, aWidth, aHeight;
 	GetPlantImageSize(theSeedType, aOffsetX, aOffsetY, aWidth, aHeight);
 
-	if (isIZombieLevel)
+	/*if (isIZombieLevel)
 	{
 		Image* aFilteredImage = FilterEffectGetImage(aImage, FilterEffect::FILTER_EFFECT_WHITE);
 
@@ -645,14 +712,14 @@ void ReanimatorCache::DrawCachedPlant(Graphics* g, float thePosX, float thePosY,
 		gFilter.SetColor(Color(255, 201, 160));
 		TodDrawImageScaledF(&gFilter, aImage, thePosX + (aOffsetX * g->mScaleX), thePosY + (aOffsetY * g->mScaleY), g->mScaleX, g->mScaleY);
 	}
-	else
+	else*/
 	{
 		TodDrawImageScaledF(g, aImage, thePosX + (aOffsetX * g->mScaleX), thePosY + (aOffsetY * g->mScaleY), g->mScaleX, g->mScaleY);
 	}
 }
 
 //0x470110
-void ReanimatorCache::DrawCachedMower(Graphics* g, float thePosX, float thePosY, LawnMowerType theMowerType, FilterVariation theFilterVariation)
+void ReanimatorCache::DrawCachedMower(Graphics* g, float thePosX, float thePosY, LawnMowerType theMowerType, DrawFilterVariation theFilterVariation)
 {
 	TOD_ASSERT(theMowerType >= 0 && theMowerType < LawnMowerType::NUM_MOWER_TYPES);
 	
@@ -662,7 +729,7 @@ void ReanimatorCache::DrawCachedMower(Graphics* g, float thePosX, float thePosY,
 }
 
 //0x470170
-void ReanimatorCache::DrawCachedZombie(Graphics* g, float thePosX, float thePosY, ZombieType theZombieType, FilterVariation theFilterVariation)
+void ReanimatorCache::DrawCachedZombie(Graphics* g, float thePosX, float thePosY, ZombieType theZombieType, DrawFilterVariation theFilterVariation)
 {
 	TOD_ASSERT(theZombieType >= 0 && theZombieType < ZombieType::NUM_CACHED_ZOMBIE_TYPES);
 	

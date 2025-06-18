@@ -243,7 +243,7 @@ public:
     TodParticleSystem*      AddAttachedParticle(int thePosX, int thePosY, int theRenderPosition, ParticleEffect theEffect);
     void                    GetPeaHeadOffset(int& theOffsetX, int& theOffsetY);
     /*inline*/ bool         MakesSun();
-    static void             DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY, bool isIZombieLevel = false);
+    static void             DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY, unsigned int theBitVariation = 0U);
     void                    KillAllPlantsNearDoom();
     bool                    IsOnHighGround();
     void                    UpdateTorchwood();
@@ -307,6 +307,7 @@ public:
     void                    UpdateYampoline();
     void                    UpdateBurn();
     void                    UpdatePowered();
+    void                    DrawPumkin(Graphics* g, DrawVariation theDrawVariation, unsigned int theDrawBitVariation);
 };
 
 float                       PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedType, int theCol, int theRow);

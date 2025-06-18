@@ -1424,7 +1424,8 @@ Rect Board::GetShovelButtonRect()
 	if (mApp->IsSlotMachineLevel() || mApp->IsSquirrelLevel())
 		aRect.mX = 600;
 	
-	if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerInfo->GetLevel() == 5 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
+	if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerInfo->GetLevel() == 5 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO ||
+		mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS)
 		aRect.mY = 0;
 	
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)

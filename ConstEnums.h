@@ -351,12 +351,17 @@ enum DrawVariation
     VARIATION_SUNSHROOM_BIG,
     NUM_VARIATIONS
 };
-enum FilterVariation
+enum DrawFilterVariation
 {
     FILTERVARIATION_NONE = 0,
     FILTERVARIATION_WASHED_OUT = 1,
     FILTERVARIATION_LESS_WASHED_OUT = 2,
     FILTERVARIATION_WHITE = 3,
+};
+enum DrawBitVariation
+{
+    BITVARIATION_NONE = 0U,
+    BITVARIATION_IZOMBIE = 1U
 };
 enum EffectType
 {

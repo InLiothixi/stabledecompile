@@ -4553,7 +4553,10 @@ void Plant::Draw(Graphics* g)
     if (mSquished)
     {
         DrawVariation drawVar = DrawVariation::VARIATION_NORMAL;
-        FilterVariation filterVar = FilterVariation::FILTERVARIATION_NONE;
+        DrawFilterVariation filterVar = DrawFilterVariation::FILTERVARIATION_NONE;
+        unsigned int aBitVar = 0U;
+
+        if (mApp->IsIZombieLevel()) SetBit(aBitVar, (int)DrawBitVariation::BITVARIATION_IZOMBIE, true);
 
         if (mImitaterType == SeedType::SEED_IMITATER)
         {
@@ -4592,14 +4595,18 @@ void Plant::Draw(Graphics* g)
         }
 
         bool aDrawPumpkinBack = false;
+
         Plant* aPumpkin = nullptr;
         {
             Plant* aPlant = nullptr;
             while (mBoard->IteratePlants(aPlant))
             {
-
                 if (aPlant->mSeedType == SeedType::SEED_SQUASH &&
                     (aPlant->mState == PlantState::STATE_SQUASH_RISING || aPlant->mState == PlantState::STATE_SQUASH_FALLING || aPlant->mState == PlantState::STATE_SQUASH_DONE_FALLING))
+                {
+                    continue;
+                }
+                else if (Plant::IsFlying(aPlant->mSeedType))
                 {
                     continue;
                 }
@@ -4608,80 +4615,65 @@ void Plant::Draw(Graphics* g)
                     continue;
                 }
 
-                SeedType eSeedType = aPlant->mSeedType;
-                if (eSeedType == SeedType::SEED_IMITATER && aPlant->mImitaterType != SeedType::SEED_NONE)
-                {
-                    eSeedType = aPlant->mImitaterType;
-                }
 
-                if (aPlant->mPlantCol == mPlantCol && aPlant->mRow == mRow && eSeedType == SeedType::SEED_PUMPKINSHELL)
+                if (aPlant->mPlantCol == mPlantCol && aPlant->mRow == mRow && aPlant->mSquished == mSquished && aPlant->mSeedType == SeedType::SEED_PUMPKINSHELL)
                 {
                     aPumpkin = aPlant;
                     break;
                 }
             }
         }
+
         Plant* aPlantInPumpkin = nullptr;
-        if (aPumpkin) 
+
+        if (aPumpkin)
         {
+            if (aPumpkin != this && mSeedType != SeedType::SEED_PUMPKINSHELL)
+            {
+                aPlantInPumpkin = this;
+                aDrawPumpkinBack = true;
+            }
+            else
             {
                 Plant* aPlant = nullptr;
                 while (mBoard->IteratePlants(aPlant))
                 {
-                    SeedType eSeedType = aPlant->mSeedType;
-                    if (eSeedType == SeedType::SEED_IMITATER && aPlant->mImitaterType != SeedType::SEED_NONE)
+                    if (Plant::IsFlying(aPlant->mSeedType)) continue;
+                    if (aPlant->mSeedType == SeedType::SEED_SQUASH &&
+                        (aPlant->mState == PlantState::STATE_SQUASH_RISING || aPlant->mState == PlantState::STATE_SQUASH_FALLING || aPlant->mState == PlantState::STATE_SQUASH_DONE_FALLING))
                     {
-                        eSeedType = aPlant->mImitaterType;
+                        continue;
                     }
 
-                    if (Plant::IsFlying(eSeedType))
-                        continue;
-                    else if (eSeedType == SeedType::SEED_FLOWERPOT || (eSeedType == SeedType::SEED_LILYPAD && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN))
-                        continue;
-                    else if (eSeedType == SeedType::SEED_PUMPKINSHELL || eSeedType == SeedType::SEED_PUMPKINSHELL && aPlant->mSquished)
-                        continue;
-                    else  
+                    if (aPlant->mPlantCol == mPlantCol && aPlant->mRow == mRow && aPlant->mSquished == aPumpkin->mSquished && aPlant->mSeedType != SeedType::SEED_PUMPKINSHELL)
+                    {
                         aPlantInPumpkin = aPlant;
+                        break;
+                    }
                 }
             }
-            if (aPlantInPumpkin) 
-            {
-                drawVar = DrawVariation::VARIATION_PUMPKINSHELL_FRONT;
-                aDrawPumpkinBack = true;
-            }
         }
+
 
         g->SetScale(1.0f, 0.25f, 0.0f, 0.0f);
+
         if (aDrawPumpkinBack)
         {
-            DrawVariation aBackVar = DrawVariation::VARIATION_PUMPKINSHELL_BACK;
-            Graphics aPumpkinGraphics(*g);
-            aPumpkinGraphics.mTransX = aPumpkin->mX;
-            aPumpkinGraphics.mTransY = aPumpkin->mY;
-
-            SeedType jSeedType = aPumpkin->mSeedType;
-            SeedType jImitaterType = aPumpkin->mImitaterType;
-
-            if (aPumpkin && aPumpkin->mImitaterType == SeedType::SEED_IMITATER)
-            {
-                jSeedType = aPumpkin->mImitaterType;
-                jImitaterType = aPumpkin->mSeedType;
-            }
-
-            DrawSeedType(&aPumpkinGraphics, jSeedType, jImitaterType, aBackVar, aOffsetX, 62.625f + aOffsetY, mApp->IsIZombieLevel());
-         
+            aPumpkin->DrawPumkin(g, DrawVariation::VARIATION_PUMPKINSHELL_BACK, aBitVar);
         }
 
-        if (mSeedType == SeedType::SEED_WALLNUT || mSeedType == SeedType::SEED_TALLNUT || mSeedType == SeedType::SEED_PUMPKINSHELL || mSeedType == SeedType::SEED_GARLIC || mSeedType == SeedType::SEED_SPIKEROCK)
+        if (mSeedType == SeedType::SEED_WALLNUT || mSeedType == SeedType::SEED_TALLNUT || mSeedType == SeedType::SEED_PUMPKINSHELL && !aPlantInPumpkin ||
+            mSeedType == SeedType::SEED_GARLIC || mSeedType == SeedType::SEED_SPIKEROCK)
         {
             if (mPlantHealth < mPlantMaxHealth / 3) drawVar = DrawVariation::VARIATION_NORMAL_DEGRADE2;
             else if (mPlantHealth < mPlantMaxHealth * 2 / 3) drawVar = DrawVariation::VARIATION_NORMAL_DEGRADE1;
         }
-
-        if (mSeedType == SeedType::SEED_PUMPKINSHELL) 
+        
+        if (mSeedType == SeedType::SEED_PUMPKINSHELL && aPlantInPumpkin)
         {
             if (mPlantHealth < mPlantMaxHealth / 3) drawVar = DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE2;
             else if (mPlantHealth < mPlantMaxHealth * 2 / 3) drawVar = DrawVariation::VARIATION_PUMPKINSHELL_FRONT_DEGRADE1;
+            else  drawVar = DrawVariation::VARIATION_PUMPKINSHELL_FRONT;
         }
 
         SeedType jSeedType = mSeedType;
@@ -4693,7 +4685,7 @@ void Plant::Draw(Graphics* g)
             jImitaterType = mSeedType;
         }
 
-        DrawSeedType(g, jSeedType, jImitaterType, drawVar, aOffsetX, 60.0f + aOffsetY);
+        DrawSeedType(g, jSeedType, jImitaterType, drawVar, aOffsetX, 60.0f + aOffsetY, aBitVar);
         g->SetScale(1.0f, 1.0f, 0.0f, 0.0f);
     }
     else
@@ -4778,7 +4770,10 @@ void Plant::Draw(Graphics* g)
                 if (!mApp->Is3DAccelerated() && mSeedType == SeedType::SEED_FLOWERPOT && IsOnBoard() && 
                     aBodyReanim->mAnimRate == 0.0f && aBodyReanim->IsAnimPlaying("anim_idle"))
                 {
-                    mApp->mReanimatorCache->DrawCachedPlant(g, aOffsetX, aOffsetY, mSeedType, DrawVariation::VARIATION_NORMAL, mApp->IsIZombieLevel());
+                    unsigned int drawbitVar = 0U;
+                    if (mApp->IsIZombieLevel())
+                        SetBit(drawbitVar, DrawBitVariation::BITVARIATION_IZOMBIE, true);
+                    mApp->mReanimatorCache->DrawCachedPlant(g, aOffsetX, aOffsetY, mSeedType, DrawVariation::VARIATION_NORMAL, (DrawFilterVariation)aBodyReanim->mFilterEffect, drawbitVar);
                 }
                 else
                 {
@@ -4906,7 +4901,7 @@ void Plant::Draw(Graphics* g)
 }
 
 //0x4660B0
-void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY, bool isIZombieLevel)
+void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY, unsigned int theBitVariation)
 {
     Graphics aSeedG(*g);
     int aCelRow = 0;
@@ -4915,7 +4910,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
     float aOffsetY = 0.0f;
     SeedType aSeedType = theSeedType;
     DrawVariation aDrawVariation = theDrawVariation;
-    FilterVariation aFilterVaration = FilterVariation::FILTERVARIATION_NONE;
+    DrawFilterVariation aFilterVaration = DrawFilterVariation::FILTERVARIATION_NONE;
 
     if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE)
     {
@@ -4983,7 +4978,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
         }
         else if (aPlantDef.mReanimationType != ReanimationType::REANIM_NONE)
         {
-            gLawnApp->mReanimatorCache->DrawCachedPlant(&aSeedG, thePosX + aOffsetX, thePosY + aOffsetY, aSeedType, aDrawVariation, isIZombieLevel, aFilterVaration);
+            gLawnApp->mReanimatorCache->DrawCachedPlant(&aSeedG, thePosX + aOffsetX, thePosY + aOffsetY, aSeedType, aDrawVariation, aFilterVaration, theBitVariation);
         }
         else
         {
@@ -6409,3 +6404,17 @@ void Plant::UpdatePowered()
     }
 }
 
+void Plant::DrawPumkin(Graphics* g, DrawVariation theDrawVariation, unsigned int theDrawBitVariation) 
+{
+    SeedType aSeedType = SeedType::SEED_PUMPKINSHELL;
+    SeedType aImitaterType = mImitaterType;
+
+    if (aImitaterType == SeedType::SEED_IMITATER)
+    {
+        aSeedType = mImitaterType;
+        aImitaterType = SeedType::SEED_PUMPKINSHELL;
+    }
+
+
+    DrawSeedType(g, aSeedType, aImitaterType, theDrawVariation, 0, 65.0f, theDrawBitVariation);
+}
