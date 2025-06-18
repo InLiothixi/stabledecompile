@@ -2931,8 +2931,8 @@ void Board::RemoveAllZombies()
 	{
 		if (!aZombie->IsDeadOrDying() && !aZombie->mMindControlled && aZombie->mZombieType != ZombieType::ZOMBIE_BOSS)
 		{
-			//aZombie->DieNoLoot();
-			aZombie->TakeBodyDamage(aZombie->mBodyMaxHealth + aZombie->mHelmMaxHealth + aZombie->mShieldMaxHealth, 0U);
+			aZombie->DieNoLoot();
+			//aZombie->TakeBodyDamage(aZombie->mBodyMaxHealth + aZombie->mHelmMaxHealth + aZombie->mShieldMaxHealth, 0U);
 		}
 	}
 }
@@ -6586,11 +6586,11 @@ void Board::DrawBackdrop(Graphics* g)
 
 	if (mTutorialState == TutorialState::TUTORIAL_LEVEL_1_PLANT_PEASHOOTER)
 	{
-		Graphics aClipG(*g);
-		aClipG.SetColorizeImages(true);
-		aClipG.SetColor(GetFlashingColor(mMainCounter, 75));
-		aClipG.DrawImage(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
-		aClipG.SetColorizeImages(false);
+		g->PushState();
+		g->SetColorizeImages(true);
+		g->SetColor(GetFlashingColor(mMainCounter, 75));
+		g->DrawImage(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
+		g->PopState();
 	}
 	mChallenge->DrawBackdrop(g);
 	if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO && StageHasGraveStones())
@@ -7931,23 +7931,23 @@ void Board::DrawUIBottom(Graphics* g)
 			int posX = 340 - aCelWidth / 2, posY = 41;
 
 
-			Graphics gShoutBar(*g);
+			g->PushState();
 
-			TodDrawImageCelScaled(&gShoutBar, Sexy::IMAGE_FLAGMETER, posX, posY, 0, 0, 1.65f, 1.0f);
+			TodDrawImageCelScaled(g, Sexy::IMAGE_FLAGMETER, posX, posY, 0, 0, 1.65f, 1.0f);
 
 			int aClipWidth = TodAnimateCurve(0, 2000, mChallenge->mChallengeStateCounter, 0, 143, TodCurves::CURVE_LINEAR);
 
 			Rect aSrcRect(7, aCelHeight + 7, aClipWidth, aCelHeight);
 			Rect aDstRect(posX + 7, posY + 7, aClipWidth * 1.65f + 11, aCelHeight);
 
-			gShoutBar.SetColorizeImages(true);
-			gShoutBar.SetColor(Color(255, 0, 0));
-			gShoutBar.SetClipRect(posX + 7, posY + 7, aCelWidth * 1.65f + 11, aCelHeight - 18);
-			gShoutBar.DrawImage(Sexy::IMAGE_FLAGMETER, aDstRect, aSrcRect);
+			g->SetColorizeImages(true);
+			g->SetColor(Color(255, 0, 0));
+			g->SetClipRect(posX + 7, posY + 7, aCelWidth * 1.65f + 11, aCelHeight - 18);
+			g->DrawImage(Sexy::IMAGE_FLAGMETER, aDstRect, aSrcRect);
+			g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+			g->DrawImage(Sexy::IMAGE_FLAGMETER, aDstRect, aSrcRect);
 
-			gShoutBar.SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
-			gShoutBar.DrawImage(Sexy::IMAGE_FLAGMETER, aDstRect, aSrcRect);
-			gShoutBar.SetDrawMode(Graphics::DRAWMODE_NORMAL);
+			g->PopState();
 
 			bool shoutAllowed = false;
 			if (mChallenge->mChallengeStateCounter == 2000)
@@ -7966,11 +7966,9 @@ void Board::DrawUIBottom(Graphics* g)
 		}
 
 		if (mApp->ChallengeHasScores(mApp->mGameMode) && mApp->mGameScene == GameScenes::SCENE_PLAYING) {
-			Graphics gScore(*g);
-
-			gScore.DrawImageMirror(Sexy::IMAGE_SEEDBANK, Rect(681, 42, 223, 54), Rect(0, 0, 446, 87), true);
-			TodDrawString(&gScore, _S("[SCORE_LABEL]"), 691, 66, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_LEFT);
-			TodDrawString(&gScore, StrFormat(_S("%d"), mChallenge->mChallengePoints).c_str(), 725, 85, Sexy::FONT_HOUSEOFTERROR16, Color::White, DrawStringJustification::DS_ALIGN_LEFT);
+			g->DrawImageMirror(Sexy::IMAGE_SEEDBANK, Rect(681, 42, 223, 54), Rect(0, 0, 446, 87), true);
+			TodDrawString(g, _S("[SCORE_LABEL]"), 691, 66, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_LEFT);
+			TodDrawString(g, StrFormat(_S("%d"), mChallenge->mChallengePoints).c_str(), 725, 85, Sexy::FONT_HOUSEOFTERROR16, Color::White, DrawStringJustification::DS_ALIGN_LEFT);
 		}
 
 		if (mAdvice->mMessageStyle == MessageStyle::MESSAGE_STYLE_SLOT_MACHINE)
@@ -8491,92 +8489,96 @@ void Board::DrawUITop(Graphics* g)
 	if (LawnApp::ChallengeUsesMicrophone(mApp->mGameMode) && mApp->mGameScene == SCENE_PLAYING) {
 		int volume = min((int)(mApp->mVoiceVolume / SHOUT_THRESHOLD * 100), 100);
 		for (int i = 0; i < 100; i++) {
-			Graphics gBarBG(*g);
-			gBarBG.SetColorizeImages(true);
+			g->PushState();
+			g->SetColorizeImages(true);
 
 			int currentY = 588 - 2 * i;
 
-			int r, g;
+			int red, green;
 			int half = 50;
 
 			if (i < half) {
-				r = (int)(255.0 * i / half);
-				g = 255;
+				red = (int)(255.0 * i / half);
+				green = 255;
 			}
 			else {
-				r = 255;
-				g = (int)(255.0 * half / i);
+				red = 255;
+				green = (int)(255.0 * half / i);
 			}
 
-			r = ClampInt(r, 0, 255);
-			g = ClampInt(g, 0, 255);
+			red = ClampInt(red, 0, 255);
+			green = ClampInt(green, 0, 255);
 
-			gBarBG.mColor = Color(r, g, 0, 64);
-			gBarBG.FillRect(10, currentY, 20, 2);
+			g->mColor = Color(red, green, 0, 64);
+			g->FillRect(10, currentY, 20, 2);
+			g->PopState();
 		}
 
 		for (int i = 0; i < volume; i++) {
-			Graphics gBar(*g);
-			gBar.SetColorizeImages(true);
+			g->PushState();
+			g->SetColorizeImages(true);
 
 			int currentY = 588 - 2 * i;
 
-			int r, g;
+			int red, green;
 			int half = 50;
 
 			if (i < half) {
-				r = (int)(255.0 * i / half);
-				g = 255;
+				red = (int)(255.0 * i / half);
+				green = 255;
 			}
 			else {
-				r = 255;
-				g = (int)(255.0 * half / i);
+				red = 255;
+				green = (int)(255.0 * half / i);
 			}
 
-			r = ClampInt(r, 0, 255);
-			g = ClampInt(g, 0, 255);
+			red = ClampInt(red, 0, 255);
+			green = ClampInt(green, 0, 255);
 
-			gBar.mColor = Color(r, g, 0);
-			gBar.FillRect(10, currentY, 20, 2);
+			g->mColor = Color(red, green, 0);
+			g->FillRect(10, currentY, 20, 2);
+			g->PopState();
 		}
 	}
 	
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
+		g->PushState();
 		int indicatorHeight = mChallenge->mShoutingCounter / 100.0f * 200;
-		Graphics gShoutIndicator(*g);
-		gShoutIndicator.SetColorizeImages(true);
-		gShoutIndicator.SetColor(Color::White);
-		gShoutIndicator.FillRect(35, 588 - indicatorHeight, 5, indicatorHeight);
+		g->SetColorizeImages(true);
+		g->SetColor(Color::White);
+		g->FillRect(35, 588 - indicatorHeight, 5, indicatorHeight);
+		g->PopState();
 
-		Graphics gFlare(*g);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE, 522, 129);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 2, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -2, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE2, 602, 113);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 4, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -4, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE3, 626, 115);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE4, 691, 109);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 8, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -8, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE5, 691, 122);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 2, -2, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE6, 686, 69);
-		gFlare.mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		gFlare.mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_LENSEFLARE7, 681, 16);
-		gFlare.mTransX = 0;
-		gFlare.mTransY = 0;
-		gFlare.SetColorizeImages(true);
-		gFlare.SetColor(Color::White);
-		gFlare.mColor.mAlpha = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 191, 255, TodCurves::CURVE_BOUNCE);
-		gFlare.DrawImageF(Sexy::IMAGE_AWARDPICKUPGLOW, 727, -86);
+		g->PushState();
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE, 522, 129);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 2, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -2, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE2, 602, 113);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 4, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -4, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE3, 626, 115);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE4, 691, 109);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 8, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -8, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE5, 691, 122);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 2, -2, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE6, 686, 69);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_LENSEFLARE7, 681, 16);
+		g->mTransX = 0;
+		g->mTransY = 0;
+		g->SetColorizeImages(true);
+		g->SetColor(Color::White);
+		g->mColor.mAlpha = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 191, 255, TodCurves::CURVE_BOUNCE);
+		g->DrawImageF(Sexy::IMAGE_AWARDPICKUPGLOW, 727, -86);
+		g->PopState();
 	}
 
 	if ((mApp->mGameMode == GameMode::GAMEMODE_UPSELL || mApp->mGameMode == GameMode::GAMEMODE_INTRO) && mCutScene->mUpsellHideBoard)
@@ -8599,10 +8601,11 @@ void Board::DrawUITop(Graphics* g)
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || 
 		IsScaryPotterDaveTalking())
 	{
-		Graphics aScreenSpace(*g);
-		aScreenSpace.mTransX -= mX;
-		aScreenSpace.mTransY -= mY;
-		mApp->DrawCrazyDave(&aScreenSpace);
+		g->PushState();
+		g->mTransX -= mX;
+		g->mTransY -= mY;
+		mApp->DrawCrazyDave(g);
+		g->PopState();
 	}
 
 	if (mAdvice->mMessageStyle != MessageStyle::MESSAGE_STYLE_SLOT_MACHINE)

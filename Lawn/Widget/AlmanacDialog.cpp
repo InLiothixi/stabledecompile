@@ -318,18 +318,18 @@ void AlmanacDialog::DrawIndex(Graphics* g)
 	
 	if (mPlant)
 	{
-		Graphics aPlantGraphics = Graphics(*g);
-		mPlant->BeginDraw(&aPlantGraphics);
-		mPlant->Draw(&aPlantGraphics);
+		g->PushState();
+		mPlant->BeginDraw(g);
+		mPlant->Draw(g);
+		g->PopState();
 	}
 	if (mZombie)
 	{
-		Graphics aZombieGraphics = Graphics(*g);
-		mZombie->BeginDraw(&aZombieGraphics);
-#ifdef DO_FIX_BUGS
-		mZombie->DrawShadow(&aZombieGraphics);
-#endif
-		mZombie->Draw(&aZombieGraphics);
+		g->PushState();
+		mZombie->BeginDraw(g);
+		mZombie->DrawShadow(g);
+		mZombie->Draw(g);
+		g->PopState();
 	}
 }
 
@@ -387,9 +387,10 @@ void AlmanacDialog::DrawPlants(Graphics* g)
 	
 	if (mPlant)
 	{
-		Graphics aPlantGraphics(*g);
-		mPlant->BeginDraw(&aPlantGraphics);
-		mPlant->Draw(&aPlantGraphics);
+		g->PushState();
+		mPlant->BeginDraw(g);
+		mPlant->Draw(g);
+		g->PopState();
 	}
 
 	g->DrawImage(Sexy::IMAGE_ALMANAC_PLANTCARD, 459, 86);
@@ -444,50 +445,50 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 				}
 
 				ZombieType aZombieTypeToDraw = aZombieType;
-				Graphics aZombieGraphics = Graphics(*g);
-				aZombieGraphics.SetClipRect(aPosX + 2, aPosY + 2, 72, 72);
-				aZombieGraphics.Translate(aPosX + 1, aPosY - 6);
-				aZombieGraphics.mScaleX = 0.5f;
-				aZombieGraphics.mScaleY = 0.5f;
+				g->PushState();
+				g->SetClipRect(aPosX + 2, aPosY + 2, 72, 72);
+				g->Translate(aPosX + 1, aPosY - 6);
+				g->mScaleX = 0.5f;
+				g->mScaleY = 0.5f;
 				switch (aZombieType)
 				{
 				case ZombieType::ZOMBIE_POLEVAULTER:
 				{
-					aZombieGraphics.TranslateF(-24.25f, -3);
+					g->TranslateF(-24.25f, -3);
 					aZombieTypeToDraw = ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE;
 				}
 				break;
-				case ZombieType::ZOMBIE_FLAG:			aZombieGraphics.TranslateF(2, 10);		break;
-				case ZombieType::ZOMBIE_TRAFFIC_CONE:	aZombieGraphics.TranslateF(0, 12);		break;
-				case ZombieType::ZOMBIE_PAIL:			aZombieGraphics.TranslateF(0, 9);		break;
+				case ZombieType::ZOMBIE_FLAG:			g->TranslateF(2, 10);		break;
+				case ZombieType::ZOMBIE_TRAFFIC_CONE:	g->TranslateF(0, 12);		break;
+				case ZombieType::ZOMBIE_PAIL:			g->TranslateF(0, 9);		break;
 				case ZombieType::ZOMBIE_BLACK_FOOTBALL:
-				case ZombieType::ZOMBIE_FOOTBALL:		aZombieGraphics.TranslateF(-15, -1);	break;
-				case ZombieType::ZOMBIE_ZAMBONI:		aZombieGraphics.TranslateF(-25, 3);		break;
-				case ZombieType::ZOMBIE_DOLPHIN_RIDER:	aZombieGraphics.TranslateF(-2, -10);	break;
-				case ZombieType::ZOMBIE_POGO:			aZombieGraphics.TranslateF(0, -3);		break;
-				case ZombieType::ZOMBIE_GARGANTUAR:		aZombieGraphics.TranslateF(15, 17);		break;
-				case ZombieType::ZOMBIE_IMP:			aZombieGraphics.TranslateF(-8, -7);		break;
-				case ZombieType::ZOMBIE_BUNGEE:			aZombieGraphics.TranslateF(-4, 3);		break;
-				//case ZombieType::ZOMBIE_DANCER:			aZombieGraphics.TranslateF(-6, 5);		break;
-				case ZombieType::ZOMBIE_BACKUP_DANCER:	aZombieGraphics.TranslateF(-2, 5);		break; //aZombieGraphics.TranslateF(-8, 5);
-				case ZombieType::ZOMBIE_SNORKEL:		aZombieGraphics.TranslateF(-10, 0);		break;
-				case ZombieType::ZOMBIE_YETI:			aZombieGraphics.TranslateF(0, 4);		break;
-				case ZombieType::ZOMBIE_CATAPULT:		aZombieGraphics.TranslateF(-24, -1);	break;
-				case ZombieType::ZOMBIE_BOBSLED:		aZombieGraphics.TranslateF(0, -8);		break;
-				case ZombieType::ZOMBIE_LADDER:			aZombieGraphics.TranslateF(0, -3);		break;
+				case ZombieType::ZOMBIE_FOOTBALL:		g->TranslateF(-15, -1);	break;
+				case ZombieType::ZOMBIE_ZAMBONI:		g->TranslateF(-25, 3);		break;
+				case ZombieType::ZOMBIE_DOLPHIN_RIDER:	g->TranslateF(-2, -10);	break;
+				case ZombieType::ZOMBIE_POGO:			g->TranslateF(0, -3);		break;
+				case ZombieType::ZOMBIE_GARGANTUAR:		g->TranslateF(15, 17);		break;
+				case ZombieType::ZOMBIE_IMP:			g->TranslateF(-8, -7);		break;
+				case ZombieType::ZOMBIE_BUNGEE:			g->TranslateF(-4, 3);		break;
+				//case ZombieType::ZOMBIE_DANCER:		g->TranslateF(-6, 5);		break;
+				case ZombieType::ZOMBIE_BACKUP_DANCER:	g->TranslateF(-2, 5);		break;
+				case ZombieType::ZOMBIE_SNORKEL:		g->TranslateF(-10, 0);		break;
+				case ZombieType::ZOMBIE_YETI:			g->TranslateF(0, 4);		break;
+				case ZombieType::ZOMBIE_CATAPULT:		g->TranslateF(-24, -1);	break;
+				case ZombieType::ZOMBIE_BOBSLED:		g->TranslateF(0, -8);		break;
+				case ZombieType::ZOMBIE_LADDER:			g->TranslateF(0, -3);		break;
 				default: break;
 				}
 				if (ZombieHasSilhouette(aZombieType))
 				{
-					aZombieGraphics.SetColor(Color(0, 0, 0, 40));
-					aZombieGraphics.SetColorizeImages(true);
+					g->SetColor(Color(0, 0, 0, 40));
+					g->SetColorizeImages(true);
 				}
 				if (aZombieType == ZombieType::ZOMBIE_BUNGEE)
 				{
-					aZombieGraphics.mTransY -= 300;
+					g->mTransY -= 300;
 				}
-				mApp->mReanimatorCache->DrawCachedZombie(&aZombieGraphics, 0, 0, aZombieTypeToDraw);
-				aZombieGraphics.SetColorizeImages(false);
+				mApp->mReanimatorCache->DrawCachedZombie(g, 0, 0, aZombieTypeToDraw);
+				g->PopState();
 
 				g->DrawImage(Sexy::IMAGE_ALMANAC_ZOMBIEWINDOW2, aPosX, aPosY);
 				if (aZombieType == aZombieMouseOn)
@@ -513,48 +514,50 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 			{
 				followerID++;
 				
-				Graphics aFollowerGraphics = Graphics(*g);
-				aFolllower->BeginDraw(&aFollowerGraphics);
-				aFollowerGraphics.SetClipRect(-42 - 50 * followerID, -51, 197, 187);
+				g->PushState();
+				aFolllower->BeginDraw(g);
+				g->SetClipRect(-42 - 50 * followerID, -51, 197, 187);
 				if (aFolllower->mZombieType != ZombieType::ZOMBIE_BUNGEE && aFolllower->mZombieType != ZombieType::ZOMBIE_BOSS &&
 					aFolllower->mZombieType != ZombieType::ZOMBIE_ZAMBONI && aFolllower->mZombieType != ZombieType::ZOMBIE_CATAPULT && 
 					aFolllower->mZombieType != ZombieType::ZOMBIE_BOBSLED)
-					aFolllower->DrawShadow(&aFollowerGraphics);
+					aFolllower->DrawShadow(g);
 				if (followerID == 1) {
 					ZombieDrawPosition aDrawPos;
 					aFolllower->GetDrawPos(aDrawPos);
-					aFollowerGraphics.DrawImage(IMAGE_ZOMBIE_BOBSLED_INSIDE, aFolllower->mPosX + aDrawPos.mImageOffsetX - aFolllower->mPosX - 76.0f - 50, 15.0f);
+					g->DrawImage(IMAGE_ZOMBIE_BOBSLED_INSIDE, aFolllower->mPosX + aDrawPos.mImageOffsetX - aFolllower->mPosX - 76.0f - 50, 15.0f);
 				}
-				aFolllower->Draw(&aFollowerGraphics);
+				aFolllower->Draw(g);
+				g->PopState();
 			}
 		}
 
-		Graphics aZombieGraphics = Graphics(*g);
-		mZombie->BeginDraw(&aZombieGraphics);
-		aZombieGraphics.SetClipRect(-42, -51, 197, 187);
+		g->PushState();
+		mZombie->BeginDraw(g);
+		g->SetClipRect(-42, -51, 197, 187);
 		switch (mZombie->mZombieType)
 		{
-		case ZombieType::ZOMBIE_ZAMBONI:		aZombieGraphics.TranslateF(-30, 5);		break;
-		case ZombieType::ZOMBIE_GARGANTUAR:		aZombieGraphics.TranslateF(0, 40);		break;
-		case ZombieType::ZOMBIE_FOOTBALL:		aZombieGraphics.TranslateF(-10, 0);		break;
-		case ZombieType::ZOMBIE_BALLOON:		aZombieGraphics.TranslateF(0, -20);		break;
-		case ZombieType::ZOMBIE_BUNGEE:			aZombieGraphics.TranslateF(15, 0);		break;
-		case ZombieType::ZOMBIE_CATAPULT:		aZombieGraphics.TranslateF(-10, 0);		break;
-		case ZombieType::ZOMBIE_BOSS:			aZombieGraphics.TranslateF(-540, -175);	break;
+		case ZombieType::ZOMBIE_ZAMBONI:		g->TranslateF(-30, 5);		break;
+		case ZombieType::ZOMBIE_GARGANTUAR:		g->TranslateF(0, 40);		break;
+		case ZombieType::ZOMBIE_FOOTBALL:		g->TranslateF(-10, 0);		break;
+		case ZombieType::ZOMBIE_BALLOON:		g->TranslateF(0, -20);		break;
+		case ZombieType::ZOMBIE_BUNGEE:			g->TranslateF(15, 0);		break;
+		case ZombieType::ZOMBIE_CATAPULT:		g->TranslateF(-10, 0);		break;
+		case ZombieType::ZOMBIE_BOSS:			g->TranslateF(-540, -175);	break;
 		default: break;
 		}
 		if (mZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && mZombie->mZombieType != ZombieType::ZOMBIE_BOSS &&
 			mZombie->mZombieType != ZombieType::ZOMBIE_ZAMBONI && mZombie->mZombieType != ZombieType::ZOMBIE_CATAPULT &&
 			mZombie->mZombieType != ZombieType::ZOMBIE_BOBSLED)
-			mZombie->DrawShadow(&aZombieGraphics);
-		mZombie->Draw(&aZombieGraphics);
+			mZombie->DrawShadow(g);
+		mZombie->Draw(g);
 
 		if (mZombie->mZombieType == ZombieType::ZOMBIE_BOBSLED) {
 			ZombieDrawPosition aDrawPos;
 			mZombie->GetDrawPos(aDrawPos);
-			aZombieGraphics.SetClipRect(-42, -51, 197, 187);
-			aZombieGraphics.DrawImage(IMAGE_ZOMBIE_BOBSLED1, mZombie->mPosX + aDrawPos.mImageOffsetX - mZombie->mPosX - 76.0f, 15.0f);
+			g->SetClipRect(-42, -51, 197, 187);
+			g->DrawImage(IMAGE_ZOMBIE_BOBSLED1, mZombie->mPosX + aDrawPos.mImageOffsetX - mZombie->mPosX - 76.0f, 15.0f);
 		}
+		g->PopState();
 	}
 	g->DrawImage(Sexy::IMAGE_ALMANAC_ZOMBIECARD, 455, 78);
 
@@ -602,19 +605,20 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 	mScrollbar->SetDisabled(mScrollbar->mScrollRange <= 34);
 	int aClipWidthOffset = mScrollbar->mDisabled ? 10 : 0;
 
-	Graphics gHeader(*g);
+	g->PushState();
+	g->SetClipRect(484, 377 , 258, aHeaderHeight);
+	TodDrawStringWrapped(g, aHeader, Rect(484, 377, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, true);
+	g->PopState();
 
-	gHeader.SetClipRect(484, 377 , 258, aHeaderHeight);
-	TodDrawStringWrapped(&gHeader, aHeader, Rect(484, 377, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, true);
-
-	Graphics gDescription(*g);
-	gDescription.mTransY -= mScrollbar->mScrollValue;
-	gDescription.SetClipRect(484, 377 + aHeaderHeight + mScrollbar->mScrollValue, 248 + aClipWidthOffset, 142 + aDescriptionOffset);
+	g->PushState();
+	g->mTransY -= mScrollbar->mScrollValue;
+	g->SetClipRect(484, 377 + aHeaderHeight + mScrollbar->mScrollValue, 248 + aClipWidthOffset, 142 + aDescriptionOffset);
 
 	mScrollbar->Resize(738, 377 + aHeaderHeight, 8, 142 + aDescriptionOffset);
 	mScrollbar->mViewport = Rect(484, 377 + aHeaderHeight, 248 + aClipWidthOffset, 142 + aDescriptionOffset);
 	
-	TodDrawStringWrapped(&gDescription, aDescription, Rect(484, 377 + aHeaderHeight, 248 + aClipWidthOffset, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, true);
+	TodDrawStringWrapped(g, aDescription, Rect(484, 377 + aHeaderHeight, 248 + aClipWidthOffset, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, true);
+	g->PopState();
 }
 //0x403810
 void AlmanacDialog::Draw(Graphics* g)
@@ -631,8 +635,9 @@ void AlmanacDialog::Draw(Graphics* g)
 	{
 		if (aZombie)
 		{
-			Graphics aTestGraphics = Graphics(*g);
-			aZombie->Draw(&aTestGraphics);
+			g->PushState();
+			aZombie->Draw(g);
+			g->PopState();
 		}
 	}
 
@@ -644,11 +649,12 @@ void AlmanacDialog::Draw(Graphics* g)
 	if (!mScrollbar->mDisabled)
 	{
 		mScrollbar->mButtonNoDraw = false;
-		Graphics mScrollG(*g);
-		mScrollG.mTransX = g->mTransX + mScrollbar->mX;
-		mScrollG.mTransY = g->mTransY + mScrollbar->mY;
-		mScrollbar->Draw(&mScrollG);
+		g->PushState();
+		g->mTransX = g->mTransX + mScrollbar->mX;
+		g->mTransY = g->mTransY + mScrollbar->mY;
+		mScrollbar->Draw(g);
 		mScrollbar->mButtonNoDraw = true;
+		g->PopState();
 	}
 }
 

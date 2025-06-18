@@ -1586,7 +1586,7 @@ void Zombie::UpdateZombiePogo()
     if (mZombiePhase == ZombiePhase::PHASE_POGO_FORWARD_BOUNCE_2 && mPhaseCounter == 70)
     {
         Plant* aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_VAULT);
-        if (aPlant && (aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mState == PlantState::STATE_CACTUS_HIGH))
+        if (aPlant && (aPlant->mSeedType == SeedType::SEED_TALLNUT /*|| aPlant->mState == PlantState::STATE_CACTUS_HIGH*/ || aPlant->mSeedType == SeedType::SEED_GIANT_WALLNUT))
         {
             mApp->PlayFoley(FoleyType::FOLEY_BONK);
             mApp->AddTodParticle(aPlant->mX + 60, aPlant->mY - 20, mRenderOrder + 1, ParticleEffect::PARTICLE_TALL_NUT_BLOCK);
@@ -1807,7 +1807,7 @@ void Zombie::UpdateZombieFlyer()
         }
     }
 
-    if (mZombiePhase == ZombiePhase::PHASE_BALLOON_SWING) 
+    /*if (mZombiePhase == ZombiePhase::PHASE_BALLOON_SWING) 
     {
         bool aJumpEnds = false;
         Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
@@ -1833,13 +1833,13 @@ void Zombie::UpdateZombieFlyer()
     else if (mZombiePhase == ZombiePhase::PHASE_BALLOON_FLYING) 
     {
         Plant* aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_VAULT);
-        if (aPlant && (aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mState == PlantState::STATE_CACTUS_HIGH))
+        if (aPlant && (aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mState == PlantState::STATE_CACTUS_HIGH || aPlant->mSeedType == SeedType::SEED_GIANT_WALLNUT))
         {
             Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
             mZombiePhase = ZombiePhase::PHASE_BALLOON_SWING;
             PlayZombieReanim("anim_swing", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 12.0f);
         }
-    }
+    }*/
 
     if (mZombiePhase == ZombiePhase::PHASE_BALLOON_POPPING)
     {
@@ -1924,7 +1924,7 @@ void Zombie::UpdateZombiePolevaulter()
         if (aBodyReanim->mAnimTime > 0.6f && aBodyReanim->mAnimTime <= 0.7f)
         {
             Plant* aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_VAULT);
-            if (aPlant && (aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mState == PlantState::STATE_CACTUS_HIGH))
+            if (aPlant && (aPlant->mSeedType == SeedType::SEED_TALLNUT /*|| aPlant->mState == PlantState::STATE_CACTUS_HIGH*/ || aPlant->mSeedType == SeedType::SEED_GIANT_WALLNUT))
             {
                 mApp->PlayFoley(FoleyType::FOLEY_BONK);
                 aJumpEnds = true;
@@ -5380,7 +5380,8 @@ void Zombie::AnimateChewSound()
         }
         else
         {
-            if (aPlant->mSeedType == SeedType::SEED_WALLNUT || aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mSeedType == SeedType::SEED_PUMPKINSHELL)
+            if (aPlant->mSeedType == SeedType::SEED_WALLNUT || aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mSeedType == SeedType::SEED_PUMPKINSHELL || 
+                aPlant->mSeedType == SeedType::SEED_EXPLODE_O_NUT || aPlant->mSeedType == SeedType::SEED_GIANT_WALLNUT)
             {
                 mApp->PlayFoley(FoleyType::FOLEY_CHOMP_SOFT);
             }
@@ -5422,7 +5423,7 @@ void Zombie::AnimateChewEffect()
     Plant* aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW);
     if (aPlant)
     {
-        if (aPlant->mSeedType == SeedType::SEED_WALLNUT || aPlant->mSeedType == SeedType::SEED_TALLNUT)
+        if (aPlant->mSeedType == SeedType::SEED_WALLNUT || aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mSeedType == SeedType::SEED_GIANT_WALLNUT)
         {
             int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
             ZombieDrawPosition aDrawPos;
@@ -5456,6 +5457,42 @@ void Zombie::AnimateChewEffect()
             }
 
             mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, ParticleEffect::PARTICLE_WALLNUT_EAT_SMALL);
+        }
+        else if (aPlant->mSeedType == SeedType::SEED_EXPLODE_O_NUT)
+        {
+            int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
+            ZombieDrawPosition aDrawPos;
+            GetDrawPos(aDrawPos);
+
+            float aPosX = mPosX + 37.0f;
+            float aPosY = mPosY + 40.0f + aDrawPos.mBodyY;
+
+            if (mApp->IsLittleTroubleLevel() && !mInPool)
+            {
+                aPosY += 40;
+            }
+
+            if (mZombieType == ZombieType::ZOMBIE_SNORKEL || mZombieType == ZombieType::ZOMBIE_DOLPHIN_RIDER)
+            {
+                aPosX -= 7.0f;
+                aPosY += 70.0f;
+            }
+            else if (IsWalkingBackwards())
+            {
+                aPosX += 47.0f;
+            }
+            else if (mZombieType == ZombieType::ZOMBIE_BALLOON)
+            {
+                aPosY += 47.0f;
+            }
+            else if (mZombieType == ZombieType::ZOMBIE_IMP)
+            {
+                aPosX += 24.0f;
+                aPosY += 40.0f;
+            }
+
+            TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, ParticleEffect::PARTICLE_WALLNUT_EAT_SMALL);
+            aParticle->OverrideColor(nullptr, Color(255, 64, 64));
         }
 
         aPlant->mEatenFlashCountdown = max(aPlant->mEatenFlashCountdown, 25);
@@ -8031,6 +8068,12 @@ void Zombie::EatPlant(Plant* thePlant)
 
     if (thePlant->mPlantHealth <= 0)
     {
+        if (thePlant->mSeedType == SeedType::SEED_EXPLODE_O_NUT)
+        {
+            thePlant->DoSpecial();
+            return;
+        }
+
         mApp->PlaySample(SOUND_GULP);
 
         mBoard->mPlantsEaten++;
@@ -12447,6 +12490,8 @@ void Zombie::DropPropeller(unsigned int theDamageFlags)
 
 void Zombie::DropJackInTheBox()
 {
+    if (!mHasObject) return;
+
     StopZombieSound();
     PickRandomSpeed();
     //mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;

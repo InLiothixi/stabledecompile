@@ -2449,16 +2449,17 @@ void Challenge::DrawSlotMachine(Graphics* g)
 	if (mApp->mGameScene == SCENE_ZOMBIES_WON)
 		return;
 
-	Graphics gBoardParent = Graphics(*g);
+	g->PushState();
 	if (mSlotMachineRollCount < 3 && mBoard->mCursorObject->mCursorType == CURSOR_TYPE_NORMAL &&
 		mChallengeState != STATECHALLENGE_SLOT_MACHINE_ROLLING && !mBoard->HasLevelAwardDropped())
 	{
-		gBoardParent.SetColor(GetFlashingColor(mBoard->mMainCounter, 75));
-		gBoardParent.SetColorizeImages(true);
+		g->SetColor(GetFlashingColor(mBoard->mMainCounter, 75));
+		g->SetColorizeImages(true);
 	}
-	gBoardParent.mTransX = mBoard->mSeedBank->mX - mBoard->mX;
-	gBoardParent.mTransY = mBoard->mSeedBank->mY - mBoard->mY;
-	mApp->ReanimationGet(mReanimChallenge)->Draw(&gBoardParent);
+	g->mTransX = mBoard->mSeedBank->mX - mBoard->mX;
+	g->mTransY = mBoard->mSeedBank->mY - mBoard->mY;
+	mApp->ReanimationGet(mReanimChallenge)->Draw(g);
+	g->PopState();
 }
 
 //0x425300

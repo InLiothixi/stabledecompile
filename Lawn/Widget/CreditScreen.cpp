@@ -785,7 +785,6 @@ void CreditScreen::Draw(Graphics* g)
     int aBackground2Index = aCreditsReanim->FindTrackIndex("Background2");
     ReanimatorTransform aTransformBackground2;
     aCreditsReanim->GetCurrentTransform(aBackground2Index, &aTransformBackground2);
-    Graphics aBackground2G(*g);
 
     bool aDrawClippedBackgrounds1 = false;
     bool aDrawClippedBackgrounds2 = false;
@@ -813,21 +812,24 @@ void CreditScreen::Draw(Graphics* g)
         
         if (aTransformBackground2.mFrame != -1.0f)
         {
-            aBackground2G.ClipRect(aTransformBackground2.mTransX, aTransformBackground2.mTransY, aTransformBackground2.mImage->mWidth - 1, aTransformBackground2.mImage->mHeight - 1);
-            aBackground2G.DrawImageF(IMAGE_BACKGROUND1, aTransformBackground2.mTransX - BOARD_WIDTH / 2, aTransformBackground2.mTransY - BOARD_HEIGHT / 2);
-            aBackground2G.ClearClipRect();
+            g->PushState();
+            g->ClipRect(aTransformBackground2.mTransX, aTransformBackground2.mTransY, aTransformBackground2.mImage->mWidth - 1, aTransformBackground2.mImage->mHeight - 1);
+            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground2.mTransX - BOARD_WIDTH / 2, aTransformBackground2.mTransY - BOARD_HEIGHT / 2);
+            g->PopState();
         }
         if (aTransformBackground3.mFrame != -1.0f)
         {
-            Graphics aBackground3G(*g);
-            aBackground3G.ClipRect(aTransformBackground3.mTransX, aTransformBackground3.mTransY, aTransformBackground3.mImage->mWidth - 1, aTransformBackground3.mImage->mHeight - 1);
-            aBackground3G.DrawImageF(IMAGE_BACKGROUND1, aTransformBackground3.mTransX - BOARD_WIDTH / 2, aTransformBackground3.mTransY - BOARD_HEIGHT / 2);
+            g->PushState();
+            g->ClipRect(aTransformBackground3.mTransX, aTransformBackground3.mTransY, aTransformBackground3.mImage->mWidth - 1, aTransformBackground3.mImage->mHeight - 1);
+            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground3.mTransX - BOARD_WIDTH / 2, aTransformBackground3.mTransY - BOARD_HEIGHT / 2);
+            g->PopState();
         }
         if (aTransformBackground4.mFrame != -1.0f)
         {
-            Graphics aBackground4G(*g);
-            aBackground4G.ClipRect(aTransformBackground4.mTransX, aTransformBackground4.mTransY, aTransformBackground4.mImage->mWidth - 1, aTransformBackground4.mImage->mHeight - 1);
-            aBackground4G.DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2, aTransformBackground4.mTransY - BOARD_HEIGHT / 2);
+            g->PushState();
+            g->ClipRect(aTransformBackground4.mTransX, aTransformBackground4.mTransY, aTransformBackground4.mImage->mWidth - 1, aTransformBackground4.mImage->mHeight - 1);
+            g->DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2, aTransformBackground4.mTransY - BOARD_HEIGHT / 2);
+            g->PopState();
         }
     }
     if (aDrawClippedBackgrounds2)
@@ -844,24 +846,27 @@ void CreditScreen::Draw(Graphics* g)
 
         if (aTransformBackground1.mFrame != -1.0f)
         {
-            Graphics aBackground1G(*g);
-            aBackground1G.ClipRect(aTransformBackground1.mTransX, aTransformBackground1.mTransY, aTransformBackground1.mImage->mWidth - 1, aTransformBackground1.mImage->mHeight - 1);
-            aBackground1G.DrawImageF(IMAGE_BACKGROUND1, aTransformBackground1.mTransX - BOARD_WIDTH / 2 + 330, aTransformBackground1.mTransY - BOARD_HEIGHT / 2 - 50);
+            g->PushState();
+            g->ClipRect(aTransformBackground1.mTransX, aTransformBackground1.mTransY, aTransformBackground1.mImage->mWidth - 1, aTransformBackground1.mImage->mHeight - 1);
+            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground1.mTransX - BOARD_WIDTH / 2 + 330, aTransformBackground1.mTransY - BOARD_HEIGHT / 2 - 50);
+            g->PopState();
         }
         if (aTransformBackground3.mFrame != -1.0f)
         {
-            Graphics aBackground3G(*g);
-            aBackground3G.mTransX += aTransformBackground3.mTransX - 20.0f;
-            aBackground3G.mTransY += aTransformBackground3.mTransY - 260.0f;
-            aBackground3G.ClipRect(20, 260, aTransformBackground3.mImage->mWidth - 1, aTransformBackground3.mImage->mHeight - 1);
-            aBackground3G.DrawImageF(IMAGE_BACKGROUND3, -220.0f, 0.0f);
-            aBackground3G.DrawImageF(IMAGE_POOL, 34.0f, 278.0f);
+            g->PushState();
+            g->mTransX += aTransformBackground3.mTransX - 20.0f;
+            g->mTransY += aTransformBackground3.mTransY - 260.0f;
+            g->ClipRect(20, 260, aTransformBackground3.mImage->mWidth - 1, aTransformBackground3.mImage->mHeight - 1);
+            g->DrawImageF(IMAGE_BACKGROUND3, -220.0f, 0.0f);
+            g->DrawImageF(IMAGE_POOL, 34.0f, 278.0f);
+            g->PopState();
         }
         if (aTransformBackground4.mFrame != -1.0f)
         {
-            Graphics aBackground4G(*g);
-            aBackground4G.ClipRect(aTransformBackground4.mTransX, aTransformBackground4.mTransY, aTransformBackground4.mImage->mWidth - 1, aTransformBackground4.mImage->mHeight - 1);
-            aBackground4G.DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2, aTransformBackground4.mTransY - BOARD_HEIGHT / 2);
+            g->PushState();
+            g->ClipRect(aTransformBackground4.mTransX, aTransformBackground4.mTransY, aTransformBackground4.mImage->mWidth - 1, aTransformBackground4.mImage->mHeight - 1);
+            g->DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2, aTransformBackground4.mTransY - BOARD_HEIGHT / 2);
+            g->PopState();
         }
     }
     aCreditsReanim->DrawRenderGroup(g, 1);
@@ -934,16 +939,21 @@ void CreditScreen::Draw(Graphics* g)
     }
     else
     {
-        aBackground2G.mTransX += aTransformBackground2.mTransX + 220.0f;
+        g->PushState();
+        g->mTransX += aTransformBackground2.mTransX + 220.0f;
         if (aDrawPool || aDrawNightPool)
         {
-            mApp->mPoolEffect->PoolEffectDraw(&aBackground2G, aDrawNightPool);
+            mApp->mPoolEffect->PoolEffectDraw(g, aDrawNightPool);
         }
+        g->PopState();
     }
     
     if (aDrawDoorBottom)
     {
-        aBackground2G.DrawImage(IMAGE_BACKGROUND3_GAMEOVER_INTERIOR_OVERLAY, -171, 241);
+        g->PushState();
+        g->mTransX += aTransformBackground2.mTransX + 220.0f;
+        g->DrawImage(IMAGE_BACKGROUND3_GAMEOVER_INTERIOR_OVERLAY, -171, 241);
+        g->PopState();
     }
     aCreditsReanim->Draw(g);
 
@@ -959,19 +969,25 @@ void CreditScreen::Draw(Graphics* g)
     }
     if (aDrawFog)
     {
-        aBackground2G.DrawImage(IMAGE_REANIM_CREDITS_FOGMACHINE, 600, 200);
+        g->PushState();
+        g->mTransX += aTransformBackground2.mTransX + 220.0f;
+        g->DrawImage(IMAGE_REANIM_CREDITS_FOGMACHINE, 600, 200);
+        g->PopState();
     }
     aCreditsReanim->DrawRenderGroup(g, 2);
 
+    g->PushState();
+    g->mTransX += aTransformBackground2.mTransX + 220.0f;
     if (aDrawDoorBottom)
     {
         g->ClearClipRect();
-        aBackground2G.DrawImage(IMAGE_BACKGROUND3_GAMEOVER_MASK, -172, 234);
+        g->DrawImage(IMAGE_BACKGROUND3_GAMEOVER_MASK, -172, 234);
     }
     if (aDrawChimney)
     {
-        aBackground2G.DrawImage(IMAGE_BACKGROUND5_GAMEOVER_MASK, -220, 81);
+        g->DrawImage(IMAGE_BACKGROUND5_GAMEOVER_MASK, -220, 81);
     }
+    g->PopState();
     aCreditsReanim->DrawRenderGroup(g, 3);
 
     TodParticleSystem* aParticle = nullptr;
@@ -985,8 +1001,11 @@ void CreditScreen::Draw(Graphics* g)
 
     if (aDrawFog)
     {
+        g->PushState();
+        g->mTransX += aTransformBackground2.mTransX + 220.0f;
         float aPercent = TodAnimateCurveFloatTime(aFrameFactor * 189.0f, aFrameFactor * 249.0f, aCreditsReanim->mAnimTime, 0.0f, 1.0f, TodCurves::CURVE_LINEAR);
-        DrawFogEffect(&aBackground2G, aPercent);
+        DrawFogEffect(g, aPercent);
+        g->PopState();
     }
     aCreditsReanim->DrawRenderGroup(g, 3);
 

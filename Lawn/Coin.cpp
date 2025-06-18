@@ -869,9 +869,10 @@ void Coin::Draw(Graphics* g)
 
     if (mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
     {
-        Graphics theAttachmentGraphics(*g);
-        MakeParentGraphicsFrame(&theAttachmentGraphics);
-        AttachmentDraw(mAttachmentID, &theAttachmentGraphics, false);
+        g->PushState();
+        MakeParentGraphicsFrame(g);
+        AttachmentDraw(mAttachmentID, g, false);
+        g->PopState();
     }
 
     if ((mType == CoinType::COIN_SILVER || mType == CoinType::COIN_GOLD) && mHitGround && !mIsBeingCollected)

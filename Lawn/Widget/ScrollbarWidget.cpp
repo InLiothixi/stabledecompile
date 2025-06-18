@@ -64,12 +64,13 @@ void ScrollbarWidget::Draw(Graphics* g) {
 	DrawThumb(g);
 
 	if (isThumbOver()) {
-		Graphics aThumbGraphic(*g);
-		aThumbGraphic.SetColorizeImages(true);
-		aThumbGraphic.SetColor(Color::White);
-		aThumbGraphic.mColor.mAlpha = 96;
-		aThumbGraphic.SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
-		DrawThumb(&aThumbGraphic);
+		g->PushState();
+		g->SetColorizeImages(true);
+		g->SetColor(Color::White);
+		g->mColor.mAlpha = 96;
+		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+		DrawThumb(g);
+		g->PopState();
 	}
 
 	DrawScrollBackground(g);
@@ -88,60 +89,59 @@ bool ScrollbarWidget::isThumbDown() {
 void ScrollbarWidget::DrawThumb(Graphics* g) {
 	int aAlpha = g->mColor.mAlpha;
 
-	Graphics gThumb(*g);
+	g->SetColor(mThumbColor); // Base
+	g->mColor.mAlpha = aAlpha;
+	g->DrawLine(mThumbX, mThumbY, mThumbX+mThumbWidth-2, mThumbY); // Top Outer Line Highlight
+	g->DrawLine(mThumbX, mThumbY+1, mThumbX, mThumbY+mThumbHeight-2); // Left Outer Line Highlight
+	g->FillRect(mThumbX+2, mThumbY+2, mThumbWidth-4, mThumbHeight-3); // Inner Fill Highlight
 
-	gThumb.SetColor(mThumbColor); // Base
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.DrawLine(mThumbX, mThumbY, mThumbX+mThumbWidth-2, mThumbY); // Top Outer Line Highlight
-	gThumb.DrawLine(mThumbX, mThumbY+1, mThumbX, mThumbY+mThumbHeight-2); // Left Outer Line Highlight
-	gThumb.FillRect(mThumbX+2, mThumbY+2, mThumbWidth-4, mThumbHeight-3); // Inner Fill Highlight
+	g->SetColor(mThumbInnerHighlight); // Inner Highlight
+	g->mColor.mAlpha = aAlpha;
+	g->DrawLine(mThumbX+2, mThumbY+1, mThumbX + mThumbWidth-3, mThumbY+1); // Top Inner Line Inner Highlight
+	g->DrawLine(mThumbX+1, mThumbY+2, mThumbX+1, mThumbY+mThumbHeight-3); // Left Inner Line Inner Highlight
 
-	gThumb.SetColor(mThumbInnerHighlight); // Inner Highlight
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.DrawLine(mThumbX+2, mThumbY+1, mThumbX + mThumbWidth-3, mThumbY+1); // Top Inner Line Inner Highlight
-	gThumb.DrawLine(mThumbX+1, mThumbY+2, mThumbX+1, mThumbY+mThumbHeight-3); // Left Inner Line Inner Highlight
+	g->SetColor(mThumbInnerHighlight2); // Top Left Blend Inner Highlight
+	g->mColor.mAlpha = aAlpha;
+	g->FillRect(mThumbX+1, mThumbY+1, 1, 1); // Top Left Fill Shadow
 
-	gThumb.SetColor(mThumbInnerHighlight2); // Top Left Blend Inner Highlight
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.FillRect(mThumbX+1, mThumbY+1, 1, 1); // Top Left Fill Shadow
+	g->SetColor(mThumbInnerHighlightShadow); // Blend Inner Highlight and Shadow
+	g->mColor.mAlpha = aAlpha;
+	g->FillRect(mThumbWidth-2, mThumbY+1, 1, 1); // Top Right Fill Highlight and Shadow
+	g->FillRect(mThumbX+1, mThumbY+mThumbHeight-2, 1, 1); // Bottom Left Fill Highlight and Shadow
 
-	gThumb.SetColor(mThumbInnerHighlightShadow); // Blend Inner Highlight and Shadow
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.FillRect(mThumbWidth-2, mThumbY+1, 1, 1); // Top Right Fill Highlight and Shadow
-	gThumb.FillRect(mThumbX+1, mThumbY+mThumbHeight-2, 1, 1); // Bottom Left Fill Highlight and Shadow
+	g->SetColor(mThumbInnerShadow); // Inner Shadow
+	g->mColor.mAlpha = aAlpha;
+	g->DrawLine(mThumbX+mThumbWidth-2, mThumbY+1, mThumbX+mThumbWidth-2, mThumbY+mThumbHeight-3); // Right Inner Shadow
+	g->DrawLine(mThumbX+1, mThumbY+mThumbHeight-2, mThumbX+mThumbWidth-3, mThumbY+mThumbHeight-2); // Bottom  Inner Shadow
 
-	gThumb.SetColor(mThumbInnerShadow); // Inner Shadow
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.DrawLine(mThumbX+mThumbWidth-2, mThumbY+1, mThumbX+mThumbWidth-2, mThumbY+mThumbHeight-3); // Right Inner Shadow
-	gThumb.DrawLine(mThumbX+1, mThumbY+mThumbHeight-2, mThumbX+mThumbWidth-3, mThumbY+mThumbHeight-2); // Bottom  Inner Shadow
-
-	gThumb.SetColor(mThumbInnerShadow2); // Bottom Right Blend Inner Shadow 
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.FillRect(mThumbX+mThumbWidth-2, mThumbY+mThumbHeight-2, 1, 1); // Bottom Right Inner Shadow
+	g->SetColor(mThumbInnerShadow2); // Bottom Right Blend Inner Shadow 
+	g->mColor.mAlpha = aAlpha;
+	g->FillRect(mThumbX+mThumbWidth-2, mThumbY+mThumbHeight-2, 1, 1); // Bottom Right Inner Shadow
 	
-	gThumb.SetColor(mThumbOuterShadow); // Shadows
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.DrawLine(mThumbX+mThumbWidth-1, mThumbY, mThumbX+mThumbWidth-1, mThumbY+mThumbHeight-2); // Right Outer Line Shadow
-	gThumb.DrawLine(mThumbX, mThumbY+mThumbHeight-1, mThumbX+mThumbWidth-2, mThumbY+mThumbHeight-1); // Bottom Outer Line Shadow
+	g->SetColor(mThumbOuterShadow); // Shadows
+	g->mColor.mAlpha = aAlpha;
+	g->DrawLine(mThumbX+mThumbWidth-1, mThumbY, mThumbX+mThumbWidth-1, mThumbY+mThumbHeight-2); // Right Outer Line Shadow
+	g->DrawLine(mThumbX, mThumbY+mThumbHeight-1, mThumbX+mThumbWidth-2, mThumbY+mThumbHeight-1); // Bottom Outer Line Shadow
 
-	gThumb.SetColor(mThumbOuterShadow2); // Bottom Right Blend Shadow
-	gThumb.mColor.mAlpha = aAlpha;
-	gThumb.FillRect(mThumbX+mThumbWidth-1, mThumbY+mThumbHeight-1, 1, 1); // Bottom Right Fill Shadow
+	g->SetColor(mThumbOuterShadow2); // Bottom Right Blend Shadow
+	g->mColor.mAlpha = aAlpha;
+	g->FillRect(mThumbX+mThumbWidth-1, mThumbY+mThumbHeight-1, 1, 1); // Bottom Right Fill Shadow
 }
 
 void ScrollbarWidget::DrawScrollBackground(Graphics* g) {
 	int aAlpha = g->mColor.mAlpha;
-	Graphics gBackground(*g);
-	gBackground.SetColor(mBackgroundColor);
-	gBackground.mColor.mAlpha = aAlpha;
+	g->PushState();
+	g->SetColor(mBackgroundColor);
+	g->mColor.mAlpha = aAlpha;
 	if (mScrollbarMode == ScrollbarMode::VERTICAL)
 	{
-		gBackground.FillRect(0, 0, mThumbWidth, mThumbY);
-		gBackground.FillRect(0, mThumbY+mThumbHeight, mThumbWidth, mHeight-mThumbY-mThumbHeight);
+		g->FillRect(0, 0, mThumbWidth, mThumbY);
+		g->FillRect(0, mThumbY+mThumbHeight, mThumbWidth, mHeight-mThumbY-mThumbHeight);
 	}
 	else if (mScrollbarMode == ScrollbarMode::HORIZONTAL)
 	{
-		gBackground.FillRect(0, 0, mThumbX, mThumbHeight);
-		gBackground.FillRect(mThumbX+mThumbWidth, 0, mThumbWidth -mThumbX, mThumbHeight);
+		g->FillRect(0, 0, mThumbX, mThumbHeight);
+		g->FillRect(mThumbX+mThumbWidth, 0, mThumbWidth -mThumbX, mThumbHeight);
 	}
+	g->PopState();
 }
