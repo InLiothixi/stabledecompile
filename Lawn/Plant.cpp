@@ -4078,7 +4078,7 @@ float PlantFlowerPotHeightOffset(SeedType theSeedType, float theFlowerPotScale)
 }
 
 //0x465040
-float PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedType, int theCol, int theRow)
+float PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedType, int theCol, int theRow, bool neverFloat)
 {
     float aHeightOffset = 0.0f;
 
@@ -4094,12 +4094,12 @@ float PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedTy
             doFloating = true;
         }
     }
-    else if (theBoard->IsPoolSquare(theCol, theRow))
+    else if (theBoard->IsPoolSquare(theCol, theRow) || theBoard->mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM && gLawnApp->mDialogMap.size() == 0)
     {
         doFloating = true;
     }
 
-    if (doFloating)
+    if (doFloating && !neverFloat)
     {
         int aCounter;
         if (theBoard)

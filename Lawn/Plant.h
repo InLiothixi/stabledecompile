@@ -310,7 +310,7 @@ public:
     void                    DrawPumkin(Graphics* g, DrawVariation theDrawVariation, unsigned int theDrawBitVariation);
 };
 
-float                       PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedType, int theCol, int theRow);
+float                       PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedType, int theCol, int theRow, bool neverFloat = false);
 float                       PlantFlowerPotHeightOffset(SeedType theSeedType, float theFlowerPotScale);
 
 class PlantDefinition
