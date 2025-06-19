@@ -108,8 +108,12 @@
 <Image id="MONEYBAG" path="moneybag" />
 <Image id="MONEYBAG_HI_RES" path="moneybag_hi_res" />
 <Image id="CHOCOLATE" path="Chocolate" />
+<Image id="SEEDPACKETUPGRADE_LARGER" path="SeedPacketUpgrade_Larger" />
+<Image id="SEEDPACKETIMITATER_LARGER" path="SeedPacketImitater_Larger" />
+<Image id="SEED_SELECTOR" path="seed_selector" />
+<Image id="P1_ARROW" path="p1_arrow" />
 
-<!-- Buttons and other UI -->
+    <!-- Buttons and other UI -->
 <Image id="OPTIONS_BACKTOGAMEBUTTON0" path="options_backtogamebutton0" />
 <Image id="OPTIONS_BACKTOGAMEBUTTON2" path="options_backtogamebutton2" />
 <Image id="OPTIONS_CHECKBOX0" path="options_checkbox0" />

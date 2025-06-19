@@ -27,6 +27,7 @@ SeedPacket::SeedPacket()
 	mSlotMachineCountDown = 0;
 	mSlotMachiningNextSeed = SeedType::SEED_NONE;
 	mTimesUsed = 0;
+	mSelectionCounter = -1;
 }
 
 //0x487070
@@ -142,6 +143,21 @@ void SeedPacket::Update()
 		return;
 	}
 
+	if (mApp && mApp->mBoard && mApp->mBoard->mCursorObject->mSeedBankIndex == mIndex)
+	{
+		if (mSelectionCounter < 0)
+			mSelectionCounter = 1;
+		else if (mSelectionCounter < 100)
+			++mSelectionCounter;
+	}
+	else if (mSelectionCounter > -1)
+	{
+		if (mSelectionCounter == 0)
+			mSelectionCounter = -1;
+		else
+			--mSelectionCounter;
+	}
+
 	if (mBoard->mMainCounter == 0)
 	{
 		FlashIfReady();
@@ -255,25 +271,27 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 	}
 	else
 	{
-		Graphics aSeedG(*g);
-		aSeedG.mScaleX = theScale * g->mScaleX;
-		aSeedG.mScaleY = theScale * g->mScaleY;
+		g->PushState();
+		g->mScaleX = theScale * g->mScaleX;
+		g->mScaleY = theScale * g->mScaleY;
 		if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
 		{
-			aSeedG.mClipRect.mY = y + theOffsetY + 10;
+			g->mClipRect.mY = y + theOffsetY + 10;
 			y -= 180;
 		}
 		if (theSeedType == SeedType::SEED_ZOMBIE_POLEVAULTER)
 		{
-			aSeedG.SetClipRect(x + theOffsetX + 25, aSeedG.mClipRect.mY, 40, aSeedG.mClipRect.mHeight);
+			g->SetClipRect(x + theOffsetX + 25, g->mClipRect.mY, 40, g->mClipRect.mHeight);
 		}
-		Plant::DrawSeedType(&aSeedG, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + theOffsetX, y + theOffsetY);
+		Plant::DrawSeedType(g, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + theOffsetX, y + theOffsetY);
+		g->PopState();
 	}
 }
 
 //0x4876F0
 void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, bool theDrawCost, bool theUseCurrentCost)
 {
+	g->PushState();
 	SeedType aSeedType = theSeedType;
 	if (aSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE)
 	{
@@ -301,9 +319,11 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		theSeedType == SeedType::SEED_ZOMBIQUARIUM_SNORKLE ? 7 :
 		theSeedType == SeedType::SEED_ZOMBIQUARIUM_TROPHY ? 8 : 2;
 
-	if (g->mScaleX > 1)
+	if (g->mScaleX > 1 || g->mScaleY > 1)
 	{
-		TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKET_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
+		if (aPacketBackground == 0)	TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKETIMITATER_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
+		if (aPacketBackground == 1)	TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKETUPGRADE_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
+		if (aPacketBackground == 2)	TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKET_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
 	}
 	/*else if (g->mScaleX == 1 && g->mScaleY == 1)
 	{
@@ -512,10 +532,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		aDrawSeedInMiddle = false;
 		break;
 	}
-	if (
-#ifdef DO_FIX_BUGS
-		!((LawnApp*)gSexyAppBase)->GetDialog(Dialogs::DIALOG_ALMANAC) &&
-#endif
+	if (!((LawnApp*)gSexyAppBase)->GetDialog(Dialogs::DIALOG_ALMANAC) &&
 		((LawnApp*)gSexyAppBase)->mGameMode == GameMode::GAMEMODE_CHALLENGE_BIG_TIME)
 	{
 		if (aSeedType == SeedType::SEED_WALLNUT || aSeedType == SeedType::SEED_SUNFLOWER || aSeedType == SeedType::SEED_MARIGOLD)
@@ -540,24 +557,23 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 	if (thePercentDark > 0.0f)
 	{
 		int aDarknessHeight = FloatRoundToInt(68.0f * thePercentDark) + 2;
-		Graphics aPlantG(*g);
-		aPlantG.SetColor(Color(64, 64, 64, 255));
-		aPlantG.SetColorizeImages(true);
-		aPlantG.ClipRect(x, y, SEED_PACKET_WIDTH, aDarknessHeight);
-		TodDrawImageCelScaledF(&aPlantG, Sexy::IMAGE_SEEDS, x, y, aPacketBackground, 0, aPlantG.mScaleX, aPlantG.mScaleY);
+		g->SetColor(Color(64, 64, 64, 255));
+		g->SetColorizeImages(true);
+		g->ClipRect(x, y, SEED_PACKET_WIDTH * g->mScaleX, aDarknessHeight * g->mScaleY);
+		TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDS, x, y, aPacketBackground, 0, g->mScaleX, g->mScaleY);
 		if (aDrawSeedInMiddle)
 		{
-			SeedPacketDrawSeed(&aPlantG, x, y, theSeedType, theImitaterType, aOffsetX, aOffsetY, aScale);
+			SeedPacketDrawSeed(g, x, y, theSeedType, theImitaterType, aOffsetX, aOffsetY, aScale);
 		}
+		g->SetColor(Color::White);
+		g->SetColorizeImages(false);
+		g->ClearClipRect();
 	}
 
 	if (theDrawCost)
 	{
 		SexyString aCostStr;
-		if (gLawnApp->mBoard && gLawnApp->mBoard->PlantUsesAcceleratedPricing(aSeedType)
-#ifdef DO_FIX_BUGS
-			&& !gLawnApp->GetDialog(Dialogs::DIALOG_ALMANAC)
-#endif
+		if (gLawnApp->mBoard && gLawnApp->mBoard->PlantUsesAcceleratedPricing(aSeedType) && !gLawnApp->GetDialog(Dialogs::DIALOG_ALMANAC)
 			)
 		{
 			if (theUseCurrentCost)
@@ -585,7 +601,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		{
 			SexyMatrix3 aMatrix;
 			TodScaleTransformMatrix(aMatrix, aTextOffsetX * g->mScaleX + x, aTextOffsetY * g->mScaleY + y, g->mScaleX, g->mScaleY);
-			if (g->mScaleX > 1.8f)
+			//if (g->mScaleX > 1.8f)
 			{
 				g->SetLinearBlend(false);
 			}
@@ -593,8 +609,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 			g->SetLinearBlend(true);
 		}
 	}
-
-	g->SetColorizeImages(false);
+	g->PopState();
 }
 
 //0x488220
@@ -603,7 +618,7 @@ void SeedPacket::Draw(Graphics* g)
 	float aPercentDark = 0.0f;
 	if (!mActive)
 	{
-		if (mRefreshTime == 0)
+		if (mRefreshTime == 0 && (mApp && mApp->mBoard && mApp->mBoard->mCursorObject->mSeedBankIndex != mIndex))
 		{
 			aPercentDark = 1.0f;
 		}
@@ -617,11 +632,11 @@ void SeedPacket::Draw(Graphics* g)
 	{
 		int aOffsetY = FloatRoundToInt(-mHeight * mSlotMachiningPosition);
 
-		Graphics aClipG(*g);
-		aClipG.ClipRect(0, 0, mWidth, mHeight);
-
-		DrawSeedPacket(&aClipG, 0.0f, aOffsetY, mPacketType, SeedType::SEED_NONE, 0.0f, 128, false, false);
-		DrawSeedPacket(&aClipG, 0.0f, mHeight + aOffsetY, mSlotMachiningNextSeed, SeedType::SEED_NONE, 0.0f, 128, false, false);
+		g->PushState();
+		g->ClipRect(0, 0, mWidth * g->mScaleX, mHeight * g->mScaleY);
+		DrawSeedPacket(g, 0.0f, aOffsetY, mPacketType, SeedType::SEED_NONE, 0.0f, 128, false, false);
+		DrawSeedPacket(g, 0.0f, mHeight + aOffsetY, mSlotMachiningNextSeed, SeedType::SEED_NONE, 0.0f, 128, false, false);
+		g->PopState();
 	}
 	else
 	{
@@ -674,7 +689,56 @@ void SeedPacket::Draw(Graphics* g)
 			aGrayness = 128;
 		}
 
-		DrawSeedPacket(g, mOffsetX, 0.0f, mPacketType, mImitaterType, aPercentDark, aGrayness, aDrawCost, true);
+		g->PushState();
+
+		DrawSeedPacket(g, mOffsetX, 0.0f, mPacketType, mImitaterType, aPercentDark, aGrayness, false, true);
+		
+		SeedType aSeedType = mPacketType;
+		if (aSeedType == SeedType::SEED_IMITATER && mImitaterType != SeedType::SEED_NONE)
+		{
+			aSeedType = mImitaterType;
+		}
+		if (aGrayness != 255)
+		{
+			g->SetColor(Color(aGrayness, aGrayness, aGrayness));
+			g->SetColorizeImages(true);
+		}
+		else if (aPercentDark > 0)
+		{
+			g->SetColor(Color(128, 128, 128, 255));
+			g->SetColorizeImages(true);
+		}
+
+		SexyString aCostStr;
+		if (gLawnApp->mBoard && gLawnApp->mBoard->PlantUsesAcceleratedPricing(aSeedType) && !gLawnApp->GetDialog(Dialogs::DIALOG_ALMANAC))
+		{
+			aCostStr = StrFormat(_S("%d"), gLawnApp->mBoard->GetCurrentPlantCost(mPacketType, mImitaterType));
+		}
+		else
+		{
+			aCostStr = StrFormat(_S("%d"), Plant::GetCost(mPacketType, mImitaterType));
+		}
+
+		Font* aTextFont = Sexy::FONT_PICO129;
+		int aTextOffsetX = 32 - aTextFont->StringWidth(aCostStr);
+		int aTextOffsetY = aTextFont->GetAscent() + 54;
+		if (g->mScaleX == 1.0f && g->mScaleY == 1.0f)
+		{
+			TodDrawString(g, aCostStr, mOffsetX + aTextOffsetX, aTextOffsetY, aTextFont, Color::Black, DS_ALIGN_LEFT);
+		}
+		else
+		{
+			SexyMatrix3 aMatrix;
+			TodScaleTransformMatrix(aMatrix, g->mTransX + aTextOffsetX * g->mScaleX + mOffsetX, g->mTransY + aTextOffsetY * g->mScaleY, g->mScaleX, g->mScaleY);
+			//if (g->mScaleX > 1.8f)
+			{
+				g->SetLinearBlend(false);
+			}
+			TodDrawStringMatrix(g, aTextFont, aMatrix, aCostStr, Color::Black);
+			g->SetLinearBlend(true);
+		}
+		
+		g->PopState();
 	}
 }
 
@@ -836,6 +900,7 @@ void SeedPacket::MouseDown(int x, int y, int theClickCount)
 		mBoard->mCursorObject->mCursorType = CursorType::CURSOR_TYPE_PLANT_FROM_BANK;
 		mBoard->mCursorObject->mSeedBankIndex = mIndex;
 		mApp->PlaySample(SOUND_SEEDLIFT);
+		mSelectionCounter = 0;
 
 		if (mBoard->mTutorialState == TutorialState::TUTORIAL_LEVEL_1_PICK_UP_PEASHOOTER)
 		{
@@ -967,11 +1032,44 @@ void SeedBank::Draw(Graphics* g)
 	for (int i = 0; i < mNumPackets; i++)
 	{
 		SeedPacket* aSeedPacket = &mSeedPackets[i];
+		g->PushState();
+		float mScale = max(1.0f, mApp->mHeight / 720.0f * TodAnimateCurveFloat(0, 100, aSeedPacket->mSelectionCounter, 1.0f, 1.25f, TodCurves::CURVE_EASE_IN));
+		g->SetScale(mScale, mScale, 0, 0);
+		mScale = (mScale - 1.0f) / 2.0f;
+		g->mTransX -= mScale * 50;
+		g->mTransY -= mScale * 75;
 		if (aSeedPacket->mPacketType != SeedType::SEED_NONE && aSeedPacket->BeginDraw(g))
 		{
 			aSeedPacket->Draw(g);
 			aSeedPacket->EndDraw(g);
 		}
+		g->PopState();
+	}
+
+	if (mApp->mBoard->mCursorObject->mSeedBankIndex != -1)
+	{
+		SeedPacket* aSeedPacket = &mSeedPackets[mApp->mBoard->mCursorObject->mSeedBankIndex];
+		g->PushState();
+		float mScale = max(1.0f, mApp->mHeight / 720.0f * TodAnimateCurveFloat(0, 10, aSeedPacket->mSelectionCounter, 1.0f, 1.25f, TodCurves::CURVE_EASE_OUT));
+		g->SetScale(mScale, mScale, 0, 0);
+		float offsetScale = (mScale - 1.0f) / 2.0f;
+		g->mTransX -= offsetScale * 50;
+		g->mTransY -= offsetScale * 75;
+		g->PushState();
+		g->SetScale(1, 1, 0, 0);
+		TodDrawImageScaledF(g, Sexy::IMAGE_SEED_SELECTOR, aSeedPacket->mX + aSeedPacket->mOffsetX - 5, 2.5f, mScale, mScale);
+		float aPos = PI * 0.25f * PI;
+		float aTime = gLawnApp->mAppCounter * 2.0f * PI / 200.0f;
+		float aFloatingHeight = sin(aPos + aTime) * 2.0f;
+		g->PopState();
+		if (aSeedPacket->mPacketType != SeedType::SEED_NONE && aSeedPacket->BeginDraw(g))
+		{
+			aSeedPacket->Draw(g);
+			aSeedPacket->EndDraw(g);
+		}
+		TodDrawImageScaledF(g, Sexy::IMAGE_P1_ARROW, aSeedPacket->mX + aSeedPacket->mOffsetX - 5 + 19.5f, 2.5f + aFloatingHeight, mScale, mScale);
+		g->PopState();
+		
 	}
 
 	g->ClearClipRect();

@@ -1284,48 +1284,30 @@ void Zombie::PickRandomSpeed()
 //0x524C70
 void Zombie::BungeeStealTarget()
 {
+    PlayZombieReanim("anim_grab", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
+
     Plant* aPlant = mBoard->GetTopPlantAt(mTargetCol, mRow, PlantPriority::TOPPLANT_BUNGEE_ORDER);
     if (aPlant && !aPlant->NotOnGround())
     {
-        //PlayZombieReanim("anim_hold", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f); //anim_grab 20
-
-        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
-        if (aBodyReanim)
-            aBodyReanim->PlayReanim("anim_hold", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
-
-        mPhaseCounter = 58;
-
         TOD_ASSERT(aPlant->mSeedType != SeedType::SEED_GRAVEBUSTER);
 
-        /*if (aPlant->mSeedType != SeedType::SEED_COBCANNON && aPlant->mSeedType != SeedType::SEED_GRAVEBUSTER)
+        if (aPlant->mSeedType != SeedType::SEED_COBCANNON && aPlant->mSeedType != SeedType::SEED_GRAVEBUSTER)
         {
             mTargetPlantID = (PlantID)mBoard->mPlants.DataArrayGetID(aPlant);
             aPlant->mOnBungeeState = PlantOnBungeeState::GETTING_GRABBED_BY_BUNGEE;
             mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
-
-            GridItem* aLadder = mBoard->GetLadderAt(mTargetCol, mRow);
-            if (aLadder)
-            {
-                aLadder->GridItemDie();
-            }
-        }*/
-    }
-    else 
-    {
-        Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
-        aBodyReanim->mLoopCount = 1;
-        mPhaseCounter = 58;
+        }
     }
 }
 
 //0x524D70
 void Zombie::BungeeLiftTarget()
 {
+    PlayZombieReanim("anim_raise", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 36.0f);
+
     Plant* aPlant = mBoard->mPlants.DataArrayTryToGet((unsigned int)mTargetPlantID);
     if (aPlant == nullptr)
         return;
-
-    PlayZombieReanim("anim_raise", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 36.0f);
 
     Zombie* aZombie = nullptr;
     while (mBoard->IterateZombies(aZombie))
@@ -1336,10 +1318,9 @@ void Zombie::BungeeLiftTarget()
         }
     }
 
-
     aPlant->mOnBungeeState = PlantOnBungeeState::RISING_WITH_BUNGEE;
     mApp->PlayFoley(FoleyType::FOLEY_FLOOP);
-    
+
     Reanimation* aPlantReanim = mApp->ReanimationTryToGet(aPlant->mBodyReanimID);
     if (aPlantReanim)
     {
@@ -1351,24 +1332,11 @@ void Zombie::BungeeLiftTarget()
         mBoard->NewPlant(mTargetCol, mRow, SeedType::SEED_LILYPAD, SeedType::SEED_NONE);
     }
 
-    if (aPlant->mSeedType != SeedType::SEED_COBCANNON && aPlant->mSeedType != SeedType::SEED_GRAVEBUSTER)
-    {
-        aPlant->mOnBungeeState = PlantOnBungeeState::GETTING_GRABBED_BY_BUNGEE;
-        mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
-    }
-
-    GridItem* aLadder = mBoard->GetLadderAt(mTargetCol, mRow);
-    if (aLadder)
-    {
-        aLadder->GridItemDie();
-    }
-
     if (mApp->IsIZombieLevel())
     {
         mBoard->mChallenge->IZombiePlantDropRemainingSun(aPlant);
     }
 }
-
 //0x524EF0
 void Zombie::BungeeLanding()
 {
@@ -6166,35 +6134,36 @@ void Zombie::DrawBungeeReanim(Graphics* g, const ZombieDrawPosition& theDrawPos)
     Zombie* aDroppedZombie = mBoard->ZombieTryToGet(mRelatedZombieID);
     if (aDroppedZombie)
     {
-        Graphics aDropGraphics(*g);
-        aDropGraphics.mTransY -= mAltitude;
-        aDropGraphics.mTransX += aDroppedZombie->mPosX - mPosX;
+        g->PushState();
+        g->mTransY -= mAltitude;
+        g->mTransX += aDroppedZombie->mPosX - mPosX;
         //aDropGraphics.Translate(aDroppedZombie->mPosX - mPosX, -mAltitude);
-        
         ZombieDrawPosition aDroppedDrawPos;
         aDroppedZombie->GetDrawPos(aDroppedDrawPos);
-        aDroppedZombie->DrawReanim(&aDropGraphics, aDroppedDrawPos, RENDER_GROUP_NORMAL);
+        aDroppedZombie->DrawReanim(g, aDroppedDrawPos, RENDER_GROUP_NORMAL);
+        g->PopState();
     }
     else
     {
         Plant* aPlant = mBoard->mPlants.DataArrayTryToGet((unsigned int)mTargetPlantID);
         if (aPlant)
         {
-            Graphics aPlantGraphics(*g);
-            aPlantGraphics.mTransY += 30.0f - mAltitude;
+            g->PushState();
+            g->mTransY += 30.0f - mAltitude;
             if (mZombiePhase == ZombiePhase::PHASE_BUNGEE_RISING)
             {
                 if (aPlant->mSeedType == SeedType::SEED_SPIKEWEED || aPlant->mSeedType == SeedType::SEED_SPIKEROCK)
                 {
-                    aPlantGraphics.mTransY -= 34.0f;
+                    g->mTransY -= 34.0f;
                 }
             }
             if (aPlant->mPlantCol <= 4 && mBoard->StageHasRoof())
             {
-                aPlantGraphics.mTransY += 10;
+                g->mTransY += 10;
             }
 
-            aPlant->Draw(&aPlantGraphics);
+            aPlant->Draw(g);
+            g->PopState();
         }
     }
 
@@ -6556,9 +6525,9 @@ void Zombie::DrawBungeeCord(Graphics* g, int theOffsetX, int theOffsetY)
     float aPosX, aPosY;
     GetTrackPosition("Zombie_bungi_body", aPosX, aPosY);
 
-    Graphics gCord(*g);
-    gCord.SetColorizeImages(true);
-    gCord.SetColor(Color::White);
+    g->PushState();
+    g->SetColorizeImages(true);
+    g->SetColor(Color::White);
 
     bool aSetClip = false;
     if (IsOnBoard() && mApp->IsFinalBossLevel())
@@ -6578,7 +6547,7 @@ void Zombie::DrawBungeeCord(Graphics* g, int theOffsetX, int theOffsetY)
 
         if (mTargetCol > aBoss->mTargetCol)
         {
-            gCord.SetClipRect(Rect(-gCord.mTransX, aClipAmount - gCord.mTransY, BOARD_WIDTH, BOARD_HEIGHT));
+            g->SetClipRect(Rect(-g->mTransX, aClipAmount - g->mTransY, BOARD_WIDTH, BOARD_HEIGHT));
             aSetClip = true;
         }
     }
@@ -6587,40 +6556,42 @@ void Zombie::DrawBungeeCord(Graphics* g, int theOffsetX, int theOffsetY)
     const bool IS_CHILLED = mChilledCounter > 0 || mIceTrapCounter > 0;
 
     if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_BURNED){
-        gCord.SetColor(Color::Black);
+        g->SetColor(Color::Black);
     }
     else if (mMindControlled) {
-        gCord.SetColor(ZOMBIE_MINDCONTROLLED_COLOR);
+        g->SetColor(ZOMBIE_MINDCONTROLLED_COLOR);
     }
     else if (IS_CHILLED) {
-        gCord.SetColor(Color(75, 75, 255));
+        g->SetColor(Color(75, 75, 255));
     }
 
     if (mJustGotShotCounter > 0)
     {   
         int aGrayness = mJustGotShotCounter * 10;
         Color aHighlightColor(aGrayness, aGrayness, aGrayness, 255);
-        gCord.mColor = ColorAdd(aHighlightColor, gCord.mColor);
+        g->mColor = ColorAdd(aHighlightColor, g->mColor);
     }
 
     for (float y = aPosY - aCordCelHeight; y > -aCordCelHeight; y -= aCordCelHeight)
     {
-        TodDrawImageScaledF(&gCord, IMAGE_BUNGEECORD, theOffsetX + 61.0f - 4.0f / mScaleZombie, y - mPosY + 1, mScaleZombie, mScaleZombie);
+        TodDrawImageScaledF(g, IMAGE_BUNGEECORD, theOffsetX + 61.0f - 4.0f / mScaleZombie, y - mPosY + 1, mScaleZombie, mScaleZombie);
     }
 
 
     if (mZombiePhase != ZombiePhase::PHASE_ZOMBIE_BURNED && (mMindControlled || IS_CHILLED || mJustGotShotCounter > 0)) {
-        gCord.SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+        g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
         for (float y = aPosY - aCordCelHeight; y > -aCordCelHeight; y -= aCordCelHeight)
         {
-            TodDrawImageScaledF(&gCord, IMAGE_BUNGEECORD, theOffsetX + 61.0f - 4.0f / mScaleZombie, y - mPosY + 1, mScaleZombie, mScaleZombie);
+            TodDrawImageScaledF(g, IMAGE_BUNGEECORD, theOffsetX + 61.0f - 4.0f / mScaleZombie, y - mPosY + 1, mScaleZombie, mScaleZombie);
         }
     }
 
-    /*if (aSetClip)
+/*if (aSetClip)
     {
         g->ClearClipRect();
     }*/
+
+    g->PopState();
 }
 
 //0x52D9E0
@@ -7069,17 +7040,18 @@ void Zombie::Draw(Graphics* g)
 
     if (mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
     {
-        Graphics theParticleGraphics(*g);
-        MakeParentGraphicsFrame(&theParticleGraphics);
-        theParticleGraphics.mTransY += aDrawPos.mBodyY;
+        g->PushState();
+        MakeParentGraphicsFrame(g);
+        g->mTransY += aDrawPos.mBodyY;
 
         if (aDrawPos.mClipHeight > CLIP_HEIGHT_LIMIT)
         {
             float aDrawHeight = 120.0f - aDrawPos.mClipHeight + 21.0f;
-            theParticleGraphics.ClipRect(mX + aDrawPos.mImageOffsetX - 400.0f, mY + aDrawPos.mImageOffsetY - 28.0f, 920, aDrawHeight);
+            g->ClipRect(mX + aDrawPos.mImageOffsetX - 400.0f, mY + aDrawPos.mImageOffsetY - 28.0f, 920, aDrawHeight);
         }
 
-        AttachmentDraw(mAttachmentID, &theParticleGraphics, false);
+        AttachmentDraw(mAttachmentID, g, false);
+        g->PopState();
     }
 
     g->ClearClipRect();

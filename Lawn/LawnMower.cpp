@@ -301,42 +301,42 @@ void LawnMower::Draw(Graphics* g)
         }
     }
 
-    Graphics aMowerGraphics(*g);
-    aMowerGraphics.mTransX += mPosX + 6.0f;
-    aMowerGraphics.mTransY += mPosY - mAltitude;
+    g->PushState();
+    g->mTransX += mPosX + 6.0f;
+    g->mTransY += mPosY - mAltitude;
     if (mMowerType == LawnMowerType::LAWNMOWER_POOL)
     {
         if (mMowerState == LawnMowerState::MOWER_TRIGGERED)
         {
-            aMowerGraphics.mTransY -= 7.0f;
-            aMowerGraphics.mTransX -= 10.0f;
+            g->mTransY -= 7.0f;
+            g->mTransX -= 10.0f;
         }
         else
         {
-            aMowerGraphics.mTransY -= 33.0f;
+            g->mTransY -= 33.0f;
         }
 
         if (mMowerHeight == MowerHeight::MOWER_HEIGHT_UP_TO_LAND || mMowerHeight == MowerHeight::MOWER_HEIGHT_DOWN_TO_POOL)
         {
-            aMowerGraphics.SetClipRect(-50, -50, 150, 132 + mAltitude);
+            g->SetClipRect(-50, -50, 150, 132 + mAltitude);
         }
     }
     else if (mMowerType == LawnMowerType::LAWNMOWER_ROOF)
     {
         if (mMowerState == LawnMowerState::MOWER_TRIGGERED)
         {
-            aMowerGraphics.mTransY -= 4.0f;
-            aMowerGraphics.mTransX -= 10.0f;
+            g->mTransY -= 4.0f;
+            g->mTransX -= 10.0f;
         }
         else
         {
-            aMowerGraphics.mTransY -= 40.0f;
+            g->mTransY -= 40.0f;
         }
     }
 
     if (mMowerState == LawnMowerState::MOWER_TRIGGERED || mMowerState == LawnMowerState::MOWER_SQUISHED)
     {
-        mApp->ReanimationGet(mReanimID)->Draw(&aMowerGraphics);
+        mApp->ReanimationGet(mReanimID)->Draw(g);
     }
     else
     {
@@ -345,8 +345,9 @@ void LawnMower::Draw(Graphics* g)
         {
             aMowerType = LawnMowerType::LAWNMOWER_SUPER_MOWER;
         }
-        mApp->mReanimatorCache->DrawCachedMower(&aMowerGraphics, 0.0f, 19.0f, aMowerType);
+        mApp->mReanimatorCache->DrawCachedMower(g, 0.0f, 19.0f, aMowerType);
     }
+    g->PopState();
 }
 
 //0x458D10

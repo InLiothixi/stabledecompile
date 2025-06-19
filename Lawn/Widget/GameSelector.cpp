@@ -722,15 +722,6 @@ void GameSelector::Draw(Graphics* g)
 		aOffsetMatrix.Translate(170.5f - (int)(aStringWidth * 0.5f) + mX, 102.5f + mY);
 		TodDrawStringMatrix(g, Sexy::FONT_BRIANNETOD16, aOverlayMatrix * aOffsetMatrix, aWelcomeStr, Color(255, 245, 200));
 	}
-
-	/*
-	Graphics gTest(*g);
-	gTest.SetColorizeImages(true);
-	gTest.SetColor(Color(0xff0000));
-	gTest.FillRect(mAchievementsButton->mX, mAchievementsButton->mY, mAchievementsButton->mWidth, mAchievementsButton->mHeight);
-	gTest.SetColor(Color(0x00ff00));
-	gTest.FillRect(mTrophyButton->mX, mTrophyButton->mY, mTrophyButton->mWidth, mTrophyButton->mHeight);
-	*/
 }
 
 //0x44AB50
@@ -888,10 +879,11 @@ void GameSelector::DrawOverlay(Graphics* g)
 		}
 		else
 		{
-			Graphics gFill(*g);
-			gFill.SetColorizeImages(true);
-			gFill.SetColor(Color::Black);
-			gFill.FillRect(Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT));
+			g->PushState();
+			g->SetColorizeImages(true);
+			g->SetColor(Color::Black);
+			g->FillRect(Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT));
+			g->PopState();
 		}
 	} 
 

@@ -89,6 +89,10 @@ namespace Sexy
         IMAGE_MONEYBAG_ID,
         IMAGE_MONEYBAG_HI_RES_ID,
         IMAGE_CHOCOLATE_ID,
+        IMAGE_SEEDPACKETUPGRADE_LARGER_ID,
+        IMAGE_SEEDPACKETIMITATER_LARGER_ID,
+        IMAGE_SEED_SELECTOR_ID,
+        IMAGE_P1_ARROW_ID,
         IMAGE_OPTIONS_BACKTOGAMEBUTTON0_ID,
         IMAGE_OPTIONS_BACKTOGAMEBUTTON2_ID,
         IMAGE_OPTIONS_CHECKBOX0_ID,
@@ -975,6 +979,10 @@ namespace Sexy
     extern Image* IMAGE_ZAMBONISMOKE;                                     //0x6A7428
     extern Image* IMAGE_SELECTORSCREEN_ZENGARDEN;                         //0x6A742C
     extern Image* IMAGE_SEEDPACKET_LARGER;                                //0x6A7430
+    extern Image* IMAGE_SEEDPACKETUPGRADE_LARGER;
+    extern Image* IMAGE_SEEDPACKETIMITATER_LARGER;
+    extern Image* IMAGE_SEED_SELECTOR;
+    extern Image* IMAGE_P1_ARROW;
     extern Image* IMAGE_STORE_FIRSTAIDWALLNUTICON;                        //0x6A7434
     extern int          SOUND_JACK_SURPRISE;                                    //0x6A7438
     extern Image* IMAGE_PHONOGRAPH;                                       //0x6A743C

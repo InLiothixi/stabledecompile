@@ -600,15 +600,7 @@ void Board::PutInMissingZombies(int theWaveNumber, ZombiePicker* theZombiePicker
 {
 	for (ZombieType aZombieType = ZombieType::ZOMBIE_NORMAL; aZombieType < ZombieType::NUM_ZOMBIE_TYPES; aZombieType = (ZombieType)((int)aZombieType + 1))
 	{
-		bool isZombieAllowedToSpawn = false;
-
-		if (!mApp->IsAdventureMode())
-			isZombieAllowedToSpawn = GetZombieDefinition(aZombieType).mPickWeight > 0;
-		else
-			isZombieAllowedToSpawn = CanZombieSpawnOnLevel(aZombieType, mLevel);
-		
-
-		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] > 0 && aZombieType != ZombieType::ZOMBIE_YETI && isZombieAllowedToSpawn)
+		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] <= 0 && aZombieType != ZombieType::ZOMBIE_YETI && CanZombieSpawnOnLevel(aZombieType, mLevel))
 		{
 			PutZombieInWave(aZombieType, theWaveNumber, theZombiePicker);
 		}
