@@ -277,7 +277,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 		if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
 		{
 			g->mClipRect.mY = y + theOffsetY + 10;
-			y -= 180;
+			y -= 180 + 180 * ((g->mScaleY - 0.3f) * 3.33f);
 		}
 		if (theSeedType == SeedType::SEED_ZOMBIE_POLEVAULTER)
 		{
@@ -547,8 +547,8 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		aOffsetX = 52.0f;
 		aOffsetY = 58.0f;
 	}
-	aOffsetX = g->mScaleX * aOffsetX;
-	aOffsetY = g->mScaleY * (aOffsetY + 1.0f);
+	aOffsetX = g->mScaleX * aOffsetX - aOffsetX * (g->mScaleX-1);
+	aOffsetY = g->mScaleY * (aOffsetY + 1.0f) - (aOffsetY + 1.0f) * (g->mScaleY-1);
 	if (aDrawSeedInMiddle)
 	{
 		SeedPacketDrawSeed(g, x, y, theSeedType, theImitaterType, aOffsetX, aOffsetY, aScale);
@@ -693,49 +693,52 @@ void SeedPacket::Draw(Graphics* g)
 
 		DrawSeedPacket(g, mOffsetX, 0.0f, mPacketType, mImitaterType, aPercentDark, aGrayness, false, true);
 		
-		SeedType aSeedType = mPacketType;
-		if (aSeedType == SeedType::SEED_IMITATER && mImitaterType != SeedType::SEED_NONE)
+		if (aDrawCost)
 		{
-			aSeedType = mImitaterType;
-		}
-		if (aGrayness != 255)
-		{
-			g->SetColor(Color(aGrayness, aGrayness, aGrayness));
-			g->SetColorizeImages(true);
-		}
-		else if (aPercentDark > 0)
-		{
-			g->SetColor(Color(128, 128, 128, 255));
-			g->SetColorizeImages(true);
-		}
-
-		SexyString aCostStr;
-		if (gLawnApp->mBoard && gLawnApp->mBoard->PlantUsesAcceleratedPricing(aSeedType) && !gLawnApp->GetDialog(Dialogs::DIALOG_ALMANAC))
-		{
-			aCostStr = StrFormat(_S("%d"), gLawnApp->mBoard->GetCurrentPlantCost(mPacketType, mImitaterType));
-		}
-		else
-		{
-			aCostStr = StrFormat(_S("%d"), Plant::GetCost(mPacketType, mImitaterType));
-		}
-
-		Font* aTextFont = Sexy::FONT_PICO129;
-		int aTextOffsetX = 32 - aTextFont->StringWidth(aCostStr);
-		int aTextOffsetY = aTextFont->GetAscent() + 54;
-		if (g->mScaleX == 1.0f && g->mScaleY == 1.0f)
-		{
-			TodDrawString(g, aCostStr, mOffsetX + aTextOffsetX, aTextOffsetY, aTextFont, Color::Black, DS_ALIGN_LEFT);
-		}
-		else
-		{
-			SexyMatrix3 aMatrix;
-			TodScaleTransformMatrix(aMatrix, g->mTransX + aTextOffsetX * g->mScaleX + mOffsetX, g->mTransY + aTextOffsetY * g->mScaleY, g->mScaleX, g->mScaleY);
-			//if (g->mScaleX > 1.8f)
+			SeedType aSeedType = mPacketType;
+			if (aSeedType == SeedType::SEED_IMITATER && mImitaterType != SeedType::SEED_NONE)
 			{
-				g->SetLinearBlend(false);
+				aSeedType = mImitaterType;
 			}
-			TodDrawStringMatrix(g, aTextFont, aMatrix, aCostStr, Color::Black);
-			g->SetLinearBlend(true);
+			if (aGrayness != 255)
+			{
+				g->SetColor(Color(aGrayness, aGrayness, aGrayness));
+				g->SetColorizeImages(true);
+			}
+			else if (aPercentDark > 0)
+			{
+				g->SetColor(Color(128, 128, 128, 255));
+				g->SetColorizeImages(true);
+			}
+
+			SexyString aCostStr;
+			if (gLawnApp->mBoard && gLawnApp->mBoard->PlantUsesAcceleratedPricing(aSeedType) && !gLawnApp->GetDialog(Dialogs::DIALOG_ALMANAC))
+			{
+				aCostStr = StrFormat(_S("%d"), gLawnApp->mBoard->GetCurrentPlantCost(mPacketType, mImitaterType));
+			}
+			else
+			{
+				aCostStr = StrFormat(_S("%d"), Plant::GetCost(mPacketType, mImitaterType));
+			}
+
+			Font* aTextFont = Sexy::FONT_PICO129;
+			int aTextOffsetX = 32 - aTextFont->StringWidth(aCostStr);
+			int aTextOffsetY = aTextFont->GetAscent() + 54;
+			if (g->mScaleX == 1.0f && g->mScaleY == 1.0f)
+			{
+				TodDrawString(g, aCostStr, mOffsetX + aTextOffsetX, aTextOffsetY, aTextFont, Color::Black, DS_ALIGN_LEFT);
+			}
+			else
+			{
+				SexyMatrix3 aMatrix;
+				TodScaleTransformMatrix(aMatrix, g->mTransX + aTextOffsetX * g->mScaleX + mOffsetX, g->mTransY + aTextOffsetY * g->mScaleY, g->mScaleX, g->mScaleY);
+				//if (g->mScaleX > 1.8f)
+				{
+					g->SetLinearBlend(false);
+				}
+				TodDrawStringMatrix(g, aTextFont, aMatrix, aCostStr, Color::Black);
+				g->SetLinearBlend(true);
+			}
 		}
 		
 		g->PopState();
@@ -945,6 +948,7 @@ void SeedPacket::WasPlanted()
 	if (mBoard->HasConveyorBeltSeedBank())
 	{
 		mBoard->mSeedBank->RemoveSeed(mIndex);
+		mBoard->mSeedBank->mSeedPackets[mIndex].mSelectionCounter = -1;
 	}
 	else if (mApp->IsSlotMachineLevel())
 	{
