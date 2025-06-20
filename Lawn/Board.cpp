@@ -2080,9 +2080,10 @@ void Board::FadeOutLevel()
 		TOD_ASSERT(mApp->IsLastStand());
 		mNextSurvivalStageCounter = 500;
 		mApp->PlaySample(Sexy::SOUND_HUGE_WAVE);
+		mApp->mMusic->FadeOut(500);
 		SexyString aFlagStr = mApp->Pluralize(GetSurvivalFlagsCompleted(), _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
 		SexyString aMsg = TodReplaceString(_S("[SUCCESSFULLY_DEFENDED]"), _S("{FLAGS}"), aFlagStr);
-		DisplayAdvice(aMsg, MESSAGE_STYLE_BIG_MIDDLE_FAST, ADVICE_NONE);
+		DisplayAdvice(aMsg, MessageStyle::MESSAGE_STYLE_BIG_MIDDLE_FAST, AdviceType::ADVICE_NONE);
 		for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
 		{
 			mIceTimer[aRow] = mNextSurvivalStageCounter;

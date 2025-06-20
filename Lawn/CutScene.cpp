@@ -719,7 +719,7 @@ bool CutScene::IsNonScrollingCutscene()
 //0x43A7B0
 bool CutScene::IsScrolledLeftAtStart()
 {
-	if (mBoard->mChallenge->mSurvivalStage > 0 && (mApp->IsSurvivalMode() || mApp->IsLastStand()))
+	if (mBoard->mChallenge->mSurvivalStage > 0 && (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode)))
 		return false;  // 非首轮的生存模式的过场，屏幕滚动从屏幕中央开始
 
 	return !IsNonScrollingCutscene();
@@ -810,7 +810,7 @@ void CutScene::StartLevelIntro()
 		mApp->IsSquirrelLevel() ||
 		mApp->IsWallnutBowlingLevel() ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
-		mApp->IsLastStand() ||
+		mApp->IsLastStand() && !mApp->IsLastStandEndless(mApp->mGameMode) && mApp->mBoard->mChallenge->mSurvivalStage == 0 ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
@@ -1669,7 +1669,7 @@ void CutScene::UpdateZombiesWon()
 	// 过场结束，游戏失败
 	if (mCutsceneTime == LostTimeEnd)
 	{
-		if (mApp->IsSurvivalMode())
+		if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode))
 		{
 			int aFlagsCompleted = mBoard->GetSurvivalFlagsCompleted();
 			SexyString aFlagsStr = mApp->Pluralize(aFlagsCompleted, _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
