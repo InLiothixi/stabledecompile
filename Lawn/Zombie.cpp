@@ -3669,21 +3669,10 @@ void Zombie::DropPole()
 
     //ReanimShowPrefix("Zombie_polevaulter_innerarm", RENDER_GROUP_HIDDEN);
     //ReanimShowPrefix("Zombie_polevaulter_innerhand", RENDER_GROUP_HIDDEN);
-    //ReanimShowPrefix("Zombie_polevaulter_pole", RENDER_GROUP_HIDDEN);
+    ReanimShowPrefix("Zombie_polevaulter_pole", RENDER_GROUP_HIDDEN);
 
     mZombiePhase = ZombiePhase::PHASE_POLEVAULTER_POST_VAULT;
     mZombieAttackRect = Rect(50, 0, 20, 115);
-    
-    if (!IsDeadOrDying()) {
-        if (mIsEating)
-        {
-            PlayZombieReanim("anim_eat", ReanimLoopType::REANIM_LOOP, 20, 0.0f);
-        }
-        else
-        {
-            StartWalkAnim(0);
-        }
-    }
 }
 
 bool Zombie::CanLoseBodyParts()
@@ -3775,12 +3764,6 @@ void Zombie::DropHead(unsigned int theDamageFlags)
         ReanimShowPrefix("anim_hat", RENDER_GROUP_HIDDEN);
         ReanimShowPrefix("hat", RENDER_GROUP_HIDDEN);
         aEffect = ParticleEffect::PARTICLE_ZOMBIE_BALLOON_HEAD;
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER)
-    {
-        if (mZombiePhase != PHASE_POLEVAULTER_POST_VAULT)
-            DropZombiePole();
-        DropPole();
     }
     else if (mZombieType == ZombieType::ZOMBIE_FLAG)
     {
@@ -9912,6 +9895,11 @@ void Zombie::MowDown()
             DropArm(0U);
             DropHelm(0U);
             DropShield(0U);
+
+            if (mZombieType == ZombieType::ZOMBIE_DIGGER)
+            {
+                DropDiggerAxe();
+            }
         }
 
         DieWithLoot();
@@ -9946,12 +9934,14 @@ void Zombie::MowDown()
     }
     else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
     {
+        DropHead(0U);
         DropJackInTheBox();
     }
-    else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
+    else if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
     {
-        DiggerLoseAxe();
-        DropDiggerAxe();
+        DropHead(0U);
+        DropPole();
+        DropZombiePole();
     }
 
     Reanimation* aMoweredReanim = mApp->AddReanimation(0.0f, 0.0f, mRenderOrder, ReanimationType::REANIM_LAWN_MOWERED_ZOMBIE);
@@ -10169,9 +10159,8 @@ void Zombie::ApplyBurn()
 
         if (mZombieType == ZOMBIE_POLEVAULTER)
         {
-            if (mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT || mZombiePhase == PHASE_POLEVAULTER_IN_VAULT)
+            if (mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
                 DropZombiePole();
-            DropPole(); 
         }
         if (mZombieType == ZOMBIE_BALLOON) {
             DropBalloonPropeller();
@@ -10340,6 +10329,12 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
     {
         DieNoLoot();
         return;
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
+    {
+        DropPole();
+        DropZombiePole();
     }
 
     if (mIceTrapCounter > 0)
@@ -12324,7 +12319,6 @@ void Zombie::DropZombiePole()
     if (mBodyReanimID != ReanimationID::REANIMATIONID_NULL)
     {
         GetTrackPosition("Zombie_polevaulter_pole", aPosX, aPosY);
-        aPosY -= 40;
     }
 
     TodParticleSystem* aParticle = mApp->AddTodParticle(aPosX, aPosY, aRenderOrder, PARTICLE_ZOMBIE_HEAD);
@@ -12465,8 +12459,6 @@ void Zombie::DropPropeller(unsigned int theDamageFlags)
 
 void Zombie::DropJackInTheBox()
 {
-    if (!mHasObject) return;
-
     StopZombieSound();
     PickRandomSpeed();
     //mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;

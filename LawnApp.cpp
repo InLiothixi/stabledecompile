@@ -262,8 +262,11 @@ LawnApp::~LawnApp()
 	delete mProfileMgr;
 	delete mLastLevelStats;
 
-	delete mBoardCamera;
-	mBoardCamera = NULL;
+	if (mBoardCamera)
+	{
+		delete mBoardCamera;
+		mBoardCamera = NULL;
+	}
 
 	mDebugTexts.clear();
 
