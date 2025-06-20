@@ -93,6 +93,8 @@ Board::Board(LawnApp* theApp)
 	mCameraTranform.LoadIdentity();
 	mCameraClipRect = LawnApp::gBoardBounds;
 	mCameraColor = Color::White;
+	mCameraFilter = FilterEffect::FILTER_EFFECT_NONE;
+	mDrawOnlyCamera = true;
 	mPaused = false;
 	mLevelAwardSpawned = false;
 	mFlagRaiseCounter = 0;
@@ -2583,6 +2585,8 @@ bool Board::CanZombieSpawnOnLevel(ZombieType theZombieType, int theLevel)
 	{
 		return false;
 	}
+
+	if (!gLawnApp->IsAdventureMode())	return true;
 
 	TOD_ASSERT(gZombieAllowedLevels[theZombieType].mZombieType == theZombieType);
 	return gZombieAllowedLevels[theZombieType].mAllowedOnLevel[ClampInt(abs(theLevel) - 1, 0, 49)];
@@ -8652,12 +8656,16 @@ void Board::Draw(Graphics* g)
 	mDrawCount++;
 	DrawGameObjects(g);
 
+	mCameraClipRect.mWidth = 400;
+	mCameraFilter = FilterEffect::FILTER_EFFECT_WASHED_OUT;
+	mCameraColor = Color(255, 64, 64);
+
 	if (mCameraTranform.m01 != 0 || mCameraTranform.m02 != 0 || mCameraTranform.m10 != 0 || mCameraTranform.m12 != 0 || mCameraTranform.m20 != 0 || mCameraTranform.m21 != 0 ||
-		mCameraTranform.m00 != 1 || mCameraTranform.m11 != 1 || mCameraTranform.m22 != 1 || mCameraColor != Color::White || !(mCameraClipRect == LawnApp::gBoardBounds)) // if no transform then do not render camera
+		mCameraTranform.m00 != 1 || mCameraTranform.m11 != 1 || mCameraTranform.m22 != 1 || mCameraColor != Color::White || !(mCameraClipRect == LawnApp::gBoardBounds) || mCameraFilter != FilterEffect::FILTER_EFFECT_NONE) // if no transform then do not render camera
 	{
 		SexyTransform2D aTransform;
 		TodScaleRotateTransformMatrix(aTransform, mCameraTranform.m02 + 400, mCameraTranform.m12 + 300, 0, mCameraTranform.m00, mCameraTranform.m11);
-		mApp->DrawBoardCamera(g, aTransform, mCameraColor, Graphics::DRAWMODE_NORMAL, mCameraClipRect);
+		mApp->DrawBoardCamera(g, aTransform, mCameraColor, Graphics::DRAWMODE_NORMAL, mCameraClipRect, mCameraFilter, mDrawOnlyCamera);
 	}
 }
 

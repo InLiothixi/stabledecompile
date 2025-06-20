@@ -9,6 +9,7 @@
 #include <lua.hpp>
 #include "SexyAppFramework/DDImage.h"
 #include "SexyAppFramework/SexyMatrix.h"
+#include "Sexy.TodLib/FilterEffect.h"
 
 #include "SexyAppFramework/Common.h"
 
@@ -353,7 +354,7 @@ public:
 	static int						ChangeBackgroundL(lua_State* L);
 	static int						ChangeMusicL(lua_State* L);
 	
-	void							DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect);
+	void							DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera);
 };
 
 SexyString							LawnGetCurrentLevelName();

@@ -128,6 +128,8 @@ public:
 	SexyTransform2D					mCameraTranform;
 	Color							mCameraColor;
 	Rect							mCameraClipRect;
+	FilterEffect					mCameraFilter;
+	bool							mDrawOnlyCamera;
 	bool							mPaused;												//+0x164
 	GridSquareType					mGridSquareType[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];		//+0x168
 	int								mGridCelLook[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];			//+0x240

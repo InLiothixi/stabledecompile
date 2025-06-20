@@ -3978,7 +3978,7 @@ bool LawnApp::IsLastStandEndless(GameMode theGameMode)
 	return aLevel >= 0 && aLevel <= 4;
 }
 
-void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect) {
+void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera) {
 	LPDIRECTDRAWSURFACE aSurface = mDDInterface->mDrawSurface;
 	mDDInterface->mDrawSurface = NULL;
 	DDImage anImage(mDDInterface);
@@ -3988,16 +3988,25 @@ void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color t
 	Graphics gGameCam(mBoardCamera);
 	gGameCam.SetFastStretch(true);
 	gGameCam.SetLinearBlend(false);
-	gGameCam.SetClipRect(theClipRect);
 	gGameCam.DrawImage(&anImage, 0, 0);
-	mBoardCamera->BitsChanged();
+
 	anImage.PurgeBits();
+	anImage.DeleteDDSurface();
 	mDDInterface->mDrawSurface = aSurface;
 
-	g->PushState();
-	g->SetColor(Color::Black);
-	g->FillRect(theClipRect);
-	g->PopState();
+	Image* theImage = mBoardCamera;
 
-	TodBltMatrix(g, mBoardCamera, theTransform, theClipRect, theColor, theDrawMode, theClipRect);
+	if (theFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
+		theImage = FilterEffectGetImage(mBoardCamera, theFilterEffect);
+	}
+
+	if (drawOnlyCamera)
+	{
+		g->PushState();
+		g->SetColor(Color::Black);
+		g->FillRect(gBoardBounds);
+		g->PopState();
+	}
+
+	TodBltMatrix(g, mBoardCamera, theTransform, theClipRect, theColor, theDrawMode, gBoardBounds);
 }
