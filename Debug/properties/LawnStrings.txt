@@ -2304,8 +2304,14 @@ Earn 1 more I, Zombie trophy to unlock
 [ONE_MORE_SURVIVAL_TOOLTIP]
 Earn 1 more survival trophy to unlock
 
+[ONE_MORE_LAST_STAND_TOOLTIP]
+Earn 1 more last stand trophy to unlock
+
 [10_SURVIVAL_TOOLTIP]
 Earn 10 survival trophies to unlock
+
+[10_LAST_STAND_TOOLTIP]
+Earn 10 last stand trophies to unlock
 
 [FINISH_ADVENTURE_TOOLTIP]
 Finish adventure mode to unlock
@@ -3202,6 +3208,18 @@ Replay level?
 Do you wish to replay level 3-4?
 
 [LIMBO_PAGE]
+Limbo Page
+
+[CHALLENGE_PAGE]
+Minigames Page
+
+[PUZZLE_PAGE]
+Puzzle Page
+
+[SURVIVAL_PAGE]
+Survival Page
+
+[LIMBO]
 Limbo
 
 [LAST_STAND_PAGE]
@@ -3536,6 +3554,21 @@ Heavy Weapon
 
 [ZOMBIE_TRAP]
 Zombie Trap
+
+[LAST_STAND_DAY]
+Last Stand: Day
+
+[LAST_STAND_NIGHT]
+Last Stand: Night
+
+[LAST_STAND_POOL]
+Last Stand: Pool
+
+[LAST_STAND_FOG]
+Last Stand: Fog
+
+[LAST_STAND_ROOF]
+Last Stand: Roof
 
 [LAST_STAND_DAY_ENDLESS]
 Last Stand: Day (Endless)

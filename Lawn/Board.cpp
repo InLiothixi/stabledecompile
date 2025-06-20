@@ -606,7 +606,8 @@ void Board::PutInMissingZombies(int theWaveNumber, ZombiePicker* theZombiePicker
 {
 	for (ZombieType aZombieType = ZombieType::ZOMBIE_NORMAL; aZombieType < ZombieType::NUM_ZOMBIE_TYPES; aZombieType = (ZombieType)((int)aZombieType + 1))
 	{
-		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] <= 0 && aZombieType != ZombieType::ZOMBIE_YETI && CanZombieSpawnOnLevel(aZombieType, mLevel))
+		if (theZombiePicker->mZombieTypeCount[(int)aZombieType] <= 0 && aZombieType != ZombieType::ZOMBIE_YETI && 
+			(CanZombieSpawnOnLevel(aZombieType, mLevel) || !mApp->IsAdventureMode() && mZombieAllowed[(int)aZombieType]))
 		{
 			PutZombieInWave(aZombieType, theWaveNumber, theZombiePicker);
 		}
@@ -675,6 +676,9 @@ void Board::PickZombieWaves()
 
 		bool aIsFlagWave = IsFlagWave(aWave);
 		bool aIsFinalWave = aWave == mNumWaves - 1;
+
+		if (mApp->IsLastStand() && !mApp->IsLastStandEndless(mApp->mGameMode) && mChallenge->mSurvivalStage != LAST_STAND_FLAGS - 1)
+			aIsFinalWave = false;
 
 		if (mApp->IsBungeeBlitzLevel() && aIsFlagWave)
 		{
@@ -791,7 +795,7 @@ void Board::PickZombieWaves()
 			PutZombieInWave(ZombieType::ZOMBIE_GARGANTUAR, aWave, &aZombiePicker);
 		}
 		// 冒险模式关卡的最后一波会出现本关卡可能出现的所有僵尸
-		if (/*mApp->IsAdventureMode()*/ /*!mApp->IsSurvivalMode() && mApp->IsLastStandEndless(mApp->mGameMode) &&*/ aIsFinalWave)
+		if (/*mApp->IsAdventureMode()*/ !mApp->IsSurvivalEndless(mApp->mGameMode) && !mApp->IsLastStandEndless(mApp->mGameMode) && aIsFinalWave)
 		{
 			PutInMissingZombies(aWave, &aZombiePicker);
 		}
@@ -995,6 +999,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_ICE:
 	case GameMode::GAMEMODE_CHALLENGE_SHOVEL:
 	case GameMode::GAMEMODE_CHALLENGE_SQUIRREL:
+	case GameMode::GAMEMODE_LAST_STAND_STAGE_1:
 	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_1:
 		mBackground = BackgroundType::BACKGROUND_1_DAY;
 		break;
@@ -1028,6 +1033,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_9:
 	case GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS:
 	case GameMode::GAMEMODE_CHALLENGE_VASEBREAKER:
+	case GameMode::GAMEMODE_LAST_STAND_STAGE_2:
 	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_2:
 		mBackground = BackgroundType::BACKGROUND_2_NIGHT;
 		break;
@@ -1044,6 +1050,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_INTRO:
 	case GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE:
 	case GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN:
+	case GameMode::GAMEMODE_LAST_STAND_STAGE_3:
 	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_3:
 		mBackground = BackgroundType::BACKGROUND_3_POOL;
 		break;
@@ -1056,6 +1063,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL:
 	case GameMode::GAMEMODE_CHALLENGE_AIR_RAID:
 	case GameMode::GAMEMODE_CHALLENGE_STORMY_NIGHT:
+	case GameMode::GAMEMODE_LAST_STAND_STAGE_4:
 	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_4:
 		mBackground = BackgroundType::BACKGROUND_4_FOG;
 		break;
@@ -1067,6 +1075,7 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_POGO_PARTY:
 	case GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY:
 	case GameMode::GAMEMODE_CHALLENGE_BUNGEE_BLITZ:
+	case GameMode::GAMEMODE_LAST_STAND_STAGE_5:
 	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5:
 		mBackground = BackgroundType::BACKGROUND_5_ROOF;
 		break;
@@ -1497,6 +1506,14 @@ void Board::InitLevel()
 	{
 		mSunMoney = 0;
 	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_1 || mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_2)
+	{
+		mSunMoney = 3000;
+	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_3 || mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_4)
+	{
+		mSunMoney = 4000;
+	}
 	else if (mApp->IsLastStand())
 	{
 		mSunMoney = 5000;
@@ -1667,6 +1684,66 @@ void Board::InitLevel()
 		mSeedBank->mSeedPackets[1].SetPacketType(SeedType::SEED_GRAVEBUSTER);
 		mSeedBank->mSeedPackets[2].SetPacketType(mApp->IsAdventureMode() ? SeedType::SEED_CHERRYBOMB : SeedType::SEED_ICESHROOM);
 	}
+	else if (aGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_1)
+	{
+		TOD_ASSERT(mSeedBank->mNumPackets == 8);
+		mSeedBank->mSeedPackets[0].SetPacketType(SeedType::SEED_SNOWPEA);
+		mSeedBank->mSeedPackets[1].SetPacketType(SeedType::SEED_REPEATER);
+		mSeedBank->mSeedPackets[2].SetPacketType(SeedType::SEED_WALLNUT);
+		mSeedBank->mSeedPackets[3].SetPacketType(SeedType::SEED_CHOMPER);
+		mSeedBank->mSeedPackets[4].SetPacketType(SeedType::SEED_TORCHWOOD);
+		mSeedBank->mSeedPackets[5].SetPacketType(SeedType::SEED_SPIKEWEED);
+		mSeedBank->mSeedPackets[6].SetPacketType(SeedType::SEED_POTATOMINE);
+		mSeedBank->mSeedPackets[7].SetPacketType(SeedType::SEED_CHERRYBOMB);
+	}
+	else if (aGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_2)
+	{
+		TOD_ASSERT(mSeedBank->mNumPackets == 8);
+		mSeedBank->mSeedPackets[0].SetPacketType(SeedType::SEED_FUMESHROOM);
+		mSeedBank->mSeedPackets[1].SetPacketType(SeedType::SEED_GLOOMSHROOM);
+		mSeedBank->mSeedPackets[2].SetPacketType(SeedType::SEED_SCAREDYSHROOM);
+		mSeedBank->mSeedPackets[3].SetPacketType(SeedType::SEED_GRAVEBUSTER);
+		mSeedBank->mSeedPackets[4].SetPacketType(SeedType::SEED_PUMPKINSHELL);
+		mSeedBank->mSeedPackets[5].SetPacketType(SeedType::SEED_ICESHROOM);
+		mSeedBank->mSeedPackets[6].SetPacketType(SeedType::SEED_DOOMSHROOM);
+		mSeedBank->mSeedPackets[7].SetPacketType(SeedType::SEED_HYPNOSHROOM);
+	}
+	else if (aGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_3)
+	{
+		TOD_ASSERT(mSeedBank->mNumPackets == 8);
+		mSeedBank->mSeedPackets[0].SetPacketType(SeedType::SEED_LILYPAD);
+		mSeedBank->mSeedPackets[1].SetPacketType(SeedType::SEED_REPEATER);
+		mSeedBank->mSeedPackets[2].SetPacketType(SeedType::SEED_THREEPEATER);
+		mSeedBank->mSeedPackets[3].SetPacketType(SeedType::SEED_GATLINGPEA);
+		mSeedBank->mSeedPackets[4].SetPacketType(SeedType::SEED_TORCHWOOD);
+		mSeedBank->mSeedPackets[5].SetPacketType(SeedType::SEED_GARLIC);
+		mSeedBank->mSeedPackets[6].SetPacketType(SeedType::SEED_TALLNUT);
+		mSeedBank->mSeedPackets[7].SetPacketType(SeedType::SEED_SQUASH);
+	}
+	else if (aGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_4)
+	{
+		TOD_ASSERT(mSeedBank->mNumPackets == 8);
+		mSeedBank->mSeedPackets[0].SetPacketType(SeedType::SEED_LILYPAD);
+		mSeedBank->mSeedPackets[1].SetPacketType(SeedType::SEED_STARFRUIT);
+		mSeedBank->mSeedPackets[2].SetPacketType(SeedType::SEED_CACTUS);
+		mSeedBank->mSeedPackets[3].SetPacketType(SeedType::SEED_SNOWPEA);
+		mSeedBank->mSeedPackets[4].SetPacketType(SeedType::SEED_MAGNETSHROOM);
+		mSeedBank->mSeedPackets[5].SetPacketType(SeedType::SEED_PUMPKINSHELL);
+		mSeedBank->mSeedPackets[6].SetPacketType(SeedType::SEED_PLANTERN);
+		mSeedBank->mSeedPackets[7].SetPacketType(SeedType::SEED_CHERRYBOMB);
+	}
+	else if (aGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_5)
+	{
+		TOD_ASSERT(mSeedBank->mNumPackets == 8);
+		mSeedBank->mSeedPackets[0].SetPacketType(SeedType::SEED_FLOWERPOT);
+		mSeedBank->mSeedPackets[1].SetPacketType(SeedType::SEED_KERNELPULT);
+		mSeedBank->mSeedPackets[2].SetPacketType(SeedType::SEED_MELONPULT);
+		mSeedBank->mSeedPackets[3].SetPacketType(SeedType::SEED_WINTERMELON);
+		mSeedBank->mSeedPackets[4].SetPacketType(SeedType::SEED_CHOMPER);
+		mSeedBank->mSeedPackets[5].SetPacketType(SeedType::SEED_UMBRELLA);
+		mSeedBank->mSeedPackets[6].SetPacketType(SeedType::SEED_TALLNUT);
+		mSeedBank->mSeedPackets[7].SetPacketType(SeedType::SEED_JALAPENO);
+	}
 	else if (!ChooseSeedsOnCurrentLevel() && !HasConveyorBeltSeedBank())
 	{
 		mSeedBank->mNumPackets = GetNumSeedsInBank();
@@ -1794,6 +1871,9 @@ bool Board::ChooseSeedsOnCurrentLevel()
 		return false;
 
 	if (mApp->IsIZombieLevel() || mApp->IsSlotMachineLevel())
+		return false;
+
+	if (mApp->mGameMode >= GameMode::GAMEMODE_LAST_STAND_STAGE_1 && mApp->mGameMode <= GameMode::GAMEMODE_LAST_STAND_STAGE_5)
 		return false;
 
 	return (!mApp->IsFirstTimeAdventureMode() || mLevel > 7);
@@ -2587,8 +2667,6 @@ bool Board::CanZombieSpawnOnLevel(ZombieType theZombieType, int theLevel)
 		return false;
 	}
 
-	if (!gLawnApp->IsAdventureMode())	return true;
-
 	TOD_ASSERT(gZombieAllowedLevels[theZombieType].mZombieType == theZombieType);
 	return gZombieAllowedLevels[theZombieType].mAllowedOnLevel[ClampInt(abs(theLevel) - 1, 0, 49)];
 }
@@ -2658,7 +2736,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ================================================================================================
 		GameMode aGameMode = mApp->mGameMode;
 		// 蹦极僵尸在无尽模式中仅在旗帜波出现
-		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(aGameMode)))
+		if (aZombieType == ZombieType::ZOMBIE_BUNGEE && (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStand()))
 		{
 			if (!IsFlagWave(theWaveIndex))
 			{
@@ -2670,7 +2748,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		{
 			int aFirstAllowedWave = aZombieDef.mFirstAllowedWave;
 			// 无尽模式中，僵尸最早可出现的波数逐渐前移
-			if (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStandEndless(mApp->mGameMode))
+			if (mApp->IsSurvivalEndless(aGameMode) || mApp->IsLastStand())
 			{
 				int aFlags = GetSurvivalFlagsCompleted();
 				if (mApp->IsLastStand())
@@ -2688,7 +2766,7 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 		// ▲ 生存模式中，根据当前旗帜数等重新计算僵尸的权重
 		// ================================================================================================
 		int aPickWeight = aZombieDef.mPickWeight;
-		if (mApp->IsSurvivalMode() || mApp->IsLastStandEndless(mApp->mGameMode))
+		if (mApp->IsSurvivalMode() || mApp->IsLastStand())
 		{
 			int aFlags = GetSurvivalFlagsCompleted();
 			if (mApp->IsLastStand())
@@ -7750,6 +7828,10 @@ void Board::DrawDebugText(Graphics* g)
 		mApp->mDebugTexts.push_back(StrFormat(_S("COLLISION DEBUG")));
 		break;
 
+	case DebugTextMode::DEBUG_TEXT_GRID_DEBUG:
+		mApp->mDebugTexts.push_back(StrFormat(_S("GRID DEBUG")));
+		break;
+
 	default:
 		TOD_ASSERT();
 		break;
@@ -7768,9 +7850,8 @@ void Board::DrawDebugText(Graphics* g)
 //0x419AE0
 void Board::DrawDebugObjectRects(Graphics* g)
 {
-	if (mDebugTextMode != DebugTextMode::DEBUG_TEXT_COLLISION)
-		return;
-
+	g->PushState();
+	if (mDebugTextMode == DebugTextMode::DEBUG_TEXT_COLLISION)
 	{
 		Plant* aPlant = nullptr;
 		while (IteratePlants(aPlant))
@@ -7793,8 +7874,6 @@ void Board::DrawDebugObjectRects(Graphics* g)
 				g->DrawRect(aSecondaryRect);
 			}
 		}
-	}
-	{
 		Zombie* aZombie = nullptr;
 		while (IterateZombies(aZombie))
 		{
@@ -7809,8 +7888,6 @@ void Board::DrawDebugObjectRects(Graphics* g)
 				g->DrawRect(aAttackRect);
 			}
 		}
-	}
-	{
 		LawnMower* aLawnMower = nullptr;
 		while (IterateLawnMowers(aLawnMower))
 		{
@@ -7818,8 +7895,6 @@ void Board::DrawDebugObjectRects(Graphics* g)
 			g->SetColor(Color(255, 0, 0));
 			g->DrawRect(aAttackRect);
 		}
-	}
-	{
 		Projectile* aProjectile = nullptr;
 		while (IterateProjectiles(aProjectile))
 		{
@@ -7828,6 +7903,40 @@ void Board::DrawDebugObjectRects(Graphics* g)
 			g->DrawRect(aDamageRect);
 		}
 	}
+	else if (mDebugTextMode == DebugTextMode::DEBUG_TEXT_GRID_DEBUG)
+	{
+		for (int x = 0; x < MAX_GRID_SIZE_X; x++)
+		{
+			for (int y = 0; y < MAX_GRID_SIZE_Y; y++)
+			{
+				if (mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_NONE || mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_DIRT) continue;
+
+				if (StageHasRoof() && x < 5) {
+					g->SetColor(Color(255, 0, 0));
+					int topLX = GridToPixelX(x, y);
+					int topLY = GridToPixelY(x, y);
+					int topRX = topLX + 80;
+
+					float skew = (topRX < 440.0f) ? (440.0f - topRX) * 0.25f : 0.0f;
+					int topRY = GridToPixelY(8, y) + static_cast<int>(skew);
+
+					int botLY = topLY + 85;
+					int botRY = topRY + 85;
+
+					g->DrawLineAA(topLX, topLY, topRX, topRY);
+					g->DrawLineAA(topRX, topRY, topRX, botRY);
+					g->DrawLineAA(topRX, botRY, topLX, botLY);
+					g->DrawLineAA(topLX, botLY, topLX, topLY);
+				}
+				else
+				{
+					g->SetColor(Color(255, 0, 0));
+					g->DrawRect(GridToPixelX(x, y), GridToPixelY(x, y), 80, StageHasRoof() || StageHas6Rows() ? 85 : 100);
+				}
+			}
+		}
+	}
+	g->PopState();
 }
 
 //0x419EB0
@@ -9170,10 +9279,10 @@ void Board::KeyChar(SexyChar theChar)
 			}
 
 			mCurrentWave = mNumWaves;
-			//if (!IsSurvivalStageWithRepick())
-			//{
+			if (!IsSurvivalStageWithRepick())
+			{
 				RemoveAllZombies();
-			//}
+			}
 			FadeOutLevel();
 		}
 		else
@@ -9243,14 +9352,10 @@ void Board::KeyChar(SexyChar theChar)
 	else if (theChar == _S('z'))
 	{
 		mDebugTextMode = (DebugTextMode)((int)mDebugTextMode + 1);
-		if (mDebugTextMode > DebugTextMode::DEBUG_TEXT_COLLISION)
+		if (mDebugTextMode > DebugTextMode::DEBUG_TEXT_GRID_DEBUG)
 		{
 			mDebugTextMode = DebugTextMode::DEBUG_TEXT_NONE;
 		}
-	}
-	else if (theChar == _S('Z'))
-	{
-		AddZombie(ZombieType::ZOMBIE_BOSS, Zombie::ZOMBIE_WAVE_DEBUG);
 	}
 
 	if (mApp->mGameScene != GameScenes::SCENE_PLAYING)
@@ -9500,7 +9605,7 @@ void Board::KeyChar(SexyChar theChar)
 	}
 	if (theChar == _S('n'))
 	{
-		//if (StageHasPool())
+		if (StageHasPool())
 		{
 			AddZombie(ZombieType::ZOMBIE_SNORKEL, Zombie::ZOMBIE_WAVE_DEBUG);
 		}
@@ -9522,18 +9627,13 @@ void Board::KeyChar(SexyChar theChar)
 	}
 	if (theChar == _S('H'))
 	{
-		AddZombie(ZombieType::ZOMBIE_BLACK_FOOTBALL, Zombie::ZOMBIE_WAVE_DEBUG);
+		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
+		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
+		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
+		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
+		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
 		return;
 	}
-	//if (theChar == _S('H')
-	//{
-	//	AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
-	//	AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
-	//	AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
-	//	AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
-	//	AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
-	//	return;
-	//}
 	if (theChar == _S('D'))
 	{
 		AddZombie(ZombieType::ZOMBIE_DIGGER, Zombie::ZOMBIE_WAVE_DEBUG);
@@ -9876,6 +9976,10 @@ int Board::GetNumSeedsInBank()
 	if (mApp->mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS)
 	{
 		return 9;
+	}
+	if (mApp->mGameMode >= GameMode::GAMEMODE_LAST_STAND_STAGE_1 && mApp->mGameMode <= GameMode::GAMEMODE_LAST_STAND_STAGE_5)
+	{
+		return 8;
 	}
 
 	int aNumSeeds = mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_PACKET_UPGRADE] + 6;

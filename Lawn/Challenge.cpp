@@ -1247,10 +1247,7 @@ void Challenge::MouseDownWhackAZombie(int theX, int theY)
 		{
 			mApp->PlayFoley(FOLEY_BONK);
 			mApp->AddTodParticle(theX - 3, theY + 9, RENDER_LAYER_ABOVE_UI, PARTICLE_POW);
-			if (aTopZombie->mAltitude == 0)
-				aTopZombie->TakeBodyDamage(aTopZombie->mBodyHealth, 0U);
-			else
-				aTopZombie->DieWithLoot();
+			aTopZombie->DieWithLoot();
 			mBoard->ClearCursor();
 		}
 	}
@@ -2849,6 +2846,61 @@ void Challenge::InitZombieWaves()
 		aList[ZOMBIE_LADDER] = true;
 		aList[ZOMBIE_DOOR] = true;
 		aList[ZOMBIE_JACK_IN_THE_BOX] = true;
+		aList[ZOMBIE_GARGANTUAR] = true;
+	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_1)
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_POLEVAULTER] = true;
+		aList[ZOMBIE_PAIL] = true;
+		aList[ZOMBIE_FOOTBALL] = true;
+	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_2)
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_POLEVAULTER] = true;
+		aList[ZOMBIE_PAIL] = true;
+		aList[ZOMBIE_NEWSPAPER] = true;
+		aList[ZOMBIE_DOOR] = true;
+		aList[ZOMBIE_FOOTBALL] = true;
+		aList[ZOMBIE_DANCER] = true;
+	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_3)
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_POLEVAULTER] = true;
+		aList[ZOMBIE_PAIL] = true;
+		aList[ZOMBIE_FOOTBALL] = true;
+		aList[ZOMBIE_SNORKEL] = true;
+		aList[ZOMBIE_DOLPHIN_RIDER] = true;
+	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_4)
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_POLEVAULTER] = true;
+		aList[ZOMBIE_PAIL] = true;
+		aList[ZOMBIE_NEWSPAPER] = true;
+		aList[ZOMBIE_DOOR] = true;
+		aList[ZOMBIE_JACK_IN_THE_BOX] = true;
+		aList[ZOMBIE_BALLOON] = true;
+		aList[ZOMBIE_DIGGER] = true;
+		aList[ZOMBIE_POGO] = true;
+	}
+	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_5)
+	{
+		aList[ZOMBIE_NORMAL] = true;
+		aList[ZOMBIE_TRAFFIC_CONE] = true;
+		aList[ZOMBIE_POLEVAULTER] = true;
+		aList[ZOMBIE_PAIL] = true;
+		aList[ZOMBIE_FOOTBALL] = true;
+		aList[ZOMBIE_POGO] = true;
+		aList[ZOMBIE_BUNGEE] = true;
+		aList[ZOMBIE_LADDER] = true;
+		aList[ZOMBIE_CATAPULT] = true;
 		aList[ZOMBIE_GARGANTUAR] = true;
 	}
 	else if (mApp->IsLastStandEndless(mApp->mGameMode))

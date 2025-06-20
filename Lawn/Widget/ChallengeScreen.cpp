@@ -99,13 +99,18 @@ ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_SURVIVAL_NORMAL_STAGE_HIGHGROUND,      1,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 0,  1,  _S("[SURVIVAL_HIGHGROUND_NORMAL]") },
 	{ GameMode::GAMEMODE_SURVIVAL_HARD_STAGE_6,					9,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 1,  0,  _S("[SURVIVAL_NIGHTROOF_HARD]") },
 	{ GameMode::GAMEMODE_SURVIVAL_HARD_STAGE_HIGHGROUND,		6,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 1,  1,  _S("[SURVIVAL_HIGHGROUND_HARD]") },
-	{ GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_6,				14,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 2,  0,  _S("[SURVIVAL_NIGHTROOF_ENDLESS]") },
-	{ GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_HIGHGROUND,     11,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 2,  1,  _S("[SURVIVAL_HIGHGROUND_ENDLESS]") },
-	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_1,             10,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,	   2,  0,  _S("[LAST_STAND_DAY_ENDLESS]") },
-	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_2,             11,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,    2,  1,  _S("[LAST_STAND_NIGHT_ENDLESS]") },
-	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_3,             12,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,    2,  2,  _S("[LAST_STAND_POOL_ENDLESS]") },
-	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_4,             13,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,    2,  3,  _S("[LAST_STAND_FOG_ENDLESS]") },
-	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5,             14,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,    2,  4,  _S("[LAST_STAND_ROOF_ENDLESS]") }
+	{ GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_6,			   14,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 2,  0,  _S("[SURVIVAL_NIGHTROOF_ENDLESS]") },
+	{ GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_HIGHGROUND,    11,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 2,  1,  _S("[SURVIVAL_HIGHGROUND_ENDLESS]") },
+	{ GameMode::GAMEMODE_LAST_STAND_STAGE_1,                   10,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,	0,  0,  _S("[LAST_STAND_DAY]") },
+	{ GameMode::GAMEMODE_LAST_STAND_STAGE_2,                   11,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   0,  1,  _S("[LAST_STAND_NIGHT]") },
+	{ GameMode::GAMEMODE_LAST_STAND_STAGE_3,                   12,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   0,  2,  _S("[LAST_STAND_POOL]") },
+	{ GameMode::GAMEMODE_LAST_STAND_STAGE_4,                   13,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   0,  3,  _S("[LAST_STAND_FOG]") },
+	{ GameMode::GAMEMODE_LAST_STAND_STAGE_5,                   14,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   0,  4,  _S("[LAST_STAND_ROOF]") },
+	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_1,           10,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,	1,  0,  _S("[LAST_STAND_DAY_ENDLESS]") },
+	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_2,           11,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  1,  _S("[LAST_STAND_NIGHT_ENDLESS]") },
+	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_3,           12,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  2,  _S("[LAST_STAND_POOL_ENDLESS]") },
+	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_4,           13,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  3,  _S("[LAST_STAND_FOG_ENDLESS]") },
+	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5,           14,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  4,  _S("[LAST_STAND_ROOF_ENDLESS]") }
 };
 
 //0x42DAE0
@@ -136,11 +141,13 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 		aPageButton->mDoFinger = true;
 		mPageButton[aPageIdx] = aPageButton;
 		if (aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE)
-			aPageButton->mLabel = TodStringTranslate(_S("Challenge Page"));
+			aPageButton->mLabel = TodStringTranslate(_S("[CHALLENGE_PAGE]"));
 		else if (aPageIdx == CHALLENGE_PAGE_SURVIVAL)
-			aPageButton->mLabel = TodStringTranslate(_S("Survial Page"));
+			aPageButton->mLabel = TodStringTranslate(_S("[SURVIVAL_PAGE]"));
+		else if (aPageIdx == CHALLENGE_PAGE_PUZZLE)
+			aPageButton->mLabel = TodStringTranslate(_S("[PUZZLE_PAGE]"));
 		else if (aPageIdx == CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == CHALLENGE_PAGE_LIMBO_SURVIVAL)
-			aPageButton->mLabel = TodStringTranslate(_S("Limbo Page"));
+			aPageButton->mLabel = TodStringTranslate(_S("[LIMBO_PAGE]"));
 		else if (aPageIdx == CHALLENGE_PAGE_LAST_STAND)
 			aPageButton->mLabel = TodStringTranslate(_S("[LAST_STAND_PAGE]"));
 		else
@@ -155,8 +162,8 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 		int pageOffset = 0;
 		if (thePage == ChallengePage::CHALLENGE_PAGE_CHALLENGE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE))
 			pageOffset += 2;
-		if (thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND))
-			pageOffset += 3;
+		if (thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE))
+			pageOffset += 4;
 		aPageButton->Resize(200 + 100 * (aPageIdx - pageOffset), 540, 100, 75);
 
 		//if (!ShowPageButtons() || aPageIdx == CHALLENGE_PAGE_SURVIVAL || aPageIdx == CHALLENGE_PAGE_PUZZLE)
@@ -165,7 +172,8 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 
 		if (mApp->HasFinishedAdventure() && 
 			(thePage == ChallengePage::CHALLENGE_PAGE_CHALLENGE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE) ||
-			thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL || aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || aPageIdx == ChallengePage::CHALLENGE_PAGE_SURVIVAL)))
+			thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL || aPageIdx == ChallengePage::CHALLENGE_PAGE_SURVIVAL) ||
+			thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || aPageIdx == ChallengePage::CHALLENGE_PAGE_PUZZLE)))
 			aPageButton->mVisible = true;
 	}
 	
@@ -358,14 +366,14 @@ int ChallengeScreen::MoreTrophiesNeeded(int theChallengeIndex)
 	else
 	{
 		int aIdxInPage = aDef.mRow * 5 + aDef.mCol;
-		if ((aDef.mPage == CHALLENGE_PAGE_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_SURVIVAL) && !mApp->HasFinishedAdventure())
+		if ((aDef.mPage == CHALLENGE_PAGE_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_SURVIVAL || aDef.mPage == CHALLENGE_PAGE_LAST_STAND) && !mApp->HasFinishedAdventure())
 		{
 			return aIdxInPage < 3 ? 0 : aIdxInPage == 3 ? 1 : 2;
 		}
 		else
 		{
 			int aNumTrophies = mApp->GetNumTrophies(aDef.mPage);
-			if (aDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LIMBO_SURVIVAL || aDef.mPage == CHALLENGE_PAGE_LAST_STAND)
+			if (aDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LIMBO_SURVIVAL)
 			{
 				return 0;
 			}
@@ -373,7 +381,11 @@ int ChallengeScreen::MoreTrophiesNeeded(int theChallengeIndex)
 			{
 				return 10 - aNumTrophies;
 			}
-			if (aDef.mPage == CHALLENGE_PAGE_SURVIVAL || aDef.mPage == CHALLENGE_PAGE_CHALLENGE)
+			if (mApp->IsLastStandEndless(aDef.mChallengeMode))
+			{
+				return 5 - aNumTrophies;
+			}
+			if (aDef.mPage == CHALLENGE_PAGE_SURVIVAL || aDef.mPage == CHALLENGE_PAGE_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LAST_STAND)
 			{
 				aNumTrophies += 3;
 			}
@@ -431,6 +443,7 @@ int ChallengeScreen::AccomplishmentsNeeded(int theChallengeIndex)
 	int aTrophiesNeeded = MoreTrophiesNeeded(theChallengeIndex);
 	GameMode aGameMode = GetChallengeDefinition(theChallengeIndex).mChallengeMode;
 	if (mApp->IsSurvivalEndless(aGameMode) && aTrophiesNeeded <= 3 && mApp->GetNumTrophies(CHALLENGE_PAGE_SURVIVAL) < 10 &&
+		mApp->GetNumTrophies(CHALLENGE_PAGE_LAST_STAND) < 5 &&
 		mApp->HasFinishedAdventure() && !mApp->IsTrialStageLocked()) aTrophiesNeeded = 1;
 	return mCheatEnableChallenges ? 0 : aTrophiesNeeded;
 }
@@ -659,10 +672,10 @@ void ChallengeScreen::Draw(Graphics* g)
 			break;
 		case ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE:
 		case ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL:
-			aTitleString = _S("[LIMBO_PAGE]");
+			aTitleString = _S("[LIMBO]");
 			break;
 		case ChallengePage::CHALLENGE_PAGE_LAST_STAND:
-			aTitleString = _S("[LAST_STAND_PAGE]");
+			aTitleString = _S("[LAST_STAND]");
 			break;
 		default: 
 			break;
@@ -670,7 +683,7 @@ void ChallengeScreen::Draw(Graphics* g)
 	TodDrawString(g, aTitleString, 400, 58, Sexy::FONT_HOUSEOFTERROR28, Color(220, 220, 220), DS_ALIGN_CENTER);
 
 	int aTrophiesGot = mApp->GetNumTrophies(mPageIndex);
-	int aTrophiesTotal = mPageIndex == CHALLENGE_PAGE_SURVIVAL ? 10 : mPageIndex == CHALLENGE_PAGE_CHALLENGE ? 20 : mPageIndex == CHALLENGE_PAGE_PUZZLE ? 18 : 0;
+	int aTrophiesTotal = mPageIndex == CHALLENGE_PAGE_SURVIVAL ? 10 : mPageIndex == CHALLENGE_PAGE_CHALLENGE ? 20 : mPageIndex == CHALLENGE_PAGE_PUZZLE ? 18 : mPageIndex == CHALLENGE_PAGE_LAST_STAND ? 5 : 0;
 	if (aTrophiesTotal > 0)
 	{
 		SexyString aTrophyString = StrFormat(_S("%d/%d"), aTrophiesGot, aTrophiesTotal);
@@ -828,6 +841,14 @@ void ChallengeScreen::UpdateToolTip()
 				else if (mPageIndex == CHALLENGE_PAGE_CHALLENGE)
 				{
 					aLabel = _S("[ONE_MORE_CHALLENGE_TOOLTIP]");
+				}
+				else if (mApp->IsLastStandEndless(aDef.mChallengeMode))
+				{
+					aLabel = _S("[10_LAST_STAND_TOOLTIP]");
+				}
+				else if (mPageIndex == CHALLENGE_PAGE_LAST_STAND)
+				{
+					aLabel = _S("[ONE_MORE_LAST_STAND_TOOLTIP]");
 				}
 				else continue;
 

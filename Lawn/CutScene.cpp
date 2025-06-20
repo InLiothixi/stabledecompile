@@ -673,22 +673,10 @@ void CutScene::PlaceLawnItems()
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
 	{
-		if (mBoard->CanPlantAt(0, 0, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
-		{
-			mBoard->NewPlant(0, 0, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
-		}
-		if (mBoard->CanPlantAt(0, 1, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
-		{
-			mBoard->NewPlant(0, 1, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
-		}
-		if (mBoard->CanPlantAt(0, 4, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
-		{
-			mBoard->NewPlant(0, 4, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
-		}
-		if (mBoard->CanPlantAt(0, 5, SeedType::SEED_COBCANNON) == PlantingReason::PLANTING_NEEDS_UPGRADE)
-		{
-			mBoard->NewPlant(0, 5, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
-		}
+		mBoard->NewPlant(0, 0, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		mBoard->NewPlant(0, 1, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		mBoard->NewPlant(0, 4, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
+		mBoard->NewPlant(0, 5, SeedType::SEED_COBCANNON, SeedType::SEED_NONE);
 	}
 }
 
@@ -810,7 +798,7 @@ void CutScene::StartLevelIntro()
 		mApp->IsSquirrelLevel() ||
 		mApp->IsWallnutBowlingLevel() ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
-		mApp->IsLastStand() && !mApp->IsLastStandEndless(mApp->mGameMode) && mApp->mBoard->mChallenge->mSurvivalStage == 0 ||
+		mApp->IsLastStand() ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||

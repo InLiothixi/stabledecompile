@@ -6324,7 +6324,7 @@ void Zombie::DrawReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, int t
     if (mJustGotShotCounter > 0 && !IsBobsledTeamWithSled())
     {
         int aGrayness = mJustGotShotCounter * 10;
-        Color aHighlightColor(aGrayness, aGrayness, aGrayness, aFadeAlpha);
+        Color aHighlightColor(aGrayness, aGrayness, aGrayness, 255);
         aHighlightColor = ColorAdd(aHighlightColor, aExtraAdditiveColor);
         aExtraAdditiveColor = aHighlightColor;
         aEnableExtraAdditiveDraw = true;
@@ -6437,9 +6437,10 @@ void Zombie::DrawReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, int t
             aShieldHitOffset = TodAnimateCurveFloat(12, 0, mShieldRecoilCounter, 3.0f, 0.0f, TodCurves::CURVE_LINEAR);
         }
 
+        g->PushState();
         g->mTransX += aShieldHitOffset;
         aBodyReanim->DrawRenderGroup(g, RENDER_GROUP_SHIELD);
-        g->mTransX -= aShieldHitOffset;
+        g->PopState();
     }
 
     if (mShieldType == ShieldType::SHIELDTYPE_NEWSPAPER || mShieldType == ShieldType::SHIELDTYPE_DOOR || mShieldType == ShieldType::SHIELDTYPE_TRASHCAN || mShieldType == ShieldType::SHIELDTYPE_LADDER)
@@ -11215,6 +11216,7 @@ void Zombie::BossPlayIdle()
 //0x534960
 void Zombie::DrawBossFireBall(Graphics* g, const ZombieDrawPosition& theDrawPos)
 {
+    g->PushState();
     MakeParentGraphicsFrame(g);
 
     Reanimation* aFireBallReanim = mApp->ReanimationTryToGet(mBossFireBallReanimID);
@@ -11228,6 +11230,7 @@ void Zombie::DrawBossFireBall(Graphics* g, const ZombieDrawPosition& theDrawPos)
         g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
         aFireBallReanim->DrawRenderGroup(g, RENDER_GROUP_BOSS_FIREBALL_TOP);
     }
+    g->PopState();
 }
 
 //0x5349E0

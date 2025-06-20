@@ -947,8 +947,8 @@ void SeedPacket::WasPlanted()
 
 	if (mBoard->HasConveyorBeltSeedBank())
 	{
-		mBoard->mSeedBank->RemoveSeed(mIndex);
 		mBoard->mSeedBank->mSeedPackets[mIndex].mSelectionCounter = -1;
+		mBoard->mSeedBank->RemoveSeed(mIndex);
 	}
 	else if (mApp->IsSlotMachineLevel())
 	{
