@@ -502,7 +502,10 @@ bool Sexy::StringToDouble(const std::wstring theString, double* theDoubleVal)
 	return true;
 }
 
-// TODO: Use <locale> for localization of number output?
+// TODO: Use <locale> for localization of number output? [DONE]
+#include <locale>
+#include <sstream>
+#include <iomanip>
 SexyString Sexy::CommaSeperate(int theValue)
 {
 	if (theValue == 0)
@@ -510,7 +513,7 @@ SexyString Sexy::CommaSeperate(int theValue)
 
 	SexyString aCurString;
 
-	int aPlace = 0;
+	/*int aPlace = 0;
 	int aCurValue = theValue;
 
 	while (aCurValue > 0)
@@ -520,8 +523,11 @@ SexyString Sexy::CommaSeperate(int theValue)
 		aCurString = (SexyChar)(_S('0') + (aCurValue % 10)) + aCurString;
 		aCurValue /= 10;
 		aPlace++;
-	}
-
+	}*/
+	std::stringstream ss;
+	ss.imbue(std::locale(""));
+	ss << std::fixed << theValue;
+	aCurString = _S(ss.str().c_str());
 	return aCurString;
 }
 

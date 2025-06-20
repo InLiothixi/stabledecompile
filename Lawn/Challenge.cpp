@@ -1472,8 +1472,8 @@ void Challenge::BeghouledFlashPlant(int theFlashX, int theFlashY, int theFromX, 
 	}
 
 	Plant* aFlashPlant = mBoard->GetTopPlantAt(theFlashX, theFlashY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
-	if (aFlashPlant && aFlashPlant->mEatenFlashCountdown <= 300) 
-		aFlashPlant->mEatenFlashCountdown = 300;
+	if (aFlashPlant && aFlashPlant->mBeghouledFlashCountdown <= 300)
+		aFlashPlant->mBeghouledFlashCountdown = 300;
 }
 
 //0x422510
@@ -1485,9 +1485,9 @@ bool Challenge::BeghouledTwistFlashMatch(BeghouledBoardState* theBoardState, int
 	for (int i = 0; i < 4; i++)
 	{
 		Plant* aPlant = mBoard->GetTopPlantAt(theGridX + (i % 2), theGridY + (i / 2), PlantPriority::TOPPLANT_ANY);
-		if (aPlant && aPlant->mEatenFlashCountdown <= 300)
+		if (aPlant && aPlant->mBeghouledFlashCountdown <= 300)
 		{
-			aPlant->mEatenFlashCountdown = 300;
+			aPlant->mBeghouledFlashCountdown = 300;
 		}
 	}
 	return true;
@@ -3276,8 +3276,12 @@ void Challenge::DrawStormNight(Graphics* g)
 	}
 	else
 	{
+		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		g->SetColor(Color::Black);
 		g->FillRect(-1000, -1000, BOARD_WIDTH + 2000, BOARD_HEIGHT + 2000);
+		g->PopState();
 	}
 
 	mBoard->DrawUIBottom(g);

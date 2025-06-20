@@ -25,16 +25,16 @@
 
 						int oma = 256 - a;
 						
-						// TODO: To avoid rounding problems for fully opaque pixels use (a+1) instead of a in the code below since we are dividing by 256
+						// TODO: To avoid rounding problems for fully opaque pixels use (a+1) instead of a in the code below since we are dividing by 256 [DONE]
 						*(aDestPixels++) = (aNewDestAlpha << 24) |
-#ifdef OPTIMIZE_SOFTWARE_DRAWING
-							((((dest & 0xFF00FF) * oma >> 8) + ((src & 0xFF00FF) * a >> 8)) & 0xFF00FF) |
-							((((dest & 0x00FF00) * oma >> 8) + ((src & 0x00FF00) * a >> 8)) & 0x00FF00);
-#else
-							((((dest & 0x0000FF) * oma) >> 8) + (((src & 0x0000FF) * a) >> 8) & 0x0000FF) |
-							((((dest & 0x00FF00) * oma) >> 8) + (((src & 0x00FF00) * a) >> 8) & 0x00FF00) |
-							((((dest & 0xFF0000) * oma) >> 8) + (((src & 0xFF0000) * a) >> 8) & 0xFF0000);
-#endif
+						#ifdef OPTIMIZE_SOFTWARE_DRAWING
+							((((dest & 0xFF00FF) * oma >> 8) + ((src & 0xFF00FF) * (a + 1) >> 8)) & 0xFF00FF) |
+							((((dest & 0x00FF00) * oma >> 8) + ((src & 0x00FF00) * (a + 1) >> 8)) & 0x00FF00);
+						#else
+							((((dest & 0x0000FF) * oma >> 8) + ((src & 0x0000FF) * (a + 1) >> 8)) & 0x0000FF) |
+							((((dest & 0x00FF00) * oma >> 8) + ((src & 0x00FF00) * (a + 1) >> 8)) & 0x00FF00) |
+							((((dest & 0xFF0000) * oma >> 8) + ((src & 0xFF0000) * (a + 1) >> 8)) & 0xFF0000);
+						#endif
 					}
 					else
 						aDestPixels++;

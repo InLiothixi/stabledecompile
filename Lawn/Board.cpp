@@ -7835,7 +7835,7 @@ void Board::DrawFadeOut(Graphics* g)
 {
 	if (mBoardFadeOutCounter < 0 || IsSurvivalStageWithRepick())
 		return;
-
+	g->PushState();
 	int anAlpha = TodAnimateCurve(200, 0, mBoardFadeOutCounter, 0, 255, TodCurves::CURVE_LINEAR);
 	if (mLevel == 9 || mLevel == 19 || mLevel == 29 || mLevel == 39 || mLevel == 49)
 	{
@@ -7845,7 +7845,10 @@ void Board::DrawFadeOut(Graphics* g)
 	{
 		g->SetColor(Color(255, 255, 255, anAlpha));
 	}
+	g->mTransX = 0;
+	g->mTransY = 0;
 	g->FillRect(0, 0, mWidth, mHeight);
+	g->PopState();
 }
 
 //0x419F60
@@ -8467,14 +8470,22 @@ void Board::DrawUITop(Graphics* g)
 
 	if (mTimeStopCounter > 0)
 	{
+		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		g->SetColor(Color(200, 200, 200, 210));
 		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g->PopState();
 	}
 
 	if (mNukeCounter > 0)
 	{
+		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		g->SetColor(Color(255, 255, 255, (int)(min(mNukeCounter, 150) / 150.0f * 255)));
 		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g->PopState();
 	}
 
 	if (!mApp->IsScreenSaver() && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM))
@@ -8488,6 +8499,9 @@ void Board::DrawUITop(Graphics* g)
 	}
 
 	if (LawnApp::ChallengeUsesMicrophone(mApp->mGameMode) && mApp->mGameScene == SCENE_PLAYING) {
+		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		int volume = min((int)(mApp->mVoiceVolume / SHOUT_THRESHOLD * 100), 100);
 		for (int i = 0; i < 100; i++) {
 			g->PushState();
@@ -8540,6 +8554,7 @@ void Board::DrawUITop(Graphics* g)
 			g->FillRect(10, currentY, 20, 2);
 			g->PopState();
 		}
+		g->PopState();
 	}
 	
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
@@ -8584,8 +8599,12 @@ void Board::DrawUITop(Graphics* g)
 
 	if ((mApp->mGameMode == GameMode::GAMEMODE_UPSELL || mApp->mGameMode == GameMode::GAMEMODE_INTRO) && mCutScene->mUpsellHideBoard)
 	{
+		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		g->SetColor(Color(0, 0, 0));
 		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g->PopState();
 	}
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_UPSELL)

@@ -4003,6 +4003,8 @@ void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color t
 	if (drawOnlyCamera)
 	{
 		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		g->SetColor(Color::Black);
 		g->FillRect(gBoardBounds);
 		g->PopState();

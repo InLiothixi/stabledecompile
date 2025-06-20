@@ -3548,7 +3548,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 #endif
 	switch (uMsg)
 	{		
-//  TODO: switch to killfocus/setfocus?
+//  TODO: switch to killfocus/setfocus? [NOT NEEDED]
 //	case WM_KILLFOCUS:
 //	case WM_SETFOCUS:
 //	if ((aSexyApp != NULL) && (!aSexyApp->mPlayingDemoBuffer))
@@ -3565,7 +3565,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				aSexyApp->mActive = wParam != 0;
 			}
 		}
-		//Fallthrough	
+	//Fallthrough	
 
 	case WM_SIZE:
 	case WM_MOVE:

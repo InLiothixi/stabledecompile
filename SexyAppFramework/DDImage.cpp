@@ -683,13 +683,33 @@ void DDImage::RehupFirstPixelTrans()
 		UnlockSurface();
 	}
 }
-
+#include <ctime>
+#include "Common.h"
 LPDIRECTDRAWSURFACE DDImage::GetSurface()
 {
-	//TODO: Log if generate surface fails
-
+	//TODO: Log if generate surface fails [DONE]
 	if (mSurface == NULL)
-		GenerateDDSurface();
+	{
+		try {
+			GenerateDDSurface();
+		}
+		catch (const std::exception& err)
+		{
+			static bool firstTime = true;
+			SexyChar aBuf[512];
+
+			const SexyChar* aFlag = firstTime ? _S("w") : _S("a+");
+			firstTime = false;
+
+			FILE* aFile = sexyfopen(_S("DDImageError.txt"), aFlag);
+			if (aFile != NULL)
+			{
+
+				sexyfprintf(aFile, _S("%s %s %u\n"), _S(err.what()), sexy_strtime(aBuf), GetTickCount());
+				fclose(aFile);
+			}
+		}
+	}
 
 	return mSurface;
 }
@@ -2296,7 +2316,7 @@ void DDImage::NormalBlt(Image* theImage, int theX, int theY, const Rect& theSrcR
 		RECT aDestRect = { theX, theY, theX + theSrcRect.mWidth, theY + theSrcRect.mHeight};
 		RECT aSrcRect = { theSrcRect.mX, theSrcRect.mY, theSrcRect.mX + theSrcRect.mWidth, theSrcRect.mY + theSrcRect.mHeight };
 
-		//TODO:
+		//TODO: (already done)
 		if ((aMemoryImage->mIsVolatile) && ((aDDImage == NULL) || (aDDImage->mSurface == NULL)) &&
 			(!mNoLock) && (theColor == Color::White))
 		{
@@ -2380,7 +2400,7 @@ void DDImage::NormalBlt(Image* theImage, int theX, int theY, const Rect& theSrcR
 			if (mNoLock)
 				return;
 
-			//TODO: Have some sort of cool thing here
+			//TODO: Have some sort of cool thing here  (already done)
 			LPDIRECTDRAWSURFACE aSurface = GetSurface();
 
 			if (!LockSurface())

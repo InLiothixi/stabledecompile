@@ -38,7 +38,46 @@
 		ushort* aDestPixelsRow = ((ushort*) mLockedSurfaceDesc.lpSurface) + ((int)aDestRect.mY * mLockedSurfaceDesc.lPitch/2) + (int)aDestRect.mX;		
 		int aDestPixelsPitch = mLockedSurfaceDesc.lPitch/2;
 
-		//TODO: if (theColor == Color::White)
+		//TODO: if (theColor == Color::White) [DONE]
+		if (theColor == Color::White)
+		{
+			int ca = 255;
+			int cr = 255;
+			int cg = 255;
+			int cb = 255;
+
+			#define DEST_PIXEL_TYPE ushort
+			#define WRITE_PIXEL\
+			{\
+				ushort dest = *aDestPixels;\
+				\
+				int r = aMaxRedTable[((dest & aRMask)>>aRedShift) + \
+					((((((src1 & 0xFF0000) * a1) + \
+						((src2 & 0xFF0000) * a2) + \
+						((src3 & 0xFF0000) * a3) + \
+						((src4 & 0xFF0000) * a4)) >> aRedRightShift)) >> 8)];\
+				int g = aMaxGreenTable[((dest & aGMask)>>aGreenShift) + \
+					(((((src1 & 0x00FF00) * a1) + \
+						((src2 & 0x00FF00) * a2) + \
+						((src3 & 0x00FF00) * a3) + \
+						((src4 & 0x00FF00) * a4))) >> (aGreenRightShift + 8))];\
+				int b = aMaxBlueTable[((dest & aBMask)>>aBlueShift) + \
+					(((((src1 & 0x0000FF) * a1) + \
+						((src2 & 0x0000FF) * a2) + \
+						((src3 & 0x0000FF) * a3) + \
+						((src4 & 0x0000FF) * a4))) >> (aBlueRightShift + 8))];\
+				\
+				*(aDestPixels++) = \
+					(r << aRedShift) | \
+					(g << aGreenShift) | \
+					(b << aBlueShift); \
+			}		
+			#include "BltRotatedHelper.inc"		
+			
+			#undef WRITE_PIXEL
+			#undef DEST_PIXEL_TYPE		
+		}
+		else
 		{
 			int ca = theColor.mAlpha;
 			int cr = (theColor.mRed * ca) / 255;
@@ -74,19 +113,56 @@
 			#include "BltRotatedHelper.inc"		
 			
 			#undef WRITE_PIXEL
-			#undef DEST_PIXEL_TYPE				
+			#undef DEST_PIXEL_TYPE		
 		}
-		/*else
-		{
-			
-		}*/
 	}
 	else if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
 	{			
 		ulong* aDestPixelsRow = ((ulong*) mLockedSurfaceDesc.lpSurface) + ((int)aDestRect.mY * mLockedSurfaceDesc.lPitch/4) + (int)aDestRect.mX;		
 		int aDestPixelsPitch = mLockedSurfaceDesc.lPitch/4;
 
-		//if (theColor == Color::White)				
+		if (theColor == Color::White)				
+		{
+			int ca = 255;
+			int cr = 255;
+			int cg = 255;
+			int cb = 255;
+		
+			#define DEST_PIXEL_TYPE ulong
+			#define WRITE_PIXEL\
+			{\
+				ulong dest = *aDestPixels;\
+				\
+				int r = aMaxRedTable[((dest & aRMask)>>aRedShift) + \
+					((((((src1 & 0xFF0000) * a1) + \
+						((src2 & 0xFF0000) * a2) + \
+						((src3 & 0xFF0000) * a3) + \
+						((src4 & 0xFF0000) * a4)) >> aRedRightShift)) >> 8)];\
+				int g = aMaxGreenTable[((dest & aGMask)>>aGreenShift) + \
+					(((((src1 & 0x00FF00) * a1) + \
+						((src2 & 0x00FF00) * a2) + \
+						((src3 & 0x00FF00) * a3) + \
+						((src4 & 0x00FF00) * a4))) >> (aGreenRightShift + 8))];\
+				int b = aMaxBlueTable[((dest & aBMask)>>aBlueShift) + \
+					(((((src1 & 0x0000FF) * a1) + \
+						((src2 & 0x0000FF) * a2) + \
+						((src3 & 0x0000FF) * a3) + \
+						((src4 & 0x0000FF) * a4))) >> (aBlueRightShift + 8))];\
+				\
+				*(aDestPixels++) = \
+					(r << aRedShift) | \
+					(g << aGreenShift) | \
+					(b << aBlueShift);\
+			}
+
+			#include "BltRotatedHelper.inc"		
+			
+			#undef WRITE_PIXEL
+			#undef DEST_PIXEL_TYPE
+															
+			
+		}
+		else
 		{
 			int ca = theColor.mAlpha;
 			int cr = (theColor.mRed * ca) / 255;
@@ -125,13 +201,7 @@
 			
 			#undef WRITE_PIXEL
 			#undef DEST_PIXEL_TYPE
-															
-			
 		}
-		/*else
-		{
-			
-		}*/
 	}
 
 	UnlockSurface();

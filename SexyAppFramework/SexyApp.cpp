@@ -325,7 +325,7 @@ bool SexyApp::OpenHTMLTemplate(const std::string& theTemplateFile, const Defines
 
 	std::string anOutFilename = StrFormat("temp\\tpl%04d.html", rand()%10000);
 
-	//TODO: A better failover case?
+	//TODO: A better failover case? [already done]
 	std::fstream anOutStream(anOutFilename.c_str(), std::ios::out);
 	if (!anOutStream.is_open())
 		return false;
