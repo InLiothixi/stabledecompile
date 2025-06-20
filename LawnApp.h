@@ -8,6 +8,7 @@
 #include "portaudio.h"
 #include <lua.hpp>
 #include "SexyAppFramework/DDImage.h"
+#include "SexyAppFramework/SexyMatrix.h"
 
 #include "SexyAppFramework/Common.h"
 
@@ -141,7 +142,11 @@ public:
 	bool							mFlowersPlucked[3];
 	PaStream*						mPortAudioStream;
 	float							mVoiceVolume;
+	DDImage*						mBoardCamera;
 	//lua_State*						L;
+
+	static							Rect gBoardBounds;
+	std::vector<SexyString>			mDebugTexts;
 
 public:
 	LawnApp();
@@ -347,6 +352,8 @@ public:
 	static int						TodStringTranslateL(lua_State* L);
 	static int						ChangeBackgroundL(lua_State* L);
 	static int						ChangeMusicL(lua_State* L);
+	
+	void							DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect);
 };
 
 SexyString							LawnGetCurrentLevelName();

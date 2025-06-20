@@ -90,6 +90,9 @@ Board::Board(LawnApp* theApp)
 	mShakeCounter = 0;
 	mShakeAmountX = 0;
 	mShakeAmountY = 0;
+	mCameraTranform.LoadIdentity();
+	mCameraClipRect = LawnApp::gBoardBounds;
+	mCameraColor = Color::White;
 	mPaused = false;
 	mLevelAwardSpawned = false;
 	mFlagRaiseCounter = 0;
@@ -217,7 +220,7 @@ Board::Board(LawnApp* theApp)
 		mStoreButton->mDrawStoneButton = true;
 		mStoreButton->mBtnNoDraw = true;
 		mStoreButton->SetLabel(_S("[GET_FULL_VERSION_BUTTON]"));
-	}
+	}	
 }
 
 //0x408670、0x408690
@@ -251,6 +254,7 @@ Board::~Board()
 	}
 	delete mCutScene;
 	delete mChallenge;
+	mApp->mDebugTexts.clear();
 }
 
 void BoardInitForPlayer()
@@ -7579,7 +7583,7 @@ void Board::DrawShovel(Graphics* g)
 //0x418C70
 void Board::DrawDebugText(Graphics* g)
 {
-	SexyString aText;
+	mApp->mDebugTexts.clear();
 
 	switch (mDebugTextMode)
 	{
@@ -7591,36 +7595,37 @@ void Board::DrawDebugText(Graphics* g)
 		int aTime = mZombieCountDownStart - mZombieCountDown;
 		float aCountDownFraction = (float)aTime / (float)mZombieCountDownStart;
 
-		aText += StrFormat(_S("ZOMBIE SPAWNING DEBUG\n"));
-		aText += StrFormat(_S("CurrentWave: %d of %d\n"), mCurrentWave, mNumWaves);
-		aText += StrFormat(_S("TimeSinseLastSpawn: %d %s\n"), aTime, aTime > 400 ? _S("") : _S("(too soon)"));
-		aText += StrFormat(_S("ZombieCountDown: %d/%d (%.0f%%)\n"), mZombieCountDown, mZombieCountDownStart, aCountDownFraction);
+		mApp->mDebugTexts.push_back(StrFormat(_S("ZOMBIE SPAWNING DEBUG")));
+		mApp->mDebugTexts.push_back(StrFormat(_S("CurrentWave: %d of %d"), mCurrentWave, mNumWaves));
+		mApp->mDebugTexts.push_back(StrFormat(_S("TimeSinseLastSpawn: %d %s"), aTime, aTime > 400 ? _S("") : _S("(too soon)")));
+		mApp->mDebugTexts.push_back(StrFormat(_S("ZombieCountDown: %d/%d (%.0f%%)"), mZombieCountDown, mZombieCountDownStart, aCountDownFraction * 100));
 
 		if (mZombieHealthToNextWave != -1)
 		{
 			int aTotalHealth = TotalZombiesHealthInWave(mCurrentWave - 1);
 			int aHealthRange = max(mZombieHealthWaveStart - mZombieHealthToNextWave, 1);
 			float aHealthFraction = (float)(mZombieHealthToNextWave - aTotalHealth + aHealthRange) / (float)aHealthRange;
-			aText += StrFormat(_S("ZombieHealth: CurZombieHealth %d trigger %d (%.0f%%)\n"), aTotalHealth, mZombieHealthToNextWave, aHealthFraction * 100);
+			mApp->mDebugTexts.push_back(StrFormat(_S("ZombieHealth: CurZombieHealth %d trigger %d (%.0f%%)"), aTotalHealth, mZombieHealthToNextWave, aHealthFraction * 100));
 		}
 		else
 		{
-			aText += StrFormat(_S("ZombieHealth: before first wave\n"));
+			mApp->mDebugTexts.push_back(StrFormat(_S("ZombieHealth: before first wave")));
 		}
 
 		if (mHugeWaveCountDown > 0)
 		{
-			aText += StrFormat(_S("HugeWaveCountDown: %d\n"), mHugeWaveCountDown);
+			mApp->mDebugTexts.push_back(StrFormat(_S("HugeWaveCountDown: %d"), mHugeWaveCountDown));
 		}
 
 		Zombie* aBossZombie = GetBossZombie();
 		if (aBossZombie)
 		{
-			aText += StrFormat(_S("\nSpawn: %d\n"), aBossZombie->mSummonCounter);
-			aText += StrFormat(_S("Stomp: %d\n"), aBossZombie->mBossStompCounter);
-			aText += StrFormat(_S("Bungee: %d\n"), aBossZombie->mBossBungeeCounter);
-			aText += StrFormat(_S("Head: %d\n"), aBossZombie->mBossHeadCounter);
-			aText += StrFormat(_S("Health: %d of %d\n"), aBossZombie->mBodyHealth, aBossZombie->mBodyMaxHealth);
+			mApp->mDebugTexts.push_back("");
+			mApp->mDebugTexts.push_back(StrFormat(_S("Spawn: %d"), aBossZombie->mSummonCounter));
+			mApp->mDebugTexts.push_back(StrFormat(_S("Stomp: %d"), aBossZombie->mBossStompCounter));
+			mApp->mDebugTexts.push_back(StrFormat(_S("Bungee: %d"), aBossZombie->mBossBungeeCounter));
+			mApp->mDebugTexts.push_back(StrFormat(_S("Head: %d"), aBossZombie->mBossHeadCounter));
+			mApp->mDebugTexts.push_back(StrFormat(_S("Health: %d of %d"), aBossZombie->mBodyHealth, aBossZombie->mBodyMaxHealth));
 		}
 
 		break;
@@ -7628,59 +7633,58 @@ void Board::DrawDebugText(Graphics* g)
 
 	case DebugTextMode::DEBUG_TEXT_MUSIC:
 	{
-		aText += StrFormat(_S("MUSIC DEBUG\n"));
-		aText += StrFormat(_S("CurrentWave: %d of %d\n"), mCurrentWave, mNumWaves);
+		mApp->mDebugTexts.push_back(StrFormat(_S("MUSIC DEBUG")));
+		mApp->mDebugTexts.push_back(StrFormat(_S("CurrentWave: %d of %d"), mCurrentWave, mNumWaves));
 
 		if (mApp->mMusic->mCurMusicFileMain == MusicFile::MUSIC_FILE_NONE)
 		{
-			aText += StrFormat(_S("No music"));
+			mApp->mDebugTexts.push_back(StrFormat(_S("No music")));
 		}
 		else
 		{
-			aText += StrFormat(_S("Music Burst: "));
+			SexyString aLine = _S("Music Burst: ");
 
-			if (mApp->mMusic->mMusicBurstState == MusicBurstState::MUSIC_BURST_OFF)
+			switch (mApp->mMusic->mMusicBurstState)
 			{
-				aText += StrFormat(_S("Off"));
-			}
-			else if (mApp->mMusic->mMusicBurstState == MusicBurstState::MUSIC_BURST_STARTING)
-			{
-				aText += StrFormat(_S("Starting %d/%d"), mApp->mMusic->mBurstStateCounter, 400);
-			}
-			else if (mApp->mMusic->mMusicBurstState == MusicBurstState::MUSIC_BURST_ON)
-			{
-				aText += StrFormat(_S("On at least until %d/%d"), mApp->mMusic->mBurstStateCounter, 800);
-			}
-			else if (mApp->mMusic->mMusicBurstState == MusicBurstState::MUSIC_BURST_FINISHING)
-			{
-				aText += StrFormat(_S("Finishing %d/%d"), mApp->mMusic->mBurstStateCounter, 400);
+			case MusicBurstState::MUSIC_BURST_OFF:
+				aLine += _S("Off");
+				break;
+			case MusicBurstState::MUSIC_BURST_STARTING:
+				aLine += StrFormat(_S("Starting %d/%d"), mApp->mMusic->mBurstStateCounter, 400);
+				break;
+			case MusicBurstState::MUSIC_BURST_ON:
+				aLine += StrFormat(_S("On at least until %d/%d"), mApp->mMusic->mBurstStateCounter, 800);
+				break;
+			case MusicBurstState::MUSIC_BURST_FINISHING:
+				aLine += StrFormat(_S("Finishing %d/%d"), mApp->mMusic->mBurstStateCounter, 400);
+				break;
 			}
 
-			if (mApp->mMusic->mMusicDrumsState == MusicDrumsState::MUSIC_DRUMS_OFF)
+			switch (mApp->mMusic->mMusicDrumsState)
 			{
-				aText += StrFormat(_S(", Drums off"));
+			case MusicDrumsState::MUSIC_DRUMS_OFF:
+				aLine += _S(", Drums off");
+				break;
+			case MusicDrumsState::MUSIC_DRUMS_ON_QUEUED:
+				aLine += _S(", Drums queued on");
+				break;
+			case MusicDrumsState::MUSIC_DRUMS_ON:
+				aLine += _S(", Drums on");
+				break;
+			case MusicDrumsState::MUSIC_DRUMS_OFF_QUEUED:
+				aLine += _S(", Drums queued off");
+				break;
+			case MusicDrumsState::MUSIC_DRUMS_FADING:
+				aLine += StrFormat(_S(", Drums fading off %d/%d"), mApp->mMusic->mDrumsStateCounter, 50);
+				break;
 			}
-			else if (mApp->mMusic->mMusicDrumsState == MusicDrumsState::MUSIC_DRUMS_ON_QUEUED)
-			{
-				aText += StrFormat(_S(", Drums queued on"));
-			}
-			else if (mApp->mMusic->mMusicDrumsState == MusicDrumsState::MUSIC_DRUMS_ON)
-			{
-				aText += StrFormat(_S(", Drums on"));
-			}
-			else if (mApp->mMusic->mMusicDrumsState == MusicDrumsState::MUSIC_DRUMS_OFF_QUEUED)
-			{
-				aText += StrFormat(_S(", Drums queued off"));
-			}
-			else if (mApp->mMusic->mMusicDrumsState == MusicDrumsState::MUSIC_DRUMS_FADING)
-			{
-				aText += StrFormat(_S(", Drums fading off %d/%d"), mApp->mMusic->mDrumsStateCounter, 50);
-			}
-			aText += StrFormat(_S("\n"));
+
+			mApp->mDebugTexts.push_back(aLine);
 
 			int aPackedOrderMain = mApp->mMusic->GetMusicOrder(mApp->mMusic->mCurMusicFileMain);
 			int aCurrentOrder = LOWORD(aPackedOrderMain);
-			aText += StrFormat(_S("Music order %02d row %02d\n"), LOWORD(aPackedOrderMain), HIWORD(aPackedOrderMain) / 4);
+			mApp->mDebugTexts.push_back(StrFormat(_S("Music order %02d row %02d"), LOWORD(aPackedOrderMain), HIWORD(aPackedOrderMain) / 4));
+
 			if (mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_DAY_GRASSWALK ||
 				mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_POOL_WATERYGRAVES ||
 				mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_FOG_RIGORMORMIST ||
@@ -7694,7 +7698,7 @@ void Board::DrawDebugText(Graphics* g)
 					int aDiffDrums = HIWORD(aPackedOrderDrums) - HIWORD(aPackedOrderMain);
 					if (abs(aDiffHihats) > 1 || abs(aDiffDrums) > 1)
 					{
-						aText += StrFormat(_S("Music unsynced hihats %d drums %d\n"), aDiffHihats, aDiffDrums);
+						mApp->mDebugTexts.push_back(StrFormat(_S("Music unsynced hihats %d drums %d"), aDiffHihats, aDiffDrums));
 					}
 				}
 
@@ -7704,16 +7708,16 @@ void Board::DrawDebugText(Graphics* g)
 				int bpm1 = gBass->BASS_MusicGetAttribute(aMusicHandle1, BASS_MUSIC_ATTRIB_BPM);
 				int bpm2 = gBass->BASS_MusicGetAttribute(aMusicHandle2, BASS_MUSIC_ATTRIB_BPM);
 				int bpm3 = gBass->BASS_MusicGetAttribute(aMusicHandle3, BASS_MUSIC_ATTRIB_BPM);
-				aText += StrFormat(_S("bpm1 %d bmp2 %d bpm3 %d\n"), bpm1, bpm2, bpm3);
+				mApp->mDebugTexts.push_back(StrFormat(_S("bpm1 %d bmp2 %d bpm3 %d"), bpm1, bpm2, bpm3));
 			}
 			else if (mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS)
 			{
 				int aPackedOrderDrums = mApp->mMusic->GetMusicOrder(mApp->mMusic->mCurMusicFileDrums);
-				aText += StrFormat(_S("Drum order %02d row %02d\n"), LOWORD(aPackedOrderDrums), HIWORD(aPackedOrderDrums) / 4);
+				mApp->mDebugTexts.push_back(StrFormat(_S("Drum order %02d row %02d"), LOWORD(aPackedOrderDrums), HIWORD(aPackedOrderDrums) / 4));
 				int aDiffDrums = HIWORD(aPackedOrderDrums) - HIWORD(aPackedOrderMain);
 				if (abs(aDiffDrums) > 0 && abs(aDiffDrums) <= 128)
 				{
-					aText += StrFormat(_S("Drums unsynced %d"), aDiffDrums);
+					mApp->mDebugTexts.push_back(StrFormat(_S("Drums unsynced %d"), aDiffDrums));
 				}
 			}
 		}
@@ -7722,23 +7726,23 @@ void Board::DrawDebugText(Graphics* g)
 	}
 
 	case DebugTextMode::DEBUG_TEXT_MEMORY:
-		aText += StrFormat(_S("MEMORY DEBUG\n"));
-		aText += StrFormat(_S("attachments %d\n"), mApp->mEffectSystem->mAttachmentHolder->mAttachments.mSize);
-		aText += StrFormat(_S("emitters %d\n"), mApp->mEffectSystem->mParticleHolder->mEmitters.mSize);
-		aText += StrFormat(_S("particles %d\n"), mApp->mEffectSystem->mParticleHolder->mParticles.mSize);
-		aText += StrFormat(_S("particle systems %d\n"), mApp->mEffectSystem->mParticleHolder->mParticleSystems.mSize);
-		aText += StrFormat(_S("trails %d\n"), mApp->mEffectSystem->mTrailHolder->mTrails.mSize);
-		aText += StrFormat(_S("reanimation %d\n"), mApp->mEffectSystem->mReanimationHolder->mReanimations.mSize);
-		aText += StrFormat(_S("zombies %d\n"), mZombies.mSize);
-		aText += StrFormat(_S("plants %d\n"), mPlants.mSize);
-		aText += StrFormat(_S("projectiles %d\n"), mProjectiles.mSize);
-		aText += StrFormat(_S("coins %d\n"), mCoins.mSize);
-		aText += StrFormat(_S("lawn mowers %d\n"), mLawnMowers.mSize);
-		aText += StrFormat(_S("grid items %d\n"), mGridItems.mSize);
+		mApp->mDebugTexts.push_back(StrFormat(_S("MEMORY DEBUG")));
+		mApp->mDebugTexts.push_back(StrFormat(_S("attachments %d"), mApp->mEffectSystem->mAttachmentHolder->mAttachments.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("emitters %d"), mApp->mEffectSystem->mParticleHolder->mEmitters.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("particles %d"), mApp->mEffectSystem->mParticleHolder->mParticles.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("particle systems %d"), mApp->mEffectSystem->mParticleHolder->mParticleSystems.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("trails %d"), mApp->mEffectSystem->mTrailHolder->mTrails.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("reanimation %d"), mApp->mEffectSystem->mReanimationHolder->mReanimations.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("zombies %d"), mZombies.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("plants %d"), mPlants.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("projectiles %d"), mProjectiles.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("coins %d"), mCoins.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("lawn mowers %d"), mLawnMowers.mSize));
+		mApp->mDebugTexts.push_back(StrFormat(_S("grid items %d"), mGridItems.mSize));
 		break;
 
 	case DebugTextMode::DEBUG_TEXT_COLLISION:
-		aText += StrFormat(_S("COLLISION DEBUG\n"));
+		mApp->mDebugTexts.push_back(StrFormat(_S("COLLISION DEBUG")));
 		break;
 
 	default:
@@ -7746,14 +7750,14 @@ void Board::DrawDebugText(Graphics* g)
 		break;
 	}
 
-	g->SetFont(mDebugFont);
-	g->SetColor(Color::Black);
-	g->DrawStringWordWrapped(aText, 10, 89);
-	g->DrawStringWordWrapped(aText, 11, 91);
-	g->DrawStringWordWrapped(aText, 9, 90);
-	g->DrawStringWordWrapped(aText, 11, 90);
-	g->SetColor(Color::White);
-	g->DrawStringWordWrapped(aText, 10, 90);
+
+	int yOffset = 0;
+	for (const SexyString& sText : mApp->mDebugTexts) {
+		TodDrawString(g, sText, 10, 90 + yOffset, Sexy::FONT_HOUSEOFTERROR16, Color::White, DrawStringJustification::DS_ALIGN_LEFT);
+		yOffset += 16;
+	}
+
+	mApp->mDebugTexts.clear();
 }
 
 //0x419AE0
@@ -8647,6 +8651,14 @@ void Board::Draw(Graphics* g)
 
 	mDrawCount++;
 	DrawGameObjects(g);
+
+	if (mCameraTranform.m01 != 0 || mCameraTranform.m02 != 0 || mCameraTranform.m10 != 0 || mCameraTranform.m12 != 0 || mCameraTranform.m20 != 0 || mCameraTranform.m21 != 0 ||
+		mCameraTranform.m00 != 1 || mCameraTranform.m11 != 1 || mCameraTranform.m22 != 1 || mCameraColor != Color::White || !(mCameraClipRect == LawnApp::gBoardBounds)) // if no transform then do not render camera
+	{
+		SexyTransform2D aTransform;
+		TodScaleRotateTransformMatrix(aTransform, mCameraTranform.m02 + 400, mCameraTranform.m12 + 300, 0, mCameraTranform.m00, mCameraTranform.m11);
+		mApp->DrawBoardCamera(g, aTransform, mCameraColor, Graphics::DRAWMODE_NORMAL, mCameraClipRect);
+	}
 }
 
 //0x41AE60

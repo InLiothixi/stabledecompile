@@ -1,16 +1,16 @@
-Exception: Access Violation (code 0xc0000005) at address 6C08236D in thread 71BC
-Module: lua54.dll
-Logical Address: 0001:0000136D
+Exception: Breakpoint (code 0x80000003) at address 00D6B2A6 in thread 5F4C
+Module: PlantsVsZombies.exe
+Logical Address: 0001:004BA2A6
 
-0093F0B8 6C08236D lua_getglobal+1D
-Params: 01371E10 01371E10 0093F10C 07F1F5D8
+0133ED88 00D6B2A6 common_assert_to_message_box<wchar_t>+C6
+Params: 00E2CAC8 00E2C100 00000838 00BE64B5
 
 StackWalk failed (error 299)
 
-EAX:08FA0001 EBX:FDFDFDFD ECX:01371E10 EDX:0000002B ESI:0107C3A4 EDI:0000002B
-EIP:6C08236D ESP:0093EFC0  EBP:0093F0B8
+EAX:00000004 EBX:00000000 ECX:F6E4552D EDX:01470000 ESI:014977E8 EDI:014977E8
+EIP:00D6B2A6 ESP:0133E8F4  EBP:0133ED88
 CS:0023 SS:002B DS:002B ES:002B FS:0053 GS:002B
-Flags:00010206
+Flags:00200246
 
 Windows Ver: NT 6.2  Build 9200
 DDraw Ver: 10.0.22621.1
@@ -18,8 +18,8 @@ DSound Ver: 10.0.22621.1
 
 Product: PlantsVsZombies
 Version: 1.2.0.1096
-Time Loaded: 00:00:12
-Fullscreen: Yes
-Primary ThreadId: 71BC
+Time Loaded: 00:00:27
+Fullscreen: No
+Primary ThreadId: 5F4C
 Times Played: 0
 

@@ -1035,6 +1035,8 @@ void SeedBank::Draw(Graphics* g)
 
 	for (int i = 0; i < mNumPackets; i++)
 	{
+		if (mApp->mBoard->mCursorObject->mSeedBankIndex == i) continue;
+
 		SeedPacket* aSeedPacket = &mSeedPackets[i];
 		g->PushState();
 		float mScale = max(1.0f, mApp->mHeight / 720.0f * TodAnimateCurveFloat(0, 100, aSeedPacket->mSelectionCounter, 1.0f, 1.25f, TodCurves::CURVE_EASE_IN));
@@ -1061,6 +1063,7 @@ void SeedBank::Draw(Graphics* g)
 		g->mTransY -= offsetScale * 75;
 		g->PushState();
 		g->SetScale(1, 1, 0, 0);
+		g->SetClipRect(0, 0, 501+90, BOARD_HEIGHT);
 		TodDrawImageScaledF(g, Sexy::IMAGE_SEED_SELECTOR, aSeedPacket->mX + aSeedPacket->mOffsetX - 5, 2.5f, mScale, mScale);
 		float aPos = PI * 0.25f * PI;
 		float aTime = gLawnApp->mAppCounter * 2.0f * PI / 200.0f;
@@ -1071,6 +1074,7 @@ void SeedBank::Draw(Graphics* g)
 			aSeedPacket->Draw(g);
 			aSeedPacket->EndDraw(g);
 		}
+		g->SetClipRect(0, 0, 501 + 90, BOARD_HEIGHT);
 		TodDrawImageScaledF(g, Sexy::IMAGE_P1_ARROW, aSeedPacket->mX + aSeedPacket->mOffsetX - 5 + 19.5f, 2.5f + aFloatingHeight, mScale, mScale);
 		g->PopState();
 		

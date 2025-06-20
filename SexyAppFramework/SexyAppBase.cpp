@@ -2537,6 +2537,7 @@ static void CalculateFPS()
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetColor(gFrameCount % 2 == 1 ? Color(0xff00) : Color(0xff0000));
 	aDrawG.FillRect(0, gFPSImage->GetHeight()-2, gSexyAppBase->mLoadingThreadCompleted ? gFPSImage->GetWidth() : gFPSImage->GetWidth() / 2, 2);
+	gFPSImage->mBitsChangedCount++;
 }
 
 ///////////////////////////// FPS Stuff to draw mouse coords

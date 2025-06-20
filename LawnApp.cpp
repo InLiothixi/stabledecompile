@@ -60,6 +60,8 @@ bool gFastMo = false;  //0x6A9EAB
 LawnApp* gLawnApp = nullptr;  //0x6A9EC0
 int gSlowMoCounter = 0;  //0x6A9EC4
 
+Rect LawnApp::gBoardBounds(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
 //0x44E8A0
 bool LawnGetCloseRequest()
 {
@@ -259,6 +261,11 @@ LawnApp::~LawnApp()
 
 	delete mProfileMgr;
 	delete mLastLevelStats;
+
+	delete mBoardCamera;
+	mBoardCamera = NULL;
+
+	mDebugTexts.clear();
 
 	mResourceManager->DeleteResources("");
 #ifdef _DEBUG
@@ -1926,6 +1933,14 @@ void LawnApp::LoadingThreadProc()
 	mZenGarden = new ZenGarden();
 	mReanimatorCache = new ReanimatorCache();
 	mReanimatorCache->ReanimatorCacheInitialize();
+
+	mBoardCamera = new DDImage(mDDInterface);
+	mBoardCamera->Create(BOARD_WIDTH, BOARD_HEIGHT);
+	mBoardCamera->SetImageMode(false, false);
+	mBoardCamera->SetVolatile(true);
+	mBoardCamera->mPurgeBits = false;
+	mBoardCamera->mWantDDSurface = true;
+	mBoardCamera->PurgeBits();
 
 	TodFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));
 
@@ -3961,4 +3976,28 @@ bool LawnApp::IsLastStandEndless(GameMode theGameMode)
 {
 	int aLevel = theGameMode - GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_1;
 	return aLevel >= 0 && aLevel <= 4;
+}
+
+void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect) {
+	LPDIRECTDRAWSURFACE aSurface = mDDInterface->mDrawSurface;
+	mDDInterface->mDrawSurface = NULL;
+	DDImage anImage(mDDInterface);
+	anImage.SetSurface(aSurface);
+	anImage.GetBits();
+
+	Graphics gGameCam(mBoardCamera);
+	gGameCam.SetFastStretch(true);
+	gGameCam.SetLinearBlend(false);
+	gGameCam.SetClipRect(theClipRect);
+	gGameCam.DrawImage(&anImage, 0, 0);
+	mBoardCamera->BitsChanged();
+	anImage.PurgeBits();
+	mDDInterface->mDrawSurface = aSurface;
+
+	g->PushState();
+	g->SetColor(Color::Black);
+	g->FillRect(theClipRect);
+	g->PopState();
+
+	TodBltMatrix(g, mBoardCamera, theTransform, theClipRect, theColor, theDrawMode, theClipRect);
 }
