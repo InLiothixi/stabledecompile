@@ -8656,10 +8656,6 @@ void Board::Draw(Graphics* g)
 	mDrawCount++;
 	DrawGameObjects(g);
 
-	mCameraClipRect.mWidth = 400;
-	mCameraFilter = FilterEffect::FILTER_EFFECT_WASHED_OUT;
-	mCameraColor = Color(255, 64, 64);
-
 	if (mCameraTranform.m01 != 0 || mCameraTranform.m02 != 0 || mCameraTranform.m10 != 0 || mCameraTranform.m12 != 0 || mCameraTranform.m20 != 0 || mCameraTranform.m21 != 0 ||
 		mCameraTranform.m00 != 1 || mCameraTranform.m11 != 1 || mCameraTranform.m22 != 1 || mCameraColor != Color::White || !(mCameraClipRect == LawnApp::gBoardBounds) || mCameraFilter != FilterEffect::FILTER_EFFECT_NONE) // if no transform then do not render camera
 	{
