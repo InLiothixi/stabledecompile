@@ -7669,6 +7669,9 @@ void Board::DrawShovel(Graphics* g)
 void Board::DrawDebugText(Graphics* g)
 {
 	mApp->mDebugTexts.clear();
+	g->PushState();
+	g->mTransX = 0;
+	g->mTransY = 0;
 
 	switch (mDebugTextMode)
 	{
@@ -7847,12 +7850,15 @@ void Board::DrawDebugText(Graphics* g)
 	}
 
 	mApp->mDebugTexts.clear();
+	g->PopState();
 }
 
 //0x419AE0
 void Board::DrawDebugObjectRects(Graphics* g)
 {
 	g->PushState();
+	g->mTransX = 0;
+	g->mTransY = 0;
 	if (mDebugTextMode == DebugTextMode::DEBUG_TEXT_COLLISION)
 	{
 		Plant* aPlant = nullptr;
