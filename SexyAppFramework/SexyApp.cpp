@@ -572,6 +572,8 @@ void SexyApp::PreDisplayHook()
 	//}
 }
 
+#include "../Sexy.TodLib/TodDebug.h"
+
 void SexyApp::InitPropertiesHook()
 {
 	// Load properties if we need to
@@ -622,9 +624,9 @@ void SexyApp::Init()
 
 	SEHCatcher::mSubmitHost = "www.popcap.com";
 
-	OutputDebugString(StrFormat("Product: %s\r\n", mProdName.c_str()).c_str());	
-	OutputDebugString(StrFormat("BuildNum: %d\r\n", mBuildNum).c_str());
-	OutputDebugString(StrFormat("BuildDate: %s\r\n", mBuildDate.c_str()).c_str());	
+	TodTrace(StrFormat("Product: %s\r\n", mProdName.c_str()).c_str());
+	TodTrace(StrFormat("BuildNum: %d\r\n", mBuildNum).c_str());
+	TodTrace(StrFormat("BuildDate: %s\r\n", mBuildDate.c_str()).c_str());
 
 	SexyAppBase::Init();
 

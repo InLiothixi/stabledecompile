@@ -124,4 +124,8 @@ public:
     bool                    IsStinkyAsleep(time_t theTime);
 };
 
+extern SpecialGridPlacement gGreenhouseGridPlacement[];
+extern SpecialGridPlacement gMushroomGridPlacement[];
+extern SpecialGridPlacement gAquariumGridPlacement[];
+
 #endif

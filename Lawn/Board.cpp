@@ -33,6 +33,8 @@
 
 #include <immintrin.h> 
 
+#include "ZenGarden.h"
+
 #define SEXY_PERF_ENABLED
 #include "../SexyAppFramework/PerfTimer.h"
 
@@ -7905,33 +7907,59 @@ void Board::DrawDebugObjectRects(Graphics* g)
 	}
 	else if (mDebugTextMode == DebugTextMode::DEBUG_TEXT_GRID_DEBUG)
 	{
-		for (int x = 0; x < MAX_GRID_SIZE_X; x++)
+		g->SetColor(Color(255, 0, 0));
+
+		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
 		{
-			for (int y = 0; y < MAX_GRID_SIZE_Y; y++)
+			if (mBackground == BackgroundType::BACKGROUND_GREENHOUSE) 
 			{
-				if (mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_NONE || mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_DIRT) continue;
-
-				if (StageHasRoof() && x < 5) {
-					g->SetColor(Color(255, 0, 0));
-					int topLX = GridToPixelX(x, y);
-					int topLY = GridToPixelY(x, y);
-					int topRX = topLX + 80;
-
-					float skew = (topRX < 440.0f) ? (440.0f - topRX) * 0.25f : 0.0f;
-					int topRY = GridToPixelY(8, y) + static_cast<int>(skew);
-
-					int botLY = topLY + 85;
-					int botRY = topRY + 85;
-
-					g->DrawLineAA(topLX, topLY, topRX, topRY);
-					g->DrawLineAA(topRX, topRY, topRX, botRY);
-					g->DrawLineAA(topRX, botRY, topLX, botLY);
-					g->DrawLineAA(topLX, botLY, topLX, topLY);
-				}
-				else
+				for (int i = 0; i < 32; ++i) 
 				{
-					g->SetColor(Color(255, 0, 0));
-					g->DrawRect(GridToPixelX(x, y), GridToPixelY(x, y), 80, StageHasRoof() || StageHas6Rows() ? 85 : 100);
+					const SpecialGridPlacement& grid = gGreenhouseGridPlacement[i];
+					g->DrawRect(grid.mPixelX, grid.mPixelY, 80, 100);
+				}
+			}
+			else if (mBackground == BackgroundType::BACKGROUND_MUSHROOM_GARDEN) {
+				for (int i = 0; i < 8; ++i) 
+				{
+					const SpecialGridPlacement& grid = gMushroomGridPlacement[i];
+					g->DrawRect(grid.mPixelX, grid.mPixelY, 80, 100);
+				}
+			}
+			else if (mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM) {
+				for (int i = 0; i < 8; ++i)
+				{
+					const SpecialGridPlacement& grid = gAquariumGridPlacement[i];
+					g->DrawRect(grid.mPixelX, grid.mPixelY, 80, 100);
+				}
+			}
+		}
+		else
+		{
+			if (StageHasRoof())	g->mTransY += 10;
+			for (int x = 0; x < MAX_GRID_SIZE_X; x++)
+			{
+				for (int y = 0; y < MAX_GRID_SIZE_Y; y++)
+				{
+					if (mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_NONE || mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_DIRT) continue;
+					if (StageHasRoof() && x < 5) {
+						int topLX = GridToPixelX(x, y);
+						int topLY = GridToPixelY(x, y) + 10;
+						int topRX = topLX + 80;
+						int topRY = GridToPixelY(x + 1, y) + 10;
+						int botLY = topLY + 85;
+						int botRY = topRY + 85;
+
+						g->DrawLineAA(topLX, topLY, topRX, topRY);
+						g->DrawLineAA(topRX, topRY, topRX, botRY);
+						g->DrawLineAA(topRX, botRY, topLX, botLY);
+						g->DrawLineAA(topLX, botLY, topLX, topLY);
+					}
+					else
+					{
+						g->SetColor(Color(255, 0, 0));
+						g->DrawRect(GridToPixelX(x, y), GridToPixelY(x, y), 80, StageHasRoof() || StageHas6Rows() ? 85 : 100);
+					}
 				}
 			}
 		}

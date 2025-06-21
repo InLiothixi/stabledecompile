@@ -123,6 +123,7 @@ void TodLog(const char* theFormat, ...)
 	}
 
 	TodLogString(aButter);
+	printf(aButter);
 #endif
 }
 
@@ -133,11 +134,13 @@ void TodLogString(const char* theMsg)
 	if (f == nullptr)
 	{
 		OutputDebugString(_S("Failed to open log file\n"));
+		printf(_S("Failed to open log file\n"));
 	}
 
 	if (fwrite(theMsg, strlen(theMsg), 1, f) != 1)
 	{
 		OutputDebugString(_S("Failed to write to log file\n"));
+		printf(_S("Failed to write to log file\n"));
 	}
 
 	fclose(f);
@@ -167,6 +170,7 @@ void TodTrace(const char* theFormat, ...)
 	}
 
 	OutputDebugStringA(aButter);
+	printf(aButter);
 #endif
 }
 
@@ -197,6 +201,7 @@ void TodTraceAndLog(const char* theFormat, ...)
 	}
 
 	OutputDebugStringA(aButter);
+	printf(aButter);
 	TodLogString(aButter);
 #endif
 }
@@ -232,6 +237,7 @@ void TodTraceWithoutSpamming(const char* theFormat, ...)
 	}
 
 	OutputDebugStringA(aButter);
+	printf(aButter);
 #endif
 }
 

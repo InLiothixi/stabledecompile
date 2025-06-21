@@ -19,7 +19,7 @@
 #include "../SexyAppFramework/Graphics.h"
 #include "../Sexy.TodLib/TodStringFile.h"
 
-static SpecialGridPlacement gGreenhouseGridPlacement[] =  //0x69DE50
+SpecialGridPlacement gGreenhouseGridPlacement[] =  //0x69DE50
 {
     {  73,  73, 0, 0 },
     { 155,  71, 1, 0 },
@@ -55,7 +55,7 @@ static SpecialGridPlacement gGreenhouseGridPlacement[] =  //0x69DE50
     { 691, 368, 7, 3 }
 };
 
-static SpecialGridPlacement gMushroomGridPlacement[] = {  //0x69E050
+SpecialGridPlacement gMushroomGridPlacement[] = {  //0x69E050
     { 110, 441, 0, 0 },
     { 237, 360, 1, 0 },
     { 298, 458, 2, 0 },
@@ -66,7 +66,7 @@ static SpecialGridPlacement gMushroomGridPlacement[] = {  //0x69E050
     { 552, 283, 7, 0 }
 };
 
-static SpecialGridPlacement gAquariumGridPlacement[] = {  //0x69E0D0
+SpecialGridPlacement gAquariumGridPlacement[] = {  //0x69E0D0
     { 113, 185, 0, 0 },
     { 306, 120, 1, 0 },
     { 356, 270, 2, 0 },

@@ -42,6 +42,8 @@
 
 #include "memmgr.h"
 
+#include "../Sexy.TodLib/TodDebug.h"
+
 using namespace Sexy;
 
 const int DEMO_FILE_ID = 0x42BEEF78;
@@ -486,9 +488,9 @@ SexyAppBase::~SexyAppBase()
 		HWND aWindow = mHWnd;
 		mHWnd = NULL;
 		SetWindowLong(aWindow, GWL_USERDATA, NULL);
-		/*char aStr[256];
+		char aStr[256];
 		sprintf(aStr, "HWND: %d\r\n", aWindow);
-		OutputDebugString(aStr);*/
+		TodTrace(aStr);
 				
 		DestroyWindow(aWindow);
 	}	
@@ -2778,7 +2780,6 @@ bool SexyAppBase::DrawDirtyStuff()
 
 		mScreenBltTime = aEndTime - aPreScreenBltTime;
 
-#ifdef _DEBUG
 		/*if (mFPSTime >= 5000) // Show FPS about every 5 seconds
 		{
 			ulong aTickNow = GetTickCount();
@@ -2793,7 +2794,6 @@ bool SexyAppBase::DrawDirtyStuff()
 			mFPSStartTick = aTickNow;
 			mFPSDirtyCount = 0;
 		}*/
-#endif
 
 		if ((mLoadingThreadStarted) && (!mLoadingThreadCompleted))
 		{
@@ -2806,7 +2806,7 @@ bool SexyAppBase::DrawDirtyStuff()
 
 			/*char aStr[256];
 			sprintf(aStr, "Next Draw Time: %d\r\n", mNextDrawTick);
-			OutputDebugString(aStr);*/
+			TodTrace(aStr);*/
 		}
 		else
 			mNextDrawTick = aEndTime;
@@ -3840,9 +3840,9 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				}
 				else if (uMsg == WM_CLOSE)
 				{
-					/*char aStr[256];
+					char aStr[256];
 					sprintf(aStr, "CLOSED HWND: %d\r\n", hWnd);
-					OutputDebugString(aStr);*/
+					TodTrace(aStr);
 					
 					aSexyApp->CloseRequestAsync();
 					return 0;
@@ -3988,7 +3988,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 		{
 			char aStr[256];
 			sprintf(aStr, "DESTROYED HWND: %d\r\n", hWnd);
-			OutputDebugStringA(aStr);
+			TodTrace(aStr);
 		}
 		break;	
 	case WM_SETCURSOR:
@@ -4950,7 +4950,7 @@ std::string	SexyAppBase::NotifyCrashHook()
 
 void SexyAppBase::MakeWindow()
 {
-	//OutputDebugString("MAKING WINDOW\r\n");
+	TodTrace("MAKING WINDOW\r\n");
 
 	if (mHWnd != NULL)
 	{
@@ -5125,9 +5125,9 @@ void SexyAppBase::MakeWindow()
 		mIsPhysWindowed = false;
 	}
 	
-	/*char aStr[256];
+	char aStr[256];
 	sprintf(aStr, "HWND: %d\r\n", mHWnd);
-	OutputDebugString(aStr);*/
+	TodTrace(aStr);
 #if defined(WIN64)
 	SetWindowLongPtr(mHWnd, GWLP_USERDATA, (LONG_PTR)this);
 #elif defined(WIN32)
@@ -5357,7 +5357,7 @@ void SexyAppBase::LoadingThreadProcStub(void *theArg)
 
 	char aStr[256];
 	sprintf(aStr, "Resource Loading Time: %d\r\n", (GetTickCount() - aSexyApp->mTimeLoaded));
-	OutputDebugStringA(aStr);
+	TodTrace(aStr);
 
 	aSexyApp->mLoadingThreadCompleted = true;
 }
@@ -6138,23 +6138,23 @@ void SexyAppBase::Start()
 
 	char aString[256];
 	sprintf(aString, "Seconds       = %g\r\n", (timeGetTime() - aStartTime) / 1000.0);
-	OutputDebugStringA(aString);
-	//sprintf(aString, "Count         = %d\r\n", aCount);
-	//OutputDebugString(aString);
+	TodTrace(aString);
+	sprintf(aString, "Count         = %d\r\n", aCount);
+	TodTrace(aString);
 	sprintf(aString, "Sleep Count   = %d\r\n", mSleepCount);
-	OutputDebugStringA(aString);
+	TodTrace(aString);
 	sprintf(aString, "Update Count  = %d\r\n", mUpdateCount);
-	OutputDebugStringA(aString);
+	TodTrace(aString);
 	sprintf(aString, "Draw Count    = %d\r\n", mDrawCount);
-	OutputDebugStringA(aString);
+	TodTrace(aString);
 	sprintf(aString, "Draw Time     = %d\r\n", mDrawTime);
-	OutputDebugStringA(aString);
+	TodTrace(aString);
 	sprintf(aString, "Screen Blt    = %d\r\n", mScreenBltTime);
-	OutputDebugStringA(aString);
+	TodTrace(aString);
 	if (mDrawTime+mScreenBltTime > 0)
 	{
 		sprintf(aString, "Avg FPS       = %d\r\n", (mDrawCount*1000)/(mDrawTime+mScreenBltTime));
-		OutputDebugStringA(aString);
+		TodTrace(aString);
 	}
 
 	timeEndPeriod(1);	

@@ -23,12 +23,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	gHInstance = hInstance;
 
 #ifdef _DEBUG
-	/*AllocConsole();
+	AllocConsole();
 
 	FILE* dummy;
 	freopen_s(&dummy, "CONIN$", "r", stdin);
-	freopen("CONOUT$", "w", stdout);
-	freopen_s(&dummy, "CONOUT$", "w", stderr);*/
+	freopen_s(&dummy, "CONOUT$", "w", stdout);
+	freopen_s(&dummy, "CONOUT$", "w", stderr);
 #endif
 
 	TodStringListSetColors(gLawnStringFormats, gLawnStringFormatCount);

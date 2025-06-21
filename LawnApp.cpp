@@ -262,12 +262,6 @@ LawnApp::~LawnApp()
 	delete mProfileMgr;
 	delete mLastLevelStats;
 
-	if (mBoardCamera)
-	{
-		delete mBoardCamera;
-		mBoardCamera = NULL;
-	}
-
 	mDebugTexts.clear();
 
 	mResourceManager->DeleteResources("");
@@ -1307,13 +1301,11 @@ void BetaSubmitFunc()
 //0x451880
 void LawnApp::Init()
 {
-#ifdef _DEBUG
 	DoParseCmdLine();
 	if (!mTodCheatKeys)
 	{
-		mOnlyAllowOneCopyToRun = true;
+		mOnlyAllowOneCopyToRun = false;
 	}
-#endif
 
 
 	//if (!gSexyCache->Connected() &&

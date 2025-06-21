@@ -135,6 +135,7 @@ void SexyMemRemoveTrack(void* addr)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+#include "../Sexy.TodLib/TodDebug.h"
 void SexyDumpUnfreed()
 {
 	if (!gSexyAllocMapValid)
@@ -159,12 +160,12 @@ void SexyDumpUnfreed()
 	time_t aTime = time(NULL);
 	sprintf(buf, "Memory Leak Report for %s\n",	asctime(localtime(&aTime)));
 	fprintf(f, buf);
-	OutputDebugString("\n");
-	OutputDebugString(buf);
+	TodTrace("\n");
+	TodTrace(buf);
 	for(i = gSexyAllocMap.begin(); i != gSexyAllocMap.end(); i++) 
 	{
 		sprintf(buf, "%s(%d) : Leak %d byte%s\n", i->second.file, i->second.line, i->second.size,i->second.size>1?"s":"");
-		OutputDebugString(buf);
+		TodTrace(buf);
 		fprintf(f, buf);
 
 #ifdef SEXY_DUMP_LEAKED_MEM
@@ -226,9 +227,9 @@ void SexyDumpUnfreed()
 
 	sprintf(buf, "-----------------------------------------------------------\n");
 	fprintf(f, buf);
-	OutputDebugString(buf);
+	TodTrace(buf);
 	sprintf(buf, "Total Unfreed: %d bytes (%dKB)\n\n", totalSize, totalSize / 1024);
-	OutputDebugString(buf);
+	TodTrace(buf);
 	fprintf(f, buf);
 }
 
