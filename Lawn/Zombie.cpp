@@ -9917,31 +9917,12 @@ void Zombie::MowDown()
 
     DropShield(0U);
     DropHelm(0U);
+    DropFlag();
 
-    if (mZombieType == ZombieType::ZOMBIE_FLAG)
-    {
-        DropFlag();
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_NEWSPAPER || mZombieType == ZombieType::ZOMBIE_BALLOON)
-    {
-        DropHead(0U);
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_POGO)
+    if (mZombieType == ZombieType::ZOMBIE_POGO)
     {
         PogoBreak(0U);
-        DropHead(0U);
         mAltitude = 0.0f;
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
-    {
-        DropHead(0U);
-        DropJackInTheBox();
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
-    {
-        DropHead(0U);
-        DropPole();
-        DropZombiePole();
     }
 
     Reanimation* aMoweredReanim = mApp->AddReanimation(0.0f, 0.0f, mRenderOrder, ReanimationType::REANIM_LAWN_MOWERED_ZOMBIE);
@@ -10002,23 +9983,6 @@ void Zombie::ApplyBurn()
 
     DropHelm(0U);
     DropShield(0U);
-    DropFlag();
-    if (mZombieType == ZOMBIE_NEWSPAPER) {
-        DropNewsPaperGlasses();
-    }
-    else if (mZombieType == ZOMBIE_POGO) {
-        PogoBreak(0U);
-        DropPogoGlasses();
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
-    {
-        DropJackInTheBox();
-    }
-    else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
-    {
-        DiggerLoseAxe();
-        DropDiggerAxe();
-    }
 
     if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_DYING || 
         mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || 
@@ -10061,22 +10025,6 @@ void Zombie::ApplyBurn()
         {
             BalloonPropellerHatSpin(false);
         }
-
-        /*if (mZombieType == ZOMBIE_POLEVAULTER)
-        {
-            if (mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT || mZombiePhase == PHASE_POLEVAULTER_IN_VAULT)                
-                DropZombiePole();
-            DropPole();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
-        {
-            DropJackInTheBox();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
-        {
-            DiggerLoseAxe();
-            DropDiggerAxe();
-        }*/
     }
     else
     {
@@ -10118,6 +10066,11 @@ void Zombie::ApplyBurn()
             aCharredPosX -= 15.0f;
             aCharredPosY -= 10.0f;
         }
+        if (mZombieType == ZombieType::ZOMBIE_POGO)
+        {
+            aCharredPosY += mAltitude;
+            mAltitude = 0;
+        }
 
         if (mOnHighGround)
         {
@@ -10157,21 +10110,29 @@ void Zombie::ApplyBurn()
             aCharredReanim->mOverlayMatrix.m02 += 60.0f * aScaleZombie;
         }
 
-        if (mZombieType == ZOMBIE_POLEVAULTER)
+        DropFlag();
+
+        if (mZombieType == ZOMBIE_POLEVAULTER && mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
         {
-            if (mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
-                DropZombiePole();
+            DropZombiePole();
         }
-        if (mZombieType == ZOMBIE_BALLOON) {
+        else if (mZombieType == ZOMBIE_NEWSPAPER) {
+            DropNewsPaperGlasses();
+        }
+        else if (mZombieType == ZOMBIE_BALLOON) {
             DropBalloonPropeller();
         }
         else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
         {
             DropJackInTheBox();
         }
+        else if (mZombieType == ZombieType::ZOMBIE_POGO)
+        {
+            PogoBreak(0U);
+            DropPogoGlasses();
+        }
         else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
         {
-            DiggerLoseAxe();
             DropDiggerAxe();
         }
         DieWithLoot();
@@ -10764,6 +10725,28 @@ void Zombie::UpdateMowered()
     if (aMoweredReanim == nullptr || aMoweredReanim->mLoopCount > 0)
     {
         DropHead(0U);
+        DropFlag();
+        if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER) {
+            DropZombiePole();
+        }
+        else if (mZombieType == ZombieType::ZOMBIE_NEWSPAPER) {
+            DropNewsPaperGlasses();
+        }
+        else if (mZombieType == ZombieType::ZOMBIE_BALLOON) {
+            DropBalloonPropeller();
+        }
+        else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
+        {
+            DropJackInTheBox();
+        }
+        else if (mZombieType == ZombieType::ZOMBIE_POGO)
+        {
+            DropPogoGlasses();
+        }
+        else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
+        {
+            DropDiggerAxe();
+        }
         DropArm(0U);
         DieWithLoot();
     }

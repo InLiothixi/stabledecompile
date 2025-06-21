@@ -4957,7 +4957,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
     }*/
     if (aSeedType == SeedType::SEED_SEASHROOM)
     {
-        aOffsetY += 3.535f;
+        aOffsetY += 3.535f * g->mScaleY;
     }
     if (aSeedType == SeedType::SEED_SUNSHROOM)
     {
