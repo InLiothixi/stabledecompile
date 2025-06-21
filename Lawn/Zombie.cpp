@@ -10292,12 +10292,6 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
         return;
     }
 
-    if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
-    {
-        DropPole();
-        DropZombiePole();
-    }
-
     if (mIceTrapCounter > 0)
     {
         AddAttachedParticle(75, 106, ParticleEffect::PARTICLE_ICE_TRAP_RELEASE);
@@ -10334,6 +10328,15 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
     if (mShieldType != ShieldType::SHIELDTYPE_NONE)
     {
         DropShield(1U);
+    }
+
+    int theBlendTime = 20;
+
+    if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
+    {
+        DropPole();
+        DropZombiePole();
+        theBlendTime = 0;
     }
 
     mVelX = 0.0f;
@@ -10436,8 +10439,10 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
     {
         aDeathTrackName = "anim_death2";
     }
+
+  
    
-    PlayZombieReanim(aDeathTrackName, ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, aDeathAnimRate);
+    PlayZombieReanim(aDeathTrackName, ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, theBlendTime, aDeathAnimRate);
 
     ReanimShowPrefix("anim_tongue", RENDER_GROUP_HIDDEN);
 
