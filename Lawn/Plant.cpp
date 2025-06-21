@@ -498,7 +498,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     case SeedType::SEED_KERNELPULT:
         TOD_ASSERT(aBodyReanim);
         aBodyReanim->AssignRenderGroupToPrefix("Cornpult_butter", RENDER_GROUP_HIDDEN);
-        if (Sexy::Rand(4) == 0)
+        if (IsOnBoard() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && Sexy::Rand(4) == 0)
         {
             Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
             aBodyReanim = mApp->ReanimationGet(mBodyReanimID);

@@ -936,7 +936,11 @@ void ZenGarden::MouseDownWithFeedingTool(int x, int y, CursorType theCursorType)
         aZenTool->mGridY = aPlantToFeed->mRow;
         aZenTool->mPosX = aPlantToFeed->mX + 40;
         aZenTool->mPosY = aPlantToFeed->mY + 40;
-        aZenTool->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ABOVE_UI, 0, 0);
+
+        if (theCursorType == CursorType::CURSOR_TYPE_WATERING_CAN && mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_GOLD_WATERINGCAN])
+            aZenTool->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ABOVE_UI, 0, 0);
+        else
+            aZenTool->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PLANT, 0, aPlantToFeed->mY + 2);
 
         if (theCursorType == CursorType::CURSOR_TYPE_WATERING_CAN)
         {
