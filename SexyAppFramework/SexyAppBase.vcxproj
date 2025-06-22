@@ -275,6 +275,7 @@
     <ClCompile Include="..\Lawn\ZenGarden.cpp" />
     <ClCompile Include="..\Lawn\Zombie.cpp" />
     <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\Particles\ParticleScreen.cpp" />
     <ClCompile Include="..\PlayerController.cpp" />
     <ClCompile Include="..\Resources.cpp" />
     <ClCompile Include="..\Lawn\Widget\GameButton.cpp" />
@@ -977,6 +978,7 @@
     <ClInclude Include="..\Lawn\Widget\UserDialog.h" />
     <ClInclude Include="..\Lawn\Widget\ZombatarScreen.h" />
     <ClInclude Include="..\Lawn\Widget\ZombatarTOS.h" />
+    <ClInclude Include="..\Particles\ParticleScreen.h" />
     <ClInclude Include="..\PlayerController.h" />
     <ClInclude Include="..\Sexy.TodLib\Attachment.h" />
     <ClInclude Include="..\Lawn\Board.h" />

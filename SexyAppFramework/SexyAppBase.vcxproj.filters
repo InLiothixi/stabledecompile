@@ -124,6 +124,15 @@
     <Filter Include="Lawn\Board\Board Source">
       <UniqueIdentifier>{f3e853ae-1d79-4c3e-bdeb-63ea2671fc57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{9a76f82c-a6ae-4b01-ae6b-19ddaec6b0c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\Particle Include">
+      <UniqueIdentifier>{2e788738-f2e5-4a9e-9a42-93dd63b265d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\Particle Source">
+      <UniqueIdentifier>{ff9c4721-bcb9-4a11-b264-f8ebdddb9ab9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp">
@@ -924,6 +933,9 @@
     <ClCompile Include="..\Lawn\Widget\LanguageScreen.cpp">
       <Filter>Lawn\Widget\Widget Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\Particles\ParticleScreen.cpp">
+      <Filter>Particle\Particle Include</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -1483,6 +1495,9 @@
     </ClInclude>
     <ClInclude Include="..\Lawn\Widget\LanguageScreen.h">
       <Filter>Lawn\Widget\Widget Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Particles\ParticleScreen.h">
+      <Filter>Particle\Particle Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
