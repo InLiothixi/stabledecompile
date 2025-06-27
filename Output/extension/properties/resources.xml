@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <ResourceManifest>
-    <!--<Resources id="LoadingImages">
-        <SetDefaults path="extension/images" idprefix="IMAGE_" />
-        <Image id="XXX" path="xxx" />
-    </Resources>-->
+    
 </ResourceManifest>
         

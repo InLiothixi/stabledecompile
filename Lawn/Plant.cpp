@@ -2043,13 +2043,26 @@ void Plant::UpdateUmbrella()
 
         if (aSpecialReanim->mLoopCount > 0)
         {
-            mApp->RemoveReanimation(mSpecialReanimID);
-            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
-            if (aBodyReanim)
+            if (aSpecialReanim->IsAnimPlaying("anim_block"))
             {
-                for (int i = 0; i < aBodyReanim->mDefinition->mTracks.count; i++)
+                aSpecialReanim->StartBlend(20);
+                aSpecialReanim->SetFramesForLayer("anim_idle");
+                aSpecialReanim->mLoopCount = 0;
+                aSpecialReanim->mAnimTime = aBodyReanim->mAnimTime;
+                aSpecialReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+                aSpecialReanim->mAnimRate = aBodyReanim->mAnimRate;
+                aSpecialReanim->mRenderOrder = aBodyReanim->mRenderOrder;
+            }
+            else if (aSpecialReanim->IsAnimPlaying("anim_idle"))
+            {
+                mApp->RemoveReanimation(mSpecialReanimID);
+                Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+                if (aBodyReanim)
                 {
-                    aBodyReanim->mTrackInstances[i].mRenderGroup = RENDER_GROUP_NORMAL;
+                    for (int i = 0; i < aBodyReanim->mDefinition->mTracks.count; i++)
+                    {
+                        aBodyReanim->mTrackInstances[i].mRenderGroup = RENDER_GROUP_NORMAL;
+                    }
                 }
             }
         }
@@ -5397,22 +5410,31 @@ void Plant::DoSpecial()
 
             Reanimation* aSpecialReanim = mApp->ReanimationTryToGet(mSpecialReanimID);
             Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+
             if (!aSpecialReanim)
             {
                 aSpecialReanim = mApp->AddReanimation(mX, mY, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0), aPlantDef.mReanimationType);
                 aSpecialReanim->AssignRenderGroupToTrack("anim_face", RENDER_GROUP_HIDDEN);
+                aSpecialReanim->PlayReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
+                mSpecialReanimID = mApp->ReanimationGetID(aSpecialReanim);
+
                 if (aBodyReanim)
+                {
                     aSpecialReanim->mFilterEffect = aBodyReanim->mFilterEffect;
+                    aBodyReanim->ShowOnlyTrack("anim_face");
+                }
             }
             else
             {
                 aSpecialReanim->StartBlend(20);
+                aSpecialReanim->SetFramesForLayer("anim_block");
                 aSpecialReanim->mAnimTime = 0.0f;
-            }
-            aSpecialReanim->PlayReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
-            mSpecialReanimID = mApp->ReanimationGetID(aSpecialReanim);
+                aSpecialReanim->mLoopCount = 0;
+                aSpecialReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+                aSpecialReanim->mAnimRate = 22.0f;
+                aSpecialReanim->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0);
+            }  
             
-            if (aBodyReanim) aBodyReanim->ShowOnlyTrack("anim_face");
             //PlayBodyReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
         }
 
