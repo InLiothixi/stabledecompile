@@ -21,6 +21,7 @@
 #include "../../SexyAppFramework/Dialog.h"
 #include "../../SexyAppFramework/WidgetManager.h"
 #include "../../Sexy.TodLib/TodStringFile.h"
+#include "../../GameConstants.h"
 
 static float gFlowerCenter[3][2] = { { 765.0f, 483.0f }, { 663.0f, 455.0f }, { 701.0f, 439.0f } };  //0x665430
 
@@ -174,7 +175,7 @@ GameSelector::GameSelector(LawnApp* theApp)
 	mTrophyButton->mTranslateX = 0;
 	mTrophyButton->mTranslateY = 0;
 #endif
-#ifdef HAS_MORESCREEN
+#ifdef _HAS_MORESCREEN
 	mQuickPlayButton = MakeNewButton(
 		GameSelector::GameSelector_QuickPlay,
 		this,
@@ -698,7 +699,6 @@ void GameSelector::Draw(Graphics* g)
 	//}
 
 #ifdef _HAS_MORESCREEN
-	Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
 	int aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Right");
 	ReanimatorTransform aTransform;
 	aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
@@ -1482,7 +1482,7 @@ void GameSelector::OrderInManagerChanged()
 	mWidgetManager->PutInfront(mTrophyButton, this);
 	mWidgetManager->PutInfront(mAchievementsWidget, this);
 #endif
-#ifdef _HASMORESCREEN
+#ifdef _HAS_MORESCREEN
 	mWidgetManager->PutInfront(mQuickPlayButton, this);
 	mWidgetManager->PutInfront(mMoreWidget, this);
 #endif

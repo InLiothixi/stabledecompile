@@ -2029,15 +2029,28 @@ void Plant::UpdateUmbrella()
     }
 
     Reanimation* aSpecialReanim = mApp->ReanimationTryToGet(mSpecialReanimID);
-    if (aSpecialReanim && aSpecialReanim->mLoopCount > 0) 
+    Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+    if (aSpecialReanim) 
     {
-        mApp->RemoveReanimation(mSpecialReanimID);
-        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
-        if (aBodyReanim) 
+        if (aBodyReanim)
         {
-            for (int i = 0; i < aBodyReanim->mDefinition->mTracks.count; i++)
+            aSpecialReanim->mColorOverride = aBodyReanim->mColorOverride;
+            aSpecialReanim->mExtraAdditiveColor = aBodyReanim->mExtraAdditiveColor;
+            aSpecialReanim->mExtraOverlayColor = aBodyReanim->mExtraOverlayColor;
+            aSpecialReanim->mEnableExtraAdditiveDraw = aBodyReanim->mEnableExtraAdditiveDraw;
+            aSpecialReanim->mEnableExtraOverlayDraw = aBodyReanim->mEnableExtraOverlayDraw;
+        }
+
+        if (aSpecialReanim->mLoopCount > 0)
+        {
+            mApp->RemoveReanimation(mSpecialReanimID);
+            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+            if (aBodyReanim)
             {
-                aBodyReanim->mTrackInstances[i].mRenderGroup =  RENDER_GROUP_NORMAL;
+                for (int i = 0; i < aBodyReanim->mDefinition->mTracks.count; i++)
+                {
+                    aBodyReanim->mTrackInstances[i].mRenderGroup = RENDER_GROUP_NORMAL;
+                }
             }
         }
     }
@@ -5383,10 +5396,13 @@ void Plant::DoSpecial()
             const PlantDefinition& aPlantDef = GetPlantDefinition(mSeedType);
 
             Reanimation* aSpecialReanim = mApp->ReanimationTryToGet(mSpecialReanimID);
+            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
             if (!aSpecialReanim)
             {
                 aSpecialReanim = mApp->AddReanimation(mX, mY, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0), aPlantDef.mReanimationType);
                 aSpecialReanim->AssignRenderGroupToTrack("anim_face", RENDER_GROUP_HIDDEN);
+                if (aBodyReanim)
+                    aSpecialReanim->mFilterEffect = aBodyReanim->mFilterEffect;
             }
             else
             {
@@ -5396,7 +5412,6 @@ void Plant::DoSpecial()
             aSpecialReanim->PlayReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
             mSpecialReanimID = mApp->ReanimationGetID(aSpecialReanim);
             
-            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
             if (aBodyReanim) aBodyReanim->ShowOnlyTrack("anim_face");
             //PlayBodyReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
         }
