@@ -325,9 +325,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 	switch (aSeedType)
 	{
 	case SeedType::SEED_TALLNUT:
-		aScale = 0.3f * g->mScaleX;
-		aOffsetX = 12.0f + 3.6f * (g->mScaleX - 1);
-		aOffsetY = 22.0f + 6.6f * (g->mScaleY - 1);
+		aScale = 0.3f;
+		aOffsetX = 12.0f;
+		aOffsetY = 22.0f;
 		break;
 
 	case SeedType::SEED_INSTANT_COFFEE:
@@ -337,9 +337,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		break;
 
 	case SeedType::SEED_COBCANNON:
-		aScale = 0.26f * g->mScaleX;
-		aOffsetX = 6.5f + 1.69f * (g->mScaleX - 1);
-		aOffsetY = 23.0f + 5.98f * (g->mScaleY - 1);
+		aScale = 0.26f;
+		aOffsetX = 6.5f;
+		aOffsetY = 23.0f;
 		break;
 
 	case SeedType::SEED_CACTUS:
@@ -348,9 +348,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		break;
 
 	case SeedType::SEED_POTATOMINE:
-		aScale = 0.4f * g->mScaleX;
-		aOffsetX = 8.0f + 3.5f * (g->mScaleX - 1);
-		aOffsetY = 12.0f + 19 * (g->mScaleY - 1);
+		aScale = 0.4f;
+		aOffsetX = 8.0f;
+		aOffsetY = 12.0f;
 		break;
 
 	case SeedType::SEED_MAGNETSHROOM:
@@ -361,9 +361,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 	case SeedType::SEED_CHOMPER:
 	case SeedType::SEED_HYPNOSHROOM:
 	case SeedType::SEED_SPIKEROCK:
-		aScale = 0.4f * g->mScaleX;
-		aOffsetX = 8.0f + 4.8f * (g->mScaleX - 1);
-		aOffsetY = 12.0f + 7.2f * (g->mScaleY - 1);
+		aScale = 0.4f;
+		aOffsetX = 8.0f;
+		aOffsetY = 12.0f;
 		break;
 
 	case SeedType::SEED_FUMESHROOM:
@@ -379,9 +379,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		break;
 
 	case SeedType::SEED_TWINSUNFLOWER:
-		aScale = 0.45f * g->mScaleX;
-		aOffsetX = 7.0f + 3.15f * (g->mScaleX - 1);
-		aOffsetY = 14.0f + 6.3f * (g->mScaleY - 1);
+		aScale = 0.45f;
+		aOffsetX = 7.0f;
+		aOffsetY = 14.0f;
 		break;
 	case SeedType::SEED_GLOOMSHROOM:
 		aScale = 0.45f;
@@ -402,22 +402,22 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		break;
 
 	case SeedType::SEED_KERNELPULT:
-		aScale = 0.4f * g->mScaleX;
-		aOffsetX = 13.0f + 5.2f * (g->mScaleX - 1);
-		aOffsetY = 14.0f + 5.6f * (g->mScaleY - 1);
+		aScale = 0.4f;
+		aOffsetX = 13.0f;
+		aOffsetY = 14.0f;
 		break;
 
 	case SeedType::SEED_CABBAGEPULT:
-		aScale = 0.4f * g->mScaleX;
-		aOffsetX = 15.0f + 6 * (g->mScaleX - 1);
-		aOffsetY = 14.0f + 5.6f * (g->mScaleY - 1);
+		aScale = 0.4f;
+		aOffsetX = 15.0f;
+		aOffsetY = 14.0f;
 		break;
 
 	case SeedType::SEED_MELONPULT:
 	case SeedType::SEED_WINTERMELON:
-		aScale = 0.35f * g->mScaleX;
-		aOffsetX = 18.0f + 6.3f * (g->mScaleX - 1);
-		aOffsetY = 19.0f + 6.65f * (g->mScaleY - 1);
+		aScale = 0.35f;
+		aOffsetX = 18.0f;
+		aOffsetY = 19.0f;
 		break;
 
 	case SeedType::SEED_GRAVEBUSTER:
@@ -433,9 +433,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		break;
 
 	case SeedType::SEED_BLOVER:
-		aScale = 0.4f * g->mScaleX;
-		aOffsetX = 8.0f + 3.2f * (g->mScaleX - 1);
-		aOffsetY = 17.0f + 6.8f * (g->mScaleY - 1);
+		aScale = 0.4f;
+		aOffsetX = 8.0f;
+		aOffsetY = 17.0f;
 		break;
 
 	case SeedType::SEED_STARFRUIT:
@@ -467,7 +467,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 
 	case SeedType::SEED_ZOMBIE_POLEVAULTER:
 		aScale = 0.35f;
-		aOffsetX = -8.0f - 17.5f;
+		aOffsetX = -8.0f;
 		aOffsetY = -12.0f;
 		break;
 
@@ -506,7 +506,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 
 	case SeedType::SEED_ZOMBONI:
 		aScale = 0.23f;
-		aOffsetX = 12.0f - 6.25f;
+		aOffsetX = 12.0f;
 		aOffsetY = 3.0f;
 		break;
 
@@ -540,8 +540,8 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		aOffsetX = 52.0f;
 		aOffsetY = 58.0f;
 	}
-	aOffsetX = g->mScaleX * aOffsetX - aOffsetX * (g->mScaleX-1);
-	aOffsetY = g->mScaleY * (aOffsetY + 1.0f) - (aOffsetY + 1.0f) * (g->mScaleY-1);
+	aOffsetX = g->mScaleX * aOffsetX;
+	aOffsetY = g->mScaleY * (aOffsetY + 1.0f);
 	if (aDrawSeedInMiddle)
 	{
 		SeedPacketDrawSeed(g, x, y, theSeedType, theImitaterType, aOffsetX, aOffsetY, aScale);
