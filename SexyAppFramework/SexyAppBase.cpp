@@ -44,6 +44,7 @@
 #include "../Sexy.TodLib/TodDebug.h"
 
 #include "../GameConstants.h"
+#include <windowsx.h>
 
 using namespace Sexy;
 
@@ -3996,7 +3997,8 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 	case WM_SETCURSOR:
 		if (!aSexyApp->mSEHOccured)
 		{
-			if (LOWORD(lParam) == HTCLIENT)
+			LRESULT hitTest = SendMessage(hWnd, WM_NCHITTEST, 0, MAKELPARAM(GET_X_LPARAM(GetMessagePos()), GET_Y_LPARAM(GetMessagePos())));
+			if (hitTest == HTCLIENT)
 			{
 				aSexyApp->EnforceCursor();
 				return TRUE; 
