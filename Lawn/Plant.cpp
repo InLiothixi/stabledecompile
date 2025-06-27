@@ -838,13 +838,10 @@ void Plant::DoRowAreaDamage(int theDamage, unsigned int theDamageFlags)
 
         if (aZombie->mOnHighGround == IsOnHighGround() && (aZombie->EffectedByDamage(aDamageRangeFlags) 
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
-                || aZombie->mZombieType == ZombieType::ZOMBIE_DOG
+                || aZombie->mZombieType == ZombieType::ZOMBIE_DOG && (mSeedType == SeedType::SEED_YAMPOLINE || IsSpiky()) && aZombie->EffectedByDamage(13)
 #endif
-                && (
-#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
-                mSeedType == SeedType::SEED_YAMPOLINE ||
-#endif
-                IsSpiky()) && aZombie->EffectedByDamage(13)))
+                
+            ))
         {
             if (aZombie->mZombiePhase == ZombiePhase::PHASE_ZAMBONI_FLAT && IsSpiky()) {
                 continue;
