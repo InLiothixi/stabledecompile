@@ -601,8 +601,9 @@ void AwardScreen::DrawAchievements(Graphics* g) {
 		SexyString aAchievementDesc = gAchievementList[mAchievementItems[i].mId].description;
 
 		aAchievementName.append(_S(" Earned!"));
-
-		if (i <(int) AchievementId::SultanOfSpin)
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
+		if (i < (int)AchievementId::SultanOfSpin)
+#endif
 		{
 			int spaceOffset = 0;
 

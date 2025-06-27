@@ -351,6 +351,7 @@ public:
     void                            BossRVAttack();
     void                            BossSpawnContact();
     void                            BossBungeeLeave();
+    bool                            BossIsAbleToStomp();
     void                            BossStompAttack();
     bool                            BossCanStompRow(int theRow);
     void                            BossDie();

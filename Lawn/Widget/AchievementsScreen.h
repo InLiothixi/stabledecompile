@@ -4,42 +4,45 @@
 
 #include "../../ConstEnums.h"
 #include "../../SexyAppFramework/Widget.h"
+#include "../../GameConstants.h"
 
 class LawnApp;
 
 using namespace Sexy;
 
 enum AchievementId {
-	HomeSecurity, //
-	NovelPeasPrize, //
-	BetterOffDead, //
-	ChinaShop, //
-	Spudow, //
-	Explodonator, //
-	Morticulturalist, //
-	DontPea, //
-	RollSomeHeads, //
-	Grounded, //
-	Zombologist, //
-	PennyPincher, //
-	SunnyDays, //
-	PopcornParty, //
-	GoodMorning, //
-	NoFungusAmongUs, //
-	BeyondTheGrave, //
-	Immortal, //
-	ToweringWisdom, //
-	MustacheMode, //
-	DiscoIsUndead, //
-	SultanOfSpin, //
-	DisrespectTheDead, //
-	HeavyWeapons, //
-	ZenProfit, //
-	MayNotContainNuts, //
-	EvenMorticulturalist, //
-	BeatIt, //
-	GoldFarmer, //
-	FaceToFace,//
+	HomeSecurity,
+	NovelPeasPrize,
+	BetterOffDead,
+	ChinaShop,
+	Spudow,
+	Explodonator,
+	Morticulturalist,
+	DontPea,
+	RollSomeHeads,
+	Grounded,
+	Zombologist,
+	PennyPincher,
+	SunnyDays,
+	PopcornParty,
+	GoodMorning,
+	NoFungusAmongUs,
+	BeyondTheGrave,
+	Immortal,
+	ToweringWisdom,
+	MustacheMode,
+	DiscoIsUndead,
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
+	SultanOfSpin,
+	DisrespectTheDead,
+	HeavyWeapons,
+	ZenProfit,
+	MayNotContainNuts,
+	EvenMorticulturalist,
+	BeatIt,
+	GoldFarmer,
+	FaceToFace,
+#endif
     MAX_ACHIEVEMENTS
 };
 

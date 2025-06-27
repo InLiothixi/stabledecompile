@@ -15,7 +15,7 @@
 using namespace Sexy;
 
 #ifdef OPTIMIZE_SOFTWARE_DRAWING
-bool gOptimizeSoftwareDrawing = false;
+bool gOptimizeSoftwareDrawing = true;
 #endif
 
 
@@ -184,7 +184,7 @@ void MemoryImage::BitsChanged()
 	}
 }
 
-void MemoryImage::NormalDrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor)
+void MemoryImage::NormalDrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int rgbCount)
 {
 	double aMinX = min(theStartX, theEndX);
 	double aMinY = min(theStartY, theEndY);
@@ -200,7 +200,7 @@ void MemoryImage::NormalDrawLine(double theStartX, double theStartY, double theE
 	
 	DWORD *aSurface = GetBits();
 
-	if (true)//(mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
+	if (rgbCount == 32)
 	{
 		if (theColor.mAlpha == 255)
 		{
@@ -474,7 +474,7 @@ void MemoryImage::NormalDrawLine(double theStartX, double theStartY, double theE
 	}
 }
 
-void MemoryImage::AdditiveDrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor)
+void MemoryImage::AdditiveDrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int rgbCount)
 {
 	double aMinX = min(theStartX, theEndX);
 	double aMinY = min(theStartY, theEndY);
@@ -495,7 +495,7 @@ void MemoryImage::AdditiveDrawLine(double theStartX, double theStartY, double th
 	uchar* aMaxTable = mApp->mAdd8BitMaxTable;
 	DWORD *aSurface = GetBits();
 	
-	if (true)//(mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
+	if (rgbCount == 32)
 	{
 		ulong rc = ((theColor.mRed * theColor.mAlpha) / 255);
 		ulong gc = ((theColor.mGreen * theColor.mAlpha) / 255);
@@ -660,7 +660,7 @@ void MemoryImage::AdditiveDrawLine(double theStartX, double theStartY, double th
 }
 
 
-void MemoryImage::DrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int theDrawMode)
+void MemoryImage::DrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int theDrawMode, int rgbCount)
 {	
 	if (theStartY == theEndY)
 	{
@@ -682,17 +682,17 @@ void MemoryImage::DrawLine(double theStartX, double theStartY, double theEndX, d
 	switch (theDrawMode)
 	{
 	case Graphics::DRAWMODE_NORMAL:
-		NormalDrawLine(theStartX, theStartY, theEndX, theEndY, theColor);
+		NormalDrawLine(theStartX, theStartY, theEndX, theEndY, theColor, rgbCount);
 		break;
 	case Graphics::DRAWMODE_ADDITIVE:
-		AdditiveDrawLine(theStartX, theStartY, theEndX, theEndY, theColor);
+		AdditiveDrawLine(theStartX, theStartY, theEndX, theEndY, theColor, rgbCount);
 		break;
 	}
 
 	BitsChanged();
 }
 
-void MemoryImage::NormalDrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor)
+void MemoryImage::NormalDrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int rgbCount)
 {
 	ulong* aBits = GetBits();
 	ulong color = theColor.ToInt();
@@ -772,11 +772,90 @@ void MemoryImage::NormalDrawLineAA(double theStartX, double theStartY, double th
 	BitsChanged();
 }
 
-void MemoryImage::AdditiveDrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor)
+void MemoryImage::AdditiveDrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int rgbCount)
 {
+	ulong* aBits = GetBits();
+	ulong color = theColor.ToInt();
+
+	ulong aRMask = 0xFF0000;
+	ulong aGMask = 0x00FF00;
+	ulong aBMask = 0x0000FF;
+	int aRedShift = 16;
+	int aGreenShift = 8;
+	int aBlueShift = 0;
+
+	uchar* aMaxTable = mApp->mAdd8BitMaxTable;
+
+	int aX0 = (int)theStartX, aX1 = (int)theEndX;
+	int aY0 = (int)theStartY, aY1 = (int)theEndY;
+	int aXinc = 1;
+	if (aY0 > aY1)
+	{
+		int aTempX = aX0, aTempY = aY0;
+		aX0 = aX1; aY0 = aY1;
+		aX1 = aTempX; aY1 = aTempY;
+		double aTempXd = theStartX, aTempYd = theStartY;
+		theStartX = theEndX; theStartY = theEndY;
+		theEndX = aTempXd; theEndY = aTempYd;
+	}
+
+	int dx = aX1 - aX0;
+	int dy = aY1 - aY0;
+	double dxd = theEndX - theStartX;
+	double dyd = theEndY - theStartY;
+	if (dx < 0)
+	{
+		dx = -dx;
+		aXinc = -1;
+		dxd = -dxd;
+	}
+
+	if (theColor.mAlpha != 255)
+	{
+#define PIXEL_TYPE				ulong
+#define CALC_WEIGHT_A(w)		(((w) * (theColor.mAlpha+1)) >> 8)
+#define BLEND_PIXEL(p) \
+	{\
+		int ca = theColor.mAlpha;\
+		int cr = (theColor.mRed * ca) / 255;\
+		int cg = (theColor.mGreen * ca) / 255;\
+		int cb = (theColor.mBlue * ca) / 255;\
+		int r = aMaxTable[((dest & aRMask) >> 16) + cr];\
+		int g = aMaxTable[((dest & aGMask) >> 8) + cg];\
+		int b = aMaxTable[(dest & aBMask) + cb];\
+		*(p) = (dest & 0xFF000000) | (r << 16) | (g << 8) | b;\
+	}
+		const int STRIDE = mWidth;
+
+#include "GENERIC_DrawLineAA.inc"
+
+#undef PIXEL_TYPE
+#undef CALC_WEIGHT_A
+#undef BLEND_PIXEL
+	}
+	else
+	{
+#define PIXEL_TYPE				ulong
+#define CALC_WEIGHT_A(w)		(w)
+#define BLEND_PIXEL(p) \
+	{\
+		int r = aMaxTable[((dest & aRMask) >> 16) + theColor.mRed];\
+		int g = aMaxTable[((dest & aGMask) >> 8) + theColor.mGreen];\
+		int b = aMaxTable[(dest & aBMask) + theColor.mBlue];\
+		*(p) = (dest & 0xFF000000) | (r << 16) | (g << 8) | b;\
+	}
+		const int STRIDE = mWidth;
+
+#include "GENERIC_DrawLineAA.inc"
+
+#undef PIXEL_TYPE
+#undef CALC_WEIGHT_A
+#undef BLEND_PIXEL
+	}
+	BitsChanged();
 }
 
-void MemoryImage::DrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int theDrawMode)
+void MemoryImage::DrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int theDrawMode, int rgbCount)
 {
 	if (theStartY == theEndY)
 	{
@@ -798,10 +877,10 @@ void MemoryImage::DrawLineAA(double theStartX, double theStartY, double theEndX,
 	switch (theDrawMode)
 	{
 	case Graphics::DRAWMODE_NORMAL:
-		NormalDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor);
+		NormalDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor, rgbCount);
 		break;
 	case Graphics::DRAWMODE_ADDITIVE:
-		AdditiveDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor);
+		AdditiveDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor, rgbCount);
 		break;
 	}
 

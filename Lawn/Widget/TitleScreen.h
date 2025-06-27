@@ -51,7 +51,6 @@ public:
 	bool					mDisplayPartnerLogo;		//+0xC0
 	bool					mLoaderScreenIsLoaded;		//+0xC1
 	LawnApp*				mApp;						//+0xC4
-	int						mCoolTimer;
 
 public:
 	TitleScreen(LawnApp* theApp);

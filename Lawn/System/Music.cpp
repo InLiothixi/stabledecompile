@@ -176,13 +176,14 @@ void Music::MusicTitleScreenInit()
 {
 	LoadSong(MusicFile::MUSIC_FILE_MAIN_MUSIC, "sounds\\mainmusic.mo3");
 
-	if (!mApp->IsScreenSaver())
+	if (!mApp->IsScreenSaver() && !mApp->IsPreviewSaver() && !mApp->IsParticleEditor())
 		MakeSureMusicIsPlaying(MusicTune::MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME);
 }
 
 //0x45A980
 void Music::MusicInit()
 {
+	if (mApp->IsParticleEditor()) return;
 
 #ifdef _DEBUG
 	int aNumLoadingTasks = mApp->mCompletedLoadingThreadTasks + GetNumLoadingTasks();
@@ -190,7 +191,7 @@ void Music::MusicInit()
 	LoadSong(MusicFile::MUSIC_FILE_DRUMS, "sounds\\mainmusic.mo3");
 	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;///*内测版*/800;
 
-	if (mApp->IsScreenSaver())
+	if (mApp->IsScreenSaver() || mApp->IsPreviewSaver())
 		return;
 
 	LoadSong(MusicFile::MUSIC_FILE_HIHATS, "sounds\\mainmusic.mo3"); // Originally: "sounds\\mainmusic_hihats.mo3" (Hihats have missing instruments in MUSIC_TUNE_POOL_WATERYGRAVES)
@@ -204,14 +205,14 @@ void Music::MusicInit()
 	if (mApp->mCompletedLoadingThreadTasks != aNumLoadingTasks)
 		TodTrace("Didn't calculate loading task count correctly!!!!");
 #endif
-	LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON, "sounds\\grassthemoon.ogg");
-	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
-	LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON_DRUMS, "sounds\\grassthemoon_drums.ogg");
-	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
-	LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON_HIHATS, "sounds\\grassthemoon_hihats.ogg");
-	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
-	LoadSong(MusicFile::MUSIC_FILE_FOG_PARTY, "sounds\\fogparty.ogg");
-	mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
+	//LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON, "sounds\\grassthemoon.ogg");
+	//mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
+	//LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON_DRUMS, "sounds\\grassthemoon_drums.ogg");
+	//mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
+	//LoadSong(MusicFile::MUSIC_FILE_GRASS_THE_MOON_HIHATS, "sounds\\grassthemoon_hihats.ogg");
+	//mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
+	//LoadSong(MusicFile::MUSIC_FILE_FOG_PARTY, "sounds\\fogparty.ogg");
+	//mApp->mCompletedLoadingThreadTasks += /*原版*/3500;
 
 }
 
@@ -418,7 +419,7 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		break;
 
-	case MusicTune::MUSIC_TUNE_GRASS_THE_MOON:
+	/*case MusicTune::MUSIC_TUNE_GRASS_THE_MOON:
 		mCurMusicFileMain = MusicFile::MUSIC_FILE_GRASS_THE_MOON;
 		mCurMusicFileDrums = MusicFile::MUSIC_FILE_GRASS_THE_MOON_DRUMS;
 		mCurMusicFileHihats = MusicFile::MUSIC_FILE_GRASS_THE_MOON_HIHATS;
@@ -436,14 +437,14 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		if (theOffset == -1)
 			theOffset = 0;
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
-		break;
+		break;*/
 
 	default:
 		TOD_ASSERT(false);
 		break;
 	}
 
-	if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)	return;
+	/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)	return;*/
 
 	if (aRestartingSong)
 	{
@@ -507,7 +508,7 @@ void Music::MusicResyncChannel(MusicFile theMusicFileToMatch, MusicFile theMusic
 
 void Music::MusicResync()
 {
-	if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON) return;
+	/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON) return;*/
 
 	if (mCurMusicFileMain != MusicFile::MUSIC_FILE_NONE)
 	{
@@ -545,8 +546,8 @@ void Music::UpdateMusicBurst()
 
 	int aBurstScheme;
 	if (mCurMusicTune == MusicTune::MUSIC_TUNE_DAY_GRASSWALK || mCurMusicTune == MusicTune::MUSIC_TUNE_POOL_WATERYGRAVES ||
-		mCurMusicTune == MusicTune::MUSIC_TUNE_FOG_RIGORMORMIST || mCurMusicTune == MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF || 
-		mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
+		mCurMusicTune == MusicTune::MUSIC_TUNE_FOG_RIGORMORMIST || mCurMusicTune == MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF /*|| 
+		mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON*/)
 		aBurstScheme = 1;
 	else if (mCurMusicTune == MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS)
 		aBurstScheme = 2;
@@ -554,10 +555,10 @@ void Music::UpdateMusicBurst()
 		return;
 
 	int aPackedOrderMain;
-	if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
+	/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
 		aPackedOrderMain = ((BassMusicInterface*)mApp->mMusicInterface)->GetChannelPosition((int)mCurMusicFileMain);
-	else
-		aPackedOrderMain = GetMusicOrder(mCurMusicFileMain);
+	else*/
+	aPackedOrderMain = GetMusicOrder(mCurMusicFileMain);
 	if (mBurstStateCounter > 0)
 		mBurstStateCounter--;
 	if (mDrumsStateCounter > 0)
@@ -644,12 +645,12 @@ void Music::UpdateMusicBurst()
 	int aOrderMain = 0, aOrderDrum = 0;
 	if (aBurstScheme == 1)
 	{
-		if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
+		/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
 		{
 			aOrderMain = aPackedOrderMain / 128;
 			aOrderDrum = mQueuedDrumTrackPackedOrder / 128;
 		}
-		else
+		else*/
 		{
 			aOrderMain = HIWORD(aPackedOrderMain) / 128;
 			aOrderDrum = HIWORD(mQueuedDrumTrackPackedOrder) / 128;
@@ -757,10 +758,10 @@ void Music::StartGameMusic()
 	{
 		mTune = MusicTune::MUSIC_TUNE_ZEN_GARDEN;
 	}
-	else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_FOG_OF_WAR)
+	/*else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_FOG_OF_WAR)
 	{
 		mTune = MusicTune::MUSIC_TUNE_FOG_PARTY;
-	}
+	}*/
 	else if (mApp->IsFinalBossLevel())
 	{
 		mTune = MusicTune::MUSIC_TUNE_FINAL_BOSS_BRAINIAC_MANIAC;
@@ -826,10 +827,10 @@ void Music::GameMusicPause(bool thePause)
 				mPauseOffset = gBass->BASS_ChannelGetPosition(aMusicInfo->mHStream);
 				mMusicInterface->StopMusic(mCurMusicFileMain);
 
-				if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON) {
+				/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON) {
 					mMusicInterface->StopMusic(mCurMusicFileDrums);
 					mMusicInterface->StopMusic(mCurMusicFileHihats);
-				}
+				}*/
 			}
 			else
 			{

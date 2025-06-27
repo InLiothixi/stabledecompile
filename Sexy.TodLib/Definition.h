@@ -142,6 +142,9 @@ public:
 };
 
 SexyString /*__cdecl*/  DefinitionGetCompiledFilePathFromXMLFilePath(const SexyString& theXMLFilePath);
+SexyString /*__cdecl*/  DefinitionGetCompiledFilePathFromXMLFilePathInDependency(const SexyString& theXMLFilePath);
+SexyString /*__cdecl*/  DefinitionGetCompiledFilePathFromXMLFilePathInExtension(const SexyString& theXMLFilePath);
+SexyString /*__cdecl*/  DefinitionGetCompiledFilePathFromXMLFilePathInResourcePack(const SexyString& theXMLFilePath);
 bool                    IsFileInPakFile(const SexyString& theFilePath);
 bool                    DefinitionIsCompiled(const SexyString& theXMLFilePath);
 bool                    DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* theDefMap, void* theDefinition);

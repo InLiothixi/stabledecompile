@@ -175,6 +175,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		aZombie->mPosX = 1105.0f;
 		aZombie->mPosY = 480.0f;
 	}
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (theZombieType == ZombieType::ZOMBIE_DOG_WALKER)
 	{
 		aZombie->mPosX += 40;
@@ -186,6 +187,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 			
 		}
 	}
+#endif
 	else if (theZombieType == ZombieType::ZOMBIE_BALLOON)
 	{
 		aZombie->mY -= 30;

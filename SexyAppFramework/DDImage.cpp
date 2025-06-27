@@ -1689,7 +1689,7 @@ void DDImage::DrawLine(double theStartX, double theStartY, double theEndX, doubl
 
 	if ((mDrawToBits) || (mHasAlpha) || (mHasTrans) || (mDDInterface->mIs3D))
 	{
-		MemoryImage::DrawLine(theStartX, theStartY, theEndX, theEndY, theColor, theDrawMode);
+		MemoryImage::DrawLine(theStartX, theStartY, theEndX, theEndY, theColor, theDrawMode, mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount);
 		return;
 	}
 
@@ -1941,6 +1941,138 @@ void DDImage::NormalDrawLineAA(double theStartX, double theStartY, double theEnd
 
 void DDImage::AdditiveDrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor)
 {
+	LPDIRECTDRAWSURFACE aSurface = GetSurface();
+
+	if (!LockSurface())
+		return;
+
+	ulong aRMask = mLockedSurfaceDesc.ddpfPixelFormat.dwRBitMask;
+	ulong aGMask = mLockedSurfaceDesc.ddpfPixelFormat.dwGBitMask;
+	ulong aBMask = mLockedSurfaceDesc.ddpfPixelFormat.dwBBitMask;
+
+	ulong color = (((theColor.mRed * aRMask) >> 8) & aRMask) |
+		(((theColor.mGreen * aGMask) >> 8) & aGMask) |
+		(((theColor.mBlue * aBMask) >> 8) & aBMask);
+
+	int aX0 = (int)theStartX, aX1 = (int)theEndX;
+	int aY0 = (int)theStartY, aY1 = (int)theEndY;
+	int aXinc = 1;
+	if (aY0 > aY1)
+	{
+		int aTempX = aX0, aTempY = aY0;
+		aX0 = aX1; aY0 = aY1;
+		aX1 = aTempX; aY1 = aTempY;
+		double aTempXd = theStartX, aTempYd = theStartY;
+		theStartX = theEndX; theStartY = theEndY;
+		theEndX = aTempXd; theEndY = aTempYd;
+	}
+
+	int dx = aX1 - aX0;
+	int dy = aY1 - aY0;
+	double dxd = theEndX - theStartX;
+	double dyd = theEndY - theStartY;
+	if (dx < 0)
+	{
+		dx = -dx;
+		aXinc = -1;
+		dxd = -dxd;
+	}
+
+	int* aMaxRedTable = mDDInterface->mRedAddTable;
+	int* aMaxGreenTable = mDDInterface->mGreenAddTable;
+	int* aMaxBlueTable = mDDInterface->mBlueAddTable;
+
+	int aRShift = mDDInterface->mRedShift;
+	int aGShift = mDDInterface->mGreenShift;
+	int aBShift = mDDInterface->mBlueShift;
+
+	if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
+	{
+		ulong* aBits = (ulong*)mLockedSurfaceDesc.lpSurface;
+		if (theColor.mAlpha != 255)
+		{
+#define PIXEL_TYPE			ulong
+#define CALC_WEIGHT_A(w)	(((w) * (theColor.mAlpha+1)) >> 8)
+#define BLEND_PIXEL(p)		\
+						int ca = theColor.mAlpha;\
+						int cr = (theColor.mRed * ca) / 255;\
+						int cg = (theColor.mGreen * ca) / 255;\
+						int cb = (theColor.mBlue * ca) / 255;\
+						int r = aMaxRedTable[((dest & aRMask) >> aRShift) + cr];\
+						int g = aMaxRedTable[((dest & aGMask) >> aGShift) + cg];\
+						int b = aMaxRedTable[((dest & aBMask) >> aBShift) + cb];\
+						*(p) =			\
+								(dest & 0xFF000000) | (r << aRShift)  | (g << aGShift) | (b << aBShift);
+			const int STRIDE = mLockedSurfaceDesc.lPitch / sizeof(PIXEL_TYPE);
+#include "GENERIC_DrawLineAA.inc"
+
+#undef PIXEL_TYPE
+#undef CALC_WEIGHT_A
+#undef BLEND_PIXEL
+		}
+		else
+		{
+#define PIXEL_TYPE			ulong
+#define CALC_WEIGHT_A(w)	(w)
+#define BLEND_PIXEL(p)		\
+						int r = aMaxRedTable[((dest & aRMask) >> aRShift) + theColor.mRed];\
+						int g = aMaxRedTable[((dest & aGMask) >> aGShift) + theColor.mGreen];\
+						int b = aMaxRedTable[((dest & aBMask) >> aBShift) + theColor.mBlue];\
+						*(p) =			\
+								(r << aRShift)  | (g << aGShift) | (b << aBShift);
+			const int STRIDE = mLockedSurfaceDesc.lPitch / sizeof(PIXEL_TYPE);
+#include "GENERIC_DrawLineAA.inc"
+
+#undef PIXEL_TYPE
+#undef CALC_WEIGHT_A
+#undef BLEND_PIXEL
+		}
+	}
+	else if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 16)
+	{
+		ushort* aBits = (ushort*)mLockedSurfaceDesc.lpSurface;
+			if (theColor.mAlpha != 255)
+			{
+#define PIXEL_TYPE			ushort
+#define CALC_WEIGHT_A(w)	(((w) * (theColor.mAlpha+1)) >> 8)
+#define BLEND_PIXEL(p)		\
+						int ca = theColor.mAlpha;\
+						int cr = (theColor.mRed * ca) / 255;\
+						int cg = (theColor.mGreen * ca) / 255;\
+						int cb = (theColor.mBlue * ca) / 255;\
+						int r = aMaxRedTable[((dest & aRMask) >> aRShift) + cr];\
+						int g = aMaxRedTable[((dest & aGMask) >> aGShift) + cg];\
+						int b = aMaxRedTable[((dest & aBMask) >> aBShift) + cb];\
+						*(p) =			\
+								(r << aRShift)  | (g << aGShift) | (b << aBShift);
+					const int STRIDE = mLockedSurfaceDesc.lPitch / sizeof(PIXEL_TYPE);
+#include "GENERIC_DrawLineAA.inc"
+
+#undef PIXEL_TYPE
+#undef CALC_WEIGHT_A
+#undef BLEND_PIXEL
+			}
+			else
+			{
+#define PIXEL_TYPE			ushort
+#define CALC_WEIGHT_A(w)	(w)
+#define BLEND_PIXEL(p)		\
+						int r = aMaxRedTable[((dest & aRMask) >> aRShift) + theColor.mRed];\
+						int g = aMaxRedTable[((dest & aGMask) >> aGShift) + theColor.mGreen];\
+						int b = aMaxRedTable[((dest & aBMask) >> aBShift) + theColor.mBlue];\
+						*(p) =			\
+								(dest & 0xFF000000) | (r << aRShift)  | (g << aGShift) | (b << aBShift);
+				const int STRIDE = mLockedSurfaceDesc.lPitch / sizeof(PIXEL_TYPE);
+
+#include "GENERIC_DrawLineAA.inc"
+
+#undef PIXEL_TYPE
+#undef CALC_WEIGHT_A
+#undef BLEND_PIXEL
+			}
+	}
+
+	UnlockSurface();
 }
 
 void DDImage::DrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY, const Color& theColor, int theDrawMode)
@@ -1953,7 +2085,7 @@ void DDImage::DrawLineAA(double theStartX, double theStartY, double theEndX, dou
 
 	if ((mDrawToBits) || (mHasAlpha) || (mHasTrans) || (mDDInterface->mIs3D))
 	{
-		MemoryImage::DrawLine(theStartX, theStartY, theEndX, theEndY, theColor, theDrawMode);
+		MemoryImage::DrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor, theDrawMode, mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount);
 		return;
 	}
 
@@ -1978,12 +2110,12 @@ void DDImage::DrawLineAA(double theStartX, double theStartY, double theEndX, dou
 
 	switch (theDrawMode)
 	{
-	case Graphics::DRAWMODE_NORMAL:
-		NormalDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor);
-		break;
-	case Graphics::DRAWMODE_ADDITIVE:
-		AdditiveDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor);
-		break;
+		case Graphics::DRAWMODE_NORMAL:
+			NormalDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor);
+			break;
+		case Graphics::DRAWMODE_ADDITIVE:
+			AdditiveDrawLineAA(theStartX, theStartY, theEndX, theEndY, theColor);
+			break;
 	}
 
 	DeleteAllNonSurfaceData();

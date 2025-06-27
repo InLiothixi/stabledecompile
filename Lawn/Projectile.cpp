@@ -29,9 +29,11 @@ ProjectileDefinition gProjectileDefinition[] = {  //0x69F1C0
 	{ ProjectileType::PROJECTILE_KERNEL,        0,  20  },
 	{ ProjectileType::PROJECTILE_COBBIG,        0,  300 },
 	{ ProjectileType::PROJECTILE_BUTTER,        0,  40  },
-	{ ProjectileType::PROJECTILE_ZOMBIE_PEA,    0,  20  },
-	{ ProjectileType::PROJECTILE_LETTUCE,       10, 40  },
+	{ ProjectileType::PROJECTILE_ZOMBIE_PEA,    0,  20  }
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+	,{ ProjectileType::PROJECTILE_LETTUCE,       10, 40  },
 	{ ProjectileType::PROJECTILE_BEE,			3,  20  }
+#endif
 };
 
 Projectile::Projectile()
@@ -162,6 +164,7 @@ void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, in
 			mRotationSpeed = -mRotationSpeed;
 		}
 	}
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (mProjectileType == ProjectileType::PROJECTILE_LETTUCE)
 	{
 		mHasImpactAnimation = true;
@@ -183,6 +186,7 @@ void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, in
 		mNumFrames = 8;
 		mAnimTicksPerFrame = 12;
 	}
+#endif
 
 	mAnimCounter = 0;
 	mX = (int)mPosX;
@@ -212,7 +216,9 @@ Plant* Projectile::FindCollisionTargetPlant()
 				aPlant->mState == PlantState::STATE_SCAREDYSHROOM_SCARED
 				|| aPlant->mSeedType == SeedType::SEED_TANGLEKELP
 				|| aPlant->mSeedType == SeedType::SEED_FLOWERPOT
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 				|| aPlant->mSeedType == SeedType::SEED_YAMPOLINE
+#endif
 				)  // 僵尸豌豆不能击中低矮植物
 				continue;
 		}
@@ -232,7 +238,9 @@ Plant* Projectile::FindCollisionTargetPlant()
 					aPlant2->mState == PlantState::STATE_SCAREDYSHROOM_SCARED
 					|| aPlant2->mSeedType == SeedType::SEED_TANGLEKELP
 					|| aPlant2->mSeedType == SeedType::SEED_FLOWERPOT
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 					|| aPlant2->mSeedType == SeedType::SEED_YAMPOLINE
+#endif
 					))  // 僵尸豌豆不能击中低矮植物
 					continue;
 
@@ -250,7 +258,9 @@ Plant* Projectile::FindCollisionTargetPlant()
 					aPlant2->mState == PlantState::STATE_SCAREDYSHROOM_SCARED
 					|| aPlant2->mSeedType == SeedType::SEED_TANGLEKELP
 					|| aPlant2->mSeedType == SeedType::SEED_FLOWERPOT
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 					|| aPlant2->mSeedType == SeedType::SEED_YAMPOLINE
+#endif
 					))  // 僵尸豌豆不能击中低矮植物
 					continue;
 
@@ -365,7 +375,11 @@ void Projectile::CheckForCollision()
 		return;
 	}
 
-	if (mMotionType == ProjectileMotion::MOTION_HOMING || mProjectileType == ProjectileType::PROJECTILE_BEE)
+	if (mMotionType == ProjectileMotion::MOTION_HOMING 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		|| mProjectileType == ProjectileType::PROJECTILE_BEE
+#endif
+		)
 	{
 		Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
 		if (aZombie && aZombie->EffectedByDamage((unsigned int)mDamageRangeFlags))
@@ -435,7 +449,11 @@ void Projectile::CheckForCollision()
 //0x46D090
 bool Projectile::CantHitHighGround()
 {
-	if (mMotionType == ProjectileMotion::MOTION_BACKWARDS || mMotionType == ProjectileMotion::MOTION_HOMING || mProjectileType == ProjectileType::PROJECTILE_BEE)
+	if (mMotionType == ProjectileMotion::MOTION_BACKWARDS || mMotionType == ProjectileMotion::MOTION_HOMING
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		|| mProjectileType == ProjectileType::PROJECTILE_BEE
+#endif
+		)
 		return false;
 
 	return (
@@ -522,7 +540,12 @@ unsigned int Projectile::GetDamageFlags(Zombie* theZombie)
 		SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_LOBBED, true);
 	}
 
-	if (mProjectileType == ProjectileType::PROJECTILE_SNOWPEA || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON || mProjectileType == ProjectileType::PROJECTILE_LETTUCE)
+
+	if (mProjectileType == ProjectileType::PROJECTILE_SNOWPEA || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		|| mProjectileType == ProjectileType::PROJECTILE_LETTUCE
+#endif
+		)
 	{
 		SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_FREEZE, true);
 	}
@@ -674,10 +697,12 @@ void Projectile::UpdateLobMotion()
 		{
 			aMinCollisionZ = -30.0f;
 		}
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 		else if (mProjectileType == ProjectileType::PROJECTILE_LETTUCE)
 		{
 			aMinCollisionZ = -40.0f;
 		}
+#endif
 		else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG)
 		{
 			aMinCollisionZ = -60.0f;
@@ -723,10 +748,12 @@ void Projectile::UpdateLobMotion()
 	{
 		aGroundZ -= HIGH_GROUND_HEIGHT;
 	}
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	if (mProjectileType == PROJECTILE_LETTUCE)
 	{
 		aGroundZ -= 20;
 	}
+#endif
 	bool hitGround = mPosZ > aGroundZ;
 	if (aZombie == nullptr && aPlant == nullptr && !hitGround)
 	{
@@ -813,6 +840,7 @@ void Projectile::UpdateNormalMotion()
 		mShadowY += mVelY;
 		mRow = mBoard->PixelToGridYKeepOnBoard(mPosX, mPosY);
 	}
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (mProjectileType == ProjectileType::PROJECTILE_BEE)
 	{
 		Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
@@ -846,6 +874,7 @@ void Projectile::UpdateNormalMotion()
 		mShadowY += mVelY;
 		mRow = mBoard->PixelToGridYKeepOnBoard(mPosX, mPosY);
 	}
+#endif
 	else if (mMotionType == ProjectileMotion::MOTION_STAR)
 	{
 		mPosY += mVelY;
@@ -1187,6 +1216,8 @@ void Projectile::DoImpact(Zombie* theZombie)
 		mNumFrames = 2;
 		mAnimTicksPerFrame = 12;
 		mAnimOffset = 8;
+
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 		if (mProjectileType == ProjectileType::PROJECTILE_LETTUCE)
 		{
 			mX -= mVelX * 2 + 48;
@@ -1199,6 +1230,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 				mY -= HIGH_GROUND_HEIGHT;
 			}
 		}
+#endif
 	}
 	else {
 		Die();
@@ -1222,8 +1254,11 @@ void Projectile::Update()
 		mProjectileType == ProjectileType::PROJECTILE_BUTTER || 
 		mProjectileType == ProjectileType::PROJECTILE_COBBIG || 
 		mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA || 
-		mProjectileType == ProjectileType::PROJECTILE_SPIKE ||
-		mProjectileType == ProjectileType::PROJECTILE_BEE)
+		mProjectileType == ProjectileType::PROJECTILE_SPIKE
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		|| mProjectileType == ProjectileType::PROJECTILE_BEE
+#endif
+		)
 	{
 		aTime = 0;
 	}
@@ -1463,7 +1498,9 @@ void Projectile::DrawShadow(Graphics* g)
 		break;
 
 	case ProjectileType::PROJECTILE_STAR:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	case ProjectileType::PROJECTILE_BEE:
+#endif
 		aOffsetX += 7.0f;
 		break;
 
@@ -1472,7 +1509,9 @@ void Projectile::DrawShadow(Graphics* g)
 	case ProjectileType::PROJECTILE_BUTTER:
 	case ProjectileType::PROJECTILE_MELON:
 	case ProjectileType::PROJECTILE_WINTERMELON:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	case ProjectileType::PROJECTILE_LETTUCE:
+#endif
 		aOffsetX += 3.0f;
 		aOffsetY += 10.0f;
 		aScale = 1.6f;
@@ -1527,8 +1566,11 @@ Rect Projectile::GetProjectileRect()
 {
 	if (mProjectileType == ProjectileType::PROJECTILE_PEA || 
 		mProjectileType == ProjectileType::PROJECTILE_SNOWPEA ||
-		mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA ||
-		mProjectileType == ProjectileType::PROJECTILE_BEE)
+		mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		|| mProjectileType == ProjectileType::PROJECTILE_BEE
+#endif
+		)
 	{
 		return Rect(mX - 15, mY, mWidth + 15, mHeight);
 	}
@@ -1548,10 +1590,12 @@ Rect Projectile::GetProjectileRect()
 	{
 		return Rect(mX - 25, mY, mWidth + 25, mHeight);
 	}
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (mProjectileType == ProjectileType::PROJECTILE_LETTUCE)
 	{
 		return Rect(mX + 10, mY + 10, mWidth, mHeight);
 	}
+#endif
 	else
 	{
 		return Rect(mX, mY, mWidth, mHeight);

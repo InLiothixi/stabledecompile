@@ -61,3 +61,32 @@ const int           STORESCREEN_COINBANK_X = 650;
 const int           STORESCREEN_COINBANK_Y = 559;
 const int           STORESCREEN_PAGESTRING_X = 470;
 const int           STORESCREEN_PAGESTRING_Y = 500;
+
+// ============================================================
+// ■ REMOVE THE // from the defines below to ENABLE them or INSERT // to DISABLE the feature.
+// ============================================================
+
+#ifdef _GOTY
+#define _HAS_NEW_DANCERS
+#define _HAS_ACHIEVEMENTS
+#define _HAS_ZOMBATAR
+#endif
+
+#ifdef _DEBUG
+#define _SHOW_OUTPUT_CONSOLE
+#define _SHOW_LIMBO_PAGE
+#endif
+
+//#define _ALLOW_RESOURCE_PACKS
+//#define _ALLOW_SWIPE
+//#define _HAS_KERNELPULT_BUTTER_IDLE
+//#define _HAS_LEVELSELECTOR 
+//#define _HAS_MORESCREEN
+//#define _HAS_BLOOM_AND_DOOM_CONTENTS
+//#define _HAS_MOBILE_MINIGAMES // TODO:
+//#define _HAS_DS_MINIGAMES //
+//#define _HAS_UNUSED_ACHIEVEMENTS
+//#define _HAS_ANIMATED_WOOD_SIGN
+//#define _HAS_GAMESELECTOR_SPOTLIGHT
+//#define _HAS_NEW_GIGA_ZOMBIES
+//#define _HAS_SCORE_SYSTEM

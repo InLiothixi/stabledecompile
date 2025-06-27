@@ -254,9 +254,11 @@ ZombieAllowedLevels gZombieAllowedLevels[NUM_ZOMBIE_TYPES] = {  //0x6A35B0
 		}
 	},
 	{ ZOMBIE_BOSS, {0} },
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	{ ZOMBIE_DOG_WALKER, {0} },
 	{ ZOMBIE_DOG, {0} },
 	{ ZOMBIE_PROPELLER, {0} },
+#endif
 	{ ZOMBIE_PEA_HEAD, {0} },
 	{ ZOMBIE_WALLNUT_HEAD, {0} },
 	{ ZOMBIE_JALAPENO_HEAD, {0} },
@@ -264,8 +266,10 @@ ZombieAllowedLevels gZombieAllowedLevels[NUM_ZOMBIE_TYPES] = {  //0x6A35B0
 	{ ZOMBIE_SQUASH_HEAD, {0} },
 	{ ZOMBIE_TALLNUT_HEAD, {0} },
 	{ ZOMBIE_REDEYE_GARGANTUAR, {0} },
+#ifdef _HAS_NEW_GIGA_ZOMBIES
 	{ ZOMBIE_BLACK_FOOTBALL, {0} },
 	{ ZOMBIE_TRASHCAN, {0} },
+#endif
 };
 
 SeedType gArtChallengeWallnut[MAX_GRID_SIZE_Y][MAX_GRID_SIZE_X] = {  //0x6A3260
@@ -2604,8 +2608,11 @@ void Challenge::InitZombieWavesSurvival()
 		if (mBoard->GetSurvivalFlagsCompleted() < 10 && aRandZombie >= ZombieType::ZOMBIE_REDEYE_GARGANTUAR)								continue;
 		if (mApp->IsSurvivalNormal(mApp->mGameMode) && aRandZombie > ZombieType::ZOMBIE_SNORKEL)								continue;
 		if (mBoard->IsZombieTypeSpawnedOnly(aRandZombie) || Zombie::IsZombotany(aRandZombie) ||
-			aRandZombie == ZombieType::ZOMBIE_DUCKY_TUBE || aRandZombie == ZombieType::ZOMBIE_YETI || 
-			aRandZombie == ZombieType::ZOMBIE_PROPELLER || aRandZombie == ZombieType::ZOMBIE_DOG_WALKER || aRandZombie == ZombieType::ZOMBIE_DOG)
+			aRandZombie == ZombieType::ZOMBIE_DUCKY_TUBE || aRandZombie == ZombieType::ZOMBIE_YETI 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+			|| aRandZombie == ZombieType::ZOMBIE_PROPELLER || aRandZombie == ZombieType::ZOMBIE_DOG_WALKER || aRandZombie == ZombieType::ZOMBIE_DOG
+#endif
+			)
 			continue;
 		aCapacity--;
 	}
@@ -3820,11 +3827,12 @@ void Challenge::BeghouledPacketClicked(SeedPacket* theSeedPacket)
 		BeghouledStartFalling(STATECHALLENGE_BEGHOULED_FALLING);
 	}
 
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
 	if (mBoard->mChallenge->mBeghouledPurcasedUpgrade[(int)BeghouledUpgrade::BEGHOULED_UPGRADE_REPEATER] &&
 		mBoard->mChallenge->mBeghouledPurcasedUpgrade[(int)BeghouledUpgrade::BEGHOULED_UPGRADE_FUMESHROOM] &&
 		mBoard->mChallenge->mBeghouledPurcasedUpgrade[(int)BeghouledUpgrade::BEGHOULED_UPGRADE_TALLNUT])
 		ReportAchievement::GiveAchievement(mApp, AchievementId::SultanOfSpin, true);
-
+#endif
 
 	mBoard->TakeSunMoney(aPacketCost);
 }

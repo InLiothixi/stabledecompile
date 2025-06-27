@@ -744,7 +744,11 @@ bool SeedChooserScreen::FlyProtectionCurrentlyPlanted()
 	Plant* aPlant = nullptr;
 	while (mBoard->IteratePlants(aPlant))
 	{
-		if (aPlant->mSeedType == SEED_CATTAIL || aPlant->mSeedType == SEED_CACTUS || aPlant->mSeedType == SEED_STINGER || aPlant->mSeedType == SEED_BEEHIVE)
+		if (aPlant->mSeedType == SEED_CATTAIL || aPlant->mSeedType == SEED_CACTUS
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+			|| aPlant->mSeedType == SEED_STINGER || aPlant->mSeedType == SEED_BEEHIVE
+#endif
+			)
 		{
 			return true;
 		}
@@ -835,7 +839,11 @@ void SeedChooserScreen::OnStartButton()
 		}
 	}
 
-	if (FlyersAreComming() && !FlyProtectionCurrentlyPlanted() && !PickedPlantType(SEED_CATTAIL) && !PickedPlantType(SEED_CACTUS) && !PickedPlantType(SEED_BLOVER) && !PickedPlantType(SEED_STINGER))
+	if (FlyersAreComming() && !FlyProtectionCurrentlyPlanted() && !PickedPlantType(SEED_CATTAIL) && !PickedPlantType(SEED_CACTUS) && !PickedPlantType(SEED_BLOVER) 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		&& !PickedPlantType(SEED_STINGER) && !PickedPlantType(SEED_BEEHIVE)
+#endif
+		)
 	{
 		if (!DisplayRepickWarningDialog(_S("[SEED_CHOOSER_FLYER_WARNING]")))
 		{
@@ -1221,7 +1229,11 @@ void SeedChooserScreen::MouseDown(int x, int y, int theClickCount)
 		if (!mBoard->mSeedBank->ContainsPoint(x, y) && !mAlmanacButton->IsMouseOver() && !mStoreButton->IsMouseOver() && mApp->CanShowAlmanac())
 		{
 			Zombie* aZombie = mBoard->ZombieHitTest(x - mBoard->mX, y - mBoard->mY);
-			if (aZombie && aZombie->mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE && aZombie->mZombieType < ZOMBIE_REDEYE_GARGANTUAR && aZombie->mZombieType != ZombieType::ZOMBIE_DOG_WALKER && aZombie->mZombieType != ZombieType::ZOMBIE_DOG && aZombie->mZombieType != ZombieType::ZOMBIE_PROPELLER)
+			if (aZombie && aZombie->mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE && aZombie->mZombieType < ZOMBIE_REDEYE_GARGANTUAR 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+				&& aZombie->mZombieType != ZombieType::ZOMBIE_DOG_WALKER && aZombie->mZombieType != ZombieType::ZOMBIE_DOG && aZombie->mZombieType != ZombieType::ZOMBIE_PROPELLER
+#endif
+				)
 			{
 				mApp->PlaySample(SOUND_TAP);
 				mApp->DoAlmanacDialog(SEED_NONE, aZombie->mZombieType)->WaitForResult(true);

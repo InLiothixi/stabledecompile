@@ -461,7 +461,6 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 				case ZombieType::ZOMBIE_FLAG:			g->TranslateF(2, 10);		break;
 				case ZombieType::ZOMBIE_TRAFFIC_CONE:	g->TranslateF(0, 12);		break;
 				case ZombieType::ZOMBIE_PAIL:			g->TranslateF(0, 9);		break;
-				case ZombieType::ZOMBIE_BLACK_FOOTBALL:
 				case ZombieType::ZOMBIE_FOOTBALL:		g->TranslateF(-15, -1);	break;
 				case ZombieType::ZOMBIE_ZAMBONI:		g->TranslateF(-25, 3);		break;
 				case ZombieType::ZOMBIE_DOLPHIN_RIDER:	g->TranslateF(-2, -10);	break;
@@ -469,8 +468,11 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 				case ZombieType::ZOMBIE_GARGANTUAR:		g->TranslateF(15, 17);		break;
 				case ZombieType::ZOMBIE_IMP:			g->TranslateF(-8, -7);		break;
 				case ZombieType::ZOMBIE_BUNGEE:			g->TranslateF(-4, 3);		break;
-				//case ZombieType::ZOMBIE_DANCER:		g->TranslateF(-6, 5);		break;
+#ifdef _HAS_NEW_DANCER
 				case ZombieType::ZOMBIE_BACKUP_DANCER:	g->TranslateF(-2, 5);		break;
+#else
+				case ZombieType::ZOMBIE_BACKUP_DANCER:	g->TranslateF(-8, 5);		break;
+#endif
 				case ZombieType::ZOMBIE_SNORKEL:		g->TranslateF(-10, 0);		break;
 				case ZombieType::ZOMBIE_YETI:			g->TranslateF(0, 4);		break;
 				case ZombieType::ZOMBIE_CATAPULT:		g->TranslateF(-24, -1);	break;

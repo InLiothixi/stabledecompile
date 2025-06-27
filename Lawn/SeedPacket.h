@@ -23,7 +23,6 @@ public:
     bool                mActive;                                    //+0x48
     bool                mRefreshing;                                //+0x49
     int                 mTimesUsed;                                 //+0x4C
-    int                 mSelectionCounter;
 
 public:
     SeedPacket();

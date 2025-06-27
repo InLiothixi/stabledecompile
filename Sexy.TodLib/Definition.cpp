@@ -274,7 +274,10 @@ bool DefinitionLoadImage(Image** theImage, const SexyString& theName)
         if (aPrefixLen < aNameLen)
         {
             SexyString aPathToTry = StringToSexyString(aLoadResPath.mDirectory) + theName.substr(aPrefixLen, aNameLen);
-            SharedImageRef aImageRef = gSexyAppBase->GetSharedImage(SexyStringToString(aPathToTry));
+            SharedImageRef aImageRef = gSexyAppBase->GetSharedImage(SexyStringToString("resourcepack/" + aPathToTry));
+            if ((Image*)aImageRef == nullptr) aImageRef = gSexyAppBase->GetSharedImage(SexyStringToString("extension/" + aPathToTry));
+            if ((Image*)aImageRef == nullptr) aImageRef = gSexyAppBase->GetSharedImage(SexyStringToString("dependency/" + aPathToTry));
+            if ((Image*)aImageRef == nullptr) aImageRef = gSexyAppBase->GetSharedImage(SexyStringToString(aPathToTry));
             if ((Image*)aImageRef != nullptr)
             {
                 TodHesitationTrace("Load Image '%s'", theName.c_str());
@@ -563,6 +566,21 @@ SexyString DefinitionGetCompiledFilePathFromXMLFilePath(const SexyString& theXML
     return StringToSexyString("compiled\\" + SexyStringToString(theXMLFilePath.c_str())+ ".compiled");
 }
 
+SexyString DefinitionGetCompiledFilePathFromXMLFilePathInDependency(const SexyString& theXMLFilePath)
+{
+    return StringToSexyString("dependency\\compiled\\" + SexyStringToString(theXMLFilePath.c_str()) + ".compiled");
+}
+
+SexyString DefinitionGetCompiledFilePathFromXMLFilePathInExtension(const SexyString& theXMLFilePath)
+{
+    return StringToSexyString("extension\\compiled\\" + SexyStringToString(theXMLFilePath.c_str()) + ".compiled");
+}
+
+SexyString DefinitionGetCompiledFilePathFromXMLFilePathInResourcePack(const SexyString& theXMLFilePath)
+{
+    return StringToSexyString("resourcepack\\compiled\\" + SexyStringToString(theXMLFilePath.c_str()) + ".compiled");
+}
+
 bool IsFileInPakFile(const SexyString& theFilePath)
 {
     PFILE* pFile = p_fopen(theFilePath.c_str(), _S("rb"));
@@ -576,20 +594,39 @@ bool IsFileInPakFile(const SexyString& theFilePath)
 
 bool DefinitionIsCompiled(const SexyString& theXMLFilePath)
 {
+    SexyString aCompiledFilePathInResourcePack = DefinitionGetCompiledFilePathFromXMLFilePathInResourcePack(theXMLFilePath);
+    if (IsFileInPakFile(aCompiledFilePathInResourcePack))
+        return true;
+
+    SexyString aCompiledFilePathInExtension = DefinitionGetCompiledFilePathFromXMLFilePathInExtension(theXMLFilePath);
+    if (IsFileInPakFile(aCompiledFilePathInExtension))
+        return true;
+
+    SexyString aCompiledFilePathInDependency = DefinitionGetCompiledFilePathFromXMLFilePathInDependency(theXMLFilePath);
+    if (IsFileInPakFile(aCompiledFilePathInDependency))
+        return true;
+
     SexyString aCompiledFilePath = DefinitionGetCompiledFilePathFromXMLFilePath(theXMLFilePath);
     if (IsFileInPakFile(aCompiledFilePath))
         return true;
 
     _WIN32_FILE_ATTRIBUTE_DATA lpFileData;
     _FILETIME aCompiledFileTime;
-    bool aSucceed = GetFileAttributesEx(aCompiledFilePath.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData);
 
+    SexyString aPath;
+
+    if (GetFileAttributesEx(aCompiledFilePathInResourcePack.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData)) aPath = aCompiledFilePathInResourcePack;
+    if (GetFileAttributesEx(aCompiledFilePathInExtension.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData)) aPath = aCompiledFilePathInExtension;
+    if (GetFileAttributesEx(aCompiledFilePathInDependency.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData)) aPath = aCompiledFilePathInDependency;
+    else aPath = aCompiledFilePath;
+
+    bool aSucceed = GetFileAttributesEx(aPath.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData);
     if (aSucceed)
         aCompiledFileTime = lpFileData.ftLastWriteTime;
 
-    if (!GetFileAttributesEx(aCompiledFilePath.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData))
+    if (!GetFileAttributesEx(aPath.c_str(), _GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard, &lpFileData))
     {
-        TodTrace("Can't file source file to compile '%s'", SexyStringToString(aCompiledFilePath.c_str()).c_str());
+        TodTrace("Can't file source file to compile '%s'", SexyStringToString(aPath.c_str()).c_str());
         return true;
     }
     else
@@ -956,7 +993,65 @@ bool DefinitionCompileAndLoad(const SexyString& theXMLFilePath, DefMap* theDefMa
 #ifdef _COMPILEXML  // 内测版执行的内容
 
     TodHesitationTrace(_S("predef"));
+    SexyString aCompiledFilePathInResourcePack = DefinitionGetCompiledFilePathFromXMLFilePathInResourcePack(theXMLFilePath);
+    SexyString aCompiledFilePathInExtension = DefinitionGetCompiledFilePathFromXMLFilePathInExtension(theXMLFilePath);
+    SexyString aCompiledFilePathInDependency = DefinitionGetCompiledFilePathFromXMLFilePathInDependency(theXMLFilePath);
     SexyString aCompiledFilePath = DefinitionGetCompiledFilePathFromXMLFilePath(theXMLFilePath);
+
+    if (DefinitionIsCompiled(theXMLFilePath) && DefinitionReadCompiledFile(aCompiledFilePathInResourcePack, theDefMap, theDefinition))
+    {
+        TodHesitationTrace(_S("loaded %s"), aCompiledFilePathInResourcePack.c_str());
+        return true;
+    }
+    else
+    {
+        PerfTimer aTimer;
+        aTimer.Start();
+        bool aResult = DefinitionCompileFile(theXMLFilePath, aCompiledFilePathInResourcePack, theDefMap, theDefinition);
+        if (aResult)
+        {
+            TodTrace(_S("compile %d ms:'%s'"), (int)aTimer.GetDuration(), aCompiledFilePathInResourcePack.c_str());
+            TodHesitationTrace(_S("compiled %s"), aCompiledFilePathInResourcePack.c_str());
+            return true;
+        }
+    }
+
+    if (DefinitionIsCompiled(theXMLFilePath) && DefinitionReadCompiledFile(aCompiledFilePathInExtension, theDefMap, theDefinition))
+    {
+        TodHesitationTrace(_S("loaded %s"), aCompiledFilePathInExtension.c_str());
+        return true;
+    }
+    else
+    {
+        PerfTimer aTimer;
+        aTimer.Start();
+        bool aResult = DefinitionCompileFile(theXMLFilePath, aCompiledFilePathInExtension, theDefMap, theDefinition);
+        if (aResult)
+        {
+            TodTrace(_S("compile %d ms:'%s'"), (int)aTimer.GetDuration(), aCompiledFilePathInExtension.c_str());
+            TodHesitationTrace(_S("compiled %s"), aCompiledFilePathInExtension.c_str());
+            return true;
+        }
+    }
+
+    if (DefinitionIsCompiled(theXMLFilePath) && DefinitionReadCompiledFile(aCompiledFilePathInDependency, theDefMap, theDefinition))
+    {
+        TodHesitationTrace(_S("loaded %s"), aCompiledFilePathInDependency.c_str());
+        return true;
+    }
+    else
+    {
+        PerfTimer aTimer;
+        aTimer.Start();
+        bool aResult = DefinitionCompileFile(theXMLFilePath, aCompiledFilePathInDependency, theDefMap, theDefinition);
+        if (aResult)
+        {
+            TodTrace(_S("compile %d ms:'%s'"), (int)aTimer.GetDuration(), aCompiledFilePathInDependency.c_str());
+            TodHesitationTrace(_S("compiled %s"), aCompiledFilePathInDependency.c_str());
+            return true;
+        }
+    }
+
     if (DefinitionIsCompiled(theXMLFilePath) && DefinitionReadCompiledFile(aCompiledFilePath, theDefMap, theDefinition))
     {
         TodHesitationTrace(_S("loaded %s"), aCompiledFilePath.c_str());
@@ -973,6 +1068,18 @@ bool DefinitionCompileAndLoad(const SexyString& theXMLFilePath, DefMap* theDefMa
     }
 
 #else  // 原版执行的内容
+    SexyString aCompiledFilePathInResourcePack = DefinitionGetCompiledFilePathFromXMLFilePathInResourcePack(theXMLFilePath);
+    if (DefinitionReadCompiledFile(aCompiledFilePathInResourcePack, theDefMap, theDefinition))
+        return true;
+
+    SexyString aCompiledFilePathInExtension = DefinitionGetCompiledFilePathFromXMLFilePathInExtension(theXMLFilePath);
+    if (DefinitionReadCompiledFile(aCompiledFilePathInExtension, theDefMap, theDefinition))
+        return true;
+
+    SexyString aCompiledFilePathInDependency = DefinitionGetCompiledFilePathFromXMLFilePathInDependency(theXMLFilePath);
+    if (DefinitionReadCompiledFile(aCompiledFilePathInDependency, theDefMap, theDefinition))
+        return true;
+
     SexyString aCompiledFilePath = DefinitionGetCompiledFilePathFromXMLFilePath(theXMLFilePath);
     if (DefinitionReadCompiledFile(aCompiledFilePath, theDefMap, theDefinition))
         return true;

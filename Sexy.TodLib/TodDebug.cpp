@@ -4,6 +4,7 @@
 #include "../SexyAppFramework/Debug.h"
 #include "../SexyAppFramework/SEHCatcher.h"
 #include "../SexyAppFramework/SexyAppBase.h"
+#include "../GameConstants.h"
 
 using namespace Sexy;
 
@@ -42,7 +43,7 @@ void TodFree(void* theBlock)
 
 void TodAssertFailed(const char* theCondition, const char* theFile, int theLine, const char* theMsg, ...)
 {
-#ifdef _DEBUG
+#ifdef _SHOW_OUTPUT_CONSOLE
 	char aFormattedMsg[1024];
 	va_list argList;
 	va_start(argList, theMsg);
@@ -102,7 +103,7 @@ void TodAssertFailed(const char* theCondition, const char* theFile, int theLine,
 
 void TodLog(const char* theFormat, ...)
 {
-#ifdef _DEBUG
+#ifdef _SHOW_OUTPUT_CONSOLE
 	char aButter[1024];
 	va_list argList;
 	va_start(argList, theFormat);
@@ -129,7 +130,7 @@ void TodLog(const char* theFormat, ...)
 
 void TodLogString(const char* theMsg)
 {
-#ifdef _DEBUG
+#ifdef _SHOW_OUTPUT_CONSOLE
 	FILE* f = fopen(gLogFileName, "a");
 	if (f == nullptr)
 	{
@@ -149,7 +150,7 @@ void TodLogString(const char* theMsg)
 
 void TodTrace(const char* theFormat, ...)
 {
-#ifdef _DEBUG
+#ifdef _SHOW_OUTPUT_CONSOLE
 	char aButter[1024];
 	va_list argList;
 	va_start(argList, theFormat);
@@ -180,7 +181,7 @@ void TodHesitationTrace(...)
 
 void TodTraceAndLog(const char* theFormat, ...)
 {
-#ifdef _DEBUG
+#ifdef _SHOW_OUTPUT_CONSOLE
 	char aButter[1024];
 	va_list argList;
 	va_start(argList, theFormat);
@@ -208,7 +209,7 @@ void TodTraceAndLog(const char* theFormat, ...)
 
 void TodTraceWithoutSpamming(const char* theFormat, ...)
 {
-#ifdef _DEBUG
+#ifdef _SHOW_OUTPUT_CONSOLE
 	static __time64_t gLastTraceTime = 0i64;
 	__time64_t aTime = _time64(nullptr);
 	if (aTime < gLastTraceTime)

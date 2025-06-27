@@ -28,7 +28,7 @@ MoreWidget::MoreWidget(LawnApp* theApp) {
 	mBackButton->Resize(651, 455, Sexy::IMAGE_QUICKPLAY_BACK_BUTTON_HIGHLIGHT->mWidth, Sexy::IMAGE_QUICKPLAY_BACK_BUTTON_HIGHLIGHT->mHeight);
 	mBackButton->mTranslateX = 0;
 	mBackButton->mTranslateY = 0;
-
+#ifdef _HAS_LEVELSELECTOR
 	mQuickplayButton = MakeNewButton(
 		MoreWidget::More_Quickplay,
 		this, _S(""),
@@ -40,19 +40,24 @@ MoreWidget::MoreWidget(LawnApp* theApp) {
 	mQuickplayButton->Resize(25, 377, Sexy::IMAGE_QUICKPLAY_SIGN_HIGHLIGHT->mWidth, Sexy::IMAGE_QUICKPLAY_SIGN_HIGHLIGHT->mHeight);
 	mQuickplayButton->mTranslateX = 0;
 	mQuickplayButton->mTranslateY = 0;
+#endif
 }
 
 MoreWidget::~MoreWidget() {
 	if (mBackButton)
 		delete mBackButton;
+#ifdef _HAS_LEVELSELECTOR
 	if (mQuickplayButton)
 		delete mQuickplayButton;
+#endif
 }
 
 void MoreWidget::Update() {
 	Widget::Update();
 	mBackButton->MarkDirty();
+#ifdef _HAS_LEVELSELECTOR
 	mQuickplayButton->MarkDirty();
+#endif
 
 }
 
@@ -74,20 +79,26 @@ void MoreWidget::AddedToManager(WidgetManager* theWidgetManager)
 {
 	Widget::AddedToManager(theWidgetManager);
 	this->AddWidget(mBackButton);
+#ifdef _HAS_LEVELSELECTOR
 	this->AddWidget(mQuickplayButton);
+#endif
 }
 
 void MoreWidget::RemovedFromManager(WidgetManager* theWidgetManager)
 {
 	Widget::RemovedFromManager(theWidgetManager);
 	this->RemoveWidget(mBackButton);
+#ifdef _HAS_LEVELSELECTOR
 	this->RemoveWidget(mQuickplayButton);
+#endif
 }
 
 void MoreWidget::OrderInManagerChanged()
 {
 	this->PutInfront(mBackButton, this);
+#ifdef _HAS_LEVELSELECTOR
 	this->PutInfront(mQuickplayButton, this);
+#endif
 }
 
 void MoreWidget::ButtonMouseEnter(int theId)

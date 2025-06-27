@@ -74,17 +74,19 @@ PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES] = {  //0x69F2B0
     { SeedType::SEED_SPIKEROCK,         nullptr, ReanimationType::REANIM_SPIKEROCK,     27, 125,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("SPIKEROCK") },
     { SeedType::SEED_COBCANNON,         nullptr, ReanimationType::REANIM_COBCANNON,     16, 500,    5000,   PlantSubClass::SUBCLASS_NORMAL,     600,    _S("COB_CANNON") },
     { SeedType::SEED_IMITATER,          nullptr, ReanimationType::REANIM_IMITATER,      33, 0,      750,    PlantSubClass::SUBCLASS_NORMAL,     0,      _S("IMITATER") },
-    { SeedType::SEED_TIMESTOPPER,       &Sexy::IMAGE_DUPLICATOR, ReanimationType::REANIM_NONE,     37, 50,     3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("TIME_STOPPER") },
-    { SeedType::SEED_ICEBERGLETTUCE,    &Sexy::IMAGE_ICEBERG, ReanimationType::REANIM_NONE,     37, 200,     750,   PlantSubClass::SUBCLASS_SHOOTER,     300,      _S("ICEBERG_LETTUCE") },
-    { SeedType::SEED_CHERRYHOVERBOMB,   &Sexy::IMAGE_CHERRYBOMB, ReanimationType::REANIM_NONE,     3,  175,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("CHERRY_HOVER_BOMB") },
-    { SeedType::SEED_STINGER,   &Sexy::IMAGE_STINGER, ReanimationType::REANIM_NONE,     37,  125,    750,   PlantSubClass::SUBCLASS_SHOOTER,     150,      _S("STINGER") },
-    { SeedType::SEED_DUPLICATORCYCLER,   &Sexy::IMAGE_DUPLICATOR, ReanimationType::REANIM_NONE,     37,  150,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("DUPLICATOR_CYCLER") },
-    { SeedType::SEED_BEEHIVE,   &Sexy::IMAGE_BEEHIVE, ReanimationType::REANIM_NONE,     37,  250,    750,   PlantSubClass::SUBCLASS_SHOOTER,     150,      _S("BEEHIVE") },
-    { SeedType::SEED_YAMPOLINE,   &Sexy::IMAGE_YAMPOLINE, ReanimationType::REANIM_NONE,     37,  125,    3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("YAMPOLINE") },
-    { SeedType::SEED_NUKECUMBER,        &Sexy::IMAGE_NUKECUMBER, ReanimationType::REANIM_NONE,    37, 500,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("NUKECUMBER") },
-    { SeedType::SEED_EXPLODE_O_NUT,     nullptr, ReanimationType::REANIM_WALLNUT,       2,  50,      3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("EXPLODE_O_NUT") },
-    { SeedType::SEED_GIANT_WALLNUT,     nullptr, ReanimationType::REANIM_WALLNUT,       2,  400,      3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("GIANT_WALLNUT") },
-    { SeedType::SEED_SPROUT,            nullptr, ReanimationType::REANIM_ZENGARDEN_SPROUT,          33, 0,      3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("SPROUT") },
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+    { SeedType::SEED_TIMESTOPPER,       &Sexy::IMAGE_DUPLICATOR, ReanimationType::REANIM_NONE,  37, 50,     3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("TIME_STOPPER") },
+    { SeedType::SEED_ICEBERGLETTUCE,    &Sexy::IMAGE_ICEBERG, ReanimationType::REANIM_NONE,     37, 200,    750,    PlantSubClass::SUBCLASS_SHOOTER,    300,    _S("ICEBERG_LETTUCE") },
+    { SeedType::SEED_CHERRYHOVERBOMB,   &Sexy::IMAGE_CHERRYBOMB, ReanimationType::REANIM_NONE,  3,  175,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("CHERRY_HOVER_BOMB") },
+    { SeedType::SEED_STINGER,           &Sexy::IMAGE_STINGER, ReanimationType::REANIM_NONE,     37, 125,    750,    PlantSubClass::SUBCLASS_SHOOTER,    150,    _S("STINGER") },
+    { SeedType::SEED_DUPLICATORCYCLER,  &Sexy::IMAGE_DUPLICATOR, ReanimationType::REANIM_NONE,  37, 150,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("DUPLICATOR_CYCLER") },
+    { SeedType::SEED_BEEHIVE,           &Sexy::IMAGE_BEEHIVE, ReanimationType::REANIM_NONE,     37, 250,    750,    PlantSubClass::SUBCLASS_SHOOTER,    150,    _S("BEEHIVE") },
+    { SeedType::SEED_YAMPOLINE,         &Sexy::IMAGE_YAMPOLINE, ReanimationType::REANIM_NONE,   37, 125,    3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("YAMPOLINE") },
+    { SeedType::SEED_NUKECUMBER,        &Sexy::IMAGE_NUKECUMBER, ReanimationType::REANIM_NONE,  37, 500,    5000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("NUKECUMBER") },
+#endif
+    { SeedType::SEED_EXPLODE_O_NUT,     nullptr, ReanimationType::REANIM_WALLNUT,       2,  50,     3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("EXPLODE_O_NUT") },
+    { SeedType::SEED_GIANT_WALLNUT,     nullptr, ReanimationType::REANIM_WALLNUT,       2,  400,    3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("GIANT_WALLNUT") },
+    { SeedType::SEED_SPROUT,            nullptr, ReanimationType::REANIM_ZENGARDEN_SPROUT,  33, 0,  3000,   PlantSubClass::SUBCLASS_NORMAL,     0,      _S("SPROUT") },
     { SeedType::SEED_LEFTPEATER,        nullptr, ReanimationType::REANIM_REPEATER,      5,  200,    750,    PlantSubClass::SUBCLASS_SHOOTER,    150,    _S("REPEATER") }
 };
 
@@ -149,6 +151,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     mDuplicatorImitaterType = SeedType::SEED_NONE;
     mBurnedCounter = -1;
     mPoweredCounter = -1;
+    mSpecialReanimID = ReanimationID::REANIMATIONID_NULL;
 
     Reanimation* aBodyReanim = nullptr;
     if (aPlantDef.mReanimationType != ReanimationType::REANIM_NONE)
@@ -498,6 +501,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     case SeedType::SEED_KERNELPULT:
         TOD_ASSERT(aBodyReanim);
         aBodyReanim->AssignRenderGroupToPrefix("Cornpult_butter", RENDER_GROUP_HIDDEN);
+#ifdef _HAS_KERNELPULT_BUTTER_IDLE
         if (IsOnBoard() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && Sexy::Rand(4) == 0)
         {
             Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
@@ -506,6 +510,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
             aBodyReanim->AssignRenderGroupToPrefix("Cornpult_kernal", RENDER_GROUP_HIDDEN);
             mState = PlantState::STATE_KERNELPULT_BUTTER;
         }
+#endif
         break;
     case SeedType::SEED_MAGNETSHROOM:
         TOD_ASSERT(aBodyReanim);
@@ -535,6 +540,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         TOD_ASSERT(aBodyReanim);
         aBodyReanim->SetTruncateDisappearingFrames();
         break;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_TIMESTOPPER:
         if (IsInPlay())
         {
@@ -543,8 +549,6 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         break;
     case SeedType::SEED_CHERRYHOVERBOMB:
     {
-        //TOD_ASSERT(aBodyReanim);
-
         if (IsInPlay())
         {
             mDoSpecialCountdown = 100;
@@ -576,17 +580,18 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         }
         break;
     }
+    case SeedType::SEED_ICEBERGLETTUCE:
+    {
+        mAnimCounter = Rand(mFrameLength * mNumFrames);
+        break;
+    }
+#endif
     case SeedType::SEED_SUNFLOWER:
     {
         if (mApp->IsIZombieLevel())
         {
             mApp->ReanimationGet(mBodyReanimID)->mAnimTime = 0.15f;
         }
-        break;
-    }
-    case SeedType::SEED_ICEBERGLETTUCE:
-    {
-        mAnimCounter = Rand(mFrameLength * mNumFrames);
         break;
     }
     }
@@ -733,11 +738,15 @@ int Plant::GetDamageRangeFlags(PlantWeapon thePlantWeapon)
     case SeedType::SEED_JALAPENO:
     case SeedType::SEED_COBCANNON:
     case SeedType::SEED_DOOMSHROOM:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_CHERRYHOVERBOMB:
     case SeedType::SEED_NUKECUMBER:
+#endif
         return 127;
     case SeedType::SEED_MELONPULT:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_ICEBERGLETTUCE:
+#endif
     case SeedType::SEED_CABBAGEPULT:
     case SeedType::SEED_KERNELPULT:
     case SeedType::SEED_WINTERMELON:
@@ -753,14 +762,18 @@ int Plant::GetDamageRangeFlags(PlantWeapon thePlantWeapon)
     case SeedType::SEED_CHOMPER:
         return 9;
     case SeedType::SEED_CATTAIL:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_BEEHIVE:
         return 11;
+#endif
     case SeedType::SEED_TANGLEKELP:
         return 5;
     case SeedType::SEED_GIANT_WALLNUT:
         return 17;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_STINGER:
         return 2;
+#endif
     default:
         return 1;
     }
@@ -823,14 +836,24 @@ void Plant::DoRowAreaDamage(int theDamage, unsigned int theDamageFlags)
         else if (aDiffY)
             continue;
 
-        if (aZombie->mOnHighGround == IsOnHighGround() && (aZombie->EffectedByDamage(aDamageRangeFlags) || 
-            aZombie->mZombieType == ZombieType::ZOMBIE_DOG && (mSeedType == SeedType::SEED_YAMPOLINE || IsSpiky()) && aZombie->EffectedByDamage(13)))
+        if (aZombie->mOnHighGround == IsOnHighGround() && (aZombie->EffectedByDamage(aDamageRangeFlags) 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+                || aZombie->mZombieType == ZombieType::ZOMBIE_DOG
+#endif
+                && (
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+                mSeedType == SeedType::SEED_YAMPOLINE ||
+#endif
+                IsSpiky()) && aZombie->EffectedByDamage(13)))
         {
             if (aZombie->mZombiePhase == ZombiePhase::PHASE_ZAMBONI_FLAT && IsSpiky()) {
                 continue;
             }
 
             Rect aZombieRect = aZombie->GetZombieRect();
+            if (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT || aZombie->mZombieType == ZombieType::ZOMBIE_POGO && aZombie->mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL &&
+                (mSeedType == SeedType::SEED_SPIKEWEED || mSeedType == SeedType::SEED_SPIKEROCK))
+                aZombieRect.mWidth += 50;
             if (GetRectOverlap(aAttackRect, aZombieRect) > 0)
             {
                 int aDamage = theDamage;
@@ -856,7 +879,7 @@ void Plant::DoRowAreaDamage(int theDamage, unsigned int theDamageFlags)
                         }
                     }
                 }
-
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
                 if (mSeedType == SeedType::SEED_YAMPOLINE && aZombie->mZombieType != ZombieType::ZOMBIE_BOSS && aZombie->mYampolineCounter == 0 && 
                     !aZombie->IsDeadOrDying() && aZombie->mHasHead && aZombie->mZombieType != ZombieType::ZOMBIE_BOSS && 
                     aZombie->mZombieType != ZombieType::ZOMBIE_CATAPULT && aZombie->mZombieType != ZombieType::ZOMBIE_ZAMBONI)
@@ -897,6 +920,7 @@ void Plant::DoRowAreaDamage(int theDamage, unsigned int theDamageFlags)
                        
                     continue;
                 }
+#endif
 
                 aZombie->TakeDamage(aDamage, theDamageFlags);
                 mApp->PlayFoley(FoleyType::FOLEY_SPLAT);
@@ -1002,26 +1026,35 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
         case SeedType::SEED_FUMESHROOM:     mShootingCounter = 50;  break;
         case SeedType::SEED_PUFFSHROOM:     mShootingCounter = 29;  break;
         case SeedType::SEED_SCAREDYSHROOM:  mShootingCounter = 25;  break;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
         case SeedType::SEED_ICEBERGLETTUCE:
+#endif
         case SeedType::SEED_CABBAGEPULT:    mShootingCounter = 32;  break;
         case SeedType::SEED_MELONPULT:
         case SeedType::SEED_WINTERMELON:    mShootingCounter = 36;  break;
         case SeedType::SEED_KERNELPULT:
         {
-            /*if (Sexy::Rand(4) == 0)
+#ifndef _HAS_KERNELPULT_BUTTER_IDLE
+            if (Sexy::Rand(4) == 0)
             {
+
+            
                 aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
                 aBodyReanim->AssignRenderGroupToPrefix("Cornpult_butter", RENDER_GROUP_NORMAL);
                 aBodyReanim->AssignRenderGroupToPrefix("Cornpult_kernal", RENDER_GROUP_HIDDEN);
                 mState = PlantState::STATE_KERNELPULT_BUTTER;
-            }*/
+            }
+#endif
+
 
             mShootingCounter = 30;
             break;
         }
         case SeedType::SEED_CACTUS:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
         case SeedType::SEED_STINGER:
         case SeedType::SEED_BEEHIVE:        mShootingCounter = 35;  break;
+#endif
         default:                            mShootingCounter = 29;  break;
         }
     }
@@ -1392,9 +1425,11 @@ void Plant::UpdateGraveBuster()
         {
             aGraveStone->GridItemDie();
             mBoard->mGravesCleared++;
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
             if (mBoard->mGravesCleared == 10) {
                 ReportAchievement::GiveAchievement(mApp, AchievementId::DisrespectTheDead, true);
             }
+#endif
         }
 
         mApp->AddTodParticle(mX + 40, mY + 40, mRenderOrder + 4, ParticleEffect::PARTICLE_GRAVE_BUSTER_DIE);
@@ -1719,7 +1754,11 @@ void Plant::DoSquashDamage()
         if ((aZombie->mRow == mRow || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) && aZombie->EffectedByDamage(aDamageRangeFlags))
         {
             Rect aZombieRect = aZombie->GetZombieRect();
-            if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL || aZombie->mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL ? -20 : 0))
+            if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL 
+#ifdef _HAS_NEW_GIGA_ZOMBIES
+                || aZombie->mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL 
+#endif
+                ? -20 : 0))
             {
                 aZombie->TakeDamage(1800, 18U); 
 
@@ -1736,7 +1775,12 @@ void Plant::DoSquashDamage()
 Zombie* Plant::FindSquashTarget()
 {
     int aDamageRangeFlags = GetDamageRangeFlags(PlantWeapon::WEAPON_PRIMARY);
+
     Rect aAttackRect = GetPlantAttackRect(PlantWeapon::WEAPON_PRIMARY);
+
+    int midX = mX + (mWidth / 2);
+    int halfWidth = aAttackRect.mWidth / 2;
+    aAttackRect.mX = midX - halfWidth;
 
     int aClosestRange = 0;
     Zombie* aClosestZombie = nullptr;
@@ -1744,51 +1788,53 @@ Zombie* Plant::FindSquashTarget()
     Zombie* aZombie = nullptr;
     while (mBoard->IterateZombies(aZombie))
     {
-        if ((aZombie->mRow == mRow || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) &&
-            aZombie->mHasHead && !aZombie->IsTangleKelpTarget() && aZombie->EffectedByDamage(aDamageRangeFlags))
+        if ((aZombie->mRow != mRow && aZombie->mZombieType != ZombieType::ZOMBIE_BOSS) ||
+            !aZombie->mHasHead || aZombie->IsTangleKelpTarget() ||
+            !aZombie->EffectedByDamage(aDamageRangeFlags))
         {
-            Rect aZombieRect = aZombie->GetZombieRect();
+            continue;
+        }
 
-            if ((
-                    aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT && aZombieRect.mX < mX + 20
-                ) || (
-                    aZombie->mZombiePhase != ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT && 
-                    aZombie->mZombiePhase != ZombiePhase::PHASE_POLEVAULTER_IN_VAULT &&
-                    aZombie->mZombiePhase != ZombiePhase::PHASE_SNORKEL_INTO_POOL && 
-                    aZombie->mZombiePhase != ZombiePhase::PHASE_DOLPHIN_INTO_POOL &&
-                    aZombie->mZombiePhase != ZombiePhase::PHASE_DOLPHIN_RIDING && 
-                    aZombie->mZombiePhase != ZombiePhase::PHASE_DOLPHIN_IN_JUMP &&
-                    !aZombie->IsBobsledTeamWithSled()
-                ))
-            {
-                int aRange = -GetRectOverlap(aAttackRect, aZombieRect);
-                if (aRange <= (aZombie->mIsEating ? 110 : 70))
-                {
-                    int aPlantX = aAttackRect.mX;
-                    if (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT || aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT ||
-                        aZombie->mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_IN_POOL || aZombie->mZombieType == ZombieType::ZOMBIE_IMP ||
-                        aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL || mApp->IsScaryPotterLevel())
-                    {
-                        aPlantX = aAttackRect.mX - 60;
-                    }
+        bool IsZombieLeaping =
+            (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT && aZombie->GetZombieRect().mX >= mX + 20) ||
+            (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT ||
+                aZombie->mZombiePhase == ZombiePhase::PHASE_SNORKEL_INTO_POOL ||
+                aZombie->mZombiePhase == ZombiePhase::PHASE_DOLPHIN_INTO_POOL ||
+                aZombie->mZombiePhase == ZombiePhase::PHASE_DOLPHIN_RIDING ||
+                aZombie->mZombiePhase == ZombiePhase::PHASE_DOLPHIN_IN_JUMP ||
+                aZombie->IsBobsledTeamWithSled());
 
-                    if (aZombie->IsWalkingBackwards() || aZombieRect.mX + aZombieRect.mWidth >= aPlantX)
-                    {
-                        if (mBoard->ZombieGetID(aZombie) == mTargetZombieID)
-                            return aZombie;  // 是锁定的目标僵尸，则直接返回该僵尸
+        if (IsZombieLeaping)
+            continue;
 
-                        if (aClosestZombie == nullptr || aRange < aClosestRange)
-                        {
-                            aClosestZombie = aZombie;
-                            aClosestRange = aRange;
-                        }
-                    }
-                }
-            }
+        Rect aZombieRect = aZombie->GetZombieRect();
+        int aRange = -GetRectOverlap(aAttackRect, aZombieRect);
+        if (aRange > (aZombie->mIsEating ? 110 : 70))
+            continue;
+
+        int aPlantX = aAttackRect.mX;
+        if (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT ||
+            aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT ||
+            aZombie->mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_IN_POOL ||
+            aZombie->mZombieType == ZombieType::ZOMBIE_IMP ||
+            aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL ||
+            mApp->IsScaryPotterLevel())
+        {
+            aPlantX -= 60;
+        }
+
+        if (mBoard->ZombieGetID(aZombie) == mTargetZombieID)
+            return aZombie; 
+
+        if (!aClosestZombie || aRange < aClosestRange)
+        {
+            aClosestZombie = aZombie;
+            aClosestRange = aRange;
         }
     }
 
     return aClosestZombie;
+
 }
 
 //0x4609D0
@@ -1970,7 +2016,7 @@ void Plant::UpdateUmbrella()
     {
         if (mStateCountdown == 0)
         {
-            mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0);
+            //mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0);
             mState = PlantState::STATE_UMBRELLA_REFLECTING;
         }
     }
@@ -1979,9 +2025,23 @@ void Plant::UpdateUmbrella()
         Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
         if (aBodyReanim->mLoopCount > 0)
         {
-            PlayIdleAnim(0.0f);
+            //PlayIdleAnim(0.0f);
             mState = PlantState::STATE_NOTREADY;
-            mRenderOrder = CalcRenderOrder();
+            //mRenderOrder = CalcRenderOrder();
+        }
+    }
+
+    Reanimation* aSpecialReanim = mApp->ReanimationTryToGet(mSpecialReanimID);
+    if (aSpecialReanim && aSpecialReanim->mLoopCount > 0) 
+    {
+        mApp->RemoveReanimation(mSpecialReanimID);
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim) 
+        {
+            for (int i = 0; i < aBodyReanim->mDefinition->mTracks.count; i++)
+            {
+                aBodyReanim->mTrackInstances[i].mRenderGroup =  RENDER_GROUP_NORMAL;
+            }
         }
     }
 }
@@ -2330,6 +2390,7 @@ void Plant::MagnetShroomAttactItem(Zombie* theZombie)
         aMagnetItem->mDestOffsetY = RandRangeFloat(-10.0f, 10.0f) + 15.0f;
         aMagnetItem->mItemType = MagnetItemType::MAGNET_ITEM_PICK_AXE;
     }
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     else if (theZombie->mZombiePhase == ZombiePhase::PHASE_PROPELLER_FLYING)
     {
         theZombie->LandFlyer(0U);
@@ -2342,6 +2403,7 @@ void Plant::MagnetShroomAttactItem(Zombie* theZombie)
         aMagnetItem->mDestOffsetY = RandRangeFloat(-10.0f, 10.0f) + 15.0f;
         aMagnetItem->mItemType = MagnetItemType::MAGNET_ITEM_PROPELLER;
     }
+#endif
 }
 
 //0x461CD0
@@ -2469,8 +2531,11 @@ void Plant::UpdateMagnetShroom()
                 aZombie->mShieldType == ShieldType::SHIELDTYPE_DOOR ||
                 aZombie->mShieldType == ShieldType::SHIELDTYPE_TRASHCAN ||
                 aZombie->mShieldType == ShieldType::SHIELDTYPE_LADDER ||
-                aZombie->mZombiePhase == ZombiePhase::PHASE_JACK_IN_THE_BOX_RUNNING ||
-                aZombie->mZombiePhase == ZombiePhase::PHASE_PROPELLER_FLYING))
+                aZombie->mZombiePhase == ZombiePhase::PHASE_JACK_IN_THE_BOX_RUNNING 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+                || aZombie->mZombiePhase == ZombiePhase::PHASE_PROPELLER_FLYING
+#endif
+                ))
                 continue;
 
             int aRadius = aZombie->mIsEating ? 320 : 270;
@@ -2702,6 +2767,7 @@ void Plant::RemoveEffects()
     mApp->RemoveReanimation(mLightReanimID);
     mApp->RemoveReanimation(mBlinkReanimID);
     mApp->RemoveReanimation(mSleepingReanimID);
+    mApp->RemoveReanimation(mSpecialReanimID);
 }
 
 //0x462B80
@@ -2722,8 +2788,12 @@ void Plant::Squish()
     {
         if (mSeedType == SeedType::SEED_CHERRYBOMB || mSeedType == SeedType::SEED_JALAPENO ||
             mSeedType == SeedType::SEED_DOOMSHROOM || mSeedType == SeedType::SEED_ICESHROOM || 
-            mSeedType == SeedType::SEED_TIMESTOPPER || mSeedType == SeedType::SEED_CHERRYHOVERBOMB ||
-            mSeedType == SeedType::SEED_NUKECUMBER || mSeedType == SeedType::SEED_EXPLODE_O_NUT)
+            mSeedType == SeedType::SEED_EXPLODE_O_NUT 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+            || mSeedType == SeedType::SEED_TIMESTOPPER || mSeedType == SeedType::SEED_CHERRYHOVERBOMB ||
+            mSeedType == SeedType::SEED_NUKECUMBER 
+#endif
+            )
         {
             DoSpecial();
             return;
@@ -2952,8 +3022,10 @@ void Plant::UpdateAbilities()
     if (mIsAsleep || mSquished || mOnBungeeState != PlantOnBungeeState::NOT_ON_BUNGEE)
         return;
 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     if (mSeedType == SeedType::SEED_DUPLICATORCYCLER && IsInPlay() && mBoard->mCursorObject->mDuplicatorPlantID == (PlantID)mBoard->mPlants.DataArrayGetID(this))
         return;
+#endif
     
     UpdateShooting();
 
@@ -2988,7 +3060,9 @@ void Plant::UpdateAbilities()
     else if (mSeedType == SeedType::SEED_SPIKEWEED || mSeedType == SeedType::SEED_SPIKEROCK)    UpdateSpikeweed();
     else if (mSeedType == SeedType::SEED_TANGLEKELP)                                            UpdateTanglekelp();
     else if (mSeedType == SeedType::SEED_SCAREDYSHROOM)                                         UpdateScaredyShroom();
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     else if (mSeedType == SeedType::SEED_YAMPOLINE)                                             UpdateYampoline();
+#endif
 
     if (mSubclass == PlantSubClass::SUBCLASS_SHOOTER)
     {
@@ -3349,8 +3423,10 @@ void Plant::Update()
         if (mPlantHealth < 0)
             Die();
 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
         if (mBoard && mSeedType == SeedType::SEED_TIMESTOPPER && mDoSpecialCountdown == -1 && mBoard->mTimeStopCounter == 0)
             Die();
+#endif
         
         UpdateReanim();
     }
@@ -3805,9 +3881,13 @@ void Plant::UpdateShooting()
             Fire(nullptr, mRow, PlantWeapon::WEAPON_SECONDARY);
         }
         else if (mSeedType == SeedType::SEED_CABBAGEPULT || mSeedType == SeedType::SEED_KERNELPULT || mSeedType == SeedType::SEED_MELONPULT || mSeedType == SeedType::SEED_WINTERMELON
-                || mSeedType == SeedType::SEED_ICEBERGLETTUCE)
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+                || mSeedType == SeedType::SEED_ICEBERGLETTUCE
+#endif
+            )
         {
             PlantWeapon aPlantWeapon = PlantWeapon::WEAPON_PRIMARY;
+#ifndef _HAS_KERNELPULT_BUTTER_IDLE
             if (mState == PlantState::STATE_KERNELPULT_BUTTER)
             {
                 Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
@@ -3816,7 +3896,7 @@ void Plant::UpdateShooting()
                 mState = PlantState::STATE_NOTREADY;
                 aPlantWeapon = PlantWeapon::WEAPON_SECONDARY;
             }
-
+#else
             if (Sexy::Rand(4) == 0)
             {
                 Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
@@ -3825,6 +3905,7 @@ void Plant::UpdateShooting()
                 aBodyReanim->AssignRenderGroupToPrefix("Cornpult_kernal", RENDER_GROUP_HIDDEN);
                 mState = PlantState::STATE_KERNELPULT_BUTTER;
             }
+#endif
 
             Zombie* aZombie = FindTargetZombie(mRow, aPlantWeapon);
             Fire(aZombie, mRow, aPlantWeapon);
@@ -3972,7 +4053,11 @@ void Plant::UpdateShooting()
 //0x464DB0
 void Plant::Animate()
 {
-    if (!mApp->GetDialog(Dialogs::DIALOG_ALMANAC) && (mSeedType == SeedType::SEED_CHERRYBOMB || mSeedType == SeedType::SEED_JALAPENO || mSeedType == SeedType::SEED_CHERRYHOVERBOMB || mSeedType == SeedType::SEED_NUKECUMBER) && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
+    if (!mApp->GetDialog(Dialogs::DIALOG_ALMANAC) && (mSeedType == SeedType::SEED_CHERRYBOMB || mSeedType == SeedType::SEED_JALAPENO 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+        || mSeedType == SeedType::SEED_CHERRYHOVERBOMB || mSeedType == SeedType::SEED_NUKECUMBER
+#endif
+        ) && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
     {
         mShakeOffsetX = RandRangeFloat(-1.0f, 1.0f);
         mShakeOffsetY = RandRangeFloat(-1.0f, 1.0f);
@@ -4184,7 +4269,11 @@ float PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedTy
     {
         aHeightOffset -= 40.0f;
     }
-    else if (theSeedType == SeedType::SEED_SPIKEWEED || theSeedType == SeedType::SEED_SPIKEROCK || theSeedType == SeedType::SEED_YAMPOLINE)
+    else if (theSeedType == SeedType::SEED_SPIKEWEED || theSeedType == SeedType::SEED_SPIKEROCK 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+        || theSeedType == SeedType::SEED_YAMPOLINE
+#endif
+        )
     {
         int aBottomRow = 4;
         if (theBoard && theBoard->StageHas6Rows())
@@ -4388,8 +4477,11 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
     if (mSeedType == SeedType::SEED_LILYPAD || mSeedType == SeedType::SEED_STARFRUIT || mSeedType == SeedType::SEED_TANGLEKELP || 
         mSeedType == SeedType::SEED_SEASHROOM || mSeedType == SeedType::SEED_COBCANNON || mSeedType == SeedType::SEED_SPIKEWEED || 
         mSeedType == SeedType::SEED_SPIKEROCK || mSeedType == SeedType::SEED_GRAVEBUSTER && IsOnBoard()|| mSeedType == SeedType::SEED_CATTAIL ||
-        mSeedType == SeedType::SEED_INSTANT_COFFEE || mSeedType == SeedType::SEED_YAMPOLINE || 
-        mOnBungeeState == PlantOnBungeeState::RISING_WITH_BUNGEE || mBurnedCounter != -1)
+        mSeedType == SeedType::SEED_INSTANT_COFFEE 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+        || mSeedType == SeedType::SEED_YAMPOLINE 
+#endif
+        || mOnBungeeState == PlantOnBungeeState::RISING_WITH_BUNGEE || mBurnedCounter != -1)
         return;
 
     if (IsOnBoard() && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mZenGarden->mGardenType == GardenType::GARDEN_MAIN)
@@ -4510,7 +4602,7 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
         aShadowOffsetY = 56.0f;
         aScale = 1.7f;
     }
-
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     if (mSeedType == SeedType::SEED_STINGER)
     {
         aShadowOffsetY += 90.0f;
@@ -4523,7 +4615,9 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
         if (mBoard && (mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_NORMAL_POSITION) || mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_PUMPKIN)))
             return;
     }
-    else if (Plant::IsFlying(mSeedType))
+    else 
+#endif
+    if (Plant::IsFlying(mSeedType))
     {
         aShadowOffsetY += 10.0f;
         if (mBoard && (mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_NORMAL_POSITION) || mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_PUMPKIN)))
@@ -4549,15 +4643,20 @@ void Plant::Draw(Graphics* g)
     {
         aOffsetY += 30.0f;
     }
+
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     if (!((LawnApp*)gSexyAppBase)->GetDialog(Dialogs::DIALOG_ALMANAC) && mSeedType == SeedType::SEED_STINGER)
     {
         aOffsetY -= 60.0f;
     }
+#endif
 
     int aImageIndex = mFrame;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     if (mSeedType == SeedType::SEED_DUPLICATORCYCLER) {
         aImageIndex = 9;
     }
+#endif
     Image* aPlantImage = Plant::GetImage(mSeedType);
 
     if (mSquished)
@@ -4858,7 +4957,7 @@ void Plant::Draw(Graphics* g)
                     g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
                     g->SetColorizeImages(false);
                 }
-
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
                 if (mSeedType == SeedType::SEED_DUPLICATORCYCLER && IsInPlay() && mApp->mGameScene == GameScenes::SCENE_PLAYING && mDuplicatorSeedType != SeedType::SEED_NONE) {
                     int aCost = mBoard->GetCurrentPlantCost(mDuplicatorSeedType, mDuplicatorImitaterType);
                     float aPercentDark = 0.0f;
@@ -4887,6 +4986,7 @@ void Plant::Draw(Graphics* g)
 
                     DrawSeedPacket(g, 15.0f, PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow), mDuplicatorSeedType, mDuplicatorImitaterType, aPercentDark, aGrayness, true, true);
                 }
+#endif
             }
         }
 
@@ -4957,7 +5057,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
     }*/
     if (aSeedType == SeedType::SEED_SEASHROOM)
     {
-        aOffsetY += 3.535f * g->mScaleY;
+        aOffsetY += 3.535f;
     }
     if (aSeedType == SeedType::SEED_SUNSHROOM)
     {
@@ -5008,9 +5108,12 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
             {
                 aCelCol = aPlantImage->mNumCols - 1;
             }
+
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
             if (aSeedType == SeedType::SEED_DUPLICATORCYCLER) {
                 aCelCol = 9;
             }
+#endif
 
             TodDrawImageCelScaledF(g, aPlantImage, thePosX + aOffsetX, thePosY + aOffsetY, aCelCol, aCelRow, g->mScaleX, g->mScaleY);
         }
@@ -5037,6 +5140,7 @@ void Plant::MouseDown(int x, int y, int theClickCount)
         mBoard->mCobCannonMouseY = y;
     }
 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     if (mSeedType == SeedType::SEED_DUPLICATORCYCLER && mDuplicatorSeedType != SeedType::SEED_NONE) {
         int aCost = mBoard->GetCurrentPlantCost(mDuplicatorSeedType, mDuplicatorImitaterType);
         int isReady = mStateCountdown == 0;
@@ -5096,6 +5200,7 @@ void Plant::MouseDown(int x, int y, int theClickCount)
             }
         }
     }
+#endif
 }
 
 //0x466420
@@ -5278,7 +5383,25 @@ void Plant::DoSpecial()
             mState = PlantState::STATE_UMBRELLA_TRIGGERED;
             mStateCountdown = 5;
 
-            PlayBodyReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
+            const PlantDefinition& aPlantDef = GetPlantDefinition(mSeedType);
+
+            Reanimation* aSpecialReanim = mApp->ReanimationTryToGet(mSpecialReanimID);
+            if (!aSpecialReanim)
+            {
+                aSpecialReanim = mApp->AddReanimation(mX, mY, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0), aPlantDef.mReanimationType);
+                aSpecialReanim->AssignRenderGroupToTrack("anim_face", RENDER_GROUP_HIDDEN);
+            }
+            else
+            {
+                aSpecialReanim->StartBlend(20);
+                aSpecialReanim->mAnimTime = 0.0f;
+            }
+            aSpecialReanim->PlayReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
+            mSpecialReanimID = mApp->ReanimationGetID(aSpecialReanim);
+            
+            Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+            if (aBodyReanim) aBodyReanim->ShowOnlyTrack("anim_face");
+            //PlayBodyReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
         }
 
         break;
@@ -5333,6 +5456,7 @@ void Plant::DoSpecial()
 
         break;
     }
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_TIMESTOPPER:
     {
         mDoSpecialCountdown = -1;
@@ -5387,6 +5511,7 @@ void Plant::DoSpecial()
         Die();
         break;
     }
+#endif
     case SeedType::SEED_EXPLODE_O_NUT:
     {
         mApp->PlayFoley(FoleyType::FOLEY_CHERRYBOMB);
@@ -5547,7 +5672,9 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
         break;
     case SeedType::SEED_CACTUS:
     case SeedType::SEED_CATTAIL:
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_STINGER:
+#endif
         aProjectileType = ProjectileType::PROJECTILE_SPIKE;
         break;
     case SeedType::SEED_CABBAGEPULT:
@@ -5565,12 +5692,14 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
     case SeedType::SEED_COBCANNON:
         aProjectileType = ProjectileType::PROJECTILE_COBBIG;
         break;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_ICEBERGLETTUCE:
         aProjectileType = ProjectileType::PROJECTILE_LETTUCE;
         break;
     case SeedType::SEED_BEEHIVE:
         aProjectileType = ProjectileType::PROJECTILE_BEE;
         break;
+#endif
     default:
         TOD_ASSERT();
         break;
@@ -5690,11 +5819,13 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
         aOriginX = mX - 44;
         aOriginY = mY - 184;
     }
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     else if (mSeedType == SeedType::SEED_STINGER)
     {
         aOriginX = mX + 10;
         aOriginY = mY + 5 - 60;
     }
+#endif
     else
     {
         aOriginX = mX + 10;
@@ -5754,7 +5885,10 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
 
     if (mSeedType == SeedType::SEED_CABBAGEPULT || mSeedType == SeedType::SEED_KERNELPULT ||
         mSeedType == SeedType::SEED_MELONPULT || mSeedType == SeedType::SEED_WINTERMELON
-        || mSeedType == SeedType::SEED_ICEBERGLETTUCE)
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+        || mSeedType == SeedType::SEED_ICEBERGLETTUCE
+#endif
+        )
     {
         float aRangeX, aRangeY;
         if (theTargetZombie)
@@ -5840,12 +5974,14 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
         aProjectile->mCobTargetX = mTargetX - 40;
         aProjectile->mCobTargetRow = mBoard->PixelToGridYKeepOnBoard(mTargetX, mTargetY);
     }
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     else if (mSeedType == SeedType::SEED_BEEHIVE)
     {
         aProjectile->mMotionType = ProjectileMotion::MOTION_BEE;
         aProjectile->mVelX = 2.0f;
         aProjectile->mTargetZombieID = mBoard->ZombieGetID(theTargetZombie);
     }
+#endif
 }
 
 //0x4675C0
@@ -5882,7 +6018,11 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
             }
         }
 
-        if (mSeedType != SeedType::SEED_CATTAIL && mSeedType != SeedType::SEED_BEEHIVE)
+        if (mSeedType != SeedType::SEED_CATTAIL 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+            && mSeedType != SeedType::SEED_BEEHIVE
+#endif
+            )
         {
             if (mSeedType == SeedType::SEED_GLOOMSHROOM)
             {
@@ -5909,9 +6049,12 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
             continue;
         }
 
-        if (aZombie->EffectedByDamage(aDamageRangeFlags) ||
-            aZombie->mZombieType == ZombieType::ZOMBIE_DOG && (mSeedType == SeedType::SEED_YAMPOLINE || IsSpiky()) && aZombie->EffectedByDamage(13) ||
+        if (aZombie->EffectedByDamage(aDamageRangeFlags) 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+            || aZombie->mZombieType == ZombieType::ZOMBIE_DOG  && (mSeedType == SeedType::SEED_YAMPOLINE || IsSpiky()) && aZombie->EffectedByDamage(13) ||
             aZombie->mZombiePhase == ZombiePhase::PHASE_PROPELLER_FLYING && mSeedType == SeedType::SEED_CACTUS && thePlantWeapon == PlantWeapon::WEAPON_PRIMARY)
+#endif 
+           )
         {
             int aExtraRange = 0;
 
@@ -5950,7 +6093,7 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
                     aAttackRect.mX -= 40;
                     aAttackRect.mWidth += 40;  // 原版经典土豆地雷 Bug 及“四撑杆引雷”的原理
                 }
-                else{
+                else {
                     aAttackRect.mX += 40;
                     aAttackRect.mWidth -= 40;
                 }
@@ -5972,12 +6115,17 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
                 continue;
             }
 
+#ifdef _HAS_BLOOMANDDOOM_CONTENTS
             if (mSeedType == SeedType::SEED_YAMPOLINE && (aZombie->mYampolineCounter > 0 || aZombie->IsDeadOrDying() || !aZombie->mHasHead || 
                 aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mZombieType == ZombieType::ZOMBIE_CATAPULT || 
                 aZombie->mZombieType == ZombieType::ZOMBIE_ZAMBONI))
                 continue;
+#endif
 
             Rect aZombieRect = aZombie->GetZombieRect();
+            if (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT || aZombie->mZombieType == ZombieType::ZOMBIE_POGO && aZombie->mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL &&
+                (mSeedType == SeedType::SEED_SPIKEWEED || mSeedType == SeedType::SEED_SPIKEROCK))
+                aZombieRect.mWidth += 50;
             if (!needPortalCheck && GetRectOverlap(aAttackRect, aZombieRect) < -aExtraRange)
             {
                 continue;
@@ -5986,7 +6134,11 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
             ////////////////////
 
             int aWeight = -aZombieRect.mX;
-            if (mSeedType == SeedType::SEED_CATTAIL || mSeedType == SeedType::SEED_BEEHIVE)
+            if (mSeedType == SeedType::SEED_CATTAIL 
+#ifdef _HAS_BLOOMANDDOOM_CONTENTS
+                || mSeedType == SeedType::SEED_BEEHIVE
+#endif      
+            )
             {
                 aWeight = -Distance2D(mX + 40.0f, mY + 40.0f, aZombieRect.mX + aZombieRect.mWidth / 2, aZombieRect.mY + aZombieRect.mHeight / 2);
                 if (aZombie->IsFlying())
@@ -6250,7 +6402,11 @@ bool Plant::IsAquatic(SeedType theSeedType)
 
 bool Plant::IsFlying(SeedType theSeedtype)
 {
-    return theSeedtype == SeedType::SEED_INSTANT_COFFEE || theSeedtype == SeedType::SEED_CHERRYHOVERBOMB || theSeedtype == SeedType::SEED_STINGER;
+    return theSeedtype == SeedType::SEED_INSTANT_COFFEE 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+        || theSeedtype == SeedType::SEED_CHERRYHOVERBOMB || theSeedtype == SeedType::SEED_STINGER
+#endif
+        ;
 }
 
 //0x467EC0
@@ -6310,7 +6466,9 @@ Rect Plant::GetPlantAttackRect(PlantWeapon thePlantWeapon)
     case SeedType::SEED_CHOMPER:        aRect = Rect(mX + 80,       mY,             40,                 mHeight);               break;
     case SeedType::SEED_SPIKEWEED:
     case SeedType::SEED_SPIKEROCK:      aRect = Rect(mX + 20,       mY,             mWidth - 50,        mHeight);               break;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_YAMPOLINE:      aRect = Rect(mX + 40,       mY,             mWidth - 79,        mHeight);               break;
+#endif
     case SeedType::SEED_POTATOMINE:     aRect = Rect(mX,            mY,             mWidth - 25,        mHeight);               break;
     case SeedType::SEED_TORCHWOOD:      aRect = Rect(mX + 50,       mY,             30,                 mHeight);               break;
     case SeedType::SEED_PUFFSHROOM:
@@ -6319,7 +6477,10 @@ Rect Plant::GetPlantAttackRect(PlantWeapon thePlantWeapon)
     case SeedType::SEED_GLOOMSHROOM:    aRect = Rect(mX - 80,       mY - 80,        240,                240);                   break;
     case SeedType::SEED_TANGLEKELP:     aRect = Rect(mX,            mY,             mWidth,             mHeight);               break;
     case SeedType::SEED_CATTAIL:
-    case SeedType::SEED_BEEHIVE:        aRect = Rect(-BOARD_WIDTH,  -BOARD_HEIGHT,  BOARD_WIDTH * 2,    BOARD_HEIGHT * 2);      break;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+    case SeedType::SEED_BEEHIVE:
+#endif
+                                        aRect = Rect(-BOARD_WIDTH,  -BOARD_HEIGHT,  BOARD_WIDTH * 2,    BOARD_HEIGHT * 2);      break;
     default:                            aRect = Rect(mX + 60,       mY,             BOARD_WIDTH,        mHeight);               break;
     }
 
@@ -6343,7 +6504,11 @@ bool Plant::PreloadPlantResources(SeedType theSeedType)
         ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_HEATWAVE_SHOOTER, true);
     }
 
-    if (theSeedType == SeedType::SEED_CHERRYBOMB || theSeedType == SeedType::SEED_CHERRYHOVERBOMB || theSeedType == SeedType::SEED_EXPLODE_O_NUT)
+    if (theSeedType == SeedType::SEED_CHERRYBOMB || theSeedType == SeedType::SEED_EXPLODE_O_NUT 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+        || theSeedType == SeedType::SEED_CHERRYHOVERBOMB 
+#endif
+    )
     {
         if (&gReanimatorDefArray[(int)ReanimationType::REANIM_ZOMBIE_CHARRED].mTracks.tracks == nullptr)
             needPreload = true;

@@ -51,8 +51,12 @@
 
 #include "Lawn/SeedPacket.h"
 
+#include "Sexy.TodLib/Definition.h"
+
 #include "portaudio.h"
 #include <lua.hpp>
+
+#include "Particle/ParticleScreen.h"
 
 bool gIsPartnerBuild = false;
 bool gSlowMo = false;  //0x6A9EAA
@@ -87,6 +91,7 @@ LawnApp::LawnApp()
 	mAwardScreen = nullptr;
 	mCreditScreen = nullptr;
 	mLanguageScreen = nullptr;
+	mParticleScreen = nullptr;
 	mTitleScreen = nullptr;
 	mSoundSystem = nullptr;
 	mKonamiCheck = nullptr;
@@ -124,6 +129,7 @@ LawnApp::LawnApp()
 	mSfxVolume = 0.5525;
 	mAutoStartLoadingThread = false;
 	mDebugKeysEnabled = false;
+	mBoardCamera = nullptr;
 	mProdName = "PlantsVsZombies";
 	SexyString aTitleName = _S("Plants vs. Zombies");
 #ifdef _DEBUG
@@ -156,7 +162,6 @@ LawnApp::LawnApp()
 	mBigArrowCursor = LoadCursor(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDC_CURSOR1));
 	mDRM = nullptr;
 	mShowHealthBar = false;
-	mPlayerController = new PlayerController();
 	mVoiceVolume = 0.0f;
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
 }
@@ -257,6 +262,11 @@ LawnApp::~LawnApp()
 	{
 		mWidgetManager->RemoveWidget(mLanguageScreen);
 		delete mLanguageScreen;
+	}
+	if (mParticleScreen)
+	{
+		mWidgetManager->RemoveWidget(mParticleScreen);
+		delete mParticleScreen;
 	}
 
 	delete mProfileMgr;
@@ -420,16 +430,12 @@ void LawnApp::WriteToRegistry()
 		mPlayerInfo->SaveDetails();
 	}
 
-	RegistryWriteData("PlayerController", reinterpret_cast<const unsigned char*>(&mPlayerController), sizeof(PlayerController));
-
 	SexyAppBase::WriteToRegistry();
 }
 
 //0x44F530
 void LawnApp::ReadFromRegistry()
 {
-	ulong playerControllerSize = sizeof(PlayerController);
-	RegistryReadData("PlayerController", reinterpret_cast<uchar*>(&mPlayerController), &playerControllerSize);
 	SexyApp::ReadFromRegistry();
 }
 
@@ -1307,7 +1313,6 @@ void LawnApp::Init()
 		mOnlyAllowOneCopyToRun = false;
 	}
 
-
 	//if (!gSexyCache->Connected() &&
 	//	gLawnApp->mTodCheatKeys &&
 	//	MessageBox(gLawnApp->mHWnd, _S("Start SexyCache now?"), _S("SexyCache"), MB_YESNO) == IDYES &&
@@ -1328,17 +1333,28 @@ void LawnApp::Init()
 
 	SexyApp::Init();
 
-
-
-
-
 #ifdef _DEBUG
 	TodAssertInitForApp();
 	gBetaSubmitFunc = BetaSubmitFunc;
 	TodLog("session id: %u", mSessionID);
 #endif
 
-	if (!mResourceManager->ParseResourcesFile(_S("properties\\resources.xml")))
+	
+	WIN32_FILE_ATTRIBUTE_DATA fileInfo;
+	bool IsXMLPackLoaded = mResourceManager->ParseResourcesFile(_S("properties\\resources.xml"));
+
+	if (GetFileAttributesExA("dependency\\properties\\resources.xml", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("dependency\\properties\\resources.xml"))
+		IsXMLPackLoaded &= mResourceManager->ParseResourcesFile(_S("dependency\\properties\\resources.xml"));
+
+	if (GetFileAttributesExA("extension\\properties\\resources.xml", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("extension\\properties\\resources.xml"))
+		IsXMLPackLoaded &= mResourceManager->ParseResourcesFile(_S("extension\\properties\\resources.xml"));
+
+#ifdef _ALLOW_RESOURCEPACKS
+	if (GetFileAttributesExA("resourcepack\\properties\\resources.xml", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("resourcepack\\properties\\resources.xml"))
+		IsXMLPackLoaded &= mResourceManager->ParseResourcesFile(_S("resourcepack\\properties\\resources.xml"));
+#endif
+
+	if (!IsXMLPackLoaded)
 	{
 		ShowResourceError(true);
 		return;
@@ -1527,24 +1543,32 @@ bool LawnApp::UpdatePlayerProfileForFinishingLevel()
 		}
 
 		// @Patoke: implemented
-		if (mBoard->StageIsDayWithPool() && !mBoard->mPeaShooterUsed) {
+		if (mBoard->StageIsDayWithPool() && !mBoard->mPeaShooterUsed) 
+		{
 			ReportAchievement::GiveAchievement(this, AchievementId::DontPea, false);
 		}
-		if (mBoard->StageHasRoof() && !mBoard->HasConveyorBeltSeedBank() && !mBoard->mCatapultPlantsUsed) {
+		if (mBoard->StageHasRoof() && !mBoard->HasConveyorBeltSeedBank() && !mBoard->mCatapultPlantsUsed) 
+		{
 			ReportAchievement::GiveAchievement(this, AchievementId::Grounded, false);
 		}
-		if (mBoard->StageIsNight() && !mBoard->mMushroomsUsed) {
+		if (mBoard->StageIsNight() && !mBoard->mMushroomsUsed) 
+		{
 			ReportAchievement::GiveAchievement(this, AchievementId::NoFungusAmongUs, false);
 		}
-		if (mBoard->StageIsDayWithoutPool() && mBoard->mMushroomAndCoffeeBeansOnly) {
+		if (mBoard->StageIsDayWithoutPool() && mBoard->mMushroomAndCoffeeBeansOnly) 
+		{
 			ReportAchievement::GiveAchievement(this, AchievementId::GoodMorning, false);
 		}
-		if (mBoard->mSpawnedDiggerZombie && !mBoard->mDiggerHasReachLeftSide) {
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
+		if (mBoard->mSpawnedDiggerZombie && !mBoard->mDiggerHasReachLeftSide) 
+		{
 			ReportAchievement::GiveAchievement(this, AchievementId::FaceToFace, false);
 		}
-		if (!mBoard->mHadPlantedNuts && mBoard->mLevel > 3) {
+		if (!mBoard->mHadPlantedNuts && mBoard->mLevel > 3) 
+		{
 			ReportAchievement::GiveAchievement(this, AchievementId::MayNotContainNuts, true);
 		}
+#endif
 	}
 	else if (IsSurvivalMode())
 	{
@@ -1801,8 +1825,10 @@ void LawnApp::UpdateFrames()
 				{
 					for (int k = 0; k < mBoard->mSeedBank->mNumPackets; k++)
 					{
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 						if (mBoard->mSeedBank->mSeedPackets[k].mPacketType == SeedType::SEED_TIMESTOPPER)
 							continue;
+#endif
 
 						mBoard->mSeedBank->mSeedPackets[k].Update();
 					}
@@ -1818,8 +1844,10 @@ void LawnApp::UpdateFrames()
 					{
 						for (int k = 0; k < mBoard->mSeedBank->mNumPackets; k++)
 						{
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 							if (mBoard->mSeedBank->mSeedPackets[k].mPacketType == SeedType::SEED_TIMESTOPPER)
 								continue;
+#endif
 
 							mBoard->mSeedBank->mSeedPackets[k].Update();
 						}
@@ -1886,7 +1914,23 @@ void LawnApp::LoadingThreadProc()
 		return;
 
 	TodStringListLoad(_S("Properties\\LawnStrings.txt"));
-	TodStringListLoad(_S("Properties\\ZombatarTOS.txt"));
+
+	WIN32_FILE_ATTRIBUTE_DATA fileInfo;
+	if (GetFileAttributesExA("dependency\\properties\\LawnStrings.txt", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("dependency\\properties\\LawnStrings.txt"))
+		TodStringListLoad(_S("dependency\\properties\\LawnStrings.txt"));
+
+	if (GetFileAttributesExA("extension\\properties\\LawnStrings.txt", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("extension\\properties\\LawnStrings.txt"))
+		TodStringListLoad(_S("extension\\properties\\LawnStrings.txt"));
+
+#ifdef _ALLOW_RESOURCEPACKS
+	if (GetFileAttributesExA("resourcepack\\properties\\LawnStrings.txt", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("resourcepack\\properties\\LawnStrings.txt"))
+		TodStringListLoad(_S("resourcepack\\properties\\LawnStrings.txt"));
+#endif
+
+#ifdef _HAS_ZOMBATAR
+	if (!IsScreenSaver() && !IsParticleEditor())
+		TodStringListLoad(_S("Properties\\ZombatarTOS.txt"));
+#endif
 	
 	if (mTitleScreen)
 	{
@@ -1897,10 +1941,13 @@ void LawnApp::LoadingThreadProc()
 	int group_ave_ms_to_load[] = { 54, 9, 54 };
 	for (int i = 0; i < 3; i++)
 	{
+		if (IsParticleEditor() && i == 2) continue;
+
 		mNumLoadingThreadTasks += mResourceManager->GetNumResources(groups[i]) * group_ave_ms_to_load[i];
 	}
 	mNumLoadingThreadTasks += 636;
-	mNumLoadingThreadTasks += GetNumPreloadingTasks();
+	if (!IsParticleEditor())
+		mNumLoadingThreadTasks += GetNumPreloadingTasks();
 	mNumLoadingThreadTasks += mMusic->GetNumLoadingTasks();
 
 	PerfTimer aTimer;
@@ -1923,19 +1970,26 @@ void LawnApp::LoadingThreadProc()
 	int aDuration = max(aTimer.GetDuration(), 0);
 	aTimer.Start();
 
-	mPoolEffect = new PoolEffect();
-	mPoolEffect->PoolEffectInitialize();
-	mZenGarden = new ZenGarden();
-	mReanimatorCache = new ReanimatorCache();
-	mReanimatorCache->ReanimatorCacheInitialize();
+	if (!IsScreenSaver() && !IsParticleEditor())
+	{
+		mPoolEffect = new PoolEffect();
+		mPoolEffect->PoolEffectInitialize();
+		mZenGarden = new ZenGarden();
+	}
 
-	mBoardCamera = new DDImage(mDDInterface);
-	mBoardCamera->Create(BOARD_WIDTH, BOARD_HEIGHT);
-	mBoardCamera->SetImageMode(false, false);
-	mBoardCamera->SetVolatile(true);
-	mBoardCamera->mPurgeBits = false;
-	mBoardCamera->mWantDDSurface = true;
-	mBoardCamera->PurgeBits();
+	if (!IsParticleEditor())
+	{
+		mReanimatorCache = new ReanimatorCache();
+		mReanimatorCache->ReanimatorCacheInitialize();
+
+		mBoardCamera = new DDImage(mDDInterface);
+		mBoardCamera->Create(BOARD_WIDTH, BOARD_HEIGHT);
+		mBoardCamera->SetImageMode(false, false);
+		mBoardCamera->SetVolatile(true);
+		mBoardCamera->mPurgeBits = false;
+		mBoardCamera->mWantDDSurface = true;
+		mBoardCamera->PurgeBits();
+	}
 
 	TodFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));
 
@@ -1951,7 +2005,8 @@ void LawnApp::LoadingThreadProc()
 	//aDuration = max(aTimer.GetDuration(), 0);
 	aTimer.Start();
 
-	PreloadForUser();
+	if (!IsParticleEditor())
+		PreloadForUser();
 	
 	if (mLoadingFailed || mShutdown || mCloseRequest)
 		return;
@@ -1960,7 +2015,8 @@ void LawnApp::LoadingThreadProc()
 	aTimer.Start();
 
 	//GetNumPreloadingTasks();
-	LoadGroup("LoadingSounds", 54);
+	if (!IsParticleEditor())
+		LoadGroup("LoadingSounds", 54);
 	TodHesitationTrace("finished loading");
 }
 
@@ -1994,6 +2050,11 @@ void LawnApp::LoadingCompleted()
 		KillBoard();
 		mZenGarden->UpdatePlantNeeds();
 		PreNewGame(GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN, false);
+	}
+	else if (IsParticleEditor())
+	{
+		KillBoard();
+		ShowParticleEditor();
 	}
 	else
 	{
@@ -3805,6 +3866,9 @@ bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 
 bool LawnApp::ChallengeHasScores(GameMode theGameMode)
 {
+#ifndef _HAS_SCORESYSTEM
+	return false;
+#endif
 	return IsEndlessIZombie(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsSurvivalEndless(theGameMode) || IsLastStandEndless(theGameMode);
 }
 
@@ -4007,4 +4071,19 @@ void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color t
 	}
 
 	TodBltMatrix(g, mBoardCamera, theTransform, theClipRect, theColor, theDrawMode, gBoardBounds);
+}
+
+void LawnApp::ShowParticleEditor()
+{
+	if (mGameSelector)
+	{
+		mWidgetManager->RemoveWidget(mGameSelector);
+		SafeDeleteWidget(mGameSelector);
+	}
+
+	mParticleScreen = new ParticleScreen(this);
+	mParticleScreen->Resize(0, 0, mWidth, mHeight);
+	mWidgetManager->AddWidget(mParticleScreen);
+	mWidgetManager->BringToBack(mParticleScreen);
+	mWidgetManager->SetFocus(mParticleScreen);
 }

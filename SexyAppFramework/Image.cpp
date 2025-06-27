@@ -287,4 +287,3 @@ void Image::BltMirror(Image* theImage, int theX, int theY, const Rect& theSrcRec
 void Image::StretchBltMirror(Image* theImage, const Rect& theDestRect, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool fastStretch)
 {
 }
-

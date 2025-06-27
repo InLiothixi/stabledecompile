@@ -18,7 +18,6 @@ namespace Sexy
         IMAGE_LOADBAR_DIRT_ID,
         IMAGE_LOADBAR_GRASS_ID,
         IMAGE_PVZ_LOGO_ID,
-        IMAGE_SUBLOGO_ID,
         IMAGE_REANIM_SODROLLCAP_ID,
         FONT_BRIANNETOD16_ID,
         SOUND_BUTTONCLICK_ID,
@@ -145,7 +144,6 @@ namespace Sexy
         IMAGE_SELECTOR_MORE_BUTTON_ID,
         IMAGE_SELECTOR_MORE_BUTTON_HIGHLIGHT_ID,
         IMAGE_SELECTOR_MORE_SIGN_ID,
-        IMAGE_SELECTOR_FENCE_ID,
         IMAGE_ACHEESEMENTS_MORE_ROCK_ID,
         IMAGE_ACHEESEMENTS_MORE_BUTTON_ID,
         IMAGE_ACHEESEMENTS_MORE_BUTTON_HIGHLIGHT_ID,
@@ -280,7 +278,6 @@ namespace Sexy
         IMAGE_ZOMBIEBOBSLEDHEAD_ID,
         IMAGE_ZOMBIELADDERHEAD_ID,
         IMAGE_ZOMBIEYETIHEAD_ID,
-        IMAGE_ZOMBIEBUNGEEHEAD_ID,
         IMAGE_ZOMBIENEWSPAPERHEAD_ID,
         IMAGE_ZOMBIENEWSPAPERMADHEAD_ID,
         IMAGE_ZOMBIEJACKBOXHEAD_ID,
@@ -929,7 +926,6 @@ namespace Sexy
     extern Image* IMAGE_REANIM_ZOMBIE_ZAMBONI_2_DAMAGE1;                  //0x6A738C
     extern int          SOUND_SQUASH_HMM2;                                      //0x6A7390
     extern Image* IMAGE_ZOMBIEYETIHEAD;                                   //0x6A7394
-    extern Image* IMAGE_ZOMBIEBUNGEEHEAD;
     extern Image* IMAGE_ZOMBIENEWSPAPERHEAD;
     extern Image* IMAGE_ZOMBIENEWSPAPERMADHEAD;
     extern Image* IMAGE_ZOMBIEJACKBOXHEAD;
@@ -1041,7 +1037,6 @@ namespace Sexy
     extern Image* IMAGE_SELECTOR_MORE_BUTTON;
     extern Image* IMAGE_SELECTOR_MORE_BUTTON_HIGHLIGHT;
     extern Image* IMAGE_SELECTOR_MORE_SIGN;
-    extern Image* IMAGE_SELECTOR_FENCE;
     extern Image* IMAGE_QUICKPLAY_BACK_BUTTON;
     extern Image* IMAGE_QUICKPLAY_BACK_BUTTON_HIGHLIGHT;
     extern Image* IMAGE_QUICKPLAY_MINIGAMES_BUTTON;
@@ -1227,7 +1222,6 @@ namespace Sexy
     extern int          SOUND_SUKHBIR;                                          //0x6A7718
     extern Image* IMAGE_ZOMBIE_BOSS_FIREBALL_PARTICLES;                   //0x6A771C
     extern Image* IMAGE_PVZ_LOGO;                                         //0x6A7720
-    extern Image* IMAGE_SUBLOGO;
     extern Image* IMAGE_BACKGROUND5;                                      //0x6A7724
     extern int          SOUND_DIRT_RISE;                                        //0x6A7728
     extern Image* IMAGE_DIRTSMALL;                                        //0x6A772C

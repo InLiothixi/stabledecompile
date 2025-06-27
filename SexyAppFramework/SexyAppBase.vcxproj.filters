@@ -133,6 +133,9 @@
     <Filter Include="Particle\Particle Source">
       <UniqueIdentifier>{ff9c4721-bcb9-4a11-b264-f8ebdddb9ab9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinyfiledialogs">
+      <UniqueIdentifier>{2160df78-1c28-4e33-8900-d3dfed279a0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp">
@@ -920,7 +923,6 @@
     <ClCompile Include="..\Lawn\Widget\QuickplayScreen.cpp">
       <Filter>Lawn\Widget\Widget Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\PlayerController.cpp" />
     <ClCompile Include="..\Lawn\Widget\ZombatarTOS.cpp">
       <Filter>Lawn\Widget\Widget Source</Filter>
     </ClCompile>
@@ -933,8 +935,11 @@
     <ClCompile Include="..\Lawn\Widget\LanguageScreen.cpp">
       <Filter>Lawn\Widget\Widget Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\Particles\ParticleScreen.cpp">
-      <Filter>Particle\Particle Include</Filter>
+    <ClCompile Include="..\Particle\ParticleScreen.cpp">
+      <Filter>Particle\Particle Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tinyfiledialogs\tinyfiledialogs.c">
+      <Filter>tinyfiledialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1483,7 +1488,6 @@
     <ClInclude Include="..\Lawn\Widget\QuickplayScreen.h">
       <Filter>Lawn\Widget\Widget Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\PlayerController.h" />
     <ClInclude Include="..\Lawn\Widget\ZombatarTOS.h">
       <Filter>Lawn\Widget\Widget Include</Filter>
     </ClInclude>
@@ -1496,8 +1500,8 @@
     <ClInclude Include="..\Lawn\Widget\LanguageScreen.h">
       <Filter>Lawn\Widget\Widget Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\Particles\ParticleScreen.h">
-      <Filter>Particle\Particle Source</Filter>
+    <ClInclude Include="..\Particle\ParticleScreen.h">
+      <Filter>Particle\Particle Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1550,6 +1554,9 @@
       <Filter>Sexy\Graphics\Inc Routines</Filter>
     </None>
     <None Include="..\Cursor13.cur" />
+    <None Include="GENERIC_DrawLineAA.inc">
+      <Filter>Sexy\Graphics\Inc Routines</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\ImageLib\jpeg2000\jas_cm.h">

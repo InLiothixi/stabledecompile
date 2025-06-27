@@ -3,7 +3,6 @@
 
 #include "ConstEnums.h"
 #include "SexyAppFramework/SexyApp.h"
-#include "PlayerController.h"
 
 #include "portaudio.h"
 #include <lua.hpp>
@@ -24,6 +23,7 @@ class SeedChooserScreen;
 class AwardScreen;
 class CreditScreen;
 class LanguageWidget;
+class ParticleScreen;
 class TodFoley;
 class PoolEffect;
 class ZenGarden;
@@ -77,6 +77,7 @@ public:
 	CreditScreen*					mCreditScreen;									//+0x77C
 	ChallengeScreen*				mChallengeScreen;								//+0x780
 	LanguageWidget*					mLanguageScreen;
+	ParticleScreen*					mParticleScreen;
 	TodFoley*						mSoundSystem;									//+0x784
 	ButtonList						mControlButtonList;								//+0x788
 	ImageList						mCreatedImageList;								//+0x794
@@ -139,7 +140,6 @@ public:
 	bool							mDebugTrialLocked;								//+0x8C4
 	bool							mMuteSoundsForCutscene;							//+0x8C5
 	bool							mShowHealthBar;
-	PlayerController*				mPlayerController;
 	bool							mFlowersPlucked[3];
 	PaStream*						mPortAudioStream;
 	float							mVoiceVolume;
@@ -355,6 +355,8 @@ public:
 	static int						ChangeMusicL(lua_State* L);
 	
 	void							DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera);
+
+	void							ShowParticleEditor();
 };
 
 SexyString							LawnGetCurrentLevelName();

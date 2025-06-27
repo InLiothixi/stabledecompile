@@ -48,7 +48,7 @@ SexyApp::SexyApp()
 	mFullCompanyName= "PopCap Games";
 	mInternetManager = nullptr;//new InternetManager();
 	mBetaSupport = NULL;
-	mBetaValidate = true;
+	mBetaValidate = false;
 
 	SetString("UPDATE_CHECK_BODY", L"Contacting PopCap.com to determine if there are any updates available for this product ...");
 

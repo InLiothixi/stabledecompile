@@ -41,8 +41,6 @@ TitleScreen::TitleScreen(LawnApp* theApp)
 	mStartButton->mUnderlineSize = 0;
 	mStartButton->mDisabled = true;
 	mStartButton->mVisible = false;
-
-	mCoolTimer = 0;
 }
 
 //0x48D6B0¡¢0x48D6D0
@@ -62,8 +60,6 @@ void TitleScreen::DrawToPreload(Graphics* g)
 //0x48D730
 void TitleScreen::Draw(Graphics* g)
 {
-	mCoolTimer = (mCoolTimer + 1) % 22;
-
 	g->SetLinearBlend(true);
 
 	if (mTitleState == TitleState::TITLESTATE_WAITING_FOR_FIRST_DRAW)
@@ -153,7 +149,6 @@ void TitleScreen::Draw(Graphics* g)
 		aLogoY = TodAnimateCurve(60, 50, mTitleStateCounter, 10, 15, CURVE_BOUNCE);
 	}
 	g->DrawImage(IMAGE_PVZ_LOGO, mWidth / 2 - IMAGE_PVZ_LOGO->mWidth / 2, aLogoY);
-	g->DrawImageCel(Sexy::IMAGE_SUBLOGO, mWidth / 2 - Sexy::IMAGE_SUBLOGO->GetCelWidth() / 2, aLogoY + Sexy::IMAGE_PVZ_LOGO->mHeight - 10, int((mCoolTimer / 21.0f) * 4));
 
 	int aGrassX = mStartButton->mX - 4;
 	int aGrassY = mStartButton->mY - 17;
@@ -378,7 +373,7 @@ void TitleScreen::Update()
 		mLoadingThreadComplete = true;
 		mStartButton->SetDisabled(false);
 
-		if (mApp->IsScreenSaver())
+		if (mApp->IsScreenSaver() || mApp->IsParticleEditor())
 		{
 			mApp->LoadingCompleted();
 		}

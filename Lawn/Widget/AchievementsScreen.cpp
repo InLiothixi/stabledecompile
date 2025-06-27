@@ -44,8 +44,9 @@ AchievementItem gAchievementList[MAX_ACHIEVEMENTS] = {
 	{ _S("[IMMORTAL_TITLE]"), _S("[IMMORTAL_DESCRIPTION]") },
 	{ _S("[TOWERING_WISDOM_TITLE]"), _S("[TOWERING_WISDOM_DESCRIPTION]") },
 	{ _S("[MUSTACHE_MODE_TITLE]"), _S("[MUSTACHE_MODE_DESCRIPTION]") },
-	{ _S("[DISCO_IS_UNDEAD_TITLE]"), _S("[DISCO_IS_UNDEAD_DESCRIPTION]") },
-	{ _S("[SULTAN_OF_SPIN_TITLE]"), _S("[SULTAN_OF_SPIN_DESCRIPTION]") },
+	{ _S("[DISCO_IS_UNDEAD_TITLE]"), _S("[DISCO_IS_UNDEAD_DESCRIPTION]") }
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
+	,{ _S("[SULTAN_OF_SPIN_TITLE]"), _S("[SULTAN_OF_SPIN_DESCRIPTION]") },
 	{ _S("[DISRESPECT_THE_DEAD_TITLE]"), _S("[DISRESPECT_THE_DEAD_DESCRIPTION]") },
 	{ _S("[HEAVY_WEAPONS_TITLE]"), _S("[HEAVY_WEAPONS_DESCRIPTION]") },
 	{ _S("[ZEN_PROFIT_TITLE]"), _S("[ZEN_PROFIT_DESCRIPTION]") },
@@ -54,6 +55,7 @@ AchievementItem gAchievementList[MAX_ACHIEVEMENTS] = {
 	{ _S("[BEAT_IT_TITLE]"), _S("[BEAT_IT_DESCRIPTION]") },
 	{ _S("[GOLD_FARMER_TITLE]"), _S("[GOLD_FARMER_DESCRIPTION]") },
 	{ _S("[FACE_TO_FACE_TITLE]"), _S("[FACE_TO_FACE_DESCRIPTION]") }
+#endif
 };
 
 // GOTY @Patoke: 0x401000
@@ -167,8 +169,10 @@ void AchievementsWidget::Draw(Graphics* g) {
 		int aTextYPos = aImageYPos + 16;
 
 		// Achievement images
-		//@inliothixi whoever spaced this unevenly  + (i >= 1 || i / 7 > 2 ? 2 : 0)
-		if (i < AchievementId::SultanOfSpin)
+		#//@inliothixi whoever spaced this unevenly  + (i >= 1 || i / 7 > 2 ? 2 : 0)
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
+		if (i < (int)AchievementId::SultanOfSpin)
+#endif
 		{
 			int spaceOffset = 0;
 			if (i % 7 == 1 && i / 7 < 2 || i % 7 < 2 && i / 7 == 2)
@@ -184,6 +188,7 @@ void AchievementsWidget::Draw(Graphics* g) {
 			g->DrawImage(IMAGE_ACHEESEMENTS_ICONS, aDestRect, aSrcRect);
 			g->SetColorizeImages(false);
 		}
+
 		
 		// Achievement titles
 		g->SetFont(FONT_DWARVENTODCRAFT15);
@@ -282,6 +287,9 @@ void AchievementsWidget::MouseWheel(int theDelta) {
 
 // GOTY @Patoke: 0x459670
 void ReportAchievement::GiveAchievement(LawnApp* theApp, int theAchievement, bool theForceGive) {
+#ifndef _HAS_ACHIEVEMENTS
+	return;
+#endif
 	if (!theApp->mPlayerInfo)
 		return;
 

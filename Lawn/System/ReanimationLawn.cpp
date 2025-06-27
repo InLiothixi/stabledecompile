@@ -459,6 +459,7 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 		aReanim.Draw(&aMemoryGraphics2);
 		aMemoryGraphics.DrawImageF(aMemoryImage2, 0, relativeY);
 	}
+#ifdef _HAS_NEW_DANCERS
 	else if (theZombieType == ZombieType::ZOMBIE_DANCER)
 	{
 		Reanimation aReanim;
@@ -482,6 +483,7 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 		aReanim.mAnimTime = 0.5f;
 		aReanim.Draw(&aMemoryGraphics);
 	}
+#endif
 	else if (theZombieType == ZombieType::ZOMBIE_BOBSLED)
 	{
 		{

@@ -199,6 +199,7 @@ public:
     SeedType                mDuplicatorImitaterType;                  //+0x138
     int                     mBurnedCounter;
     int                     mPoweredCounter;
+    ReanimationID           mSpecialReanimID;
 
 public:
     Plant();

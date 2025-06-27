@@ -170,11 +170,17 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 
 		aPageButton->mVisible = false;
 
-		if (mApp->HasFinishedAdventure() && 
-			(thePage == ChallengePage::CHALLENGE_PAGE_CHALLENGE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE) ||
-			thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL || aPageIdx == ChallengePage::CHALLENGE_PAGE_SURVIVAL) ||
-			thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || aPageIdx == ChallengePage::CHALLENGE_PAGE_PUZZLE)))
+#ifdef _SHOW_LIMBO_PAGE
+		if ((thePage == ChallengePage::CHALLENGE_PAGE_CHALLENGE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE) ||
+			thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL || aPageIdx == ChallengePage::CHALLENGE_PAGE_SURVIVAL)))
 			aPageButton->mVisible = true;
+#endif
+
+#ifdef _HAS_MOBILE_MINIGAMES
+		if (thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || aPageIdx == ChallengePage::CHALLENGE_PAGE_PUZZLE))
+			aPageButton->mVisible = true;
+#endif
+
 	}
 	
 	for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++)

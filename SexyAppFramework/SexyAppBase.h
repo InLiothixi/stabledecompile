@@ -331,6 +331,8 @@ public:
 	bool					mIsPreviewSaver;
 	HWND					mPreviewHWnd;
 
+	bool					mIsParticleEditor;
+
 protected:	
 	void					RehupFocus();
 	void					ClearKeysDown();
@@ -575,6 +577,7 @@ public:
 	static LRESULT CALLBACK	WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	
 
 	bool					IsPreviewSaver();
+	bool					IsParticleEditor();
 };
 
 extern SexyAppBase* gSexyAppBase;

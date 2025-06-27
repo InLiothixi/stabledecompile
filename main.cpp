@@ -1,6 +1,7 @@
 #include "LawnApp.h"
 #include "Resources.h"
 #include "Sexy.TodLib/TodStringFile.h"
+#include "GameConstants.h"
 
 using namespace Sexy;
 
@@ -22,7 +23,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 {
 	gHInstance = hInstance;
 
-#ifdef _DEBUG
+#if defined(_SHOW_OUTPUT_CONSOLE)
 	AllocConsole();
 
 	FILE* dummy;

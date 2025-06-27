@@ -18,8 +18,8 @@ unsigned int gReanimationParamArraySize;              //[0x6A9EEC]
 ReanimationParams* gReanimationParamArray;   //[0x6A9EF0]
 
 ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { //0x6A1340
-	{ ReanimationType::REANIM_LOADBAR_SPROUT,                       "reanim\\LoadBar_sprout.reanim",                    1 },
-	{ ReanimationType::REANIM_LOADBAR_ZOMBIEHEAD,                   "reanim\\LoadBar_Zombiehead.reanim",                1 },
+	{ ReanimationType::REANIM_LOADBAR_SPROUT,                       "reanim\\LoadBar_sprout.reanim",                   1 },
+	{ ReanimationType::REANIM_LOADBAR_ZOMBIEHEAD,                   "reanim\\LoadBar_Zombiehead.reanim",               1 },
 	{ ReanimationType::REANIM_SODROLL,                              "reanim\\SodRoll.reanim",                          0 },
 	{ ReanimationType::REANIM_FINAL_WAVE,                           "reanim\\FinalWave.reanim",                        1 },
 	{ ReanimationType::REANIM_PEASHOOTER,                           "reanim\\PeaShooterSingle.reanim",                 0 },
@@ -69,7 +69,11 @@ ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { /
 	{ ReanimationType::REANIM_BLOVER,                               "reanim\\Blover.reanim",                           0 },
 	{ ReanimationType::REANIM_FLOWER_POT,                           "reanim\\Pot.reanim",                              0 },
 	{ ReanimationType::REANIM_CACTUS,                               "reanim\\Cactus.reanim",                           0 },
-	{ ReanimationType::REANIM_DANCER,                               "reanim\\Zombie_disco.reanim",						0 }, // @Patoke: GOTY has different reanim name
+#ifdef _HAS_NEW_DANCERS
+	{ ReanimationType::REANIM_DANCER,                               "reanim\\Zombie_disco.reanim",					   0 }, // @Patoke: GOTY has different reanim name
+#else
+	{ ReanimationType::REANIM_DANCER,                               "reanim\\Zombie_Jackson.reanim",				   0 },
+#endif
 	{ ReanimationType::REANIM_TANGLEKELP,                           "reanim\\Tanglekelp.reanim",                       0 },
 	{ ReanimationType::REANIM_STARFRUIT,                            "reanim\\Starfruit.reanim",                        0 },
 	{ ReanimationType::REANIM_POLEVAULTER,                          "reanim\\Zombie_polevaulter.reanim",               0 },
@@ -79,12 +83,18 @@ ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { /
 	{ ReanimationType::REANIM_DIGGER,                               "reanim\\Zombie_digger.reanim",                    0 },
 	{ ReanimationType::REANIM_DIGGER_DIRT,                          "reanim\\Digger_rising_dirt.reanim",               0 },
 	{ ReanimationType::REANIM_ZOMBIE_DOLPHINRIDER,                  "reanim\\Zombie_dolphinrider.reanim",              0 },
+#ifdef _HAS_ZOMBATAR
 	{ ReanimationType::REANIM_ZOMBATAR,								"reanim\\zombatar_zombie_head.reanim",             0 }, // @Inliothixi: 006E73B8
+#endif
 	{ ReanimationType::REANIM_POGO,                                 "reanim\\Zombie_pogo.reanim",                      0 },
+#ifdef _HAS_NEW_DANCERS
 	{ ReanimationType::REANIM_BACKUP_DANCER,                        "reanim\\Zombie_backup.reanim",                    0 }, // @Patoke: GOTY has different reanim name
+#else 
+	{ ReanimationType::REANIM_BACKUP_DANCER,                        "reanim\\Zombie_dancer.reanim",                    0 },
+#endif
 	{ ReanimationType::REANIM_BOBSLED,                              "reanim\\Zombie_bobsled.reanim",                   0 },
 	{ ReanimationType::REANIM_JACKINTHEBOX,                         "reanim\\Zombie_jackbox.reanim",                   0 },
-	{ ReanimationType::REANIM_SNORKEL,                              "reanim\\Zombie_snorkle.reanim",                    0},
+	{ ReanimationType::REANIM_SNORKEL,                              "reanim\\Zombie_snorkle.reanim",                   0 },
 	{ ReanimationType::REANIM_BUNGEE,                               "reanim\\Zombie_bungi.reanim",                     0 },
 	{ ReanimationType::REANIM_CATAPULT,                             "reanim\\Zombie_catapult.reanim",                  0 },
 	{ ReanimationType::REANIM_LADDER,                               "reanim\\Zombie_ladder.reanim",                    0 },
@@ -167,6 +177,7 @@ ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { /
 	{ ReanimationType::REANIM_ZOMBIE_BLACKFOOTBALL,                 "reanim\\Zombie_blackfootball.reanim",             0 },
 	{ ReanimationType::REANIM_SELECTORSCREEN_SPOTLIGHT,             "reanim\\SelectorScreen_spotlight.reanim",         3 },
 	{ ReanimationType::REANIM_HEATWAVE_SHOOTER,						"reanim\\HeatWaveShooter.reanim",				   0 },
+	{ ReanimationType::REANIM_ZOMBIE_ZOMBOTANY,						"reanim\\ZombieZombotany.reanim",				   0 },
 
 };
 

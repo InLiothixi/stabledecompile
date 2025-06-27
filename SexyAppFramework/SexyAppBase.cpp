@@ -39,10 +39,11 @@
 #include <string>
 #include <shlobj.h>
 #include <windows.h>
-
 #include "memmgr.h"
 
 #include "../Sexy.TodLib/TodDebug.h"
+
+#include "../GameConstants.h"
 
 using namespace Sexy;
 
@@ -310,6 +311,7 @@ SexyAppBase::SexyAppBase()
 #endif
 	mIsPreviewSaver = false;
 	mPreviewHWnd = NULL;
+	mIsParticleEditor = false;
 
 	int i;
 
@@ -1649,7 +1651,7 @@ bool SexyAppBase::RegistryWriteData(const SexyString& theValueName, const uchar*
 
 void SexyAppBase::WriteToRegistry()
 {	
-	if (IsScreenSaver())	return;
+	if (IsScreenSaver() || IsPreviewSaver() || IsParticleEditor())	return;
 	RegistryWriteInteger(_S("MusicVolume"), (int) (mMusicVolume * 100));
 	RegistryWriteInteger(_S("SfxVolume"), (int) (mSfxVolume * 100));
 	RegistryWriteInteger(_S("Muted"), (mMuteCount - mAutoMuteCount > 0) ? 1 : 0);
@@ -3558,7 +3560,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 //	}
 //	//Fallthrough
 	case WM_ACTIVATEAPP:
-		if ((aSexyApp != NULL) && (!aSexyApp->mPlayingDemoBuffer))
+		if ((aSexyApp != NULL) && (aSexyApp->mHWnd != NULL) && (!aSexyApp->mPlayingDemoBuffer))
 		{
 			if (hWnd == aSexyApp->mHWnd)
 			{
@@ -3993,8 +3995,14 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 		break;	
 	case WM_SETCURSOR:
 		if (!aSexyApp->mSEHOccured)
-			aSexyApp->EnforceCursor();
-		return TRUE;		
+		{
+			if (LOWORD(lParam) == HTCLIENT)
+			{
+				aSexyApp->EnforceCursor();
+				return TRUE; 
+			}
+		}
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	case WM_ERASEBKGND:
 		return TRUE;		
 	case WM_ENDSESSION:
@@ -4867,19 +4875,21 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 						}
 					}
 
-					POINT aULCorner = { 0, 0 };
-					::ClientToScreen(hWnd, &aULCorner);
+					RECT clientRect;
+					::GetClientRect(hWnd, &clientRect);
 
-					POINT aBRCorner = { mDDInterface->mDisplayWidth, mDDInterface->mDisplayHeight };
-					::ClientToScreen(hWnd, &aBRCorner);
+					POINT topLeft = { clientRect.left, clientRect.top };
+					POINT bottomRight = { clientRect.right, clientRect.bottom };
+					::MapWindowPoints(hWnd, nullptr, &topLeft, 1);
+					::MapWindowPoints(hWnd, nullptr, &bottomRight, 1);
 
 					POINT aPoint;
 					::GetCursorPos(&aPoint);
 
 					HWND aWindow = ::WindowFromPoint(aPoint);
-					bool isMouseIn = (aWindow == hWnd) &&
-						(aPoint.x >= aULCorner.x) && (aPoint.y >= aULCorner.y) &&
-						(aPoint.x < aBRCorner.x) && (aPoint.y < aBRCorner.y);
+					bool isMouseIn = (aWindow == hWnd || ::IsChild(hWnd, aWindow)) &&
+						(aPoint.x >= topLeft.x) && (aPoint.y >= topLeft.y) &&
+						(aPoint.x < bottomRight.x) && (aPoint.y < bottomRight.y);
 
 					if (mMouseIn != isMouseIn)
 					{
@@ -4896,8 +4906,8 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 
 						if (!isMouseIn)
 						{
-							int x = aPoint.x - aULCorner.x;
-							int y = aPoint.y - aULCorner.y;
+							int x = aPoint.x - topLeft.x;
+							int y = aPoint.y - topLeft.y;
 							mWidgetManager->RemapMouse(x, y);
 							mWidgetManager->MouseExit(x, y);
 						}
@@ -4905,6 +4915,7 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 						mMouseIn = isMouseIn;
 						EnforceCursor();
 					}
+
 				}
 				break;
 
@@ -4965,15 +4976,28 @@ void SexyAppBase::MakeWindow()
 		mWidgetManager->mImage = NULL;
 	}
 
-	if (IsScreenSaver()) {
+	if (IsScreenSaver())
+	{
 		mTitle = _S("Zen Garden");
 		mIsWindowed = false;
 		mFullScreenWindow = true;
 	}
+	else if (IsPreviewSaver())
+	{
+		mTitle = _S("Zen Garden Preview");
+		mIsWindowed = true;
+		mFullScreenWindow = false;
+	}
+	else if (IsParticleEditor()) 
+	{
+		mTitle = _S("Particle Editor");
+		mIsWindowed = true;
+		mFullScreenWindow = false;
+	}
 
 	if ((mPlayingDemoBuffer) || (mIsWindowed && !mFullScreenWindow))
 	{
-		DWORD aWindowStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_POPUP;
+		DWORD aWindowStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 
 		if (mEnableMaximizeButton)
 		{
@@ -6523,6 +6547,10 @@ void SexyAppBase::HandleCmdLineParam(const std::string& theParamName, const std:
 
 		}
 	}
+	else if (theParamName == "-particleeditor")
+	{
+		mIsParticleEditor = true;
+	}
 	else if (theParamName == "-changedir")
 	{
 		mChangeDirTo = theParamValue;
@@ -6629,12 +6657,16 @@ void SexyAppBase::Init()
 		sexychdir(mChangeDirTo.c_str());
 
 	WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-#ifdef _USE_WIDE_STRING
-	if (GetFileAttributesExW(_S("resource.pak"), GetFileExInfoStandard, &fileInfo) != 0)
-#else
-	if (GetFileAttributesExA("resource.pak", GetFileExInfoStandard, &fileInfo) != 0)
+#ifdef _ALLOW_RESOURCEPACKS
+	if (GetFileAttributesExA("resourcepack.pak", GetFileExInfoStandard, &fileInfo) != 0)
+		gPakInterface->AddPakFile(_S("resourcepack.pak"));
 #endif
-		gPakInterface->AddPakFile(_S("resource.pak"));
+
+	if (GetFileAttributesExA("extension.pak", GetFileExInfoStandard, &fileInfo) != 0)
+		gPakInterface->AddPakFile(_S("extension.pak"));
+
+	if (GetFileAttributesExA("dependency.pak", GetFileExInfoStandard, &fileInfo) != 0)
+		gPakInterface->AddPakFile(_S("dependency.pak"));
 
 	gPakInterface->AddPakFile(_S("main.pak"));
 
@@ -7706,4 +7738,9 @@ void SexyAppBase::CleanSharedImages()
 bool SexyAppBase::IsPreviewSaver()
 {
 	return IsScreenSaver() && mIsPreviewSaver;
+}
+
+bool SexyAppBase::IsParticleEditor()
+{
+	return mIsParticleEditor;
 }

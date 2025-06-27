@@ -17,13 +17,21 @@
 
 #include <memory>
 
+#ifdef _GOTY
 static const char* FILE_COMPILE_TIME_STRING = "Dec 10 201014:56:46";
+static const char* FILE_COMPILE_TIME_STRING2 = "Jul  2 201011:47:03";
+#else
+static const char* FILE_COMPILE_TIME_STRING = "Feb 16 200923:03:38";
+#endif
 // "Feb 16 200923:03:38"; // OG
 // "Jul  2 201011:47:03"; // OLD GOTY
 // "Dec 10 201014:56:46"; // GOTY Steam
 static const unsigned int SAVE_FILE_MAGIC_NUMBER = 0xFEEDDEAD;
 static const unsigned int SAVE_FILE_VERSION = 2U;
 static unsigned int SAVE_FILE_DATE = crc32(0, (Bytef*)FILE_COMPILE_TIME_STRING, strlen(FILE_COMPILE_TIME_STRING));  //[0x6AA7EC]
+#ifdef _GOTY
+static unsigned int SAVE_FILE_DATE2 = crc32(0, (Bytef*)FILE_COMPILE_TIME_STRING2, strlen(FILE_COMPILE_TIME_STRING2));
+#endif
 
 //0x4813D0
 void SaveGameContext::SyncBytes(void* theDest, int theReadSize)
@@ -513,7 +521,11 @@ bool LawnLoadGame(Board* theBoard, const SexyString& theFilePath)
 
 	SaveFileHeader aHeader;
 	aContext.SyncBytes(&aHeader, sizeof(aHeader));
-	if (aHeader.mMagicNumber != SAVE_FILE_MAGIC_NUMBER || aHeader.mBuildVersion != SAVE_FILE_VERSION || aHeader.mBuildDate != SAVE_FILE_DATE)
+	if (aHeader.mMagicNumber != SAVE_FILE_MAGIC_NUMBER || aHeader.mBuildVersion != SAVE_FILE_VERSION || aHeader.mBuildDate != SAVE_FILE_DATE
+#ifdef GOTY
+		&& aHeader.mBuildDate != SAVE_FILE_DATE2
+#endif
+		)
 	{
 		return false;
 	}

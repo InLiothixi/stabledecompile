@@ -1910,7 +1910,8 @@ void Board::StartLevel()
 		mApp->IsFinalBossLevel())
 		return;
 
-	mApp->mMusic->StartGameMusic();
+	if (mApp->mMusic->mApp)
+		mApp->mMusic->StartGameMusic();
 }
 
 //0x40BF10
@@ -2156,6 +2157,8 @@ void Board::FadeOutLevel()
 		{
 			aCoin->TryAutoCollectAfterLevelAward();
 		}
+
+		mApp->EraseFile(GetSavedGameName(mApp->mGameMode, mApp->mPlayerInfo->mId));
 	}
 	else if (mApp->IsLastStandEndless(mApp->mGameMode))
 	{
@@ -2403,7 +2406,7 @@ Plant* Board::AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedTyp
 
 	if (theSeedType == SeedType::SEED_MARIGOLD) mMarigoldCount++;
 	else if (theSeedType == SeedType::SEED_GOLD_MAGNET)	mGoldMagnetCount++;
-
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
 	//if (mApp->IsAdventureMode()) does not have to be adventure I guess...
 	{
 		if (mMarigoldCount == 5 && mGoldMagnetCount == 1) {
@@ -2412,11 +2415,13 @@ Plant* Board::AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedTyp
 
 		mApp->mPlayerInfo->mPlantedPlants[(int)theSeedType] = true;
 
+
 		if (all_of(begin(mApp->mPlayerInfo->mPlantedPlants), end(mApp->mPlayerInfo->mPlantedPlants), [](bool planted) { return planted; })) {
 			ReportAchievement::GiveAchievement(mApp, AchievementId::EvenMorticulturalist, true);
 		}
-	}
 
+	}
+#endif
 	return aPlant;
 }
 
@@ -2784,7 +2789,11 @@ ZombieType Board::PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePi
 				}
 			}
 			// 红眼的旗帜波出怪上限和非旗帜波出怪总和上限
-			else if (aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR || aZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL || aZombieType == ZombieType::ZOMBIE_TRASHCAN /*|| aZombieType == ZombieType::ZOMBIE_PROPELLER || aZombieType == ZombieType::ZOMBIE_DOG_WALKER*/)
+			else if (aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR
+#ifdef _HAS_NEW_GIGA_ZOMBIES
+				|| aZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL || aZombieType == ZombieType::ZOMBIE_TRASHCAN 
+#endif
+			)
 			{
 				if (IsFlagWave(theWaveIndex))
 				{
@@ -3162,7 +3171,11 @@ PlantingReason Board::CanPlantAt(int theGridX, int theGridY, SeedType theSeedTyp
 		return aPlantOnLawn.mFlyingPlant ? PlantingReason::PLANTING_NOT_HERE : PlantingReason::PLANTING_OK;
 	}
 	// 地刺/地刺王只能种在坚固的地面
-	if (theSeedType == SeedType::SEED_SPIKEWEED || theSeedType == SeedType::SEED_SPIKEROCK || theSeedType == SeedType::SEED_YAMPOLINE)
+	if (theSeedType == SeedType::SEED_SPIKEWEED || theSeedType == SeedType::SEED_SPIKEROCK 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+		|| theSeedType == SeedType::SEED_YAMPOLINE
+#endif
+		)
 	{
 		if (aGridSquare == GridSquareType::GRIDSQUARE_POOL || StageHasRoof() || aUnderPlant)
 		{
@@ -5867,8 +5880,8 @@ void Board::UpdateZombieSpawning()
 				if (mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_DAY_GRASSWALK || 
 					mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_POOL_WATERYGRAVES || 
 					mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_FOG_RIGORMORMIST ||
-					mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF ||
-					mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
+					mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF /*||
+					mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON*/)
 				{
 					if (mHugeWaveCountDown == 400)
 					{
@@ -6325,6 +6338,7 @@ void Board::Update()
 	mCutScene->Update();
 	UpdateMousePosition();
 
+#ifdef _ALLOW_SWIPE
 	if (mIsDown)
 	{
 		if (mHeldCounter < 0)
@@ -6435,6 +6449,7 @@ void Board::Update()
 		mHeldStartX = -1;
 		mHeldStartY = -1;
 	}
+#endif
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
 	{
@@ -7948,6 +7963,7 @@ void Board::DrawDebugObjectRects(Graphics* g)
 				for (int y = 0; y < MAX_GRID_SIZE_Y; y++)
 				{
 					if (mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_NONE || mGridSquareType[x][y] == GridSquareType::GRIDSQUARE_DIRT) continue;
+
 					if (StageHasRoof() && x < 5) {
 						int topLX = GridToPixelX(x, y);
 						int topLY = GridToPixelY(x, y) + 10;
@@ -7956,14 +7972,13 @@ void Board::DrawDebugObjectRects(Graphics* g)
 						int botLY = topLY + 85;
 						int botRY = topRY + 85;
 
-						g->DrawLineAA(topLX, topLY, topRX, topRY);
-						g->DrawLineAA(topRX, topRY, topRX, botRY);
-						g->DrawLineAA(topRX, botRY, topLX, botLY);
-						g->DrawLineAA(topLX, botLY, topLX, topLY);
+						g->DrawLine(topLX, topLY, topRX, topRY);
+						g->DrawLine(topRX, topRY, topRX, botRY);
+						g->DrawLine(topRX, botRY, topLX, botLY);
+						g->DrawLine(topLX, botLY, topLX, topLY);
 					}
 					else
 					{
-						g->SetColor(Color(255, 0, 0));
 						g->DrawRect(GridToPixelX(x, y), GridToPixelY(x, y), 80, StageHasRoof() || StageHas6Rows() ? 85 : 100);
 					}
 				}
@@ -9659,7 +9674,7 @@ void Board::KeyChar(SexyChar theChar)
 		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
 		return;
 	}
-	if (theChar == _S('H'))
+	/*if (theChar == _S('H'))
 	{
 		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
 		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
@@ -9667,7 +9682,7 @@ void Board::KeyChar(SexyChar theChar)
 		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
 		AddZombie(ZombieType::ZOMBIE_PAIL, Zombie::ZOMBIE_WAVE_DEBUG);
 		return;
-	}
+	}*/
 	if (theChar == _S('D'))
 	{
 		AddZombie(ZombieType::ZOMBIE_DIGGER, Zombie::ZOMBIE_WAVE_DEBUG);
@@ -10569,9 +10584,12 @@ void Board::KillAllPlantsInRadius(int theX, int theY, int theRadius)
 		if (!aPlant->mIsAsleep)
 		{
 			if (aPlant->mSeedType == SeedType::SEED_CHERRYBOMB || aPlant->mSeedType == SeedType::SEED_JALAPENO ||
-				aPlant->mSeedType == SeedType::SEED_DOOMSHROOM || aPlant->mSeedType == SeedType::SEED_ICESHROOM ||
-				aPlant->mSeedType == SeedType::SEED_TIMESTOPPER || aPlant->mSeedType == SeedType::SEED_CHERRYHOVERBOMB ||
-				aPlant->mSeedType == SeedType::SEED_NUKECUMBER)
+				aPlant->mSeedType == SeedType::SEED_DOOMSHROOM || aPlant->mSeedType == SeedType::SEED_ICESHROOM 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+				|| aPlant->mSeedType == SeedType::SEED_TIMESTOPPER || aPlant->mSeedType == SeedType::SEED_CHERRYHOVERBOMB ||
+				aPlant->mSeedType == SeedType::SEED_NUKECUMBER
+#endif
+				)
 			{
 				aPlant->DoSpecial();
 				continue;

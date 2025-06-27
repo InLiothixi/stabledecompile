@@ -471,9 +471,11 @@ void Coin::ScoreCoin()
         if (mBoard)
         {
             mBoard->mCoinsCollected += aCoinValue;
-
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
             // @Patoke: implemented
-            if (mType == CoinType::COIN_SILVER || mType == CoinType::COIN_GOLD) {
+            if ((mType == CoinType::COIN_SILVER || mType == CoinType::COIN_GOLD) 
+                && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameScene == SCENE_PLAYING) 
+            {
                 mBoard->mLevelCoinsCollected++;
                 if (mBoard->mLevelCoinsCollected == 30 && mApp->mPlayerInfo->mCoins != 0)
                     ReportAchievement::GiveAchievement(mApp, AchievementId::PennyPincher, true);
@@ -485,9 +487,11 @@ void Coin::ScoreCoin()
                     if (mApp->mPlayerInfo->mEarnedFromZenGarden == 100000) {
                         ReportAchievement::GiveAchievement(mApp, AchievementId::ZenProfit, true);
                     }
+
                 }
 
             }
+#endif
         }
     }
 

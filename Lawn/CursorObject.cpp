@@ -192,11 +192,14 @@ void CursorObject::Draw(Graphics* g)
     {
         float aOffsetX = -10.0f;
         float aOffsetY = PlantDrawHeightOffset(mBoard, nullptr, mType, -1, -1) - 10.0f;
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
         if (mType == SeedType::SEED_STINGER)
         {
             aOffsetY -= 60.0f;
         }
-        else if (Plant::IsFlying(mType) || mType == SeedType::SEED_GRAVEBUSTER)
+        else 
+#endif
+        if (Plant::IsFlying(mType) || mType == SeedType::SEED_GRAVEBUSTER)
         {
             aOffsetY += 30.0f;
         }
@@ -372,10 +375,12 @@ void CursorPreview::Draw(Graphics* g)
             aOffsetY = PlantDrawHeightOffset(mBoard, nullptr, aSeedType, mGridX, mGridY);
             aOffsetX = 0.0f;
 
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
             if (mBoard->mCursorObject->mType == SeedType::SEED_STINGER)
             {
                 aOffsetY -= 60;
             }
+#endif
         }
 
         Plant::DrawSeedType(g, mBoard->mCursorObject->mType, mBoard->mCursorObject->mImitaterType, DrawVariation::VARIATION_NORMAL, aOffsetX, aOffsetY);

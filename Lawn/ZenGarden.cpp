@@ -477,9 +477,11 @@ void ZenGarden::MouseDownWithMoneySign(Plant* thePlant)
         mApp->mPlayerInfo->AddCoins(aPrice);
         mApp->mPlayerInfo->mEarnedFromZenGarden += aPrice;
 
+#ifdef _HAS_UNUSED_ACHIEVEMENTS
         if (mApp->mPlayerInfo->mEarnedFromZenGarden == 100000) {
             ReportAchievement::GiveAchievement(mApp, AchievementId::ZenProfit, true);
         }
+#endif
 
         mBoard->mCoinsCollected += aPrice;
 

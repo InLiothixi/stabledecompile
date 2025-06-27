@@ -1,4 +1,16 @@
+SexyAppFramework/Output/*
 SexyAppFramework/Debug/*
+SexyAppFramework/DebugGOTY/*
 SexyAppFramework/Release/*
+SexyAppFramework/ReleaseGOTY/*
+!SexyAppFramework/Output/dependency.pak
 /.vs
 /Patch
+/Output/dependency/*
+/Output/properties/*
+/Output/*.exe
+/Output/*.pak
+!/Output/dependency.pak
+/Output/crash.txt
+/Output/*.ilk
+/Output/*.pdb

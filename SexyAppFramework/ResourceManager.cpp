@@ -163,7 +163,6 @@ bool ResourceManager::Fail(const std::string& theErrorText)
 
 	return false;
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 bool ResourceManager::ParseCommonResource(XMLElement& theElement, BaseRes* theRes, ResMap& theMap)
@@ -196,13 +195,28 @@ bool ResourceManager::ParseCommonResource(XMLElement& theElement, BaseRes* theRe
 	theRes->mResGroup = mCurResGroup;
 	theRes->mId = anId;
 
-	std::pair<ResMap::iterator, bool> aRet = theMap.insert(ResMap::value_type(anId, theRes));
+	/*std::pair<ResMap::iterator, bool> aRet = theMap.insert(ResMap::value_type(anId, theRes));
 	if (!aRet.second)
 	{
 		mHadAlreadyDefinedError = true;
 		return Fail("Resource already defined.");
+	}*/
+
+	std::pair<ResMap::iterator, bool> aRet = theMap.insert(ResMap::value_type(anId, theRes));
+	if (!aRet.second)
+	{
+		//mHadAlreadyDefinedError = true;
+		aRet.second = theRes;
+
+		auto it = theMap.find(anId);
+		if (it != theMap.end())
+		{
+			mCurResGroupList->remove(it->second);
+			theMap.erase(it);
+		}
 	}
 
+	theMap.insert(ResMap::value_type(anId, theRes));
 	mCurResGroupList->push_back(theRes);
 	return true;
 }

@@ -27,7 +27,6 @@ SeedPacket::SeedPacket()
 	mSlotMachineCountDown = 0;
 	mSlotMachiningNextSeed = SeedType::SEED_NONE;
 	mTimesUsed = 0;
-	mSelectionCounter = -1;
 }
 
 //0x487070
@@ -143,21 +142,6 @@ void SeedPacket::Update()
 		return;
 	}
 
-	if (mApp && mApp->mBoard && mApp->mBoard->mCursorObject->mSeedBankIndex == mIndex)
-	{
-		if (mSelectionCounter < 0)
-			mSelectionCounter = 1;
-		else if (mSelectionCounter < 100)
-			++mSelectionCounter;
-	}
-	else if (mSelectionCounter > -1)
-	{
-		if (mSelectionCounter == 0)
-			mSelectionCounter = -1;
-		else
-			--mSelectionCounter;
-	}
-
 	if (mBoard->mMainCounter == 0)
 	{
 		FlashIfReady();
@@ -217,7 +201,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 		aImage = FilterEffectGetImage(aImage, aFilterEffect);
 	}
 
-	if (aSeedType == SeedType::SEED_POTATOMINE && g->mScaleX <= 1.0f)
+	/*if (aSeedType == SeedType::SEED_POTATOMINE && g->mScaleX <= 1.0f)
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 0, 0, g->mScaleX, g->mScaleY);
 	}
@@ -253,7 +237,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 8, 0, g->mScaleX, g->mScaleY);
 	}
-	else if (aSeedType == SeedType::SEED_KERNELPULT && g->mScaleX <= 1.0f)
+	elseif (aSeedType == SeedType::SEED_KERNELPULT && g->mScaleX <= 1.0f)
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 9, 0, g->mScaleX, g->mScaleY);
 	}
@@ -269,7 +253,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 12, 0, g->mScaleX, g->mScaleY);
 	}
-	else
+	else*/ 
 	{
 		g->PushState();
 		g->mScaleX = theScale * g->mScaleX;
@@ -277,7 +261,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 		if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
 		{
 			g->mClipRect.mY = y + theOffsetY + 10;
-			y -= 180 + 180 * ((g->mScaleY - 0.3f) * 3.33f);
+			y -= 180;
 		}
 		if (theSeedType == SeedType::SEED_ZOMBIE_POLEVAULTER)
 		{
@@ -627,7 +611,7 @@ void SeedPacket::Draw(Graphics* g)
 	float aPercentDark = 0.0f;
 	if (!mActive)
 	{
-		if (mRefreshTime == 0 && (mApp && mApp->mBoard && mApp->mBoard->mCursorObject->mSeedBankIndex != mIndex))
+		if (mRefreshTime == 0)
 		{
 			aPercentDark = 1.0f;
 		}
@@ -912,7 +896,6 @@ void SeedPacket::MouseDown(int x, int y, int theClickCount)
 		mBoard->mCursorObject->mCursorType = CursorType::CURSOR_TYPE_PLANT_FROM_BANK;
 		mBoard->mCursorObject->mSeedBankIndex = mIndex;
 		mApp->PlaySample(SOUND_SEEDLIFT);
-		mSelectionCounter = 0;
 
 		if (mBoard->mTutorialState == TutorialState::TUTORIAL_LEVEL_1_PICK_UP_PEASHOOTER)
 		{
@@ -956,7 +939,6 @@ void SeedPacket::WasPlanted()
 
 	if (mBoard->HasConveyorBeltSeedBank())
 	{
-		mBoard->mSeedBank->mSeedPackets[mIndex].mSelectionCounter = -1;
 		mBoard->mSeedBank->RemoveSeed(mIndex);
 	}
 	else if (mApp->IsSlotMachineLevel())
@@ -1044,49 +1026,12 @@ void SeedBank::Draw(Graphics* g)
 
 	for (int i = 0; i < mNumPackets; i++)
 	{
-		if (mApp->mBoard->mCursorObject->mSeedBankIndex == i) continue;
-
 		SeedPacket* aSeedPacket = &mSeedPackets[i];
-		g->PushState();
-		float mScale = max(1.0f, mApp->mHeight / 720.0f * TodAnimateCurveFloat(0, 100, aSeedPacket->mSelectionCounter, 1.0f, 1.25f, TodCurves::CURVE_EASE_IN));
-		g->SetScale(mScale, mScale, 0, 0);
-		mScale = (mScale - 1.0f) / 2.0f;
-		g->mTransX -= mScale * 50;
-		g->mTransY -= mScale * 75;
 		if (aSeedPacket->mPacketType != SeedType::SEED_NONE && aSeedPacket->BeginDraw(g))
 		{
 			aSeedPacket->Draw(g);
 			aSeedPacket->EndDraw(g);
 		}
-		g->PopState();
-	}
-
-	if (mApp->mBoard->mCursorObject->mSeedBankIndex != -1)
-	{
-		SeedPacket* aSeedPacket = &mSeedPackets[mApp->mBoard->mCursorObject->mSeedBankIndex];
-		g->PushState();
-		float mScale = max(1.0f, mApp->mHeight / 720.0f * TodAnimateCurveFloat(0, 10, aSeedPacket->mSelectionCounter, 1.0f, 1.25f, TodCurves::CURVE_EASE_OUT));
-		g->SetScale(mScale, mScale, 0, 0);
-		float offsetScale = (mScale - 1.0f) / 2.0f;
-		g->mTransX -= offsetScale * 50;
-		g->mTransY -= offsetScale * 75;
-		g->PushState();
-		g->SetScale(1, 1, 0, 0);
-		g->SetClipRect(0, 0, 501+90, BOARD_HEIGHT);
-		TodDrawImageScaledF(g, Sexy::IMAGE_SEED_SELECTOR, aSeedPacket->mX + aSeedPacket->mOffsetX - 5, 2.5f, mScale, mScale);
-		float aPos = PI * 0.25f * PI;
-		float aTime = gLawnApp->mAppCounter * 2.0f * PI / 200.0f;
-		float aFloatingHeight = sin(aPos + aTime) * 2.0f;
-		g->PopState();
-		if (aSeedPacket->mPacketType != SeedType::SEED_NONE && aSeedPacket->BeginDraw(g))
-		{
-			aSeedPacket->Draw(g);
-			aSeedPacket->EndDraw(g);
-		}
-		g->SetClipRect(0, 0, 501 + 90, BOARD_HEIGHT);
-		TodDrawImageScaledF(g, Sexy::IMAGE_P1_ARROW, aSeedPacket->mX + aSeedPacket->mOffsetX - 5 + 19.5f, 2.5f + aFloatingHeight, mScale, mScale);
-		g->PopState();
-		
 	}
 
 	g->ClearClipRect();
