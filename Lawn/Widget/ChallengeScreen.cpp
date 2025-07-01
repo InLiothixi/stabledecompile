@@ -208,6 +208,7 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 			aChallengeButton->Resize(38 + aColumn * 155, 93 + aRow * 119, 104, 115);
 		else
 			aChallengeButton->Resize(38 + aColumn * 155, 125 + aRow * 145, 104, 115);
+
 		if (MoreTrophiesNeeded(aChallengeMode))
 		{
 			aChallengeButton->mDoFinger = false;
@@ -381,6 +382,11 @@ int ChallengeScreen::MoreTrophiesNeeded(int theChallengeIndex)
 			int aNumTrophies = mApp->GetNumTrophies(aDef.mPage);
 			if (aDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LIMBO_SURVIVAL)
 			{
+				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+				{
+					return 1;
+				}
+
 				return 0;
 			}
 			if (mApp->IsSurvivalEndless(aDef.mChallengeMode))
@@ -519,7 +525,8 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 
 			if (aChallengeButton->mDisabled || (theChallengeIndex == mUnlockChallengeIndex && mUnlockState == UNLOCK_SHAKING))
 			{
-				aName = _S("?");
+				if (!(aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP))
+					aName = _S("?");
 			}
 
 			int aNameLen = aName.size();
@@ -855,6 +862,10 @@ void ChallengeScreen::UpdateToolTip()
 				else if (mPageIndex == CHALLENGE_PAGE_LAST_STAND)
 				{
 					aLabel = _S("[ONE_MORE_LAST_STAND_TOOLTIP]");
+				}
+				else if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+				{
+					aLabel = _S("[COMING_SOON]");
 				}
 				else continue;
 

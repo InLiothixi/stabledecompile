@@ -26,9 +26,9 @@ NewOptionsDialog::NewOptionsDialog(LawnApp* theApp, bool theFromGameSelector) :
     mRestartButton = MakeButton(NewOptionsDialog::NewOptionsDialog_Restart, this, _S("[RESTART_LEVEL]"));
     mBackToMainButton = MakeButton(NewOptionsDialog::NewOptionsDialog_MainMenu, this, _S("[MAIN_MENU_BUTTON]"));
 
-    mGameplayButton = MakeButton(NewOptionsDialog::NewOptionsDialog_VideoGraphics, this, _S("[GAMEPLAY_SETTINGS_BUTTON]"));
+   /* mGameplayButton = MakeButton(NewOptionsDialog::NewOptionsDialog_VideoGraphics, this, _S("[GAMEPLAY_SETTINGS_BUTTON]"));
     mControllerButton = MakeButton(NewOptionsDialog::NewOptionsDialog_SoundSystem, this, _S("[CONTROLLER_BUTTON]"));
-    mLanguageButton = MakeButton(NewOptionsDialog::NewOptionsDialog_Language, this, _S("[LANGUAGE_BUTTON]"));
+    mLanguageButton = MakeButton(NewOptionsDialog::NewOptionsDialog_Language, this, _S("[LANGUAGE_BUTTON]"));*/
 
     mBackToGameButton = MakeNewButton(
         Dialog::ID_OK, 
@@ -94,19 +94,19 @@ NewOptionsDialog::NewOptionsDialog(LawnApp* theApp, bool theFromGameSelector) :
         mAlmanacButton->SetVisible(false);
     }
 
-    if (mFromGameSelector)
-    {
-        mMusicVolumeSlider->SetVisible(false);
-        mSfxVolumeSlider->SetVisible(false);
-        mHardwareAccelerationCheckbox->SetVisible(false);
-        mFullscreenCheckbox->SetVisible(false);
-    }
-    else
-    {
-        mGameplayButton->SetVisible(false);
-        mControllerButton->SetVisible(false);
-        mLanguageButton->SetVisible(false);
-    }
+    //if (mFromGameSelector)
+    //{
+    //    mMusicVolumeSlider->SetVisible(false);
+    //    mSfxVolumeSlider->SetVisible(false);
+    //    mHardwareAccelerationCheckbox->SetVisible(false);
+    //    mFullscreenCheckbox->SetVisible(false);
+    //}
+    //else
+    //{
+    //    /*mGameplayButton->SetVisible(false);
+    //    mControllerButton->SetVisible(false);
+    //    mLanguageButton->SetVisible(false);*/
+    //}
 }
 
 //0x45C760¡¢0x45C780
@@ -120,9 +120,9 @@ NewOptionsDialog::~NewOptionsDialog()
     delete mRestartButton;
     delete mBackToMainButton;
     delete mBackToGameButton;
-    delete mGameplayButton;
+    /*delete mGameplayButton;
     delete mControllerButton;
-    delete mLanguageButton;
+    delete mLanguageButton;*/
 }
 
 //0x45C880
@@ -135,9 +135,9 @@ int NewOptionsDialog::GetPreferredHeight(int theWidth)
 void NewOptionsDialog::AddedToManager(Sexy::WidgetManager* theWidgetManager)
 {
     Dialog::AddedToManager(theWidgetManager);
-    AddWidget(mGameplayButton);
+    /*AddWidget(mGameplayButton);
     AddWidget(mControllerButton);
-    AddWidget(mLanguageButton);
+    AddWidget(mLanguageButton);*/
     AddWidget(mAlmanacButton);
     AddWidget(mRestartButton);
     AddWidget(mBackToMainButton);
@@ -152,9 +152,9 @@ void NewOptionsDialog::AddedToManager(Sexy::WidgetManager* theWidgetManager)
 void NewOptionsDialog::RemovedFromManager(Sexy::WidgetManager* theWidgetManager)
 {
     Dialog::RemovedFromManager(theWidgetManager);
-    RemoveWidget(mGameplayButton);
+    /*RemoveWidget(mGameplayButton);
     RemoveWidget(mControllerButton);
-    RemoveWidget(mLanguageButton);
+    RemoveWidget(mLanguageButton);*/
     RemoveWidget(mAlmanacButton);
     RemoveWidget(mRestartButton);
     RemoveWidget(mBackToMainButton);
@@ -178,9 +178,9 @@ void NewOptionsDialog::Resize(int theX, int theY, int theWidth, int theHeight)
     mBackToMainButton->Resize(mRestartButton->mX, mRestartButton->mY + 43, 209, 46);
     mBackToGameButton->Resize(30, 381, mBackToGameButton->mWidth, mBackToGameButton->mHeight);
 
-    mGameplayButton->Resize(mAlmanacButton->mX, 116, 209, 46);
+    /*mGameplayButton->Resize(mAlmanacButton->mX, 116, 209, 46);
     mControllerButton->Resize(mAlmanacButton->mX, mGameplayButton->mY + 43, 209, 46);
-    mLanguageButton->Resize(mAlmanacButton->mX, mControllerButton->mY + 43, 209, 46);
+    mLanguageButton->Resize(mAlmanacButton->mX, mControllerButton->mY + 43, 209, 46);*/
 
     if (mFromGameSelector)
     {
@@ -189,10 +189,10 @@ void NewOptionsDialog::Resize(int theX, int theY, int theWidth, int theHeight)
         mHardwareAccelerationCheckbox->mY += 15;
         mFullscreenCheckbox->mY += 20;
 
-        mGameplayButton->mY += 69;
+        /*mGameplayButton->mY += 69;
         mControllerButton->mY += 69;
         mLanguageButton->mY += 69;
-        mBackToMainButton->Resize(mAlmanacButton->mX, mLanguageButton->mY + 43, 209, 46);
+        mBackToMainButton->Resize(mAlmanacButton->mX, mLanguageButton->mY + 43, 209, 46);*/
     }
 
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ICE)
@@ -219,7 +219,7 @@ void NewOptionsDialog::Draw(Sexy::Graphics* g)
     }
     Sexy::Color aTextColor(107, 109, 145);
 
-    if (mFromGameSelector)
+   /* if (mFromGameSelector)
     {
         SexyString version = _S("Version: ") + StringToSexyString(mApp->mProductVersion);
 #ifdef _DEBUG
@@ -228,7 +228,7 @@ void NewOptionsDialog::Draw(Sexy::Graphics* g)
         TodDrawString(g, _S("Plants vs. Zombies"), 210, 130.5f + aMusicOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_CENTER);
         TodDrawString(g, version, 210, 157.5f + aMusicOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_CENTER);
     }
-    else
+    else*/
     {
         TodDrawString(g, TodStringTranslate(_S("[MUSIC_LABEL]")), 186, 140 + aMusicOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);
         TodDrawString(g, TodStringTranslate(_S("[SOUND_LABEL]")), 186, 167 + aSfxOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);

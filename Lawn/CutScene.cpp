@@ -1845,6 +1845,8 @@ void CutScene::KeyDown(KeyCode theKey)
 		{
 			mApp->CrazyDaveStopSound();
 			mApp->PlaySample(SOUND_PAUSE);
+			if (!mApp->mMusic->mMusicInterface)
+				mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
 			mApp->mMusic->GameMusicPause(true);
 
 			int aResult = mApp->LawnMessageBox(
@@ -1861,6 +1863,8 @@ void CutScene::KeyDown(KeyCode theKey)
 				mApp->DoBackToMain();
 			}
 
+			if (!mApp->mMusic->mMusicInterface)
+				mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
 			mApp->mMusic->GameMusicPause(false);
 		}
 	}

@@ -11,6 +11,8 @@ LanguageWidget::LanguageWidget(LawnApp* theApp) {
 	mHeight = BOARD_HEIGHT;
 	mApp->mMusic->StopAllMusic();
 
+	TodLoadResources("DelayLoad_Credits");
+
 	mBackButton = MakeNewButton(LanguageWidget::Langauge_Back, this, _S("[BACK]"), Sexy::FONT_BRIANNETOD32, Sexy::IMAGE_BLANK, Sexy::IMAGE_BLANK, Sexy::IMAGE_BLANK);
 	mBackButton->mTextDownOffsetX = 0;
 	mBackButton->mTextDownOffsetY = 0;

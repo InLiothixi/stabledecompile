@@ -2435,7 +2435,7 @@ void Challenge::DrawBeghouled(Graphics* g)
 			float aPixelY = mBoard->GridToPixelY(mChallengeGridX, mChallengeGridY) + 100;
 
 			SexyTransform2D aTransform;
-			TodScaleRotateTransformMatrix(aTransform, aPixelX, aPixelY, -mBoard->mMainCounter * 2 * PI * 0.01f, 1, 1);
+			TodScaleRotateTransformMatrix(aTransform, aPixelX, aPixelY, -mBoard->mMainCounter * 2 * PI * 0.001f, 1, 1);
 
 			Image* aImageOverlay = Sexy::IMAGE_BEGHOULED_TWIST_OVERLAY;
 			Rect aSrcRect = Rect(0, 0, aImageOverlay->mWidth, aImageOverlay->mHeight);
@@ -2600,20 +2600,21 @@ void Challenge::InitZombieWavesSurvival()
 	while (aCapacity > 0)
 	{
 		ZombieType aRandZombie = (ZombieType)aLevelRNG.Next((unsigned long)ZombieType::NUM_ZOMBIE_TYPES);
-		if (mBoard->mZombieAllowed[aRandZombie])																	continue;
-		if (mBoard->IsZombieTypePoolOnly(aRandZombie) && !mBoard->StageHasPool())									continue;
-		if (mBoard->StageHasRoof() && (aRandZombie == ZombieType::ZOMBIE_DIGGER || aRandZombie == ZombieType::ZOMBIE_DANCER))				continue;
-		if (mBoard->StageHasGraveStones() && aRandZombie == ZombieType::ZOMBIE_ZAMBONI)											continue;
+		if (mBoard->mZombieAllowed[aRandZombie])																															continue;
+		if (mBoard->IsZombieTypePoolOnly(aRandZombie) && !mBoard->StageHasPool())																							continue;
+		if (mBoard->StageHasRoof() && (aRandZombie == ZombieType::ZOMBIE_DIGGER || aRandZombie == ZombieType::ZOMBIE_DANCER))												continue;
+		if (mBoard->StageHasGraveStones() && aRandZombie == ZombieType::ZOMBIE_ZAMBONI)																						continue;
 		if (!mBoard->StageHasRoof() && !mApp->IsSurvivalEndless(mApp->mGameMode) && !mApp->IsLastStandEndless(mApp->mGameMode) && aRandZombie == ZombieType::ZOMBIE_BUNGEE)	continue;
-		if (mBoard->GetSurvivalFlagsCompleted() < 10 && aRandZombie >= ZombieType::ZOMBIE_REDEYE_GARGANTUAR)								continue;
-		if (mApp->IsSurvivalNormal(mApp->mGameMode) && aRandZombie > ZombieType::ZOMBIE_SNORKEL)								continue;
+		if (mBoard->GetSurvivalFlagsCompleted() < 10 && aRandZombie >= ZombieType::ZOMBIE_REDEYE_GARGANTUAR)																continue;
+		if (mApp->IsSurvivalNormal(mApp->mGameMode) && aRandZombie > ZombieType::ZOMBIE_SNORKEL)																			continue;
 		if (mBoard->IsZombieTypeSpawnedOnly(aRandZombie) || Zombie::IsZombotany(aRandZombie) ||
 			aRandZombie == ZombieType::ZOMBIE_DUCKY_TUBE || aRandZombie == ZombieType::ZOMBIE_YETI 
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 			|| aRandZombie == ZombieType::ZOMBIE_PROPELLER || aRandZombie == ZombieType::ZOMBIE_DOG_WALKER || aRandZombie == ZombieType::ZOMBIE_DOG
 #endif
-			)
-			continue;
+			)	
+																																											continue;
+		mBoard->mZombieAllowed[aRandZombie] = true;																															
 		aCapacity--;
 	}
 }

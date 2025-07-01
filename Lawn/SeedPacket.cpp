@@ -467,7 +467,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 
 	case SeedType::SEED_ZOMBIE_POLEVAULTER:
 		aScale = 0.35f;
-		aOffsetX = -8.0f;
+		aOffsetX = -8.0f - 16.25f;
 		aOffsetY = -12.0f;
 		break;
 

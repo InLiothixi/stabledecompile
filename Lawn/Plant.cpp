@@ -153,6 +153,9 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     mPoweredCounter = -1;
     mSpecialReanimID = ReanimationID::REANIMATIONID_NULL;
 
+    if (IsOnBoard())
+        mLastStandFlagPlaced = mBoard->mChallenge->mSurvivalStage;
+
     Reanimation* aBodyReanim = nullptr;
     if (aPlantDef.mReanimationType != ReanimationType::REANIM_NONE)
     {
@@ -5413,7 +5416,9 @@ void Plant::DoSpecial()
 
             if (!aSpecialReanim)
             {
-                aSpecialReanim = mApp->AddReanimation(mX, mY, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0), aPlantDef.mReanimationType);
+                float aOffsetY = PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow);
+
+                aSpecialReanim = mApp->AddReanimation(mX, mY + aOffsetY, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow + 1, 0), aPlantDef.mReanimationType);
                 aSpecialReanim->AssignRenderGroupToTrack("anim_face", RENDER_GROUP_HIDDEN);
                 aSpecialReanim->PlayReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
                 mSpecialReanimID = mApp->ReanimationGetID(aSpecialReanim);

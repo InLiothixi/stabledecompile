@@ -1706,6 +1706,8 @@ void CreditScreen::PauseCredits()
     mApp->PlaySample(SOUND_PAUSE);
     mCreditsPaused = true;
     int aDurationOnPause = mTimerSinceStart.GetDuration();
+    if (!mApp->mMusic->mMusicInterface)
+        mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
     mApp->mMusic->GameMusicPause(true);
 
     if (mApp->LawnMessageBox(
@@ -1721,6 +1723,8 @@ void CreditScreen::PauseCredits()
     }
 
     mCreditsPaused = false;
+    if (!mApp->mMusic->mMusicInterface)
+        mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
     mApp->mMusic->GameMusicPause(false);
     ((TodsHackyUnprotectedPerfTimer*)&mTimerSinceStart)->SetStartTime(aDurationOnPause);
 }

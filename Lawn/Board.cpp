@@ -353,6 +353,8 @@ void Board::TryToSaveGame()
 		}
 
 		MkDir(GetAppDataFolder() + _S("userdata"));
+		if (!mApp->mMusic->mMusicInterface)
+			mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
 		mApp->mMusic->GameMusicPause(true);
 		LawnSaveGame(this, aFileName);
 		mApp->ClearUpdateBacklog();
@@ -2881,7 +2883,7 @@ bool Board::RowCanHaveZombieType(int theRow, ZombieType theZombieType, int theWa
 		return false;
 	}
 	// 雪橇僵尸小队仅能在有冰道的行刷出
-	if (theZombieType == ZOMBIE_BOBSLED && (!mIceTimer[theRow] && !CanAddBobSled() || mZombieAllowed[ZombieType::ZOMBIE_ZAMBONI]))
+	if (theZombieType == ZOMBIE_BOBSLED && !mIceTimer[theRow] && !CanAddBobSled())
 	{
 		return false;
 	}
@@ -4528,7 +4530,7 @@ void Board::MouseDownWithTool(int x, int y, int theClickCount, CursorType theCur
 	}
 	else if (theCursorType == CursorType::CURSOR_TYPE_SHOVEL)
 	{
-		/*if (mApp->mGameMode == GAMEMODE_CHALLENGE_LAST_STAND && mChallenge->mSurvivalStage == 0) {
+		if (mApp->IsLastStand() && mChallenge->mSurvivalStage == aPlant->mLastStandFlagPlaced && mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL) {
 
 			int sunreback = Plant::GetCost(aPlant->mSeedType, aPlant->mImitaterType);
 
@@ -4546,7 +4548,7 @@ void Board::MouseDownWithTool(int x, int y, int theClickCount, CursorType theCur
 			for (int i = 0; i < fullCoins; i++) {
 				Coin* aCoin = AddCoin(aPlant->mX, aPlant->mY, COIN_SUN, COIN_MOTION_COIN);
 			}
-		}*/
+		}
 
 		mApp->PlayFoley(FoleyType::FOLEY_USE_SHOVEL);
 		mPlantsShoveled++;
@@ -5234,6 +5236,8 @@ void Board::Pause(bool thePause)
 	if (!thePause || mApp->mGameScene != GameScenes::SCENE_LEVEL_INTRO)
 	{
 		mApp->mSoundSystem->GamePause(thePause);
+		if (!mApp->mMusic->mMusicInterface)
+			mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
 		mApp->mMusic->GameMusicPause(thePause);
 	}
 }

@@ -248,23 +248,7 @@ Plant* Projectile::FindCollisionTargetPlant()
 			}
 			else
 			{
-				Plant* aPlant2 = mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_CATAPULT_ORDER);
-				if (aPlant2 && (aPlant2->mSeedType == SeedType::SEED_PUFFSHROOM ||
-					aPlant2->mSeedType == SeedType::SEED_SUNSHROOM ||
-					aPlant2->mSeedType == SeedType::SEED_POTATOMINE ||
-					aPlant2->mSeedType == SeedType::SEED_SPIKEWEED ||
-					aPlant2->mSeedType == SeedType::SEED_SPIKEROCK ||
-					aPlant2->mSeedType == SeedType::SEED_LILYPAD ||
-					aPlant2->mState == PlantState::STATE_SCAREDYSHROOM_SCARED
-					|| aPlant2->mSeedType == SeedType::SEED_TANGLEKELP
-					|| aPlant2->mSeedType == SeedType::SEED_FLOWERPOT
-#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
-					|| aPlant2->mSeedType == SeedType::SEED_YAMPOLINE
-#endif
-					))  // 僵尸豌豆不能击中低矮植物
-					continue;
-
-				return aPlant2;
+				return mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_CATAPULT_ORDER);
 			}
 		}
 	}
@@ -369,7 +353,9 @@ void Projectile::CheckForCollision()
 		return;
 	}
 
-	if (mPosX > WIDE_BOARD_WIDTH || mPosX + mWidth < 0.0f)
+	Zombie* aTargetZombie = mMotionType == ProjectileMotion::MOTION_HOMING ?  mBoard->ZombieTryToGet(mTargetZombieID) : nullptr;
+
+	if ((mPosX > WIDE_BOARD_WIDTH || mPosX + mWidth < 0.0f) && !aTargetZombie)
 	{
 		Die();
 		return;
@@ -712,12 +698,11 @@ void Projectile::UpdateLobMotion()
 			aMinCollisionZ += 40.0f;
 		}
 
-		int aGridX = mBoard->PixelToGridXKeepOnBoard(mX, mY);
-		bool isHighGround = false;
+		/*int aGridX = mBoard->PixelToGridXKeepOnBoard(mX, mY);
 		if (mBoard->mGridSquareType[aGridX][mRow] == GridSquareType::GRIDSQUARE_HIGH_GROUND)
 		{
 			aMinCollisionZ -= HIGH_GROUND_HEIGHT;
-		}
+		}*/
 
 		if (mPosZ <= aMinCollisionZ)
 		{
@@ -1232,7 +1217,8 @@ void Projectile::DoImpact(Zombie* theZombie)
 		}
 #endif
 	}
-	else {
+	else 
+	{
 		Die();
 	}
 }
@@ -1273,18 +1259,21 @@ void Projectile::Update()
 	}
 	mRotation += mRotationSpeed;
 
-	if (mIsPlayingImpactAnimation) {
+	if (mIsPlayingImpactAnimation) 
+	{
 		if (mAnimTicksPerFrame > 0)
 		{
 			mAnimCounter = (mAnimCounter + 1) % (mNumFrames * mAnimTicksPerFrame);
 			mFrame = mAnimOffset + mAnimCounter / mAnimTicksPerFrame;
 			
-			if (mAnimCounter == 0) {
+			if (mAnimCounter == 0) 
+			{
 				Die();
 			}
 		}
 	}
-	else {
+	else 
+	{
 		UpdateMotion();
 		AttachmentUpdateAndMove(mAttachmentID, mPosX, mPosY + mPosZ);
 	}

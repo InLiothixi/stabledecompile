@@ -200,6 +200,7 @@ public:
     int                     mBurnedCounter;
     int                     mPoweredCounter;
     ReanimationID           mSpecialReanimID;
+    int                     mLastStandFlagPlaced;
 
 public:
     Plant();
