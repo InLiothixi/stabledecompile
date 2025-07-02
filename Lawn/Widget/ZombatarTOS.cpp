@@ -202,7 +202,7 @@ void ZombatarTOS::Draw(Graphics* g)
     aRect.mY -= mScrollPosition;
     TodDrawStringWrapped(&aLineGraphics, mDialogLines, aRect, Sexy::FONT_PICO129, g->mColor, DS_ALIGN_LEFT);
 
-    if (mWidgetManager->mFocusWidget == this)
+    if (mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
     {
         float aThumbHeight = mScrollArea.mHeight / mMaxScrollPosition * mScrollArea.mHeight;
         const float aThumbY = mScrollArea.mY + mScrollPosition / (float)mMaxScrollPosition * (mScrollArea.mHeight - aThumbHeight);
@@ -489,7 +489,7 @@ void ZombatarTOS::CheckboxChecked(int theId, bool checked)
 
 void ZombatarTOS::MouseDown(int x, int y, int theBtnNum, int theClickCount)
 {
-    if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this)
+    if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
     {
         bool onScroll = false;
 
@@ -510,7 +510,7 @@ void ZombatarTOS::MouseDown(int x, int y, int theBtnNum, int theClickCount)
 
 void ZombatarTOS::MouseUp(int x, int y, int theClickCount)
 {
-    if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this)
+    if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
     {
         bool onScroll = false;
 
@@ -531,7 +531,7 @@ void ZombatarTOS::MouseUp(int x, int y, int theClickCount)
 
 void ZombatarTOS::MouseMove(int theX, int theY)
 {
-    if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this)
+    if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
     {
         bool onScroll = false;
 

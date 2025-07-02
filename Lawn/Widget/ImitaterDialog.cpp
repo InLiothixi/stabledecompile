@@ -49,6 +49,8 @@ SeedType ImitaterDialog::SeedHitTest(int x, int y)
 //0x482DD0
 void ImitaterDialog::UpdateCursor()
 {
+	if (!mApp->mWidgetManager->mOverWidget) return;
+
 	SeedType aSeedType = SeedHitTest(mApp->mWidgetManager->mLastMouseX - mX, mApp->mWidgetManager->mLastMouseY - mY);
 	if (aSeedType != SeedType::SEED_NONE && !mApp->mSeedChooserScreen->SeedNotAllowedToPick(aSeedType))
 	{

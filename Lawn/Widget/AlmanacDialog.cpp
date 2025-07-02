@@ -280,16 +280,19 @@ void AlmanacDialog::Update()
 	}
 	mScrollbar->Update();
 
-	int aMouseX = mApp->mWidgetManager->mLastMouseX;
-	int aMouseY = mApp->mWidgetManager->mLastMouseY;
-	if (SeedHitTest(aMouseX, aMouseY) != SeedType::SEED_NONE || ZombieHitTest(aMouseX, aMouseY) != ZombieType::ZOMBIE_INVALID || 
-		mCloseButton->IsMouseOver() || mIndexButton->IsMouseOver() || mPlantButton->IsMouseOver() || mZombieButton->IsMouseOver() || mScrollbar->isThumbOver())
+	if (mApp->mWidgetManager->mOverWidget)
 	{
-		mApp->SetCursor(CURSOR_HAND);
-	}
-	else
-	{
-		mApp->SetCursor(CURSOR_POINTER);
+		int aMouseX = mApp->mWidgetManager->mLastMouseX;
+		int aMouseY = mApp->mWidgetManager->mLastMouseY;
+		if (SeedHitTest(aMouseX, aMouseY) != SeedType::SEED_NONE || ZombieHitTest(aMouseX, aMouseY) != ZombieType::ZOMBIE_INVALID ||
+			mCloseButton->IsMouseOver() || mIndexButton->IsMouseOver() || mPlantButton->IsMouseOver() || mZombieButton->IsMouseOver() || mScrollbar->isThumbOver())
+		{
+			mApp->SetCursor(CURSOR_HAND);
+		}
+		else
+		{
+			mApp->SetCursor(CURSOR_POINTER);
+		}
 	}
 
 	Widget::Update();

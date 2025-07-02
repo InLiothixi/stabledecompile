@@ -12,6 +12,7 @@
 #include "../../SexyAppFramework/Dialog.h"
 #include "../../Sexy.TodLib/EffectSystem.h"
 #include "../../Sexy.TodLib/TodStringFile.h"
+#include "../../SexyAppFramework/WidgetManager.h"
 
 static CreditsTiming gCreditsTiming[] = {  //0x6A1AD8
     {  128.5f,      CreditWordType::WORD_AW ,         0,     CreditBrainType::BRAIN_OFF       },
@@ -1073,7 +1074,7 @@ void CreditScreen::UpdateBlink()
 void CreditScreen::Update()
 {
     Widget::Update();
-    if (!mCreditsPaused && !mMainMenuButton->mIsOver && !mReplayButton->mIsOver)
+    if (!mCreditsPaused && !mMainMenuButton->mIsOver && !mReplayButton->mIsOver && mApp->mWidgetManager->mOverWidget)
     {
         mApp->SetCursor(CURSOR_POINTER);
     }

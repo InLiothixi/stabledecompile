@@ -5701,6 +5701,10 @@ void Board::ZombiesWon(Zombie* theZombie)
 
 	mApp->mMusic->StopAllMusic();
 	StopAllZombieSounds();
+	for (int i = (int)FoleyType::FOLEY_SUN; i < (int)FoleyType::NUM_FOLEY; i++)
+	{
+		mApp->mSoundSystem->StopFoley((FoleyType)i);
+	}
 	mApp->PlaySample(Sexy::SOUND_LOSEMUSIC);
 
 	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBIES_WON, true);
@@ -5708,6 +5712,8 @@ void Board::ZombiesWon(Zombie* theZombie)
 	aReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
 	aReanim->GetTrackInstanceByName("fullscreen")->mTrackColor = Color::Black;
 	aReanim->SetFramesForLayer("anim_screen");
+
+	mApp->EraseFile(GetSavedGameName(mApp->mGameMode, mApp->mPlayerInfo->mId));
 }
 
 //0x4138D0
@@ -7876,8 +7882,8 @@ void Board::DrawDebugText(Graphics* g)
 void Board::DrawDebugObjectRects(Graphics* g)
 {
 	g->PushState();
-	g->mTransX = 0;
-	g->mTransY = 0;
+	g->mTransX -= TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountX, TodCurves::CURVE_BOUNCE);
+	g->mTransY -= TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountY, TodCurves::CURVE_BOUNCE);
 	if (mDebugTextMode == DebugTextMode::DEBUG_TEXT_COLLISION)
 	{
 		Plant* aPlant = nullptr;
@@ -9102,9 +9108,11 @@ static void TodCrash()
 //0x41B950（原版中废弃）
 void Board::KeyChar(SexyChar theChar)
 {
+#ifdef _HAS_HEALTHBAR_TOGGLE
 	if (theChar == KeyCode::KEYCODE_TAB) {
 		mApp->mShowHealthBar = !mApp->mShowHealthBar;
 	}
+#endif
 
 #ifdef _DEBUG 
 	if(!mApp->mDebugKeysEnabled)

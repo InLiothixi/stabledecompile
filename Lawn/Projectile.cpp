@@ -1393,10 +1393,9 @@ void Projectile::Draw(Graphics* g)
 		{
 			float aOffsetX = mPosX + aCelWidth * 0.5f;
 			float aOffsetY = mPosZ + mPosY + aCelHeight * 0.5f;
-
-			float scaleX = 1.0f;
-
-			if (aMirror) scaleX = -1.0f;
+			float scaleX = aScale;
+			if (aMirror) 
+				scaleX *= -1;
 
 			SexyTransform2D aTransform;
 			TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, scaleX, aScale);

@@ -15,6 +15,7 @@
 #include "../../Sexy.TodLib/TodCommon.h"
 #include "../../Sexy.TodLib/TodStringFile.h"
 #include "AchievementsScreen.h"
+#include "../../SexyAppFramework/WidgetManager.h"
 
 //0x405780
 // GOTY @Patoke: 0x4063E0
@@ -435,7 +436,8 @@ void AwardScreen::Update()
 	mStartButton->Update();
 	mMenuButton->Update();
 	mContinueButton->Update(); // @Patoke: add call
-	mApp->SetCursor(mStartButton->IsMouseOver() || mMenuButton->IsMouseOver() ? CURSOR_HAND : CURSOR_POINTER);
+	if (mApp->mWidgetManager->mOverWidget)
+		mApp->SetCursor(mStartButton->IsMouseOver() || mMenuButton->IsMouseOver() ? CURSOR_HAND : CURSOR_POINTER);
 	MarkDirty();
 	if (mFadeInCounter > 0) mFadeInCounter--;
 }

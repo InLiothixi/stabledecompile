@@ -1173,7 +1173,7 @@ static void SetLinearFilter(LPDIRECT3DDEVICE7 theDevice, bool linear)
 
 		const char *aDebugContext = linear ? "SetTextureStageState LINEAR" : "SetTextureStageState Point";
 
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, aFilter),aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, aFilter), aDebugContext);
 		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, aFilter),aDebugContext);
 		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, aFilter),aDebugContext);
 		gLinearFilter = linear;

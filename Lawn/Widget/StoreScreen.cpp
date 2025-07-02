@@ -613,7 +613,8 @@ void StoreScreen::UpdateMouse()
         }
     }
 
-    mApp->SetCursor(mBackButton->mIsOver || mPrevButton->mIsOver || mNextButton->mIsOver || aShowFinger ? CURSOR_HAND : CURSOR_POINTER);
+    if (mApp->mWidgetManager->mOverWidget)
+        mApp->SetCursor(mBackButton->mIsOver || mPrevButton->mIsOver || mNextButton->mIsOver || aShowFinger ? CURSOR_HAND : CURSOR_POINTER);
 }
 
 //0x48BE30
@@ -945,7 +946,8 @@ bool StoreScreen::CanAffordItem(StoreItem theStoreItem)
 //0x48C740
 void StoreScreen::PurchaseItem(StoreItem theStoreItem)
 {
-    mApp->SetCursor(CURSOR_POINTER);
+    if (mApp->mWidgetManager->mOverWidget)
+        mApp->SetCursor(CURSOR_POINTER);
     mBubbleCountDown = 0;
     mApp->CrazyDaveStopTalking();
     if (!CanAffordItem(theStoreItem))

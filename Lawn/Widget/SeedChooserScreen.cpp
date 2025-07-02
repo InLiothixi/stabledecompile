@@ -632,10 +632,10 @@ void SeedChooserScreen::LandFlyingSeed(ChosenSeed& theChosenSeed)
 //0x485040
 void SeedChooserScreen::UpdateCursor()
 {
-	if (mApp->GetDialogCount() || mBoard->mCutScene->IsInShovelTutorial() || mApp->mGameMode == GAMEMODE_UPSELL) return;
+	if (mApp->GetDialogCount() || mBoard->mCutScene->IsInShovelTutorial() || mApp->mGameMode == GAMEMODE_UPSELL || !mApp->mWidgetManager->mOverWidget) return;
 
 	mApp->mWidgetManager->SetFocus(this);
-
+	
 	SeedType aMouseSeedType = SeedHitTest(mLastMouseX, mLastMouseY);
 	if (aMouseSeedType != SEED_NONE)
 	{

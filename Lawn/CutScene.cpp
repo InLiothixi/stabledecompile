@@ -2242,7 +2242,7 @@ void CutScene::LoadUpsellBoardRoof()
 //0x440D20
 void CutScene::UpdateUpsell()
 {
-	if (!mBoard->mMenuButton->mIsOver && !mBoard->mStoreButton->mIsOver)
+	if (!mBoard->mMenuButton->mIsOver && !mBoard->mStoreButton->mIsOver && mApp->mWidgetManager->mOverWidget)
 	{
 		mApp->SetCursor(CURSOR_POINTER);
 	}

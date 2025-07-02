@@ -218,7 +218,7 @@ void AchievementsWidget::Draw(Graphics* g) {
 		if (aIsHighlight) isHand = true;
 	}
 
-	if (mApp->mWidgetManager->mFocusWidget == this)
+	if (mApp->mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
 	{
 		if (isHand) mApp->SetCursor(CURSOR_HAND);
 		else mApp->SetCursor(CURSOR_POINTER);

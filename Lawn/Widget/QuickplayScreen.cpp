@@ -393,7 +393,8 @@ void QuickplayWidget::Draw(Graphics* g) {
 			if (onScroll || mIsDraggingThumb)
 			{
 				mMouseIsDragging = true;
-				mApp->SetCursor(CURSOR_HAND);
+				if (mApp->mWidgetManager->mOverWidget)
+					mApp->SetCursor(CURSOR_HAND);
 			}
 		}
 	}
@@ -597,7 +598,7 @@ void QuickplayWidget::MouseWheel(int theDelta)
 
 void QuickplayWidget::MouseUp(int theX, int theY)
 {
-	if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this)
+	if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
 	{
 		bool onScroll = false;
 
@@ -614,7 +615,7 @@ void QuickplayWidget::MouseUp(int theX, int theY)
 
 void QuickplayWidget::MouseMove(int theX, int theY)
 {
-	if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this)
+	if (mMouseIsDragging && mApp->mWidgetManager->mFocusWidget == this && mApp->mWidgetManager->mOverWidget)
 	{
 		bool onScroll = false;
 
