@@ -1355,3 +1355,43 @@ int	Graphics::GetWordWrappedHeight(int theWidth, const SexyString& theLine, int 
 
 	return aHeight;	
 }
+
+void Graphics::DrawCircle(float cx, float cy, float radius, int segments)
+{
+	double angleStep = 2.0 * PI / segments;
+
+	float prevX = cx + radius * cos(0);
+	float prevY = cy + radius * sin(0);
+
+	for (int i = 1; i <= segments; i++)
+	{
+		double angle = i * angleStep;
+		float currX = cx + radius * cos(angle);
+		float currY = cy + radius * sin(angle);
+
+		DrawLine((int)prevX, (int)prevY, (int)currX, (int)currY);
+
+		prevX = currX;
+		prevY = currY;
+	}
+}
+
+void Graphics::DrawOval(float cx, float cy, float radiusX, float radiusY, int segments)
+{
+	double angleStep = 2.0 * PI / segments;
+
+	float prevX = cx + radiusX * cos(0);
+	float prevY = cy + radiusY * sin(0);
+
+	for (int i = 1; i <= segments; i++)
+	{
+		double angle = i * angleStep;
+		float currX = cx + radiusX * cos(angle);
+		float currY = cy + radiusY * sin(angle);
+
+		DrawLine((int)prevX, (int)prevY, (int)currX, (int)currY);
+
+		prevX = currX;
+		prevY = currY;
+	}
+}

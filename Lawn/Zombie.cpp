@@ -7411,8 +7411,8 @@ void Zombie::SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackTyp
 
                 int theNextGrid = theX + (IsWalkingBackwards() ? 1 : -1);
 
-                Plant* aPlant = mBoard->GetTopPlantAt(theNextGrid, theY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
-                if (aPlant && !aPlant->mSquished && aPlant->mSeedType == SeedType::SEED_COBCANNON) {
+                Plant* aNextPlant = mBoard->GetTopPlantAt(theNextGrid, theY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
+                if (aNextPlant && aNextPlant == aPlant && !aNextPlant->mSquished && aNextPlant->mSeedType == SeedType::SEED_COBCANNON) {
                     SquishAllInSquare(theNextGrid, theY, theAttackType);
                 }
             }
@@ -10291,7 +10291,7 @@ void Zombie::ApplyBurn()
 
         DropFlag();
 
-        if (mZombieType == ZOMBIE_POLEVAULTER && mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
+        if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
         {
             DropZombiePole();
         }
@@ -10301,7 +10301,7 @@ void Zombie::ApplyBurn()
         else if (mZombieType == ZOMBIE_BALLOON) {
             DropBalloonPropeller();
         }
-        else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
+        else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX && mZombiePhase != ZombiePhase::PHASE_ZOMBIE_NORMAL)
         {
             DropJackInTheBox();
         }

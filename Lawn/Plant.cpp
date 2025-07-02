@@ -152,6 +152,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     mBurnedCounter = -1;
     mPoweredCounter = -1;
     mSpecialReanimID = ReanimationID::REANIMATIONID_NULL;
+    mRad = 0.0f;
 
     if (IsOnBoard())
         mLastStandFlagPlaced = mBoard->mChallenge->mSurvivalStage;
@@ -184,6 +185,27 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         aBodyReanim->mIsAttachment = true;
         mBodyReanimID = mApp->ReanimationGetID(aBodyReanim);
         mBlinkCountdown = 400 + Sexy::Rand(400);
+
+#ifdef _HAS_ROOF_SLOPE_ANGLE
+        if (mBoard && mBoard->StageHasRoof())
+        {
+            if (mPlantCol < 5)
+            {
+                int nextColoumn = mPlantCol + 1;
+                if (mSeedType == SeedType::SEED_COBCANNON) nextColoumn++;
+                const float x2 = mBoard->GridToPixelX(nextColoumn, mRow);
+                const float y2 = mBoard->GridToPixelY(nextColoumn, mRow);
+                mRad = -atan2(y2 - mY, x2 - mX);
+                float rotatedHeightX = sin(mRad) * aOffsetY;
+                const float offsetX = -cos(mRad) * 15 + rotatedHeightX;
+                const float offsetY = sin(mRad) * 40;
+                aBodyReanim->mOffsetX = offsetX;
+                aBodyReanim->mOffsetY = offsetY;
+                TodScaleRotateTransformMatrix(aBodyReanim->mOverlayMatrix, 0.0f, 0.0f, mRad, 1.0f, 1.0f);
+                UpdateReanim();
+            }
+        }
+#endif
     }
 
     if (IsNocturnal(mSeedType) && mBoard && !mBoard->StageIsNight())
@@ -1654,7 +1676,7 @@ void Plant::UpdateScaredyShroom()
     {
         Rect aZombieRect = aZombie->GetZombieRect();
         int aDiffY = (aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) ? 0 : (aZombie->mRow - mRow);
-        if (!aZombie->mMindControlled && !aZombie->IsDeadOrDying() && aDiffY <= 1 && aDiffY >= -1 && GetCircleRectOverlap(mX, mY + 20.0f, 120, aZombieRect))
+        if (!aZombie->mMindControlled && !aZombie->IsDeadOrDying() && aDiffY <= 1 && aDiffY >= -1 && GetOvalRectOverlap(mX + 40, mY + 40.0f, 80, 120, aZombieRect))
         {
             aHasZombieNearby = true;
             break;
@@ -2565,7 +2587,7 @@ void Plant::UpdateMagnetShroom()
                 continue;
 
             int aRadius = aZombie->mIsEating ? 320 : 270;
-            if (GetCircleRectOverlap(mX, mY + 20, aRadius, aZombieRect))
+            if (GetOvalRectOverlap(mX + 40, mY + 40, aRadius - 40, aRadius, aZombieRect))
             {
                 float aDistance = Distance2D(mX, mY, aZombieRect.mX, aZombieRect.mY);
                 aDistance += abs(aDiffY) * 80.0f;
@@ -4479,17 +4501,27 @@ void Plant::DrawMagnetItems(Graphics* g)
                 TOD_ASSERT();
             }
 
-                if (aScale == 1.0f)
-                {
-                    g->DrawImageCel(aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow);
-                }
-                else
-                {
-                    TodDrawImageCelScaledF(g, aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow, aScale, aScale);
-                }
+            g->PushState();
+            
+            if (mBurnedCounter != -1)
+            {
+                g->SetColorizeImages(true);
+                g->SetColor(Color::Black);
             }
+
+            if (aScale == 1.0f)
+            {
+                g->DrawImageCel(aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow);
+            }
+            else
+            {
+                TodDrawImageCelScaledF(g, aImage, aMagnetItem->mPosX - mX + aOffsetX, aMagnetItem->mPosY - mY + aOffsetY, aCelCol, aCelRow, aScale, aScale);
+            }
+
+            g->PopState();
         }
     }
+}
 
 Image* Plant::GetImage(SeedType theSeedType)
 {
@@ -4648,6 +4680,15 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
         aShadowOffsetY += 10.0f;
         if (mBoard && (mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_NORMAL_POSITION) || mBoard->GetTopPlantAt(mPlantCol, mRow, TOPPLANT_ONLY_PUMPKIN)))
             return;
+    }
+
+    if (FloatApproxEqual(mRad, 0.0f))
+    {
+        float heightOffset = 0;
+        if (mSeedType != SeedType::SEED_FLOWERPOT)
+            heightOffset = PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow);
+        float rotatedHeightX = sin(mRad) * heightOffset;
+        aShadowOffsetX += rotatedHeightX;
     }
 
     if (aShadowType == 0)
@@ -5423,6 +5464,12 @@ void Plant::DoSpecial()
                 aSpecialReanim->PlayReanim("anim_block", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 22.0f);
                 mSpecialReanimID = mApp->ReanimationGetID(aSpecialReanim);
 
+                if (!FloatApproxEqual(mRad, 0.0f))
+                {
+                    float aOffsetX = -sin(mRad) * aOffsetY;
+                    TodScaleRotateTransformMatrix(aSpecialReanim->mOverlayMatrix, mX + aBodyReanim->mOverlayMatrix.m02 + aOffsetX, mY + aOffsetX + aBodyReanim->mOverlayMatrix.m12, mRad, 1.0f, 1.0f);
+                }
+
                 if (aBodyReanim)
                 {
                     aSpecialReanim->mFilterEffect = aBodyReanim->mFilterEffect;
@@ -5855,8 +5902,27 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
     }
     else if (mSeedType == SeedType::SEED_COBCANNON)
     {
-        aOriginX = mX - 44;
-        aOriginY = mY - 184;
+        float baseOffsetX = -44;
+        float baseOffsetY = -184;
+
+        float offsetX = baseOffsetX;
+        float offsetY = baseOffsetY;
+
+        if (!FloatApproxEqual(mRad, 0.0f))
+        {
+            float cosA = cos(mRad);
+            float sinA = sin(mRad);
+
+            offsetX = baseOffsetX * cosA + baseOffsetY * sinA;
+            offsetY = baseOffsetX * sinA + baseOffsetY * cosA;
+
+            float rotatedHeightX = sin(mRad) * PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow);
+            offsetX += -cos(mRad) * 7.5f + rotatedHeightX;
+            offsetY += sin(mRad) * 20;
+        }
+
+        aOriginX = mX + offsetX;
+        aOriginY = mY + offsetY;
     }
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     else if (mSeedType == SeedType::SEED_STINGER)
@@ -5913,6 +5979,11 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
 
     Projectile* aProjectile = mBoard->AddProjectile(aOriginX, aOriginY, theOrder, theRow, aProjectileType);
     aProjectile->mDamageRangeFlags = GetDamageRangeFlags(thePlantWeapon);
+
+    if (aProjectileType == ProjectileType::PROJECTILE_COBBIG && !FloatApproxEqual(mRad, 0.0f))
+    {
+        aProjectile->OverrideAngle(mRad);
+    }
 
     {
         Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
@@ -6012,6 +6083,15 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
         aProjectile->mVelZ = -8.0f;
         aProjectile->mCobTargetX = mTargetX - 40;
         aProjectile->mCobTargetRow = mBoard->PixelToGridYKeepOnBoard(mTargetX, mTargetY);
+
+        if (!FloatApproxEqual(mRad, 0.0f))
+        {
+            float adjustedAngle = mRad - (PI / 2.0f);
+            float speed = aProjectile->mVelZ;
+
+            aProjectile->mVelX = speed * cos(adjustedAngle);
+            aProjectile->mVelZ = -speed * sin(adjustedAngle);
+        }
     }
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     else if (mSeedType == SeedType::SEED_BEEHIVE)

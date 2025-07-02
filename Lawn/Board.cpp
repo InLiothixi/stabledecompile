@@ -2883,7 +2883,7 @@ bool Board::RowCanHaveZombieType(int theRow, ZombieType theZombieType, int theWa
 		return false;
 	}
 	// 雪橇僵尸小队仅能在有冰道的行刷出
-	if (theZombieType == ZOMBIE_BOBSLED && !mIceTimer[theRow] && !CanAddBobSled())
+	if (theZombieType == ZOMBIE_BOBSLED && !mIceTimer[theRow])
 	{
 		return false;
 	}
@@ -7883,6 +7883,8 @@ void Board::DrawDebugObjectRects(Graphics* g)
 		Plant* aPlant = nullptr;
 		while (IteratePlants(aPlant))
 		{
+			if (aPlant->mBurnedCounter != -1)	continue;
+
 			Rect aRect = aPlant->GetPlantRect();
 			g->SetColor(Color(0, 255, 0));
 			g->DrawRect(aRect);
@@ -7900,6 +7902,34 @@ void Board::DrawDebugObjectRects(Graphics* g)
 				g->SetColor(Color(255, 0, 128));
 				g->DrawRect(aSecondaryRect);
 			}
+
+			if (aPlant->mSeedType == SeedType::SEED_CHERRYBOMB)
+			{
+				g->SetColor(Color(255, 255, 0));
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 115, 2 * PI * 115);
+			}
+			else if (aPlant->mSeedType == SeedType::SEED_EXPLODE_O_NUT)
+			{
+				g->SetColor(Color(255, 255, 0));
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 90, 2 * PI * 90);
+			}
+			else if (aPlant->mSeedType == SeedType::SEED_DOOMSHROOM)
+			{
+				g->SetColor(Color(255, 255, 0));
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 250, 2 * PI * 250);
+			}
+			else if (aPlant->mSeedType == SeedType::SEED_SCAREDYSHROOM)
+			{
+				g->SetColor(Color(255, 255, 0));
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40.0f, 80.0f, 120.0f, 2 * PI * 80.0f);
+			}
+			else if (aPlant->mSeedType == SeedType::SEED_MAGNETSHROOM)
+			{
+				g->SetColor(Color(255, 255, 0));
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 230.0f, 270.0f, 2 * PI * 270.0f);
+				g->SetColor(Color(255, 255, 0, 128));
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 280.0f, 320.0f, 2 * PI * 320.0f);
+			}
 		}
 		Zombie* aZombie = nullptr;
 		while (IterateZombies(aZombie))
@@ -7913,6 +7943,18 @@ void Board::DrawDebugObjectRects(Graphics* g)
 				Rect aAttackRect = aZombie->GetZombieAttackRect();
 				g->SetColor(Color(255, 0, 0));
 				g->DrawRect(aAttackRect);
+
+				if (aZombie->mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX && aZombie->mZombiePhase != ZombiePhase::PHASE_ZOMBIE_NORMAL)
+				{
+					if (!aZombie->mMindControlled)
+					{
+						g->SetColor(Color(255, 255, 0));
+						g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 90, 2 * PI * 90);
+					}
+
+					g->SetColor(Color(255, 255, 0, 128));
+					g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 115, 2 * PI * 115);
+				}
 			}
 		}
 		LawnMower* aLawnMower = nullptr;
@@ -10449,6 +10491,21 @@ bool GetCircleRectOverlap(int theCircleX, int theCircleY, int theRadius, const R
 	{
 		return dy <= theRadius;
 	}
+}
+
+bool GetOvalRectOverlap(int theOvalX, int theOvalY, int theRadiusX, int theRadiusY, const Rect& theRect)
+{
+	int closeX = max(theRect.mX, min(theOvalX, theRect.mX + theRect.mWidth));
+	int closeY = max(theRect.mY, min(theOvalY, theRect.mY + theRect.mHeight));
+
+
+	int dx = closeX - theOvalX;
+	int dy = closeY - theOvalY;
+
+	double normalX = (double)dx / theRadiusX;
+	double normalY = (double)dy / theRadiusY;
+
+	return (normalX * normalX + normalY * normalY) <= 1.0f;
 }
 
 //0x41C8F0

@@ -70,6 +70,7 @@ void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, in
 	mCobTargetRow = 0;
 	mTargetZombieID = ZombieID::ZOMBIEID_NULL;
 	mOnHighGround = mBoard->mGridSquareType[aGridX][theRow] == GridSquareType::GRIDSQUARE_HIGH_GROUND;
+	mRad = 0.0f;
 	if (mBoard->StageHasRoof())
 	{
 		mShadowY -= 12.0f;
@@ -230,7 +231,7 @@ Plant* Projectile::FindCollisionTargetPlant()
 			{
 				Plant* aPlant2 = mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_EATING_ORDER);
 				if (aPlant2 && (aPlant2->mSeedType == SeedType::SEED_PUFFSHROOM ||
-					aPlant2->mSeedType == SeedType::SEED_SUNSHROOM ||
+					aPlant2->mSeedType == SeedType::SEED_SUNSHROOM && aPlant->mState != PlantState::STATE_SUNSHROOM_BIG ||
 					aPlant2->mSeedType == SeedType::SEED_POTATOMINE ||
 					aPlant2->mSeedType == SeedType::SEED_SPIKEWEED ||
 					aPlant2->mSeedType == SeedType::SEED_SPIKEROCK ||
@@ -634,8 +635,16 @@ void Projectile::DoSplashDamage(Zombie* theZombie)
 //0x46D490
 void Projectile::UpdateLobMotion()
 {
-	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG && mPosZ < -700.0f)
+	float displaceX = -700.0f;
+
+	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG && !FloatApproxEqual(mRad, 0.0f))
 	{
+		displaceX /= sin(mRad);
+	}
+
+	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG && mPosZ < displaceX)
+	{
+		mVelX = 0.001f;
 		mVelZ = 8.0f;
 		mRow = mCobTargetRow;
 		mPosX = mCobTargetX;
@@ -1526,9 +1535,34 @@ void Projectile::DrawShadow(Graphics* g)
 		aScale *= 200.0f / (aHeight + 200.0f);
 	}
 
-	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) {
-		if (mVelZ > 0)	g->DrawImageF(IMAGE_COBCANNON_TARGET_SHADOW, aOffsetX - 15, (mShadowY - mPosY + aOffsetY) - 37);
-		else return;
+	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) 
+	{
+		float aShadowX = mCobTargetX;
+		float aShadowY = mBoard->GridToPixelY(mBoard->PixelToGridXKeepOnBoard(mCobTargetX, 0), mCobTargetRow);
+
+		float aGroundZ = 80.0f;
+		if (mProjectileType == ProjectileType::PROJECTILE_COBBIG)
+		{
+			aGroundZ = -40.0f;
+		}
+		int aGridX = mBoard->PixelToGridXKeepOnBoard(mX, mY);
+		bool isHighGround = false;
+		if (mBoard->mGridSquareType[aGridX][mRow] == GridSquareType::GRIDSQUARE_HIGH_GROUND)
+		{
+			aGroundZ -= HIGH_GROUND_HEIGHT;
+		}
+
+		g->PushState();
+		g->mTransX -= mX;
+		g->mTransY -= mY;
+		g->SetColorizeImages(true);
+		g->SetColor(Color::White);
+		if (mVelZ < 0)
+			g->mColor.mAlpha = 255 * TodAnimateCurveFloatTime(0, -GetProjectileRect().mHeight - (mBoard->StageHas6Rows() || mBoard->StageHasRoof() ? 80.0f : 100.0f) - Sexy::IMAGE_REANIM_COBCANNON_COB->GetHeight(), mPosZ, 0.0f, 1.0f, TodCurves::CURVE_LINEAR);
+		else if (mVelZ > 0)
+			g->mColor.mAlpha = 255 * TodAnimateCurveFloatTime(-GetProjectileRect().mHeight - (mBoard->StageHas6Rows() || mBoard->StageHasRoof() ? 80.0f : 100.0f) - Sexy::IMAGE_REANIM_COBCANNON_COB->GetHeight(), aGroundZ, mPosZ, 1.0f, 0.0f, TodCurves::CURVE_LINEAR);
+		g->DrawImageF(IMAGE_COBCANNON_TARGET_SHADOW, aShadowX - 15.0f + 57.0f, aShadowY - 37.0f + (mBoard->StageHas6Rows() || mBoard->StageHasRoof() ? 80.0f : 100.0f));
+		g->PopState();
 	}
 
 	TodDrawImageCelScaledF(g, IMAGE_PEA_SHADOWS, aOffsetX, (mShadowY - mPosY + aOffsetY), aCelCol, 0, aScale * aStretch, aScale);
@@ -1636,4 +1670,14 @@ ProjectileDefinition& Projectile::GetProjectileDef()
 	TOD_ASSERT(aProjectileDef.mProjectileType == mProjectileType);
 
 	return aProjectileDef;
+}
+
+void Projectile::OverrideAngle(float theAngle)
+{
+	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG)
+	{
+		mRotation = PI / 2;
+	}
+
+	mRotation += theAngle;
 }

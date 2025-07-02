@@ -1108,6 +1108,8 @@ void CutScene::CancelIntro()
 
 		if (mApp->IsFinalBossLevel())
 		{
+			if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
+			if (!mApp->mBoard) mApp->mBoard = mBoard;
 			mApp->mMusic->StartGameMusic();
 		}
 

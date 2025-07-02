@@ -201,6 +201,7 @@ public:
     int                     mPoweredCounter;
     ReanimationID           mSpecialReanimID;
     int                     mLastStandFlagPlaced;
+    float                   mRad;
 
 public:
     Plant();

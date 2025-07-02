@@ -6,6 +6,7 @@
 #include "Color.h"
 #include "Image.h"
 #include "TriVertex.h"
+#include "../GameConstants.h"
 
 namespace Sexy
 {
@@ -175,6 +176,9 @@ public:
 	int						GetWordWrappedHeight(int theWidth, const SexyString& theLine, int theLineSpacing = -1, int *theMaxWidth = NULL);
 
 	bool					Is3D() { return mIs3D; }
+
+	void					DrawCircle(float cx, float cy, float radius, int segments);
+	void					DrawOval(float cx, float cy, float radiusX, float radiusY, int segments);
 };
 
 class GraphicsAutoState

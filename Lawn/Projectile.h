@@ -59,6 +59,7 @@ public:
     Sexy::Color             mExtraAdditiveColor;
     bool                    mEnableExtraAdditiveDraw;
     FilterEffect            mFilterEffect;
+    float                   mRad;
 
 public:
     Projectile();
@@ -88,6 +89,7 @@ public:
     void                    PlayImpactSound(Zombie* theZombie);
     bool                    IsZombieHitBySplash(Zombie* theZombie);
     bool                    PeaAboutToHitTorchwood();
+    void                    OverrideAngle(float theAngle);
 
 };
 

@@ -206,6 +206,8 @@ public:
     bool                            mEnableExtraOverlayDraw;
     float                           mLastFrameTime;
     FilterEffect                    mFilterEffect;
+    float                           mOffsetX;
+    float                           mOffsetY;
 
 public:
     Reanimation();

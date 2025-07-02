@@ -45,7 +45,6 @@ public:
 
 	virtual void Update();
 	virtual void Draw(Graphics* g);
-	void DrawCircle(Graphics* g, float cx, float cy, float radius, int segments);
 	virtual void Resize(int theX, int theY, int theWidth, int theHeight);
 	virtual void MouseUp(int x, int y, int theClickCount);
 	virtual void MouseDown(int x, int y, int theClickCount);

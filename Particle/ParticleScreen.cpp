@@ -196,7 +196,7 @@ void ParticleScreen::Draw(Graphics* g) {
 			{
 				g->SetColor(Color(255, 255, 255));
 				float aRadius1 = FloatTrackEvaluate(def->mEmitterRadius, emitter->mSystemTimeValue, 1);
-				DrawCircle(g, mWidth / 2, mHeight / 2, aRadius1, (int)(2 * PI * aRadius1));
+				g->DrawCircle(mWidth / 2, mHeight / 2, aRadius1, (int)(2 * PI * aRadius1));
 			}
 			else if (def->mEmitterType == EmitterType::EMITTER_BOX || def->mEmitterType == EmitterType::EMITTER_BOX_PATH)
 			{
@@ -281,24 +281,4 @@ void ParticleScreen::KeyDown(KeyCode theKey)
 
 	if (theKey == KeyCode::KEYCODE_NEXT || theKey == KeyCode::KEYCODE_PRIOR)
 		ResetParticle();
-}
-
-void ParticleScreen::DrawCircle(Graphics* g, float cx, float cy, float radius, int segments)
-{
-	double angleStep = 2.0 * 3.14159265358979323846 / segments;
-
-	float prevX = cx + radius * cos(0);
-	float prevY = cy + radius * sin(0);
-
-	for (int i = 1; i <= segments; i++)
-	{
-		double angle = i * angleStep;
-		float currX = cx + radius * cos(angle);
-		float currY = cy + radius * sin(angle);
-
-		g->DrawLine(static_cast<int>(prevX), static_cast<int>(prevY), static_cast<int>(currX), static_cast<int>(currY));
-
-		prevX = currX;
-		prevY = currY;
-	}
 }

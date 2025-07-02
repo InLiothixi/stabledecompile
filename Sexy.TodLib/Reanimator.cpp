@@ -330,6 +330,8 @@ Reanimation::Reanimation()
 	mTrackInstances = nullptr;
 	mFilterEffect = FilterEffect::FILTER_EFFECT_NONE;
 	mReanimationType = ReanimationType::REANIM_NONE;
+	mOffsetX = 0.0f;
+	mOffsetY = 0.0f;
 }
 
 //0x471A20
@@ -891,7 +893,9 @@ void Reanimation::GetFrameTime(ReanimatorFrameTime* theFrameTime)
 		theFrameTime->mAnimFrameAfterInt = theFrameTime->mAnimFrameBeforeInt + 1;  // 后一整数帧等于前一整数帧的后一帧
 	TOD_ASSERT(theFrameTime->mAnimFrameBeforeInt >= 0 && theFrameTime->mAnimFrameAfterInt < mDefinition->mTracks.tracks[0].mTransforms.count);
 }
-
+#include "../SexyAppFramework/DDInterface.h"
+#include "../SexyAppFramework/D3DInterface.h"
+#include "../SexyAppFramework/DDImage.h"
 //0x472E40
 void Reanimation::DrawRenderGroup(Graphics* g, int theRenderGroup)
 {
@@ -912,7 +916,7 @@ void Reanimation::DrawRenderGroup(Graphics* g, int theRenderGroup)
 				aTriangleGroup.DrawGroup(g);
 				AttachmentDraw(aTrackInstance->mAttachmentID, g, aTrackDrawn);
 			}
-			
+
 			if (!aTrackInstance->mForceDontRender)
 				aTrackDrawn = DrawTrack(g, aTrackIndex, theRenderGroup, &aTriangleGroup);
 
@@ -1099,8 +1103,8 @@ void Reanimation::SetShakeOverride(const char* theTrackName, float theShakeAmoun
 
 void Reanimation::SetPosition(float theX, float theY) 
 { 
-	mOverlayMatrix.m02 = theX;
-	mOverlayMatrix.m12 = theY;
+	mOverlayMatrix.m02 = theX + mOffsetX;
+	mOverlayMatrix.m12 = theY + mOffsetY;
 }
 
 void Reanimation::OverrideScale(float theScaleX, float theScaleY)
