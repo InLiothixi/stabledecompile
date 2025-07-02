@@ -789,8 +789,8 @@ int Plant::GetDamageRangeFlags(PlantWeapon thePlantWeapon)
     case SeedType::SEED_CATTAIL:
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_BEEHIVE:
-        return 11;
 #endif
+        return 11;
     case SeedType::SEED_TANGLEKELP:
         return 5;
     case SeedType::SEED_GIANT_WALLNUT:
