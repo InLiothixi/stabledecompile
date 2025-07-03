@@ -66,6 +66,7 @@ public:
 	DDImage(DDInterface* theDDInterface);	
 	virtual ~DDImage();		
 
+	bool					CopySurfaceToMemoryImage(MemoryImage* destImage);
 	virtual bool			LockSurface();
 	virtual bool			UnlockSurface();
 

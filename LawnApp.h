@@ -143,7 +143,7 @@ public:
 	bool							mFlowersPlucked[3];
 	PaStream*						mPortAudioStream;
 	float							mVoiceVolume;
-	DDImage*						mBoardCamera;
+	MemoryImage*					mBoardCamera;
 	//lua_State*						L;
 
 	static							Rect gBoardBounds;

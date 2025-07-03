@@ -6350,6 +6350,8 @@ void Board::Update()
 	mCutScene->Update();
 	UpdateMousePosition();
 
+	TodScaleRotateTransformMatrix(mCameraTranform, 0.0f, 0.0f, 2 * PI * 0.001f * mMainCounter, 1.0f, 1.0f);
+
 #ifdef _ALLOW_SWIPE
 	if (mIsDown)
 	{

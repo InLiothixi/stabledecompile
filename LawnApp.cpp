@@ -57,6 +57,7 @@
 #include <lua.hpp>
 
 #include "Particle/ParticleScreen.h"
+#include "SexyAppFramework/D3DInterface.h"
 
 bool gIsPartnerBuild = false;
 bool gSlowMo = false;  //0x6A9EAA
@@ -1982,13 +1983,15 @@ void LawnApp::LoadingThreadProc()
 		mReanimatorCache = new ReanimatorCache();
 		mReanimatorCache->ReanimatorCacheInitialize();
 
-		mBoardCamera = new DDImage(mDDInterface);
-		mBoardCamera->Create(BOARD_WIDTH, BOARD_HEIGHT);
-		mBoardCamera->SetImageMode(false, false);
-		mBoardCamera->SetVolatile(true);
-		mBoardCamera->mPurgeBits = false;
-		mBoardCamera->mWantDDSurface = true;
-		mBoardCamera->PurgeBits();
+		mBoardCamera = new MemoryImage();
+		mBoardCamera->mWidth = BOARD_WIDTH;
+		mBoardCamera->mHeight = BOARD_HEIGHT;
+		int aNumBits = BOARD_WIDTH * BOARD_HEIGHT;
+		mBoardCamera->mBits = new unsigned long[aNumBits + 1];
+		mBoardCamera->mHasTrans = true;
+		mBoardCamera->mHasAlpha = true;
+		memset(mBoardCamera->mBits, 0, aNumBits * 4);
+		mBoardCamera->mBits[aNumBits] = Sexy::MEMORYCHECK_ID;
 	}
 
 	TodFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));
@@ -4038,24 +4041,18 @@ bool LawnApp::IsLastStandEndless(GameMode theGameMode)
 	return aLevel >= 0 && aLevel <= 4;
 }
 
-void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera) {
-	LPDIRECTDRAWSURFACE aSurface = mDDInterface->mDrawSurface;
+void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera) 
+{
+	DDImage* screen = mDDInterface->GetScreenImage();
+
+	LPDIRECTDRAWSURFACE oldDrawSurface = mDDInterface->mDrawSurface;
 	mDDInterface->mDrawSurface = NULL;
-	DDImage anImage(mDDInterface);
-	anImage.SetSurface(aSurface);
-	anImage.GetBits();
 
-	Graphics gGameCam(mBoardCamera);
-	gGameCam.SetFastStretch(true);
-	gGameCam.SetLinearBlend(false);
-	gGameCam.DrawImage(&anImage, 0, 0);
+	screen->CopySurfaceToMemoryImage(mBoardCamera);
 
-	anImage.PurgeBits();
-	anImage.DeleteDDSurface();
-	mDDInterface->mDrawSurface = aSurface;
+	mDDInterface->mDrawSurface = oldDrawSurface;
 
 	Image* theImage = mBoardCamera;
-
 	if (theFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
 		theImage = FilterEffectGetImage(mBoardCamera, theFilterEffect);
 	}
