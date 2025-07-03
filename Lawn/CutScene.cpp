@@ -1041,9 +1041,11 @@ void CutScene::CancelIntro()
 	mApp->mWidgetManager->SetFocus(mBoard);
 	PreloadResources();
 	PlaceStreetZombies();
+
 	if (mCutsceneTime < mCrazyDaveTime + TimePanRightEnd)
 	{
 		mCutsceneTime = TimeSeedChoserSlideOnEnd + mCrazyDaveTime - 20;
+
 		if (!IsNonScrollingCutscene())
 		{
 			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET, 0);
@@ -1109,7 +1111,7 @@ void CutScene::CancelIntro()
 		if (mApp->IsFinalBossLevel())
 		{
 			if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
-			if (!mApp->mBoard) mApp->mBoard = mBoard;
+			if (!mApp->mMusic->mApp->mBoard) mApp->mMusic->mApp->mBoard = mBoard;
 			mApp->mMusic->StartGameMusic();
 		}
 
@@ -1418,7 +1420,7 @@ void CutScene::AnimateBoard()
 	if (mApp->IsFinalBossLevel() && mCutsceneTime == aTimeSeedBankOnStart)
 	{
 		if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
-		if (!mApp->mBoard) mApp->mBoard = mBoard;
+		if (!mApp->mMusic->mApp->mBoard) mApp->mMusic->mApp->mBoard = mBoard;
 		mApp->mMusic->StartGameMusic();
 	}
 

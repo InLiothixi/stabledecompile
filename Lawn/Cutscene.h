@@ -30,7 +30,6 @@ public:
     bool                        mUpsellHideBoard;                 //+0x40 【推销隐藏关卡界面】
     ChallengeScreen*            mUpsellChallengeScreen;           //+0x44 【推销插入的小游戏界面】
     bool                        mPreUpdatingBoard;                //+0x48 【场景布置阶段的关卡预更新】
-
 public:
     CutScene();
     ~CutScene();

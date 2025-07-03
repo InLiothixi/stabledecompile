@@ -271,6 +271,9 @@ void ZenGarden::ZenGardenInitLevel(bool theJustSwitchingGardens)
 
     mBoard->mChallenge->mChallengeStateCounter = 3000;
     AddStinky();
+
+    if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
+    if (!mApp->mMusic->mApp->mBoard) mApp->mMusic->mApp->mBoard = mBoard;
     mApp->mMusic->StartGameMusic();
 }
 
