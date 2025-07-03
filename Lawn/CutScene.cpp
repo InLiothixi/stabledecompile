@@ -1417,6 +1417,8 @@ void CutScene::AnimateBoard()
 	// ====================================================================================================
 	if (mApp->IsFinalBossLevel() && mCutsceneTime == aTimeSeedBankOnStart)
 	{
+		if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
+		if (!mApp->mBoard) mApp->mBoard = mBoard;
 		mApp->mMusic->StartGameMusic();
 	}
 

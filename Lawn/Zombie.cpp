@@ -3275,9 +3275,10 @@ void Zombie::UpdateZombieDancer()
         {
             if (mPhaseCounter != 0)
                 return;
-
+            
             mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
             PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 20, 18.0f);
+            PickRandomSpeed();
             UpdateAnimSpeed();
         }
 
@@ -3333,6 +3334,7 @@ void Zombie::UpdateZombieRiseFromGrave()
 
     if (mPhaseCounter == 0)
     {
+        UpdateAnimSpeed();
         mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;
 
         if (IsOnHighGround())

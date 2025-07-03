@@ -1912,8 +1912,10 @@ void Board::StartLevel()
 		mApp->IsFinalBossLevel())
 		return;
 
-	if (mApp->mMusic->mApp)
-		mApp->mMusic->StartGameMusic();
+
+	if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
+	if (!mApp->mBoard) mApp->mBoard = this;
+	mApp->mMusic->StartGameMusic();
 }
 
 //0x40BF10
