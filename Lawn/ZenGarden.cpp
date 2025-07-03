@@ -273,6 +273,7 @@ void ZenGarden::ZenGardenInitLevel(bool theJustSwitchingGardens)
     AddStinky();
 
     if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
+    if (!mApp->mMusic->mApp) mApp->mMusic->mApp = mApp;
     if (!mApp->mMusic->mApp->mBoard) mApp->mMusic->mApp->mBoard = mBoard;
     mApp->mMusic->StartGameMusic();
 }

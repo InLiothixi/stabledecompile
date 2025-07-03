@@ -1914,6 +1914,7 @@ void Board::StartLevel()
 
 
 	if (!mApp->mMusic->mMusicInterface)	mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
+	if (!mApp->mMusic->mApp) mApp->mMusic->mApp = mApp;
 	if (!mApp->mMusic->mApp->mBoard) mApp->mMusic->mApp->mBoard = this;
 	mApp->mMusic->StartGameMusic();
 }
