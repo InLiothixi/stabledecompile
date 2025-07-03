@@ -183,6 +183,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     PickRandomSpeed();
     mBodyHealth = 270;
     mHeadParticleID = ParticleSystemID::PARTICLESYSTEMID_NULL;
+    mSquashHeadColumn = -1;
 
     const ZombieDefinition& aZombieDef = GetZombieDefinition(mZombieType);
     RenderLayer aRenderLayer = RenderLayer::RENDER_LAYER_ZOMBIE;
@@ -2740,11 +2741,33 @@ void Zombie::UpdateZombieSquashHead()
         aHeadReanim->mRenderOrder = mRenderOrder + 1;
         aHeadReanim->SetPosition(mPosX + 6.0f, mPosY - 21.0f);
 
+        if (mMindControlled)
+        {
+            aHeadReanim->mColorOverride = ZOMBIE_MINDCONTROLLED_COLOR;
+            aHeadReanim->mExtraAdditiveColor = aHeadReanim->mColorOverride;
+            aHeadReanim->mEnableExtraAdditiveDraw = true;
+        }
+        else if (mChilledCounter > 0 || mIceTrapCounter > 0)
+        {
+            aHeadReanim->mColorOverride = Color(75, 75, 255);
+            aHeadReanim->mExtraAdditiveColor = aHeadReanim->mColorOverride;
+            aHeadReanim->mEnableExtraAdditiveDraw = true;
+        }
+        else
+        {
+            aHeadReanim->mColorOverride = Color::White;
+            aHeadReanim->mExtraAdditiveColor = aHeadReanim->mColorOverride;
+            aHeadReanim->mEnableExtraAdditiveDraw = false;
+        }
+
         Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
         ReanimatorTrackInstance* aTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
         AttachmentDetach(aTrackInstance->mAttachmentID);
         aHeadReanim->OverrideScale(0.75f, 0.75f);
+        aHeadReanim->mOffsetX = 80;
+        aHeadReanim->mOverlayMatrix.m00 = -0.75;
         aHeadReanim->mOverlayMatrix.m10 = 0.0f;
+        aHeadReanim->mOverlayMatrix.m01 = 0.0f;
 
         mZombiePhase = ZombiePhase::PHASE_SQUASH_RISING;
         mPhaseCounter = 95;
@@ -2765,8 +2788,24 @@ void Zombie::UpdateZombieSquashHead()
                 aDestX += 90.0f * mScaleZombie;
             }
         }
+        else
+        {
+            if (mSquashHeadColumn == -1)
+            {
+                Plant* aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW);
+                if (aPlant)
+                {
+                    mSquashHeadColumn = aPlant->mPlantCol;
+                }
+                aDestX = mBoard->GridToPixelX(mSquashHeadColumn, mRow);
+            }
+            else
+            {
+                aDestX = mBoard->GridToPixelX(mSquashHeadColumn, mRow);
+            }
+        }
 
-        int aPosX = TodAnimateCurve(50, 20, mPhaseCounter, 0, aDestX - mPosX, TodCurves::CURVE_EASE_IN_OUT);
+        int aPosX = TodAnimateCurve(50, 20, mPhaseCounter, 0, aDestX - 20 - mPosX, TodCurves::CURVE_EASE_IN_OUT);
         int aPosY = TodAnimateCurve(50, 20, mPhaseCounter, 0, -20, TodCurves::CURVE_EASE_IN_OUT);
 
         Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
@@ -2797,15 +2836,24 @@ void Zombie::UpdateZombieSquashHead()
                 aDestX += 90.0f * mScaleZombie;
             }
         }
+        else
+        {
+            if (mSquashHeadColumn != -1)
+            {
+                aDestX = mBoard->GridToPixelX(mSquashHeadColumn, mRow);
+            }
+        }
 
         Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-        aHeadReanim->SetPosition(mPosX + 6.0f + aDestX - mPosX, mPosY - 21.0f + aPosY);
+
+        float squashX = mPosX + 6.0f + aDestX - 20 - mPosX;
+        aHeadReanim->SetPosition(squashX, mPosY - 21.0f + aPosY);
         
         if (mPhaseCounter == 2)
         {
             if (mMindControlled)  // 魅惑修复Di
             {
-                Rect aAttackRect(aDestX - 73, mPosY + 4, 65, 90);  // 具体数值未实测，待定
+                Rect aAttackRect(aDestX + 20 - 73, mPosY + 4, 65, 90);  // 具体数值未实测，待定
 
                 Zombie* aZombie = nullptr;
                 while (mBoard->IterateZombies(aZombie))
@@ -2826,7 +2874,7 @@ void Zombie::UpdateZombieSquashHead()
             }
             else
             {
-                SquishAllInSquare(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow, ZombieAttackType::ATTACKTYPE_CHEW);
+                SquishAllInSquare(mBoard->PixelToGridXKeepOnBoard(squashX + 20, mY), mRow, ZombieAttackType::ATTACKTYPE_CHEW);
             }
         }
 
@@ -7402,6 +7450,15 @@ void Zombie::SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackTyp
                 continue;
             }
 
+            if (aPlant->mSeedType == SeedType::SEED_COBCANNON)
+            {
+                Plant* aNextPlant = mBoard->GetTopPlantAt(theX + 1, theY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
+                if (aNextPlant && !aNextPlant->mSquished)
+                {
+                    SquishAllInSquare(theX + 1, theY, theAttackType);
+                }
+            }
+
             if (aPlant->mSeedType != SeedType::SEED_SPIKEROCK 
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
                 && aPlant->mSeedType != SeedType::SEED_STINGER
@@ -7414,7 +7471,8 @@ void Zombie::SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackTyp
                 int theNextGrid = theX + (IsWalkingBackwards() ? 1 : -1);
 
                 Plant* aNextPlant = mBoard->GetTopPlantAt(theNextGrid, theY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
-                if (aNextPlant && aNextPlant == aPlant && !aNextPlant->mSquished && aNextPlant->mSeedType == SeedType::SEED_COBCANNON) {
+                if (aNextPlant && aNextPlant == aPlant && !aNextPlant->mSquished && aNextPlant->mSeedType == SeedType::SEED_COBCANNON) 
+                {
                     SquishAllInSquare(theNextGrid, theY, theAttackType);
                 }
             }
@@ -9099,11 +9157,6 @@ int Zombie::TakeHelmDamage(int theDamage, unsigned int theDamageFlags)
     {
         ApplyChill(false);
     }
-    if (mHelmHealth == 0)
-    {
-        DropHelm(theDamageFlags);
-        return aDamageRemaining;
-    }
 
     int aDamageIndexAfterDamage = GetHelmDamageIndex();
     if (aDamageIndexBeforeDamage != aDamageIndexAfterDamage)
@@ -9177,6 +9230,13 @@ int Zombie::TakeHelmDamage(int theDamage, unsigned int theDamageFlags)
             aBodyReanim->SetImageOverride("zombie_football_helmet", IMAGE_REANIM_ZOMBIE_BLACK_FOOTBALL_HELMET3);
         }
     }
+
+    if (mHelmHealth == 0)
+    {
+        DropHelm(theDamageFlags);
+        return aDamageRemaining;
+    }
+
     return aDamageRemaining;
 }
 
@@ -10134,7 +10194,7 @@ void Zombie::ApplyBurn()
 
     int currentHealth = mBodyHealth + mHelmHealth + mShieldHealth + mFlyingHealth;
 
-    if (currentHealth >= 1800 || mZombieType == ZombieType::ZOMBIE_BOSS)
+    if (currentHealth >= 1800 && mZombieType != ZombieType::ZOMBIE_TALLNUT_HEAD || mZombieType == ZombieType::ZOMBIE_BOSS)
     {
         TakeDamage(1800, 18U);
         return;
@@ -10518,6 +10578,11 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
         DropPole();
         DropZombiePole();
         theBlendTime = 0;
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_SQUASH_HEAD)
+    {
+        mApp->RemoveReanimation(mSpecialHeadReanimID);
     }
 
     mVelX = 0.0f;

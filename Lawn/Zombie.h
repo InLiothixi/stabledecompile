@@ -175,6 +175,7 @@ public:
     float                           mYampolineVelZ;
     FilterEffect                    mButterFilterEffect;
     ParticleSystemID                mHeadParticleID;
+    int                             mSquashHeadColumn;
 
 public:
     Zombie();

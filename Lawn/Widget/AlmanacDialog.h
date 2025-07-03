@@ -6,7 +6,7 @@
 #include "ScrollbarWidget.h"
 
 #define NUM_ALMANAC_SEEDS NUM_SEEDS_IN_CHOOSER
-#define NUM_ALMANAC_ZOMBIES 26
+#define NUM_ALMANAC_ZOMBIES 26 //NUM_ZOMBIE_TYPES - 1 // 26
 
 constexpr const float			ALMANAC_PLANT_POSITION_X		= 578.0f;
 constexpr const float			ALMANAC_PLANT_POSITION_Y		= 140.0f;

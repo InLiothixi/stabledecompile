@@ -6,10 +6,10 @@
 #include "../../SexyAppFramework/Color.h"
 #include "../../Sexy.TodLib/Reanimator.h"
 #include "../../SexyAppFramework/MemoryImage.h"
-#ifdef DO_FIX_BUGS
 #include "../../Resources.h"
-#endif
 #include "../../Sexy.TodLib/FilterEffect.h"
+#include "../../Sexy.TodLib/Attachment.h"
+#include "../../Sexy.TodLib/EffectSystem.h"
 
 //0x46EF00
 void ReanimatorCache::UpdateReanimationForVariation(Reanimation* theReanim, DrawVariation theDrawVariation, DrawFilterVariation theFilterVariation)
@@ -390,7 +390,78 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 	TOD_ASSERT(aZombieDef.mReanimationType != ReanimationType::REANIM_NONE);
 
 	float aPosX = 40.0f, aPosY = 40.0f;
-	if (aZombieDef.mReanimationType == ReanimationType::REANIM_ZOMBIE)
+	if (theZombieType == ZombieType::ZOMBIE_PEA_HEAD || theZombieType == ZombieType::ZOMBIE_GATLING_HEAD || theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD)
+	{
+		Reanimation* aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
+		aReanim->mIsAttachment = true;
+		aReanim->SetFramesForLayer("anim_idle");
+		Zombie::SetupReanimLayers(aReanim, aUseZombieType);
+		aReanim->AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+		aReanim->AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+
+		ReanimatorTrackInstance* aTrackInstance = aReanim->GetTrackInstanceByName("anim_head1");
+		aTrackInstance->mImageOverride = IMAGE_BLANK;
+
+		ReanimationType aHeadType;
+
+		if (theZombieType == ZombieType::ZOMBIE_PEA_HEAD)	aHeadType = ReanimationType::REANIM_PEASHOOTER;
+		else if (theZombieType == ZombieType::ZOMBIE_GATLING_HEAD)	aHeadType = ReanimationType::REANIM_GATLINGPEA;
+		else if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD)	aHeadType = ReanimationType::REANIM_SQUASH;
+
+		Reanimation* aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
+		if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD) aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+		else aHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+
+		AttachEffect* aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+		aReanim->mFrameBasePose = 0;
+
+		if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD) TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 55.0f, -15.0f, 0.2f, -0.75f, 0.75f);
+		else TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -5.0f, 0.2f, -1.0f, 1.0f);
+
+		SexyTransform2D aOverlayMatrix;
+		aReanim->GetAttachmentOverlayMatrix(aReanim->FindTrackIndex("anim_head1"), aOverlayMatrix);
+		AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
+
+		aReanim->Draw(&aMemoryGraphics);
+	}
+	else if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD || theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD || theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD)
+	{
+		Reanimation* aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
+		aReanim->mIsAttachment = true;
+		aReanim->SetFramesForLayer("anim_idle");
+		Zombie::SetupReanimLayers(aReanim, aUseZombieType);
+		aReanim->AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+		aReanim->AssignRenderGroupToPrefix("anim_head", RENDER_GROUP_HIDDEN);
+		aReanim->AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+		aReanim->AssignRenderGroupToPrefix("Zombie_tie", RENDER_GROUP_HIDDEN);
+		aReanim->AssignRenderGroupToPrefix("Zombie_zombotany_tie", RENDER_GROUP_NORMAL);
+
+		ReanimatorTrackInstance* aTrackInstance = aReanim->GetTrackInstanceByName("Zombie_zombotany_body");
+		aTrackInstance->mImageOverride = IMAGE_BLANK;
+
+		ReanimationType aHeadType;
+
+		if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD)	aHeadType = ReanimationType::REANIM_WALLNUT;
+		else if (theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD)	aHeadType = ReanimationType::REANIM_TALLNUT;
+		else if (theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD)	aHeadType = ReanimationType::REANIM_JALAPENO;
+
+		Reanimation* aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
+		aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+
+		AttachEffect* aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+		aReanim->mFrameBasePose = 0;
+
+		if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD) TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+		else if (theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD) TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 37.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+		else if (theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD) TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 55.0f, -5.0f, 0.2f, -1.0f, 1.0f);
+
+		SexyTransform2D aOverlayMatrix;
+		aReanim->GetAttachmentOverlayMatrix(aReanim->FindTrackIndex("Zombie_zombotany_body"), aOverlayMatrix);
+		AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
+
+		aReanim->Draw(&aMemoryGraphics);
+	}
+	else if (aZombieDef.mReanimationType == ReanimationType::REANIM_ZOMBIE)
 	{
 		Reanimation aReanim;
 		aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);

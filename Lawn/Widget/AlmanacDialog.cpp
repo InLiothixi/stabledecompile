@@ -719,7 +719,7 @@ bool AlmanacDialog::ZombieIsShown(ZombieType theZombieType)
 		return mApp->CanSpawnYetis() || ZombieHasSilhouette(ZombieType::ZOMBIE_YETI);
 
 	// 对于冒险模式中出现的僵尸
-	if (theZombieType <= ZombieType::ZOMBIE_BOSS)
+	//if (theZombieType <= ZombieType::ZOMBIE_BOSS)
 	{
 		// 冒险模式一周目完成后，图鉴展示所有僵尸
 		if (mApp->HasFinishedAdventure())
@@ -766,8 +766,13 @@ void AlmanacDialog::GetZombiePosition(ZombieType theZombieType, int& x, int& y)
 		x = 192, y = 486;
 	else
 	{
-		x = theZombieType % 5 * 85 + 22;
-		y = theZombieType / 5 * 80 + 86;
+		int theIndex = (int) theZombieType;
+
+		if (theZombieType >= ZombieType::ZOMBIE_BOSS)
+			--theIndex;
+
+		x = theIndex % 5 * 85 + 22;
+		y = theIndex / 5 * 80 + 86;
 	}
 }
 
