@@ -3138,7 +3138,6 @@ ZombieID Zombie::SummonBackupDancer(int theRow, int thePosX)
     int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PARTICLE, theRow, 0);
     mApp->AddTodParticle(aParticleX, aParticleY, aRenderOrder, ParticleEffect::PARTICLE_DANCER_RISE);
     mApp->PlayFoley(FoleyType::FOLEY_GRAVESTONE_RUMBLE);
-    aZombie->mVelX = mVelX;
 
     return mBoard->ZombieGetID(aZombie);
 }
@@ -3246,9 +3245,11 @@ void Zombie::UpdateZombieBackupDancer()
         switch (aDancerPhase)
         {
         case ZombiePhase::PHASE_DANCER_DANCING_LEFT:
+        {
             mZombiePhase = aDancerPhase;
             PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
             break;
+        }
         case ZombiePhase::PHASE_DANCER_WALK_TO_RAISE:
             mZombiePhase = aDancerPhase;
             PlayZombieReanim("anim_armraise", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
@@ -3324,10 +3325,22 @@ void Zombie::UpdateZombieDancer()
             if (mPhaseCounter != 0)
                 return;
             
+            PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
+
+            for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
+            {
+                Zombie* aDancer = mBoard->ZombieTryToGet(mFollowerZombieID[i]);
+
+                if (aDancer && !aDancer->IsDeadOrDying() && !aDancer->IsImmobilizied() && !aDancer->mIsEating)
+                {
+                    aDancer->mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS_HOLD;
+                    aDancer->PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
+                    aDancer->mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
+
+                }
+            }
+
             mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
-            PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 20, 18.0f);
-            PickRandomSpeed();
-            UpdateAnimSpeed();
         }
 
         ZombiePhase aDancerPhase = GetDancerPhase();
@@ -4632,13 +4645,6 @@ void Zombie::UpdateZombieWalking()
                 {
                     aSpeed = 0;
                 }
-
-                if (aLeader != this)
-                {
-                    if (aLeader->ZombieNotWalking())
-                        aSpeed = 0;
-                }
-
 
                 for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
                 {

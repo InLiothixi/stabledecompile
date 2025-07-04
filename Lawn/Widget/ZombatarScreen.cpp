@@ -186,8 +186,12 @@ void ZombatarWidget::ButtonDepress(int theId)
 			mApp->mGameSelector->mSurvivalButton->SetDisabled(false);
 			mApp->mGameSelector->mZenGardenButton->SetDisabled(false);
 			mApp->mGameSelector->mZombatarButton->SetDisabled(false);
+#ifdef _HAS_ACHIEVEMENTS
 			mApp->mGameSelector->mAchievementsButton->SetDisabled(false);
+#endif
+#ifdef _HAS_MORESCREEN 
 			mApp->mGameSelector->mQuickPlayButton->SetDisabled(false);
+#endif
 			break;
 		}
 	}
