@@ -3325,7 +3325,8 @@ void Zombie::UpdateZombieDancer()
             if (mPhaseCounter != 0)
                 return;
             
-            PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
+            mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
+            PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 20, 18.0f);
 
             for (int i = 0; i < NUM_BACKUP_DANCERS; i++)
             {
@@ -3333,14 +3334,11 @@ void Zombie::UpdateZombieDancer()
 
                 if (aDancer && !aDancer->IsDeadOrDying() && !aDancer->IsImmobilizied() && !aDancer->mIsEating)
                 {
-                    aDancer->mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS_HOLD;
-                    aDancer->PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
                     aDancer->mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
+                    aDancer->PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 20, 18.0f);
 
                 }
             }
-
-            mZombiePhase = ZombiePhase::PHASE_DANCER_DANCING_LEFT;
         }
 
         ZombiePhase aDancerPhase = GetDancerPhase();
