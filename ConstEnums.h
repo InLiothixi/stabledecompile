@@ -1080,55 +1080,55 @@ enum SeedChooserState
 };
 enum SeedType
 {
-    SEED_PEASHOOTER = 0,                    // 豌豆射手
-    SEED_SUNFLOWER = 1,                     // 向日葵
-    SEED_CHERRYBOMB = 2,                    // 樱桃炸弹
-    SEED_WALLNUT = 3,                       // 坚果
-    SEED_POTATOMINE = 4,                    // 土豆地雷
-    SEED_SNOWPEA = 5,                       // 寒冰射手
-    SEED_CHOMPER = 6,                       // 大嘴花
-    SEED_REPEATER = 7,                      // 双发射手
-    SEED_PUFFSHROOM = 8,                    // 小喷菇
-    SEED_SUNSHROOM = 9,                     // 阳光菇
-    SEED_FUMESHROOM = 10,                   // 大喷菇
-    SEED_GRAVEBUSTER = 11,                  // 墓碑吞噬者
-    SEED_HYPNOSHROOM = 12,                  // 魅惑菇
-    SEED_SCAREDYSHROOM = 13,                // 胆小菇
-    SEED_ICESHROOM = 14,                    // 寒冰菇
-    SEED_DOOMSHROOM = 15,                   // 毁灭菇
-    SEED_LILYPAD = 16,                      // 睡莲
-    SEED_SQUASH = 17,                       // 窝瓜
-    SEED_THREEPEATER = 18,                  // 三线射手
-    SEED_TANGLEKELP = 19,                   // 缠绕海草
-    SEED_JALAPENO = 20,                     // 火爆辣椒
-    SEED_SPIKEWEED = 21,                    // 地刺
-    SEED_TORCHWOOD = 22,                    // 火炬树桩
-    SEED_TALLNUT = 23,
-    SEED_SEASHROOM = 24,
-    SEED_PLANTERN = 25,
-    SEED_CACTUS = 26,
-    SEED_BLOVER = 27,
-    SEED_SPLITPEA = 28,
-    SEED_STARFRUIT = 29,
-    SEED_PUMPKINSHELL = 30,
-    SEED_MAGNETSHROOM = 31,
-    SEED_CABBAGEPULT = 32,
-    SEED_FLOWERPOT = 33,
-    SEED_KERNELPULT = 34,
-    SEED_INSTANT_COFFEE = 35,
-    SEED_GARLIC = 36,
-    SEED_UMBRELLA = 37,
-    SEED_MARIGOLD = 38,
-    SEED_MELONPULT = 39,
-    SEED_GATLINGPEA = 40,
-    SEED_TWINSUNFLOWER = 41,
-    SEED_GLOOMSHROOM = 42,
-    SEED_CATTAIL = 43,
-    SEED_WINTERMELON = 44,
-    SEED_GOLD_MAGNET = 45,
-    SEED_SPIKEROCK = 46,
-    SEED_COBCANNON = 47,
-    SEED_IMITATER = 48,
+    SEED_PEASHOOTER,
+    SEED_SUNFLOWER,
+    SEED_CHERRYBOMB,
+    SEED_WALLNUT,
+    SEED_POTATOMINE,
+    SEED_SNOWPEA,
+    SEED_CHOMPER,
+    SEED_REPEATER,
+    SEED_PUFFSHROOM,
+    SEED_SUNSHROOM,
+    SEED_FUMESHROOM,
+    SEED_GRAVEBUSTER,
+    SEED_HYPNOSHROOM,
+    SEED_SCAREDYSHROOM,
+    SEED_ICESHROOM,
+    SEED_DOOMSHROOM,
+    SEED_LILYPAD,
+    SEED_SQUASH,
+    SEED_THREEPEATER,
+    SEED_TANGLEKELP,
+    SEED_JALAPENO,
+    SEED_SPIKEWEED,
+    SEED_TORCHWOOD,
+    SEED_TALLNUT,
+    SEED_SEASHROOM,
+    SEED_PLANTERN,
+    SEED_CACTUS,
+    SEED_BLOVER,
+    SEED_SPLITPEA,
+    SEED_STARFRUIT,
+    SEED_PUMPKINSHELL,
+    SEED_MAGNETSHROOM,
+    SEED_CABBAGEPULT,
+    SEED_FLOWERPOT,
+    SEED_KERNELPULT,
+    SEED_INSTANT_COFFEE,
+    SEED_GARLIC,
+    SEED_UMBRELLA,
+    SEED_MARIGOLD,
+    SEED_MELONPULT,
+    SEED_GATLINGPEA,
+    SEED_TWINSUNFLOWER,
+    SEED_GLOOMSHROOM,
+    SEED_CATTAIL,
+    SEED_WINTERMELON,
+    SEED_GOLD_MAGNET,
+    SEED_SPIKEROCK,
+    SEED_COBCANNON,
+    SEED_IMITATER,
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS /* Bloom and Doom Accurate Plant IDs (via Cheat Engine)*/
     SEED_TIMESTOPPER,
     SEED_ICEBERGLETTUCE,

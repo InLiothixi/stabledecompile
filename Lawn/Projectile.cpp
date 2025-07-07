@@ -1558,8 +1558,6 @@ void Projectile::DrawShadow(Graphics* g)
 		g->SetColor(Color::White);
 		if (mVelZ < 0)
 			g->mColor.mAlpha = 255 * TodAnimateCurveFloatTime(0, -GetProjectileRect().mHeight - (mBoard->StageHas6Rows() || mBoard->StageHasRoof() ? 80.0f : 100.0f) - Sexy::IMAGE_REANIM_COBCANNON_COB->GetHeight(), mPosZ, 0.0f, 1.0f, TodCurves::CURVE_LINEAR);
-		else if (mVelZ > 0)
-			g->mColor.mAlpha = 255 * TodAnimateCurveFloatTime(-GetProjectileRect().mHeight - (mBoard->StageHas6Rows() || mBoard->StageHasRoof() ? 80.0f : 100.0f) - Sexy::IMAGE_REANIM_COBCANNON_COB->GetHeight(), aGroundZ, mPosZ, 1.0f, 0.0f, TodCurves::CURVE_LINEAR);
 		g->DrawImageF(IMAGE_COBCANNON_TARGET_SHADOW, aShadowX - 15.0f + 57.0f, aShadowY - 37.0f + (mBoard->StageHas6Rows() || mBoard->StageHasRoof() ? 80.0f : 100.0f));
 		g->PopState();
 	}

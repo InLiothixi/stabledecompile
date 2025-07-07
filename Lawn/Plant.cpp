@@ -205,6 +205,24 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
                 UpdateReanim();
             }
         }
+#else
+        if (mBoard && mBoard->StageHasRoof() && mSeedType == SeedType::SEED_COBCANNON)
+        {
+            if (mPlantCol < 5)
+            {
+                int nextColoumn = mPlantCol + 2;
+                const float x2 = mBoard->GridToPixelX(nextColoumn, mRow);
+                const float y2 = mBoard->GridToPixelY(nextColoumn, mRow);
+                mRad = -atan2(y2 - mY, x2 - mX);
+                float rotatedHeightX = sin(mRad) * aOffsetY;
+                const float offsetX = -cos(mRad) * 15 + rotatedHeightX;
+                const float offsetY = sin(mRad) * 40;
+                aBodyReanim->mOffsetX = offsetX;
+                aBodyReanim->mOffsetY = offsetY;
+                TodScaleRotateTransformMatrix(aBodyReanim->mOverlayMatrix, 0.0f, 0.0f, mRad, 1.0f, 1.0f);
+                UpdateReanim();
+            }
+        }
 #endif
     }
 
