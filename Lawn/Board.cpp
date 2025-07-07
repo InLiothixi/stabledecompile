@@ -286,7 +286,7 @@ bool Board::AreEnemyZombiesOnScreen()
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled)
+		if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled && !aZombie->mDead)
 		{
 			return true;
 		}
@@ -11333,6 +11333,7 @@ int Board::GetKilledlZombiesInRadius(int theRow, int theX, int theY, int theRadi
 				}
 				else
 				{
+					if (aZombie->mBodyHealth - 1800 <= 0)	aZombie->DropAllParticles(true);
 					aZombie->TakeDamage(1800, 18U);
 				}
 

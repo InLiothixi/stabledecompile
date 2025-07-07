@@ -1800,7 +1800,7 @@ void Plant::DoSquashDamage()
 #endif
                 ? -20 : 0))
             {
-                aZombie->TakeDamage(1800, 18U); 
+                aZombie->TakeDamage(1800, aZombie->mInPool ? 18U : 0U); //18U 
 
                /* if (aZombie->CanLoseBodyParts() && aZombie->mHasArm && aZombie->mBodyHealth < 2 * aZombie->mBodyMaxHealth / 3)
                 {

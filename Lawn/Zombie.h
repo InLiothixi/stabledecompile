@@ -418,6 +418,7 @@ public:
     void                            DropPropeller(unsigned int theDamageFlags);
     void                            DropJackInTheBox();
     void                            DropDiggerAxe();
+    void                            DropAllParticles(bool hasBody = false);
 };
 
 class ZombieDefinition

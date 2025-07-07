@@ -91,4 +91,4 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 //#define _HAS_SCORE_SYSTEM
 //#define _HAS_ROOF_SLOPE_ANGLE
 //#define _HAS_HEALTHBAR_TOGGLE
-//#define _PIERCING_CACTUS
+#define _PIERCING_CACTUS

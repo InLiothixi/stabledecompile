@@ -8354,10 +8354,10 @@ bool Zombie::TrySpawnLevelAward()
     int aCenterX = aZombieRect.mX + aZombieRect.mWidth / 2;
     int aCenterY = aZombieRect.mY + aZombieRect.mHeight / 2;
 
-    if (!mBoard->IsSurvivalStageWithRepick() && !mBoard->IsLastStandStageWithRepick())
+    /*if (!mBoard->IsSurvivalStageWithRepick() && !mBoard->IsLastStandStageWithRepick())
     {
         mBoard->RemoveAllZombies();
-    }
+    }*/
 
     CoinType aCoinType;
     if (mApp->IsScaryPotterLevel() && !mBoard->IsFinalScaryPotterStage())
@@ -8506,11 +8506,15 @@ void Zombie::DropLoot()
         mBoard->mKilledYeti = true;
     }
 
-    TrySpawnLevelAward();
+    if (mZombieType == ZombieType::ZOMBIE_BOSS)
+        TrySpawnLevelAward();
+
     if (mDroppedLoot || mBoard->HasLevelAwardDropped() || !mBoard->CanDropLoot() || mZombieType == ZombieType::ZOMBIE_BOSS || mZombieType == ZombieType::ZOMBIE_YETI && mMindControlled)
         return;
 
-    mDroppedLoot = true;
+    if (mZombieType == ZombieType::ZOMBIE_BOSS)
+        mDroppedLoot = true;
+
     int aZombieValue = GetZombieDefinition(mZombieType).mZombieValue;
     if (mApp->IsLittleTroubleLevel() && Rand(4) != 0)
     {
@@ -8659,6 +8663,7 @@ void Zombie::DieNoLoot()
         mBoard->mChallenge->mChallengePoints += points;
     }
 
+    TrySpawnLevelAward();
     StopZombieSound();
     AttachmentDie(mAttachmentID);
     mApp->RemoveReanimation(mBodyReanimID);
@@ -10337,7 +10342,6 @@ void Zombie::ApplyBurn()
         if (mZombieType == ZombieType::ZOMBIE_POGO)
         {
             aCharredPosY += mAltitude;
-            mAltitude = 0;
         }
 
         if (mOnHighGround)
@@ -10378,31 +10382,15 @@ void Zombie::ApplyBurn()
             aCharredReanim->mOverlayMatrix.m02 += 60.0f * aScaleZombie;
         }
 
-        DropFlag();
 
-        if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
-        {
-            DropZombiePole();
-        }
-        else if (mZombieType == ZOMBIE_NEWSPAPER) {
-            DropNewsPaperGlasses();
-        }
-        else if (mZombieType == ZOMBIE_BALLOON) {
-            DropBalloonPropeller();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX && mZombiePhase != ZombiePhase::PHASE_ZOMBIE_NORMAL)
-        {
-            DropJackInTheBox();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_POGO)
+        if (mZombieType == ZombieType::ZOMBIE_POGO)
         {
             PogoBreak(0U);
-            DropPogoGlasses();
         }
-        else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
-        {
-            DropDiggerAxe();
-        }
+
+        if (!mInPool)
+            DropAllParticles();
+        
         DieWithLoot();
     }
 
@@ -11017,30 +11005,7 @@ void Zombie::UpdateMowered()
     Reanimation* aMoweredReanim = mApp->ReanimationTryToGet(mMoweredReanimID);
     if (aMoweredReanim == nullptr || aMoweredReanim->mLoopCount > 0)
     {
-        DropHead(0U);
-        DropFlag();
-        if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER) {
-            DropZombiePole();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_NEWSPAPER) {
-            DropNewsPaperGlasses();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_BALLOON) {
-            DropBalloonPropeller();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX)
-        {
-            DropJackInTheBox();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_POGO)
-        {
-            DropPogoGlasses();
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_DIGGER)
-        {
-            DropDiggerAxe();
-        }
-        DropArm(0U);
+        DropAllParticles();
         DieWithLoot();
     }
 }
@@ -12621,6 +12586,8 @@ void Zombie::SetupWaterTrack(const char* theTrackName)
 
 void Zombie::DropZombiePole()
 {
+    if (mZombieType != ZombieType::ZOMBIE_POLEVAULTER || mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT)   return;
+
     int aRenderOrder = mRenderOrder + 1;
     ZombieDrawPosition aDrawPos;
     GetDrawPos(aDrawPos);
@@ -12670,6 +12637,8 @@ void Zombie::DropZombiePole()
 
 void Zombie::DropNewsPaperGlasses()
 {
+    if (mZombieType != ZombieType::ZOMBIE_NEWSPAPER)   return;
+
     int aRenderOrder = mRenderOrder + 1;
     ZombieDrawPosition aDrawPos;
     GetDrawPos(aDrawPos);
@@ -12688,6 +12657,8 @@ void Zombie::DropNewsPaperGlasses()
 
 void Zombie::DropBalloonPropeller()
 {
+    if (mZombieType != ZombieType::ZOMBIE_BALLOON)   return;
+
     int aRenderOrder = mRenderOrder + 1;
     ZombieDrawPosition aDrawPos;
     GetDrawPos(aDrawPos);
@@ -12725,6 +12696,8 @@ void Zombie::DropBalloonPropeller()
 
 void Zombie::DropPogoGlasses()
 {
+    if (mZombieType != ZombieType::ZOMBIE_POGO)   return;
+
     int aRenderOrder = mRenderOrder + 1;
     ZombieDrawPosition aDrawPos;
     GetDrawPos(aDrawPos);
@@ -12769,6 +12742,8 @@ void Zombie::DropPropeller(unsigned int theDamageFlags)
 
 void Zombie::DropJackInTheBox()
 {
+    if (mZombieType != ZombieType::ZOMBIE_JACK_IN_THE_BOX)   return;
+
     StopZombieSound();
     PickRandomSpeed();
     //mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;
@@ -12809,6 +12784,8 @@ void Zombie::DropJackInTheBox()
 
 void Zombie::DropDiggerAxe()
 {
+    if (mZombieType != ZombieType::ZOMBIE_DIGGER)   return;
+
     int aRenderOrder = mRenderOrder + 1;
     ZombieDrawPosition aDrawPos;
     GetDrawPos(aDrawPos);
@@ -12839,4 +12816,18 @@ void Zombie::DropDiggerAxe()
         OverrideParticleScale(aParticle);
         aParticle->OverrideImage(nullptr, IMAGE_REANIM_ZOMBIE_DIGGER_PICKAXE);
     }
+}
+
+void Zombie::DropAllParticles(bool hasBody)
+{
+    DropJackInTheBox();
+    DropDiggerAxe();
+    DropZombiePole();
+    DropFlag();
+    DropShield(0u);
+    if (hasBody)    DropArm(0u);
+    DropHelm(0u);
+    DropBalloonPropeller();
+    DropPogoGlasses();
+    if (hasBody)    DropHead(0u);
 }
