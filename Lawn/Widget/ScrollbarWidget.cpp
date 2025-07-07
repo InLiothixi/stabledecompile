@@ -89,6 +89,8 @@ bool ScrollbarWidget::isThumbDown() {
 void ScrollbarWidget::DrawThumb(Graphics* g) {
 	int aAlpha = g->mColor.mAlpha;
 
+	g->PushState();
+
 	g->SetColor(mThumbColor); // Base
 	g->mColor.mAlpha = aAlpha;
 	g->DrawLine(mThumbX, mThumbY, mThumbX+mThumbWidth-2, mThumbY); // Top Outer Line Highlight
@@ -126,6 +128,8 @@ void ScrollbarWidget::DrawThumb(Graphics* g) {
 	g->SetColor(mThumbOuterShadow2); // Bottom Right Blend Shadow
 	g->mColor.mAlpha = aAlpha;
 	g->FillRect(mThumbX+mThumbWidth-1, mThumbY+mThumbHeight-1, 1, 1); // Bottom Right Fill Shadow
+
+	g->PopState();
 }
 
 void ScrollbarWidget::DrawScrollBackground(Graphics* g) {

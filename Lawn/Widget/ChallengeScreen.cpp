@@ -12,7 +12,7 @@
 #include "../../Sexy.TodLib/TodStringFile.h"
 #include "../../SexyAppFramework/WidgetManager.h"
 #include "../../GameConstants.h"
-#include "ScrollbarWidget.h"
+#include "ImageScrollbar.h"
 
 ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_SURVIVAL_NORMAL_STAGE_1,              0,   ChallengePage::CHALLENGE_PAGE_SURVIVAL,    0,  0,  _S("[SURVIVAL_DAY_NORMAL]") },
@@ -176,7 +176,7 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 			aPageButton->mVisible = true;
 #endif
 
-#ifdef _HAS_MOBILE_MINIGAMES
+#ifdef _HAS_EXTENDED_MINIGAMES
 		if (thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || aPageIdx == ChallengePage::CHALLENGE_PAGE_PUZZLE))
 			aPageButton->mVisible = true;
 #endif
@@ -219,6 +219,17 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 	mToolTip = new ToolTipWidget();
 	mToolTip->mCenter = true;
 	mToolTip->mVisible = false;
+
+	mScrollbar = new ImageScrollbar(mApp, ScrollMode::SCROLLMODE_VERTICAL);
+	mScrollbar->mOutAlpha = 0xFF;
+	mScrollbar->SetView(14, 91, 771, 476);
+	mScrollbar->Resize(770, 100, IMAGE_SCROLLOVERLAY->GetWidth()/2, IMAGE_SCROLLOVERLAY->GetHeight());
+	mScrollbar->mThumbColor = Color(0x969696);
+	mScrollbar->SetScrollRange(1000);
+	mScrollbar->mBackGroundImage = Sexy::IMAGE_SCROLLBG;
+	mScrollbar->mOverlayImage = Sexy::IMAGE_SCROLLOVERLAY;
+	mScrollbar->mThumbPadX = 8.0f;
+	mScrollbar->mThumbPadY = 8.0f;
 	UpdateButtons();
 	
 	if (mApp->mGameMode != GAMEMODE_UPSELL || mApp->mGameScene != SCENE_LEVEL_INTRO)
@@ -248,6 +259,8 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 			mApp->mPlayerInfo->mHasNewIZombie = false;
 		}
 	}
+
+	UpdateScrollRange();
 }
 
 //0x42E280 & 0x42E2A0
@@ -382,7 +395,7 @@ int ChallengeScreen::MoreTrophiesNeeded(int theChallengeIndex)
 			int aNumTrophies = mApp->GetNumTrophies(aDef.mPage);
 			if (aDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LIMBO_SURVIVAL)
 			{
-				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_VASEBREAKER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
 				{
 					return 1;
 				}
@@ -430,6 +443,29 @@ void ChallengeScreen::UpdateButtons()
 		aButton->mVisible = aDefinition.mPage == mPageIndex;
 		if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
 			aButton->mVisible = false;
+
+		if (aButton->mVisible)
+		{
+			ChallengeDefinition& aChlDef = GetChallengeDefinition(aChallengeMode);
+
+			int aColumn = aChlDef.mCol;
+			int aRow = aChlDef.mRow;
+			if (aChlDef.mPage == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE && aChlDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY)
+			{
+				int newColumn = aChlDef.mCol - 1;
+				aColumn = newColumn % 4;
+				if (newColumn < 0)
+				{
+					aRow--;
+					aColumn = 4;
+				}
+			}
+
+			if (aChlDef.mPage == CHALLENGE_PAGE_CHALLENGE || aChlDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aChlDef.mPage == CHALLENGE_PAGE_PUZZLE)
+				aButton->Resize(38 + aColumn * 155, 93 + aRow * 119 - mScrollbar->mScrollValue, 104, 115);
+			else
+				aButton->Resize(38 + aColumn * 155, 125 + aRow * 145 - mScrollbar->mScrollValue, 104, 115);
+		}
 	}
 	
 
@@ -463,13 +499,23 @@ int ChallengeScreen::AccomplishmentsNeeded(int theChallengeIndex)
 //0x42E920
 void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 {
+	g->PushState();
 	ButtonWidget* aChallengeButton = mChallengeButtons[theChallengeIndex];
+	int aPosX = aChallengeButton->mX;
+	int aPosY = aChallengeButton->mY;
+	g->SetClipRect(mScrollbar->mViewRect);
+
+	if (aPosY + 115 < mScrollbar->mViewRect.mY || aPosY > mScrollbar->mViewRect.mY + mScrollbar->mViewRect.mHeight) 
+	{
+		g->PopState();
+		return;
+	}
+
 	if (aChallengeButton->mVisible)
 	{
 		ChallengeDefinition& aDef = GetChallengeDefinition(theChallengeIndex);
 
-		int aPosX = aChallengeButton->mX;
-		int aPosY = aChallengeButton->mY;
+		
 		if (aChallengeButton->mIsDown)
 		{
 			aPosX++;
@@ -635,7 +681,8 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 			}
 			else if (aRecord > 0)
 			{
-				if (mApp->HasBeatenChallenge(aDef.mChallengeMode))
+				if (mApp->HasBeatenChallenge(aDef.mChallengeMode) &&
+					aDef.mChallengeMode != GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && !(aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_VASEBREAKER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP))
 				{
 					g->DrawImage(Sexy::IMAGE_MINIGAME_TROPHY, aPosX - 6, aPosY - 2);
 				}
@@ -663,6 +710,8 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 			g->DrawImage(Sexy::IMAGE_CHALLENGE_BLANK, aPosX, aPosY);
 		}
 	}
+
+	g->PopState();
 }
 
 //0x42F160
@@ -741,6 +790,39 @@ void ChallengeScreen::Update()
 		mUnlockChallengeIndex = -1;
 	}
 
+	for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++)
+	{
+		ChallengeDefinition aDefinition = GetChallengeDefinition(aChallengeMode);
+		ButtonWidget* aButton = mChallengeButtons[aChallengeMode];
+
+		aButton->mVisible = aDefinition.mPage == mPageIndex;
+		if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
+			aButton->mVisible = false;
+
+		if (aButton->mVisible)
+		{
+			ChallengeDefinition& aChlDef = GetChallengeDefinition(aChallengeMode);
+
+			int aColumn = aChlDef.mCol;
+			int aRow = aChlDef.mRow;
+			if (aChlDef.mPage == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE && aChlDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY)
+			{
+				int newColumn = aChlDef.mCol - 1;
+				aColumn = newColumn % 4;
+				if (newColumn < 0)
+				{
+					aRow--;
+					aColumn = 4;
+				}
+			}
+
+			if (aChlDef.mPage == CHALLENGE_PAGE_CHALLENGE || aChlDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aChlDef.mPage == CHALLENGE_PAGE_PUZZLE)
+				aButton->Resize(38 + aColumn * 155, 93 + aRow * 119 - mScrollbar->mScrollValue, 104, 115);
+			else
+				aButton->Resize(38 + aColumn * 155, 125 + aRow * 145 - mScrollbar->mScrollValue, 104, 115);
+		}
+	}
+
 	MarkDirty();
 }
 
@@ -751,6 +833,7 @@ void ChallengeScreen::AddedToManager(WidgetManager* theWidgetManager)
 	AddWidget(mBackButton);
 	for (ButtonWidget* aButton : mPageButton) AddWidget(aButton);
 	for (ButtonWidget* aButton : mChallengeButtons) AddWidget(aButton);
+	AddWidget(mScrollbar);
 }
 
 //0x42F6B0
@@ -760,6 +843,7 @@ void ChallengeScreen::RemovedFromManager(WidgetManager* theWidgetManager)
 	RemoveWidget(mBackButton);
 	for (ButtonWidget* aButton : mPageButton) RemoveWidget(aButton);
 	for (ButtonWidget* aButton : mChallengeButtons) RemoveWidget(aButton);
+	RemoveWidget(mScrollbar);
 }
 
 //0x42F720
@@ -789,6 +873,7 @@ void ChallengeScreen::ButtonDepress(int theId)
 	{
 		mPageIndex = (ChallengePage)aPageIndex;
 		UpdateButtons();
+		UpdateScrollRange();
 	}
 }
 
@@ -863,7 +948,7 @@ void ChallengeScreen::UpdateToolTip()
 				{
 					aLabel = _S("[ONE_MORE_LAST_STAND_TOOLTIP]");
 				}
-				else if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+				else if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_VASEBREAKER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
 				{
 					aLabel = _S("[COMING_SOON]");
 				}
@@ -877,4 +962,36 @@ void ChallengeScreen::UpdateToolTip()
 	}
 
 	mToolTip->mVisible = false;
+}
+
+void ChallengeScreen::MouseWheel(int theDelta)
+{
+	Widget::MouseWheel(theDelta);
+	mScrollbar->MouseWheel(theDelta);
+}
+
+void ChallengeScreen::UpdateScrollRange()
+{
+	mScrollbar->mScrollValue = 0.0f;
+	mScrollbar->mScrollAmount = 0.0f;
+
+	float totalHeight = 0.0f;
+
+	for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++)
+	{
+		ChallengeDefinition aDefinition = GetChallengeDefinition(aChallengeMode);
+		ButtonWidget* aButton = mChallengeButtons[aChallengeMode];
+
+		aButton->mVisible = aDefinition.mPage == mPageIndex;
+		if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
+			aButton->mVisible = false;
+
+		if (aButton->mVisible)
+		{
+			totalHeight = max(aButton->mY + aButton->mHeight, totalHeight);
+		}
+	}
+
+	mScrollbar->SetScrollRange(totalHeight - mScrollbar->mY - mScrollbar->mHeight - 5);
+	mScrollbar->mDisabled = mScrollbar->mScrollRange <= 0.0f;
 }

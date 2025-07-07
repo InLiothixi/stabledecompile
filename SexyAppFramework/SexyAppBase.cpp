@@ -5553,6 +5553,11 @@ void SexyAppBase::EnforceCursor()
 	}
 	else
 	{
+
+		LRESULT hitTest = SendMessage(mHWnd, WM_NCHITTEST, 0, MAKELPARAM(GET_X_LPARAM(GetMessagePos()), GET_Y_LPARAM(GetMessagePos())));
+		if (hitTest != HTCLIENT)
+			return;
+
 		if ((mCursorImages[mCursorNum] == NULL) || 
 			((!mPlayingDemoBuffer) && (!mCustomCursorsEnabled) && (mCursorNum != CURSOR_CUSTOM)))
 		{

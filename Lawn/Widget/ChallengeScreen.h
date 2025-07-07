@@ -4,6 +4,7 @@
 #include "../../ConstEnums.h"
 #include "../../SexyAppFramework/Dialog.h"
 #include "../../SexyAppFramework/ScrollListener.h"
+#include "ImageScrollbar.h"
 
 using namespace Sexy;
 
@@ -35,6 +36,7 @@ public:
     int                         mUnlockChallengeIndex;                      //+0x1D8
     float                       mLockShakeX;                                //+0x1DC
     float                       mLockShakeY;                                //+0x1E0
+    ImageScrollbar*             mScrollbar;
 
 public:
     ChallengeScreen(LawnApp* theApp, ChallengePage thePage);
@@ -53,9 +55,11 @@ public:
     virtual void                ButtonDepress(int theId);
     void                        UpdateToolTip();
     virtual void                KeyChar(char theChar) { ; }
+    virtual void                MouseWheel(int theDelta);
 
     /*inline*/ bool             IsScaryPotterLevel(GameMode theGameMode);
     /*inline*/ bool             IsIZombieLevel(GameMode theGameMode);
+    void                        UpdateScrollRange();
 };
 
 class ChallengeDefinition

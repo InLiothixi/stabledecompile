@@ -10678,9 +10678,7 @@ void Board::KillAllPlantsInRadius(int theX, int theY, int theRadius)
 		}
 
 		mPlantsEaten++;
-		//aPlant->Die();
-		aPlant->mBurnedCounter = 300;
-		aPlant->EndBlink();
+		aPlant->ApplyBurn();
 
 		Reanimation* aBodyReanim = mApp->ReanimationTryToGet(aPlant->mBodyReanimID);
 		if (aBodyReanim) aBodyReanim->mAnimRate = 0;

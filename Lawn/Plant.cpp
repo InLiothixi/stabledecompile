@@ -3480,8 +3480,14 @@ void Plant::Update()
 
     if (doUpdate)
     {
-        if (mBurnedCounter != -1)   UpdateBurn();
-        if (mPoweredCounter != -1)  UpdatePowered();
+        if (mBurnedCounter != -1)   
+        {
+            UpdateBurn();
+            return;
+        }
+
+        if (mPoweredCounter != -1) 
+            UpdatePowered();
 
         UpdateAbilities();
         Animate();
@@ -6747,4 +6753,22 @@ void Plant::DrawPumkin(Graphics* g, DrawVariation theDrawVariation, unsigned int
 
 
     DrawSeedType(g, aSeedType, aImitaterType, theDrawVariation, 0, 65.0f, theDrawBitVariation);
+}
+
+void Plant::ApplyBurn()
+{
+    if (mBurnedCounter != -1) return;
+
+    if (IsOnBoard() && mBoard->mGridSquareType[mPlantCol][mRow] == GridSquareType::GRIDSQUARE_POOL)
+    {
+        Die();
+        return;
+    }
+
+    mBurnedCounter = 300;
+    mApp->RemoveReanimation(mBlinkReanimID);
+    mApp->RemoveReanimation(mLightReanimID);
+    mApp->RemoveReanimation(mSleepingReanimID);
+
+    UpdateReanimColor();
 }

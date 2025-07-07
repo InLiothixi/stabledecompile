@@ -11,6 +11,7 @@ class Board;
 class LawnApp;
 class GameButton;
 class ToolTipWidget;
+class ScrollbarWidget;
 namespace Sexy
 {
     class MTRand;

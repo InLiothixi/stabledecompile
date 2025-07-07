@@ -10,6 +10,8 @@ Attachment::Attachment()
 {
 	mNumEffects = 0;
 	mDead = false;
+	mShakeOffsetX = 0.0f;
+	mShakeOffsetY = 0.0f;
 }
 
 Attachment::~Attachment()
@@ -375,6 +377,10 @@ void Attachment::Draw(Graphics* g, bool theParentHidden)
 	DataArray<Reanimation>& aReanimations = gEffectSystem->mReanimationHolder->mReanimations;
 	DataArray<Attachment>& aAttachments = gEffectSystem->mAttachmentHolder->mAttachments;
 
+	g->PushState();
+	g->mTransX += mShakeOffsetX;
+	g->mTransY += mShakeOffsetY;
+
 	for (int i = 0; i < mNumEffects; i++)
 	{
 		AttachEffect* aAttachEffect = &mEffectArray[i];
@@ -426,6 +432,8 @@ void Attachment::Draw(Graphics* g, bool theParentHidden)
 		}
 		}
 	}
+
+	g->PopState();
 }
 
 //0x404E80

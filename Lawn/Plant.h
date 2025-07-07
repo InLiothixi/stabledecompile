@@ -311,6 +311,7 @@ public:
     void                    UpdateBurn();
     void                    UpdatePowered();
     void                    DrawPumkin(Graphics* g, DrawVariation theDrawVariation, unsigned int theDrawBitVariation);
+    void                    ApplyBurn();
 };
 
 float                       PlantDrawHeightOffset(Board* theBoard, Plant* thePlant, SeedType theSeedType, int theCol, int theRow, bool neverFloat = false);

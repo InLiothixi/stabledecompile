@@ -17,6 +17,7 @@
 #include "../Sexy.TodLib/Attachment.h"
 #include "../Sexy.TodLib/TodParticle.h"
 #include "Widget/AchievementsScreen.h"
+#include "../Sexy.TodLib/EffectSystem.h"
 
 ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {  //0x69DA80
     { ZOMBIE_NORMAL,            REANIM_ZOMBIE,              1,      1,      1,      4000,   _S("ZOMBIE") },
@@ -2640,6 +2641,26 @@ void Zombie::UpdateZombieJalapenoHead()
     if (!mHasHead)
         return;
 
+    if (mPhaseCounter <= 100 && mHasHead)
+    {
+        Reanimation* aSpecialHeadReanim = mApp->ReanimationTryToGet(mSpecialHeadReanimID);
+        Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+        if (aBodyReanim && aSpecialHeadReanim)
+        {
+            ReanimatorTrackInstance* aTrackInstance = aBodyReanim->GetTrackInstanceByName("Zombie_zombotany_body");
+            Attachment* aAttachment = gEffectSystem->mAttachmentHolder->mAttachments.DataArrayTryToGet(aTrackInstance->mAttachmentID);
+            aAttachment->mShakeOffsetX = RandRangeFloat(-1.0f, 1.0f);
+            aAttachment->mShakeOffsetY = RandRangeFloat(-1.0f, 1.0f);
+
+            if (mPhaseCounter == 100)
+            {
+                aSpecialHeadReanim->SetFramesForLayer("anim_explode");
+                aSpecialHeadReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+                mApp->PlayFoley(FoleyType::FOLEY_REVERSE_EXPLOSION);
+            }
+        }
+    }
+
     if (mPhaseCounter == 0)
     {
         mApp->PlayFoley(FoleyType::FOLEY_JALAPENO_IGNITE);
@@ -2660,7 +2681,7 @@ void Zombie::UpdateZombieJalapenoHead()
                 if (aPlant->mRow == mRow && !aPlant->NotOnGround())
                 {
                     mBoard->mPlantsEaten++;
-                    aPlant->Die();
+                    aPlant->ApplyBurn();
                 }
             }
         }

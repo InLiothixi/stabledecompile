@@ -45,6 +45,8 @@ public:
     AttachEffect            mEffectArray[MAX_EFFECTS_PER_ATTACHMENT];
     int                     mNumEffects;
     bool                    mDead;
+    float                   mShakeOffsetX;
+    float                   mShakeOffsetY;
 
 public:
     Attachment();

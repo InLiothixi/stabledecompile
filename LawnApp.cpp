@@ -59,6 +59,9 @@
 #include "Particle/ParticleScreen.h"
 #include "SexyAppFramework/D3DInterface.h"
 
+#include <windows.h>
+#include <windowsx.h>
+
 bool gIsPartnerBuild = false;
 bool gSlowMo = false;  //0x6A9EAA
 bool gFastMo = false;  //0x6A9EAB
@@ -3508,6 +3511,10 @@ void LawnApp::EnforceCursor()
 		::SetCursor(LoadCursor(NULL, IDC_ARROW));
 		return;
 	}
+
+	LRESULT hitTest = SendMessage(mHWnd, WM_NCHITTEST, 0, MAKELPARAM(GET_X_LPARAM(GetMessagePos()), GET_Y_LPARAM(GetMessagePos())));
+	if (hitTest != HTCLIENT)
+		return;
 
 	if (mOverrideCursor)
 	{

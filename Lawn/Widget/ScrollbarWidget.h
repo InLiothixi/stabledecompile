@@ -6,9 +6,7 @@
 
 enum ScrollbarMode{
 	HORIZONTAL,
-	VERTICAL,
-	HORIZONTAL_WITH_PAGE_UP_AND_DOWN_BUTTONS,
-	VERTICAL_WITH_PAGE_UP_AND_DOWN_BUTTONS
+	VERTICAL
 };
 
 class ScrollbarWidget : public Widget {

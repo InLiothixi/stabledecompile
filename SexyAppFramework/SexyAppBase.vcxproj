@@ -241,6 +241,7 @@
     <ClCompile Include="..\Lawn\System\SaveGame.cpp" />
     <ClCompile Include="..\Lawn\System\TypingCheck.cpp" />
     <ClCompile Include="..\Lawn\Widget\AchievementsScreen.cpp" />
+    <ClCompile Include="..\Lawn\Widget\ImageScrollbar.cpp" />
     <ClCompile Include="..\Lawn\Widget\LanguageScreen.cpp" />
     <ClCompile Include="..\Lawn\Widget\QuickplayScreen.cpp" />
     <ClCompile Include="..\Lawn\Widget\MoreScreen.cpp" />
@@ -254,6 +255,7 @@
     <ClCompile Include="..\Lawn\Widget\ImitaterDialog.cpp" />
     <ClCompile Include="..\Lawn\Widget\NewOptionsDialog.cpp" />
     <ClCompile Include="..\Lawn\Widget\NewUserDialog.cpp" />
+    <ClCompile Include="..\Lawn\Widget\Scrollbar.cpp" />
     <ClCompile Include="..\Lawn\Widget\ScrollbarWidget.cpp" />
     <ClCompile Include="..\Lawn\Widget\TitleScreen.cpp" />
     <ClCompile Include="..\Lawn\Widget\UserDialog.cpp" />
@@ -947,6 +949,7 @@
     <ClInclude Include="..\Lawn\System\SaveGame.h" />
     <ClInclude Include="..\Lawn\System\TypingCheck.h" />
     <ClInclude Include="..\Lawn\Widget\AchievementsScreen.h" />
+    <ClInclude Include="..\Lawn\Widget\ImageScrollbar.h" />
     <ClInclude Include="..\Lawn\Widget\LanguageScreen.h" />
     <ClInclude Include="..\Lawn\Widget\QuickplayScreen.h" />
     <ClInclude Include="..\Lawn\Widget\MoreScreen.h" />
@@ -960,6 +963,7 @@
     <ClInclude Include="..\Lawn\Widget\ImitaterDialog.h" />
     <ClInclude Include="..\Lawn\Widget\NewOptionsDialog.h" />
     <ClInclude Include="..\Lawn\Widget\NewUserDialog.h" />
+    <ClInclude Include="..\Lawn\Widget\Scrollbar.h" />
     <ClInclude Include="..\Lawn\Widget\ScrollbarWidget.h" />
     <ClInclude Include="..\Lawn\Widget\TitleScreen.h" />
     <ClInclude Include="..\Lawn\Widget\UserDialog.h" />

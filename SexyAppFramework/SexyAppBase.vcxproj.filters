@@ -941,6 +941,12 @@
     <ClCompile Include="..\tinyfiledialogs\tinyfiledialogs.c">
       <Filter>tinyfiledialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\Lawn\Widget\Scrollbar.cpp">
+      <Filter>Lawn\Widget\Widget Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Lawn\Widget\ImageScrollbar.cpp">
+      <Filter>Lawn\Widget\Widget Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -1502,6 +1508,12 @@
     </ClInclude>
     <ClInclude Include="..\Particle\ParticleScreen.h">
       <Filter>Particle\Particle Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lawn\Widget\Scrollbar.h">
+      <Filter>Lawn\Widget\Widget Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lawn\Widget\ImageScrollbar.h">
+      <Filter>Lawn\Widget\Widget Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

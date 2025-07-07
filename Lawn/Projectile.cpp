@@ -202,7 +202,7 @@ Plant* Projectile::FindCollisionTargetPlant()
 	Plant* aPlant = nullptr;
 	while (mBoard->IteratePlants(aPlant))
 	{
-		if (aPlant->mRow != mRow)
+		if (aPlant->mRow != mRow || aPlant->mBurnedCounter != -1)
 			continue;
 
 		if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA)
