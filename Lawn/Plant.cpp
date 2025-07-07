@@ -5780,6 +5780,10 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
         aProjectileType = ProjectileType::PROJECTILE_PUFF;
         break;
     case SeedType::SEED_CACTUS:
+#ifdef _PIERCING_CACTUS
+        aProjectileType = ProjectileType::PROJECTILE_PIERCE_SPIKE;
+        break;
+#endif
     case SeedType::SEED_CATTAIL:
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     case SeedType::SEED_STINGER:

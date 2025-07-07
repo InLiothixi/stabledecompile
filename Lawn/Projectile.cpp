@@ -29,7 +29,8 @@ ProjectileDefinition gProjectileDefinition[] = {  //0x69F1C0
 	{ ProjectileType::PROJECTILE_KERNEL,        0,  20  },
 	{ ProjectileType::PROJECTILE_COBBIG,        0,  300 },
 	{ ProjectileType::PROJECTILE_BUTTER,        0,  40  },
-	{ ProjectileType::PROJECTILE_ZOMBIE_PEA,    0,  20  }
+	{ ProjectileType::PROJECTILE_ZOMBIE_PEA,    0,  20  },
+	{ ProjectileType::PROJECTILE_PIERCE_SPIKE,  0,  20  },
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	,{ ProjectileType::PROJECTILE_LETTUCE,       10, 40  },
 	{ ProjectileType::PROJECTILE_BEE,			3,  20  }
@@ -90,6 +91,8 @@ void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, in
 	mExtraAdditiveColor = Color::Black;
 	mEnableExtraAdditiveDraw = false;
 	mFilterEffect = FilterEffect::FILTER_EFFECT_NONE;
+	memset(mPiercedZombies, 0, sizeof(mPiercedZombies));
+	mNumPierced = 0;
 
 	if (mProjectileType == ProjectileType::PROJECTILE_CABBAGE || mProjectileType == ProjectileType::PROJECTILE_BUTTER)
 	{
@@ -313,6 +316,24 @@ Zombie* Projectile::FindCollisionTarget()
 			isEffected = aZombie->EffectedByDamage(129);
 		}
 
+
+		if (mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE && mNumPierced > 0)
+		{
+			unsigned int theZombieID = mBoard->mZombies.DataArrayGetID(aZombie);
+			bool isAlreadyPierced = false;
+
+			for (int i = 0; i < mNumPierced; ++i) // Todo: Make a fallback incase this goes beyond the size
+			{
+				if (mPiercedZombies[i] == theZombieID)
+				{
+					isAlreadyPierced = true;
+					break;
+				}
+			}
+
+			if (isAlreadyPierced)	continue;
+		}
+
 		if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == mRow) && isEffected)
 		{
 			if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA && !aZombie->mMindControlled)
@@ -461,6 +482,7 @@ void Projectile::CheckForHighGround()
 		mProjectileType == ProjectileType::PROJECTILE_SNOWPEA ||
 		mProjectileType == ProjectileType::PROJECTILE_FIREBALL ||
 		mProjectileType == ProjectileType::PROJECTILE_SPIKE ||
+		mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE ||
 		mProjectileType == ProjectileType::PROJECTILE_COBBIG )
 	{
 		if (aShadowDelta < 28.0f)
@@ -1139,7 +1161,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 				theZombie->mButterFilterEffect = mFilterEffect;
 		}
 	}
-	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE)
+	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
 	{
 		aSplatPosX -= 15.0f;
 		aEffect = ParticleEffect::PARTICLE_SPIKE_SPLAT;
@@ -1228,6 +1250,9 @@ void Projectile::DoImpact(Zombie* theZombie)
 	}
 	else 
 	{
+		if (mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE && mNumPierced < 4)
+			return;
+
 		Die();
 	}
 }
@@ -1316,7 +1341,7 @@ void Projectile::Draw(Graphics* g)
 	{
 		aImage = nullptr;
 	}
-	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE)
+	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
 	{
 		aImage = IMAGE_PROJECTILECACTUS;
 	}
@@ -1606,7 +1631,7 @@ Rect Projectile::GetProjectileRect()
 	{
 		return Rect(mX, mY, mWidth - 10, mHeight);
 	}
-	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE)
+	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
 	{
 		return Rect(mX - 25, mY, mWidth + 25, mHeight);
 	}
