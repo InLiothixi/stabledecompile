@@ -1053,6 +1053,33 @@ void Projectile::PlayImpactSound(Zombie* theZombie)
 //0x46E000
 void Projectile::DoImpact(Zombie* theZombie)
 {
+	if (theZombie && mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
+	{
+		unsigned int theZombieID = mBoard->mZombies.DataArrayGetID(theZombie);
+		bool isAlreadyPierced = false;
+
+		if (mNumPierced > 0)
+		{
+			for (int i = 0; i < mNumPierced; ++i) // Todo: Make a fallback incase this goes beyond the size
+			{
+				if (mPiercedZombies[i] == theZombieID)
+				{
+					isAlreadyPierced = true;
+					break;
+				}
+			}
+		}
+
+		if (isAlreadyPierced)
+		{
+			return;
+		}
+		else
+		{
+			mPiercedZombies[mNumPierced++] = theZombieID;
+		}
+	}
+
 	PlayImpactSound(theZombie);
 
 	/*if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
@@ -1250,7 +1277,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 	}
 	else 
 	{
-		if (mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE && mNumPierced < 4)
+		if (mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE && mNumPierced < 2)
 			return;
 
 		Die();

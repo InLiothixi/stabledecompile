@@ -60,7 +60,7 @@ public:
     bool                    mEnableExtraAdditiveDraw;
     FilterEffect            mFilterEffect;
     float                   mRad;
-    unsigned int            mPiercedZombies[4];
+    unsigned int            mPiercedZombies[2];
     int                     mNumPierced;
 
 public:
