@@ -83,9 +83,6 @@ ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { /
 	{ ReanimationType::REANIM_DIGGER,                               "reanim\\Zombie_digger.reanim",                    0 },
 	{ ReanimationType::REANIM_DIGGER_DIRT,                          "reanim\\Digger_rising_dirt.reanim",               0 },
 	{ ReanimationType::REANIM_ZOMBIE_DOLPHINRIDER,                  "reanim\\Zombie_dolphinrider.reanim",              0 },
-#ifdef _HAS_ZOMBATAR
-	{ ReanimationType::REANIM_ZOMBATAR,								"reanim\\zombatar_zombie_head.reanim",             0 }, // @Inliothixi: 006E73B8
-#endif
 	{ ReanimationType::REANIM_POGO,                                 "reanim\\Zombie_pogo.reanim",                      0 },
 #ifdef _HAS_NEW_DANCERS
 	{ ReanimationType::REANIM_BACKUP_DANCER,                        "reanim\\Zombie_backup.reanim",                    0 }, // @Patoke: GOTY has different reanim name
@@ -178,7 +175,9 @@ ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { /
 	{ ReanimationType::REANIM_SELECTORSCREEN_SPOTLIGHT,             "reanim\\SelectorScreen_spotlight.reanim",         3 },
 	{ ReanimationType::REANIM_HEATWAVE_SHOOTER,						"reanim\\HeatWaveShooter.reanim",				   0 },
 	{ ReanimationType::REANIM_ZOMBIE_ZOMBOTANY,						"reanim\\ZombieZombotany.reanim",				   0 },
-
+#ifdef _HAS_ZOMBATAR
+	{ ReanimationType::REANIM_ZOMBATAR,								"reanim\\zombatar_zombie_head.reanim",             0 }, // @Inliothixi: 006E73B8
+#endif
 };
 
 //0x471540
@@ -893,9 +892,7 @@ void Reanimation::GetFrameTime(ReanimatorFrameTime* theFrameTime)
 		theFrameTime->mAnimFrameAfterInt = theFrameTime->mAnimFrameBeforeInt + 1;  // 后一整数帧等于前一整数帧的后一帧
 	TOD_ASSERT(theFrameTime->mAnimFrameBeforeInt >= 0 && theFrameTime->mAnimFrameAfterInt < mDefinition->mTracks.tracks[0].mTransforms.count);
 }
-#include "../SexyAppFramework/DDInterface.h"
-#include "../SexyAppFramework/D3DInterface.h"
-#include "../SexyAppFramework/DDImage.h"
+
 //0x472E40
 void Reanimation::DrawRenderGroup(Graphics* g, int theRenderGroup)
 {

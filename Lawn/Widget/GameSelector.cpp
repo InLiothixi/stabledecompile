@@ -1997,3 +1997,22 @@ void GameSelector::DisableButtons(bool isDisabled){
 	mQuickPlayButton->SetDisabled(isDisabled);
 #endif
 }
+
+void GameSelector::TouchDown(DWORD id, int x, int y)
+{
+	Widget::TouchDown(id, x, y);
+
+	for (int i = 0; i < 3; i++)
+	{
+		Reanimation* aFlowerReanim = mApp->ReanimationGet(mFlowerReanimID[i]);
+		if (!mApp->mFlowersPlucked[i] && aFlowerReanim->mAnimRate <= 0.0f && Distance2D(x, y, gFlowerCenter[i][0], gFlowerCenter[i][1]) < 20.0f)
+		{
+			mApp->mFlowersPlucked[i] = true;
+			aFlowerReanim->mAnimRate = 24.0f;
+			mApp->PlayFoley(FoleyType::FOLEY_LIMBS_POP);
+		}
+	}
+
+	if (mApp->mTodCheatKeys && mStartingGame && mStartingGameCounter < 450)
+		mStartingGameCounter = 450;
+}

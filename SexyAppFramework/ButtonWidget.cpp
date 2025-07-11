@@ -291,3 +291,28 @@ void ButtonWidget::Update()
 }
 
 
+void ButtonWidget::TouchDown(DWORD id, int x, int y)
+{
+	Widget::TouchDown(id, x, y);
+
+	mButtonListener->ButtonPress(mId, 1);
+
+	MarkDirty();
+}
+
+void ButtonWidget::TouchMove(DWORD id, int x, int y)
+{
+	Widget::TouchMove(id, x, y);
+
+	mButtonListener->ButtonMouseMove(mId, x, y);
+}
+
+void ButtonWidget::TouchUp(DWORD id, int x, int y)
+{
+	Widget::TouchUp(id, x, y);
+
+	if (mWidgetManager->mHasFocus)
+		mButtonListener->ButtonDepress(mId);
+
+	MarkDirty();
+}

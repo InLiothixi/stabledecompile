@@ -72,6 +72,9 @@ public:
 	virtual void			MouseUp(int theX, int theY, int theClickCount) { Widget::MouseUp(theX, theY, theClickCount); }
 	virtual void			MouseUp(int theX, int theY, int theBtnNum, int theClickCount);
 	virtual void			Update();
+	virtual void			TouchDown(DWORD id, int theX, int theY);
+	virtual void			TouchMove(DWORD id, int theX, int theY);
+	virtual void			TouchUp(DWORD id, int theX, int theY);
 };
 
 }

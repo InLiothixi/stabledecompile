@@ -39,6 +39,9 @@ WidgetManager::WidgetManager(SexyAppBase* theApp)
 
 	for (int i = 0; i < 0xFF; i++)
 		mKeyDown[i] = false;
+
+	memset(mTouches, 0, sizeof(mTouches));
+	mIsTouching = false;
 }
 
 WidgetManager::~WidgetManager()
@@ -515,7 +518,6 @@ void WidgetManager::RemovePopupCommandWidget()
 
 void WidgetManager::MousePosition(int x, int y)
 {
-
 	int aLastMouseX = mLastMouseX;
 	int aLastMouseY = mLastMouseY;
 
@@ -671,7 +673,7 @@ bool WidgetManager::MouseDown(int x, int y, int theClickCount)
 }
 
 bool WidgetManager::MouseMove(int x, int y) 
-{	
+{
 	mLastInputUpdateCnt = mUpdateCnt;
 
 	if (mDownButtons)
@@ -800,5 +802,128 @@ bool WidgetManager::KeyUp(KeyCode key)
 	if (mFocusWidget != NULL)
 		mFocusWidget->KeyUp(key);
 	
+	return true;
+}
+
+int WidgetManager::FindTouchIndexByID(DWORD id) 
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		if (mTouches[i].id == id)
+			return i;
+	}
+	return -1;
+}
+
+int WidgetManager::AllocateTouchSlot(DWORD id, int x, int y, Widget* widget)
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		if (mTouches[i].id == 0)
+		{
+			mTouches[i] = { id, x, y, widget };
+			return i;
+		}
+	}
+	return -1;
+}
+
+void WidgetManager::ReleaseTouchSlot(DWORD id)
+{
+	int idx = FindTouchIndexByID(id);
+	if (idx != -1)
+	{
+		memset(&mTouches[idx], 0, sizeof(TouchInfo));
+	}
+}
+
+bool WidgetManager::TouchDown(DWORD id, int x, int y)
+{
+	mLastInputUpdateCnt = mUpdateCnt;
+
+	int idx = FindTouchIndexByID(id);
+	if (idx != -1)
+	{
+		ReleaseTouchSlot(id);
+		return false;
+	}
+
+	if ((mPopupCommandWidget != NULL) && (!mPopupCommandWidget->Contains(x, y)))
+		RemovePopupCommandWidget();
+
+	int aWidgetX, aWidgetY;
+	Widget* aWidget = GetWidgetAt(x, y, &aWidgetX, &aWidgetY);
+
+	if (AllocateTouchSlot(id, x, y, aWidget) == -1)
+		return false;
+
+	if (aWidget != NULL)
+	{
+		/*WidgetList::iterator anItr = std::find(mWidgets.begin(), mWidgets.end(), aWidget);
+		if (anItr == mWidgets.end())
+		{
+			ReleaseTouchSlot(id);
+			return false;
+		}*/
+
+		if (aWidget->WantsFocus())
+			SetFocus(aWidget);
+
+		aWidget->mIsDown = true;
+		aWidget->TouchDown(id, x, y);
+	}
+
+	return true;
+}
+
+bool WidgetManager::TouchMove(DWORD id, int x, int y)
+{
+	mLastInputUpdateCnt = mUpdateCnt;
+
+	int idx = FindTouchIndexByID(id);
+	if (idx == -1)
+		return false;
+
+	mTouches[idx].x = x;
+	mTouches[idx].y = y;
+
+	Widget* widget = mTouches[idx].widget;
+	if (widget != NULL)
+	{
+		WidgetList::iterator anItr = std::find(mWidgets.begin(), mWidgets.end(), widget);
+		if (anItr == mWidgets.end())
+		{
+			ReleaseTouchSlot(id);
+			return false;
+		}
+
+		widget->TouchMove(id, x, y);
+	}
+
+	return true;
+}
+
+bool WidgetManager::TouchUp(DWORD id, int x, int y)
+{
+	mLastInputUpdateCnt = mUpdateCnt;
+
+	int idx = FindTouchIndexByID(id);
+	if (idx == -1)
+	{
+		return false;
+	}
+
+	Widget* widget = mTouches[idx].widget;
+	if (widget != NULL)
+	{
+		/*WidgetList::iterator anItr = std::find(mWidgets.begin(), mWidgets.end(), widget);
+		if (anItr != mWidgets.end())*/
+		{
+			widget->mIsDown = false;
+			widget->TouchUp(id, x, y);
+		}
+	}
+
+	ReleaseTouchSlot(id);
 	return true;
 }

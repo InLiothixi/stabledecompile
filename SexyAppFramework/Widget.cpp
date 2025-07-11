@@ -311,6 +311,19 @@ void Widget::MouseWheel(int theDelta)
 {
 }
 
+void Widget::TouchDown(DWORD id, int x, int y)
+{
+}
+
+void Widget::TouchMove(DWORD id, int x, int y)
+{
+}
+
+void Widget::TouchUp(DWORD id, int x, int y)
+{
+}
+
+
 //////// Helper functions
 
 Rect Widget::WriteCenteredLine(Graphics* g, int anOffset, const SexyString& theLine)

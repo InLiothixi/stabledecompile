@@ -531,15 +531,21 @@ unsigned int Projectile::GetDamageFlags(Zombie* theZombie)
 {
 	unsigned int aDamageFlags = 0U;
 
+	bool considerateHoming = false;
+	if (mMotionType == ProjectileMotion::MOTION_HOMING || mMotionType == ProjectileMotion::MOTION_BEE)
+	{
+		considerateHoming = mVelX < 0.0f;
+	}
+
 	if (IsSplashDamage(theZombie))
 	{
 		SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_HITS_SHIELD_AND_BODY, true);
 	}
-	else if (mMotionType == ProjectileMotion::MOTION_LOBBED || mMotionType == ProjectileMotion::MOTION_BACKWARDS)
+	else if (mMotionType == ProjectileMotion::MOTION_LOBBED || (mMotionType == ProjectileMotion::MOTION_BACKWARDS || considerateHoming) != theZombie->IsWalkingBackwards())
 	{
 		SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_BYPASSES_SHIELD, true);
 	}
-	else if (mMotionType == ProjectileMotion::MOTION_STAR && mVelX < 0.0f)
+	else if ((mMotionType == ProjectileMotion::MOTION_STAR && mVelX < 0.0f) != theZombie->IsWalkingBackwards())
 	{
 		SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_BYPASSES_SHIELD, true);
 	}
@@ -1053,6 +1059,8 @@ void Projectile::PlayImpactSound(Zombie* theZombie)
 //0x46E000
 void Projectile::DoImpact(Zombie* theZombie)
 {
+	ProjectileDefinition aProjDef = GetProjectileDef();
+
 	if (theZombie && mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
 	{
 		unsigned int theZombieID = mBoard->mZombies.DataArrayGetID(theZombie);
@@ -1060,6 +1068,8 @@ void Projectile::DoImpact(Zombie* theZombie)
 
 		if (mNumPierced > 0)
 		{
+			aProjDef.mDamage = 10;
+			
 			for (int i = 0; i < mNumPierced; ++i) // Todo: Make a fallback incase this goes beyond the size
 			{
 				if (mPiercedZombies[i] == theZombieID)
@@ -1077,6 +1087,12 @@ void Projectile::DoImpact(Zombie* theZombie)
 		else
 		{
 			mPiercedZombies[mNumPierced++] = theZombieID;
+
+			if (theZombie->mShieldType != ShieldType::SHIELDTYPE_NONE && mNumPierced == 1)
+			{
+				mNumPierced++;
+				theZombie->TakeBodyDamage(10, GetDamageFlags(theZombie));
+			}
 		}
 	}
 
@@ -1103,7 +1119,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 	else if (theZombie)
 	{
 		unsigned int aDamageFlags = GetDamageFlags(theZombie);
-		theZombie->TakeDamage(GetProjectileDef().mDamage, aDamageFlags);
+		theZombie->TakeDamage(aProjDef.mDamage, aDamageFlags);
 	}
 
 	float aLastPosX = mPosX - mVelX;
@@ -1350,11 +1366,12 @@ void Projectile::Draw(Graphics* g)
 	const ProjectileDefinition& aProjectileDef = GetProjectileDef();
 
 	Image* aImage;
-	float aScale = 1.0f;
+	float aScaleX = 1.0f;
+	float aScaleY = 1.0f;
 	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG)
 	{
 		aImage = IMAGE_REANIM_COBCANNON_COB;
-		aScale = 0.9f;
+		aScaleX = aScaleY = 0.9f;
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_PEA || mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA)
 	{
@@ -1379,43 +1396,43 @@ void Projectile::Draw(Graphics* g)
 	else if (mProjectileType == ProjectileType::PROJECTILE_PUFF)
 	{
 		aImage = IMAGE_PUFFSHROOM_PUFF1;
-		aScale = TodAnimateCurveFloat(0, 30, mProjectileAge, 0.3f, 1.0f, TodCurves::CURVE_LINEAR);
+		aScaleX = aScaleY = TodAnimateCurveFloat(0, 30, mProjectileAge, 0.3f, 1.0f, TodCurves::CURVE_LINEAR);
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_BASKETBALL)
 	{
 		aImage = IMAGE_REANIM_ZOMBIE_CATAPULT_BASKETBALL;
-		aScale = 1.1f;
+		aScaleX = aScaleY = 1.1f;
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_CABBAGE)
 	{
 		aImage = IMAGE_REANIM_CABBAGEPULT_CABBAGE;
-		aScale = 1.0f;
+		aScaleX = aScaleY = 1.0f;
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_KERNEL)
 	{
 		aImage = IMAGE_REANIM_CORNPULT_KERNAL;
-		aScale = 0.95f;
+		aScaleX = aScaleY = 0.95f;
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_BUTTER)
 	{
 		aImage = IMAGE_REANIM_CORNPULT_BUTTER;
-		aScale = 0.8f;
+		aScaleX = aScaleY = 0.8f;
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_MELON)
 	{
 		aImage = IMAGE_REANIM_MELONPULT_MELON;
-		aScale = 1.0f;
+		aScaleX = aScaleY = 1.0f;
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_WINTERMELON)
 	{
 		aImage = IMAGE_REANIM_WINTERMELON_PROJECTILE;
-		aScale = 1.0f;
+		aScaleX = aScaleY = 1.0f;
 	}
 	else
 	{
 		//TOD_ASSERT();
 		aImage = IMAGE_PROJECTILE;
-		aScale = 1.0f;
+		aScaleX = aScaleY = 1.0f;
 	}
 
 	if (aImage && mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
@@ -1436,7 +1453,7 @@ void Projectile::Draw(Graphics* g)
 		int aCelWidth = aImage->GetCelWidth();
 		int aCelHeight = aImage->GetCelHeight();
 		Rect aSrcRect(aCelWidth * mFrame, aCelHeight * aProjectileDef.mImageRow, aCelWidth, aCelHeight);
-		if (FloatApproxEqual(mRotation, 0.0f) && FloatApproxEqual(aScale, 1.0f))
+		if (FloatApproxEqual(mRotation, 0.0f) && FloatApproxEqual(aScaleX, 1.0f) && FloatApproxEqual(aScaleY, 1.0f))
 		{
 			Rect aDestRect(0, 0, aCelWidth, aCelHeight);
 			gProj.DrawImageMirror(aImage, aDestRect, aSrcRect, aMirror);
@@ -1445,12 +1462,11 @@ void Projectile::Draw(Graphics* g)
 		{
 			float aOffsetX = mPosX + aCelWidth * 0.5f;
 			float aOffsetY = mPosZ + mPosY + aCelHeight * 0.5f;
-			float scaleX = aScale;
 			if (aMirror) 
-				scaleX *= -1;
+				aScaleX *= -1;
 
 			SexyTransform2D aTransform;
-			TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, scaleX, aScale);
+			TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, aScaleX, aScaleY);
 			TodBltMatrix(&gProj, aImage, aTransform, gProj.mClipRect, Color::White, gProj.mDrawMode, aSrcRect);
 		}
 	}
@@ -1474,7 +1490,7 @@ void Projectile::Draw(Graphics* g)
 			int aCelWidth = aImage->GetCelWidth();
 			int aCelHeight = aImage->GetCelHeight();
 			Rect aSrcRect(aCelWidth * mFrame, aCelHeight * aProjectileDef.mImageRow, aCelWidth, aCelHeight);
-			if (FloatApproxEqual(mRotation, 0.0f) && FloatApproxEqual(aScale, 1.0f))
+			if (FloatApproxEqual(mRotation, 0.0f) && FloatApproxEqual(aScaleX, 1.0f) && FloatApproxEqual(aScaleY, 1.0f))
 			{
 				Rect aDestRect(0, 0, aCelWidth, aCelHeight);
 				gProj.DrawImageMirror(aImage, aDestRect, aSrcRect, aMirror);
@@ -1484,12 +1500,11 @@ void Projectile::Draw(Graphics* g)
 				float aOffsetX = mPosX + aCelWidth * 0.5f;
 				float aOffsetY = mPosZ + mPosY + aCelHeight * 0.5f;
 
-				float scaleX = 1.0f;
-
-				if (aMirror) scaleX = -1.0f;
+				if (aMirror)
+					aScaleX *= -1;
 
 				SexyTransform2D aTransform;
-				TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, scaleX, aScale);
+				TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, aScaleX, aScaleY);
 				TodBltMatrix(&gProj, aImage, aTransform, gProj.mClipRect, Color::White, gProj.mDrawMode, aSrcRect);
 			}
 		}
@@ -1509,7 +1524,8 @@ void Projectile::DrawShadow(Graphics* g)
 	if (mIsPlayingImpactAnimation)	return;
 
 	int aCelCol = 0;
-	float aScale = 1.0f;
+	float aScaleX = 1.0f;
+	float aScaleY = 1.0f;
 	float aStretch = 1.0f;
 	float aOffsetX = mPosX - mX;
 	float aOffsetY = mPosY - mY;
@@ -1543,7 +1559,7 @@ void Projectile::DrawShadow(Graphics* g)
 
 	case ProjectileType::PROJECTILE_SNOWPEA:
 		aOffsetX += -1.0f;
-		aScale = 1.3f;
+		aScaleX = aScaleY = 1.3f;
 		break;
 
 	case ProjectileType::PROJECTILE_STAR:
@@ -1563,27 +1579,27 @@ void Projectile::DrawShadow(Graphics* g)
 #endif
 		aOffsetX += 3.0f;
 		aOffsetY += 10.0f;
-		aScale = 1.6f;
+		aScaleX = aScaleY = 1.6f;
 		break;
 
 	case ProjectileType::PROJECTILE_PUFF:
 		return;
 		
 	case ProjectileType::PROJECTILE_COBBIG:
-		aScale = 1.0f;
+		aScaleX = aScaleY = 1.0f;
 		aStretch = 3.0f;
 		aOffsetX += 57.0f;
 		break;
 
 	case ProjectileType::PROJECTILE_FIREBALL:
-		aScale = 1.4f;
+		aScaleX = aScaleY = 1.4f;
 		break;
 	}
 
 	if (mMotionType == ProjectileMotion::MOTION_LOBBED)
 	{
 		float aHeight = ClampFloat(-mPosZ, 0.0f, 200.0f);
-		aScale *= 200.0f / (aHeight + 200.0f);
+		aScaleX = aScaleY *= 200.0f / (aHeight + 200.0f);
 	}
 
 	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) 
@@ -1614,7 +1630,7 @@ void Projectile::DrawShadow(Graphics* g)
 		g->PopState();
 	}
 
-	TodDrawImageCelScaledF(g, IMAGE_PEA_SHADOWS, aOffsetX, (mShadowY - mPosY + aOffsetY), aCelCol, 0, aScale * aStretch, aScale);
+	TodDrawImageCelScaledF(g, IMAGE_PEA_SHADOWS, aOffsetX, (mShadowY - mPosY + aOffsetY), aCelCol, 0, aScaleX * aStretch, aScaleY);
 }
 
 //0x46EB20

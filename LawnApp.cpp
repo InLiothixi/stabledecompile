@@ -499,12 +499,15 @@ void LawnApp::MakeNewBoard()
 	mWidgetManager->AddWidget(mBoard);
 	mWidgetManager->BringToBack(mBoard);
 	mWidgetManager->SetFocus(mBoard);
-
 	if (!mPortAudioStream && ChallengeUsesMicrophone(mGameMode))
 	{
-		Pa_Initialize();
-		Pa_OpenDefaultStream(&mPortAudioStream, 1, 0, paFloat32, SAMPLE_RATE, FRAMES_PER_BUFFER, AudioCallback, &mVoiceVolume);
-		Pa_StartStream(mPortAudioStream);
+		if (!TryToInitializePA())
+		{
+			DoDialog(Dialogs::DIALOG_INFO, true, "Error", "Something went wrong when starting Port Audio.\n\n Please check your Audio driver or whether your system meets the requirements to support PortAudio. Please contact the devoleper", _S("[OK_LABEL]"), Dialog::BUTTONS_FOOTER);
+			mPortAudioStream = nullptr;
+			DoBackToMain();
+			return;
+		}
 	}
 }
 
@@ -557,6 +560,7 @@ void LawnApp::NewGame()
 	mFirstTimeGameSelector = false;
 
 	MakeNewBoard();
+	if (!mBoard) return;
 	mBoard->InitLevel();
 	mBoardResult = BoardResult::BOARDRESULT_NONE;
 	mGameScene = GameScenes::SCENE_LEVEL_INTRO;
@@ -4090,4 +4094,21 @@ void LawnApp::ShowParticleEditor()
 	mWidgetManager->AddWidget(mParticleScreen);
 	mWidgetManager->BringToBack(mParticleScreen);
 	mWidgetManager->SetFocus(mParticleScreen);
+}
+
+bool LawnApp::TryToInitializePA()
+{
+	PaError err = Pa_Initialize();
+	if (err != paNoError)
+		return false;
+
+	err = Pa_OpenDefaultStream(&mPortAudioStream, 1, 0, paFloat32, SAMPLE_RATE, FRAMES_PER_BUFFER, AudioCallback, &mVoiceVolume);
+	if (err != paNoError)
+		return false;
+
+	err = Pa_StartStream(mPortAudioStream);
+	if (err != paNoError)
+		return false;
+
+	return true;
 }

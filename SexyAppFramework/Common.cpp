@@ -90,6 +90,32 @@ bool Sexy::CheckForVista()
 	return isVista;
 }
 
+bool Sexy::CheckForWindows7OrLater()
+{
+	static bool needOsCheck = true;
+	static bool isWin7OrLater = false;
+
+	if (needOsCheck)
+	{
+		OSVERSIONINFOEXA osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEXA));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
+
+		if (GetVersionExA((LPOSVERSIONINFOA)&osvi) == 0)
+		{
+			osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+			if (GetVersionExA((LPOSVERSIONINFOA)&osvi) == 0)
+				return false;
+		}
+
+		needOsCheck = false;
+		isWin7OrLater = (osvi.dwMajorVersion > 6) ||
+			(osvi.dwMajorVersion == 6 && osvi.dwMinorVersion >= 1);
+	}
+
+	return isWin7OrLater;
+}
+
 SexyString Sexy::GetAppDataFolder()
 {
 	return Sexy::gAppDataFolder;

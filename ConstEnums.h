@@ -833,20 +833,20 @@ enum ProjectileMotion
 };
 enum ProjectileType
 {
-    PROJECTILE_PEA = 0,   // 豌豆
-    PROJECTILE_SNOWPEA = 1,   // 冰豌豆
-    PROJECTILE_CABBAGE = 2,   // 卷心菜
-    PROJECTILE_MELON = 3,   // 西瓜
-    PROJECTILE_PUFF = 4,   // 孢子
-    PROJECTILE_WINTERMELON = 5,   // 冰瓜
-    PROJECTILE_FIREBALL = 6,   // 火豌豆
-    PROJECTILE_STAR = 7,   // 星星
-    PROJECTILE_SPIKE = 8,   // 尖刺
-    PROJECTILE_BASKETBALL = 9,   // 篮球
-    PROJECTILE_KERNEL = 10,  // 玉米粒
-    PROJECTILE_COBBIG = 11,  // 玉米加农炮
-    PROJECTILE_BUTTER = 12,  // 黄油
-    PROJECTILE_ZOMBIE_PEA = 13,  // 僵尸豌豆
+    PROJECTILE_PEA,   // 豌豆
+    PROJECTILE_SNOWPEA,   // 冰豌豆
+    PROJECTILE_CABBAGE,   // 卷心菜
+    PROJECTILE_MELON,   // 西瓜
+    PROJECTILE_PUFF,   // 孢子
+    PROJECTILE_WINTERMELON,   // 冰瓜
+    PROJECTILE_FIREBALL,   // 火豌豆
+    PROJECTILE_STAR,   // 星星
+    PROJECTILE_SPIKE,  // 尖刺
+    PROJECTILE_BASKETBALL,   // 篮球
+    PROJECTILE_KERNEL,  // 玉米粒
+    PROJECTILE_COBBIG,  // 玉米加农炮
+    PROJECTILE_BUTTER,  // 黄油
+    PROJECTILE_ZOMBIE_PEA,  // 僵尸豌豆
     PROJECTILE_PIERCE_SPIKE,
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     PROJECTILE_LETTUCE,
@@ -917,9 +917,6 @@ enum ReanimationType : unsigned int {
     REANIM_DIGGER,
     REANIM_DIGGER_DIRT,
     REANIM_ZOMBIE_DOLPHINRIDER,
-#ifdef _HAS_ZOMBATAR
-    REANIM_ZOMBATAR,
-#endif
     REANIM_POGO,
     REANIM_BACKUP_DANCER,
     REANIM_BOBSLED,
@@ -1008,6 +1005,9 @@ enum ReanimationType : unsigned int {
     REANIM_SELECTORSCREEN_SPOTLIGHT,
     REANIM_HEATWAVE_SHOOTER,
     REANIM_ZOMBIE_ZOMBOTANY,
+#ifdef _HAS_ZOMBATAR
+    REANIM_ZOMBATAR,
+#endif
     NUM_REANIMS
 };
 enum ReanimLoopType

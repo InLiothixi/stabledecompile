@@ -248,6 +248,13 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         mLaunchCounter = 0;
     }
 
+    if (mSeedType == SeedType::SEED_CATTAIL)
+    {
+        mLaunchCounter = 51;
+        mShootingCounter = 50;
+    }
+
+
     switch (theSeedType)
     {
     case SeedType::SEED_BLOVER:

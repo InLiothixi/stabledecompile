@@ -332,6 +332,7 @@ public:
 	HWND					mPreviewHWnd;
 
 	bool					mIsParticleEditor;
+	bool					mIsTouch;
 
 protected:	
 	void					RehupFocus();

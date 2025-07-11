@@ -78,6 +78,9 @@ public:
 	virtual void			MouseDrag(int x, int y);
 	virtual void			MouseWheel(int theDelta);
 	virtual bool			IsPointVisible(int x, int y);
+	virtual void			TouchDown(DWORD id, int x, int y);
+	virtual void			TouchMove(DWORD id, int x, int y);
+	virtual void			TouchUp(DWORD id, int x, int y);
 	
 	//////// Helper functions
 	

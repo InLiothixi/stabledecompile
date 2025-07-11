@@ -605,6 +605,7 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 
 	int aHeaderHeight = TodDrawStringWrappedHelper(g, aHeader, Rect(484, 377, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, false);
 	int aDescriptionOffset = 17 - aHeaderHeight;
+	if (!ZombieHasDescription(mSelectedZombie)) aHeaderHeight = aDescriptionOffset = 0;
 	int aDescriptionHeight = TodDrawStringWrappedHelper(g, aDescription, Rect(484, 377 + aHeaderHeight, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, false);
 	mScrollbar->mScrollRange = aHeaderHeight + aDescriptionHeight - 142;
 	mScrollbar->SetDisabled(mScrollbar->mScrollRange <= 34);

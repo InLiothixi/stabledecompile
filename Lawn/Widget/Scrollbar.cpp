@@ -161,13 +161,13 @@ void Scrollbar::DrawBackground(Graphics* g)
 	g->mColor.mAlpha = mBackgroundColor.mAlpha * (aAlpha / 2) / 255;
 	if (mScrollMode == ScrollMode::SCROLLMODE_HORIZONTAL)
 	{
-		g->FillRect(0, 0, mThumbRect.mX + mThumbPadX, mHeight);
-		g->FillRect(mThumbRect.mX + mThumbRect.mWidth - mThumbPadX, 0, mWidth - mThumbRect.mWidth - mThumbRect.mX, mThumbRect.mHeight);
+		g->FillRect(0, 0, mThumbRect.mX + (int)mThumbPadX, mHeight);
+		g->FillRect(mThumbRect.mX + mThumbRect.mWidth - (int)mThumbPadX, 0, mWidth - mThumbRect.mWidth - mThumbRect.mX, mThumbRect.mHeight);
 	}
 	else
 	{
-		g->FillRect(0, 0, mWidth, mThumbRect.mY + mThumbPadY);
-		g->FillRect(0, mThumbRect.mY + mThumbRect.mHeight - mThumbPadY, mWidth, mHeight - mThumbRect.mY - mThumbRect.mHeight);
+		g->FillRect(0, 0, mWidth, mThumbRect.mY + (int)mThumbPadY);
+		g->FillRect(0, mThumbRect.mY + mThumbRect.mHeight - (int)mThumbPadY, mWidth, mHeight - mThumbRect.mY - mThumbRect.mHeight);
 	}
 	g->PopState();
 }
@@ -178,7 +178,7 @@ void Scrollbar::DrawThumb(Graphics* g)
 	g->PushState();
 	g->SetColor(mThumbColor);
 	g->mColor.mAlpha = mThumbColor.mAlpha * aAlpha / 255;
-	g->FillRect(mThumbRect.mX + mThumbPadX, mThumbRect.mY + mThumbPadY, mThumbRect.mWidth - mThumbPadX * 2, mThumbRect.mHeight - mThumbPadY * 2);
+	g->FillRect(mThumbRect.mX + (int)mThumbPadX, mThumbRect.mY + (int)mThumbPadY, mThumbRect.mWidth - (int)mThumbPadX * 2, mThumbRect.mHeight - (int)mThumbPadY * 2);
 	g->PopState();
 }
 

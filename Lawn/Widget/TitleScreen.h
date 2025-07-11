@@ -64,6 +64,7 @@ public:
 	virtual void			ButtonPress(int theId);
 	virtual void			ButtonDepress(int theId);
 	virtual void			MouseDown(int x, int y, int theClickCount);
+	virtual void			TouchDown(DWORD id, int x, int y);
 	virtual void			KeyDown(KeyCode theKey);
 	void					SetRegistered();
 	void					DrawToPreload(Graphics* g);

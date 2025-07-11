@@ -130,6 +130,7 @@ public:
     void                        ShowQuickplayScreen();
     void                        ShowGameSelectorScreen();
     void                        DisableButtons(bool isDisabled);
+    virtual void                TouchDown(DWORD id, int x, int y);
 };
 
 class GameSelectorOverlay : public Widget

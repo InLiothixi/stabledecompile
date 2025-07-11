@@ -726,7 +726,7 @@ void TodBltMatrix(Graphics* g, Image* theImage, const SexyMatrix3& theTransform,
 
 	g->SetFastStretch(true);
 
-	if (theClipRect.mX != 0 || theClipRect.mY != 0 || theClipRect.mWidth != BOARD_WIDTH || theClipRect.mHeight != BOARD_HEIGHT)
+	if ((theClipRect.mX != 0 || theClipRect.mY != 0 || theClipRect.mWidth != BOARD_WIDTH || theClipRect.mHeight != BOARD_HEIGHT) && g->mDestImage->GetWidth() == BOARD_WIDTH && g->mDestImage->GetHeight() == BOARD_HEIGHT)
 	{
 		g->mDestImage->BltMatrix(theImage, aOffsetX, aOffsetY, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
 	}
@@ -735,6 +735,10 @@ void TodBltMatrix(Graphics* g, Image* theImage, const SexyMatrix3& theTransform,
 		theImage->mDrawn = true;
 		D3DInterface* aInterface = ((DDImage*)g->mDestImage)->mDDInterface->mD3DInterface;
 		aInterface->BltTransformed(theImage, nullptr, theColor, theDrawMode, theSrcRect, theTransform, g->mLinearBlend, aOffsetX, aOffsetY, true);
+	}
+	else if (g->mDestImage->GetWidth() != BOARD_WIDTH && g->mDestImage->GetHeight() != BOARD_HEIGHT)
+	{
+		((DDImage*)g->mDestImage)->BltMatrix(theImage, 0, 0, theTransform, g->mClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
 	}
 	else
 	{

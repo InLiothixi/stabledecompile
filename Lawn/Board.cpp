@@ -286,7 +286,7 @@ bool Board::AreEnemyZombiesOnScreen()
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled && !aZombie->mDead)
+		if (/*aZombie->mHasHead && !aZombie->IsDeadOrDying() &&*/ !aZombie->mMindControlled && !aZombie->mDead)
 		{
 			return true;
 		}
@@ -302,7 +302,7 @@ int Board::CountZombiesOnScreen()
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled && aZombie->IsOnBoard())
+		if (/*aZombie->mHasHead && !aZombie->IsDeadOrDying() &&*/ !aZombie->mMindControlled && aZombie->IsOnBoard())
 		{
 			aCount++;
 		}
@@ -316,7 +316,7 @@ int Board::GetLiveGargantuarCount() {
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (!aZombie->mDead && aZombie->mHasHead && !aZombie->IsDeadOrDying() && aZombie->IsOnBoard() && (aZombie->mZombieType == ZombieType::ZOMBIE_GARGANTUAR || aZombie->mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR))
+		if (!aZombie->mDead /*&& aZombie->mHasHead && !aZombie->IsDeadOrDying() */&& aZombie->IsOnBoard() && (aZombie->mZombieType == ZombieType::ZOMBIE_GARGANTUAR || aZombie->mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR))
 		{
 			aCount++;
 		}
@@ -3309,7 +3309,7 @@ PlantingReason Board::CanPlantAt(int theGridX, int theGridY, SeedType theSeedTyp
 //0x40E520
 void Board::UpdateCursor()
 {
-	if (mApp->IsScreenSaver()) return;
+	if (mApp->IsScreenSaver() || mWidgetManager == NULL|| mWidgetManager->mOverWidget == NULL) return;
 
 	int aMouseX = mApp->mWidgetManager->mLastMouseX - mX;
 	int aMouseY = mApp->mWidgetManager->mLastMouseY - mY;
@@ -3323,12 +3323,8 @@ void Board::UpdateCursor()
 	if (mApp->GetDialogCount() > 0)
 		return;
 
-	if (mPaused || mBoardFadeOutCounter >= 0 || mTimeStopCounter > 0 || 
-#ifndef DO_FIX_BUGS
-		mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON 
-#else
-		mApp->mGameScene != SCENE_PLAYING
-#endif
+	if ((mPaused || mBoardFadeOutCounter >= 0 || mTimeStopCounter > 0 || 
+		mApp->mGameScene != SCENE_PLAYING) && mWidgetManager->mOverWidget != NULL
 		)
 	{
 		mApp->SetCursor(Sexy::CURSOR_POINTER);
@@ -5474,7 +5470,7 @@ int Board::TotalZombiesHealthInWave(int theWaveIndex)
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->mFromWave == theWaveIndex && !aZombie->mMindControlled && !aZombie->IsDeadOrDying() &&
+		if (aZombie->mFromWave == theWaveIndex && !aZombie->mMindControlled /*&& !aZombie->IsDeadOrDying()*/ &&
 			aZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && aZombie->mRelatedZombieID == ZombieID::ZOMBIEID_NULL)
 		{
 			aTotalHealth += aZombie->mBodyHealth + aZombie->mHelmHealth + aZombie->mShieldHealth * 0.2f + aZombie->mFlyingHealth;
@@ -6350,7 +6346,6 @@ void Board::Update()
 
 	mCutScene->Update();
 	UpdateMousePosition();
-
 
 #ifdef _ALLOW_SWIPE
 	if (mIsDown)
@@ -7491,7 +7486,15 @@ void Board::DrawLevel(Graphics* g)
 	{
 		aPosY += TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, 50, TodCurves::CURVE_EASE_IN_OUT);
 	}
+
 	TodDrawString(g, aLevelStr, aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_RIGHT);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		TouchInfo touch = mWidgetManager->mTouches[i];
+		if (touch.id != 0)
+			g->DrawCircle(touch.x, touch.y, 20, 20 * PI);
+	}
 }
 
 //0x4182D0
@@ -7916,29 +7919,29 @@ void Board::DrawDebugObjectRects(Graphics* g)
 			if (aPlant->mSeedType == SeedType::SEED_CHERRYBOMB)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 115, 2 * PI * 115);
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 115, PI * 115);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_EXPLODE_O_NUT)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 90, 2 * PI * 90);
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 90, PI * 90);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_DOOMSHROOM)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 250, 2 * PI * 250);
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 250, PI * 250);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_SCAREDYSHROOM)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40.0f, 80.0f, 120.0f, 2 * PI * 80.0f);
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40.0f, 80.0f, 120.0f, PI * 80.0f);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_MAGNETSHROOM)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 230.0f, 270.0f, 2 * PI * 270.0f);
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 230.0f, 270.0f, PI * 270.0f);
 				g->SetColor(Color(255, 255, 0, 128));
-				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 280.0f, 320.0f, 2 * PI * 320.0f);
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 280.0f, 320.0f, PI * 320.0f);
 			}
 		}
 		Zombie* aZombie = nullptr;
@@ -7959,11 +7962,11 @@ void Board::DrawDebugObjectRects(Graphics* g)
 					if (!aZombie->mMindControlled)
 					{
 						g->SetColor(Color(255, 255, 0));
-						g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 90, 2 * PI * 90);
+						g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 90, PI * 90);
 					}
 
 					g->SetColor(Color(255, 255, 0, 128));
-					g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 115, 2 * PI * 115);
+					g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 115, PI * 115);
 				}
 			}
 		}
@@ -11333,7 +11336,7 @@ int Board::GetKilledlZombiesInRadius(int theRow, int theX, int theY, int theRadi
 				}
 				else
 				{
-					if (aZombie->mBodyHealth - 1800 <= 0)	aZombie->DropAllParticles(true);
+					if (aZombie->mBodyHealth - 1800 <= 0 && theDamageRangeFlags == 77U)	aZombie->DropAllParticles(true);
 					aZombie->TakeDamage(1800, 18U);
 				}
 

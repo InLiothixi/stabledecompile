@@ -46,6 +46,93 @@
 #include "../GameConstants.h"
 #include <windowsx.h>
 
+
+//Touch
+#include <WinUser.h>
+
+#define WM_TOUCH 0x0240
+#define HTOUCHINPUT HANDLE
+#define TOUCH_COORD_TO_PIXEL(l) ((l) / 100)
+#define TOUCHEVENTF_MOVE      0x0001
+#define TOUCHEVENTF_DOWN      0x0002
+#define TOUCHEVENTF_UP        0x0004
+#define TOUCHEVENTF_INRANGE   0x0008
+#define TOUCHEVENTF_PRIMARY   0x0010
+#define TOUCHEVENTF_NOCOALESCE 0x0020
+#define TOUCHEVENTF_PEN       0x0040
+#define TOUCHEVENTF_PALM      0x0080
+#define TWF_WANTPALM 0x00000002
+typedef struct tagTOUCHINPUT {
+	LONG x;
+	LONG y;
+	HANDLE hSource;
+	DWORD dwID;
+	DWORD dwFlags;
+	DWORD dwMask;
+	DWORD dwTime;
+	ULONG_PTR dwExtraInfo;
+	DWORD cxContact;
+	DWORD cyContact;
+} TOUCHINPUT, * PTOUCHINPUT;
+typedef BOOL(WINAPI* PFN_GetTouchInputInfo)(HTOUCHINPUT, UINT, PTOUCHINPUT, int);
+typedef BOOL(WINAPI* PFN_CloseTouchInputHandle)(HTOUCHINPUT);
+
+PFN_GetTouchInputInfo pGetTouchInputInfo = NULL;
+PFN_CloseTouchInputHandle pCloseTouchInputHandle = NULL;
+
+#define WM_POINTERDOWN     0x0246
+#define WM_POINTERUPDATE   0x0245
+#define WM_POINTERUP       0x0247
+
+#define GET_POINTERID_WPARAM(wParam) (LOWORD(wParam))
+
+typedef enum tagPOINTER_INPUT_TYPE {
+	PT_POINTER = 1,
+	PT_TOUCH = 2,
+	PT_PEN = 3,
+	PT_MOUSE = 4,
+	PT_TOUCHPAD = 5
+} POINTER_INPUT_TYPE;
+
+typedef enum tagPOINTER_BUTTON_CHANGE_TYPE {
+	POINTER_CHANGE_NONE = 0,
+	POINTER_CHANGE_FIRSTBUTTON_DOWN = 1,
+	POINTER_CHANGE_FIRSTBUTTON_UP = 2,
+	POINTER_CHANGE_SECONDBUTTON_DOWN = 3,
+	POINTER_CHANGE_SECONDBUTTON_UP = 4,
+	POINTER_CHANGE_THIRDBUTTON_DOWN = 5,
+	POINTER_CHANGE_THIRDBUTTON_UP = 6,
+	POINTER_CHANGE_FOURTHBUTTON_DOWN = 7,
+	POINTER_CHANGE_FOURTHBUTTON_UP = 8,
+	POINTER_CHANGE_FIFTHBUTTON_DOWN = 9,
+	POINTER_CHANGE_FIFTHBUTTON_UP = 10
+} POINTER_BUTTON_CHANGE_TYPE;
+
+typedef struct tagPOINTER_INFO {
+	POINTER_INPUT_TYPE pointerType;
+	UINT32            pointerId;
+	UINT32            frameId;
+	DWORD             pointerFlags;
+	HANDLE            sourceDevice;
+	HWND              hwndTarget;
+	POINT             ptPixelLocation;
+	POINT             ptHimetricLocation;
+	POINT             ptPixelLocationRaw;
+	POINT             ptHimetricLocationRaw;
+	DWORD             dwTime;
+	UINT32            historyCount;
+	INT32             inputData;
+	DWORD             dwKeyStates;
+	UINT64            PerformanceCount;
+	POINTER_BUTTON_CHANGE_TYPE ButtonChangeType;
+} POINTER_INFO;
+
+typedef BOOL(WINAPI* GETPOINTERINFO)(UINT32 pointerId, POINTER_INFO* pointerInfo);
+GETPOINTERINFO pGetPointerInfo = nullptr;
+
+typedef BOOL(WINAPI* PFN_EnableMouseInPointer)(BOOL fEnable);
+PFN_EnableMouseInPointer pEnableMouseInPointer = nullptr;
+
 using namespace Sexy;
 
 const int DEMO_FILE_ID = 0x42BEEF78;
@@ -313,6 +400,7 @@ SexyAppBase::SexyAppBase()
 	mIsPreviewSaver = false;
 	mPreviewHWnd = NULL;
 	mIsParticleEditor = false;
+	mIsTouch = false;
 
 	int i;
 
@@ -3568,8 +3656,100 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 				aSexyApp->mActive = wParam != 0;
 			}
 		}
-	//Fallthrough	
+	//Fallthrough
+	case WM_POINTERDOWN:
+	case WM_POINTERUPDATE:
+	case WM_POINTERUP:
+	{
+		UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
+		POINTER_INFO pointerInfo = {};
+		if (pGetPointerInfo && pGetPointerInfo(pointerId, &pointerInfo))
+		{
+			switch (pointerInfo.pointerType)
+			{
+			case PT_TOUCH:
+			case PT_PEN:
+				aSexyApp->mIsTouch = true;
+				break;
 
+			case PT_MOUSE:
+			case PT_TOUCHPAD:
+				aSexyApp->mIsTouch = false;
+				break;
+			}
+		}
+		break;
+	}
+	case WM_TOUCH:
+	{
+		if ((aSexyApp != NULL) && (!aSexyApp->mNoDefer))
+		{
+			UINT cInputs = LOWORD(wParam);
+			std::vector<TOUCHINPUT> inputs(cInputs);
+
+			if (pGetTouchInputInfo && pGetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, inputs.data(), sizeof(TOUCHINPUT)))
+			{
+				for (UINT i = 0; i < cInputs; ++i)
+				{
+					const TOUCHINPUT& ti = inputs[i];
+					int xScreen = TOUCH_COORD_TO_PIXEL(ti.x);
+					int yScreen = TOUCH_COORD_TO_PIXEL(ti.y);
+
+					POINT pt = { xScreen, yScreen };
+					ScreenToClient(hWnd, &pt);
+
+					int offsetX = aSexyApp->mDDInterface->mPresentationRect.mX;
+					int offsetY = aSexyApp->mDDInterface->mPresentationRect.mY;
+
+					int inputX = pt.x - offsetX;
+					int inputY = pt.y - offsetY;
+
+					if (inputX < 0) inputX = 0;
+					if (inputY < 0) inputY = 0;
+					if (inputX > aSexyApp->mDDInterface->mPresentationRect.mWidth)
+						inputX = aSexyApp->mDDInterface->mPresentationRect.mWidth;
+					if (inputY > aSexyApp->mDDInterface->mPresentationRect.mHeight)
+						inputY = aSexyApp->mDDInterface->mPresentationRect.mHeight;
+
+					float scaleX = (float)aSexyApp->mScreenBounds.mWidth / aSexyApp->mDDInterface->mPresentationRect.mWidth;
+					float scaleY = (float)aSexyApp->mScreenBounds.mHeight / aSexyApp->mDDInterface->mPresentationRect.mHeight;
+
+					int normalizedX = (int)(inputX * scaleX);
+					int normalizedY = (int)(inputY * scaleY);
+
+					if (ti.dwFlags & TOUCHEVENTF_DOWN)
+					{
+						aSexyApp->mWidgetManager->TouchDown(ti.dwID, normalizedX, normalizedY);
+					}
+					else if (ti.dwFlags & TOUCHEVENTF_UP)
+					{
+						aSexyApp->mWidgetManager->TouchUp(ti.dwID, normalizedX, normalizedY);
+					}
+					else if (ti.dwFlags & TOUCHEVENTF_MOVE)
+					{
+						aSexyApp->mWidgetManager->TouchMove(ti.dwID, normalizedX, normalizedY);
+					}
+				}
+			}
+
+			for (int i = 0; i < 10; ++i)
+			{
+				TouchInfo touch = aSexyApp->mWidgetManager->mTouches[i];
+				DWORD touchID = touch.id;
+				bool found = std::any_of(inputs.begin(), inputs.end(), [touchID](const TOUCHINPUT& ti) {
+					return ti.dwID == touchID;
+					});
+				if (!found)
+				{
+					aSexyApp->mWidgetManager->ReleaseTouchSlot(touchID);
+				}
+			}
+
+			if (pCloseTouchInputHandle)
+				pCloseTouchInputHandle((HTOUCHINPUT)lParam);
+		}
+		break;
+	}
 	case WM_SIZE:
 	case WM_MOVE:
 	case WM_TIMER:
@@ -4700,16 +4880,17 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 			case WM_LBUTTONUP:		
 			case WM_RBUTTONUP:		
 			case WM_MBUTTONUP:
-			case WM_MOUSEMOVE:		
-				if ((!gInAssert) && (!mSEHOccured))
+			case WM_MOUSEMOVE:	
+				if ((!gInAssert) && (!mSEHOccured) && !mIsTouch)
 				{
+
 					int x = (short) LOWORD(lParam);
 					int y = (short) HIWORD(lParam);
 					mWidgetManager->RemapMouse(x, y);
 
 					mLastUserInputTick = mLastTimerTime;
 					
-					mWidgetManager->MouseMove(x, y);		
+					mWidgetManager->MouseMove(x, y);
 
 					if (!mMouseIn)
 					{
@@ -5150,6 +5331,32 @@ void SexyAppBase::MakeWindow()
 
 		mIsPhysWindowed = false;
 	}
+
+	if (CheckForWindows7OrLater())
+	{
+		HMODULE hUser32 = GetModuleHandleA("user32.dll");
+		if (hUser32)
+		{
+			pGetTouchInputInfo = (PFN_GetTouchInputInfo)GetProcAddress(hUser32, "GetTouchInputInfo");
+			pCloseTouchInputHandle = (PFN_CloseTouchInputHandle)GetProcAddress(hUser32, "CloseTouchInputHandle");
+			pGetPointerInfo = (GETPOINTERINFO)GetProcAddress(hUser32, "GetPointerInfo");
+
+			typedef BOOL(WINAPI* PFN_RegisterTouchWindow)(HWND, ULONG);
+			PFN_RegisterTouchWindow pRegisterTouchWindow =
+				(PFN_RegisterTouchWindow)GetProcAddress(hUser32, "RegisterTouchWindow");
+
+			if (pRegisterTouchWindow)
+			{
+				pRegisterTouchWindow(mHWnd, TWF_WANTPALM);
+			}
+
+			pEnableMouseInPointer = (PFN_EnableMouseInPointer)GetProcAddress(hUser32, "EnableMouseInPointer");
+			if (pEnableMouseInPointer)
+			{
+				pEnableMouseInPointer(TRUE); 
+			}
+		}
+	}
 	
 	char aStr[256];
 	sprintf(aStr, "HWND: %d\r\n", mHWnd);
@@ -5553,7 +5760,6 @@ void SexyAppBase::EnforceCursor()
 	}
 	else
 	{
-
 		LRESULT hitTest = SendMessage(mHWnd, WM_NCHITTEST, 0, MAKELPARAM(GET_X_LPARAM(GetMessagePos()), GET_Y_LPARAM(GetMessagePos())));
 		if (hitTest != HTCLIENT)
 			return;

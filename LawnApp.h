@@ -357,6 +357,7 @@ public:
 	void							DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera);
 
 	void							ShowParticleEditor();
+	bool							TryToInitializePA();
 };
 
 SexyString							LawnGetCurrentLevelName();

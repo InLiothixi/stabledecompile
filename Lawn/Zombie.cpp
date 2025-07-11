@@ -8663,7 +8663,6 @@ void Zombie::DieNoLoot()
         mBoard->mChallenge->mChallengePoints += points;
     }
 
-    TrySpawnLevelAward();
     StopZombieSound();
     AttachmentDie(mAttachmentID);
     mApp->RemoveReanimation(mBodyReanimID);
@@ -11005,7 +11004,8 @@ void Zombie::UpdateMowered()
     Reanimation* aMoweredReanim = mApp->ReanimationTryToGet(mMoweredReanimID);
     if (aMoweredReanim == nullptr || aMoweredReanim->mLoopCount > 0)
     {
-        DropAllParticles();
+        if (!mInPool)
+            DropAllParticles();
         DieWithLoot();
     }
 }
