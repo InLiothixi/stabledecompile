@@ -3307,15 +3307,15 @@ void DDImage::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3& th
 	if (!LockSurface())
 		return;
 
-	int aPixelFormat;
-	if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
+	int aPixelFormat = 0x8888;
+	if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32 && !mHasAlpha && !mHasTrans)
 		aPixelFormat = 0x888;
 	else if (mLockedSurfaceDesc.ddpfPixelFormat.dwRBitMask == 0xf800 && mLockedSurfaceDesc.ddpfPixelFormat.dwGBitMask == 0x07e0 && mLockedSurfaceDesc.ddpfPixelFormat.dwBBitMask == 0x001f)
 		aPixelFormat = 0x565;
 	else if (mLockedSurfaceDesc.ddpfPixelFormat.dwRBitMask == 0x7c00 && mLockedSurfaceDesc.ddpfPixelFormat.dwGBitMask == 0x03e0 && mLockedSurfaceDesc.ddpfPixelFormat.dwBBitMask == 0x001f)
 		aPixelFormat = 0x555;
-	else
-		DBG_ASSERTE(FALSE);
+	/*else
+		DBG_ASSERTE(FALSE);*/
 
 	BltMatrixHelper(theImage, x, y, theMatrix, theClipRect, theColor, theDrawMode, theSrcRect, mLockedSurfaceDesc.lpSurface, mLockedSurfaceDesc.lPitch, aPixelFormat, blend);
 

@@ -10589,8 +10589,8 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
 
     if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER && mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
     {
-        DropPole();
         DropZombiePole();
+        DropPole();
         theBlendTime = 0;
     }
 
