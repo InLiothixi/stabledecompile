@@ -9126,9 +9126,6 @@ void Board::KeyChar(SexyChar theChar)
 #endif
 		return;
 
-	if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
-		return;
-
 	TodTraceAndLog("Board cheat key '%c'", theChar);
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)

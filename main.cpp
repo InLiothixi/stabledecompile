@@ -30,6 +30,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	freopen_s(&dummy, "CONIN$", "r", stdin);
 	freopen_s(&dummy, "CONOUT$", "w", stdout);
 	freopen_s(&dummy, "CONOUT$", "w", stderr);
+
+	HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD prevMode;
+	GetConsoleMode(hInput, &prevMode);
+
+	SetConsoleMode(hInput, (prevMode & ~ENABLE_QUICK_EDIT_MODE) | ENABLE_EXTENDED_FLAGS | ENABLE_INSERT_MODE | ENABLE_PROCESSED_INPUT);
 #endif
 
 	TodStringListSetColors(gLawnStringFormats, gLawnStringFormatCount);

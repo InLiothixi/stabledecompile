@@ -334,7 +334,7 @@ SexyAppBase::SexyAppBase()
 	mSysCursor = true;	
 	mForceFullscreen = false;
 	mForceWindowed = false;
-	mHasFocus = false;			
+	mHasFocus = true;			
 	mCustomCursorsEnabled = false;	
 	mCustomCursorDirty = false;
 	mOverrideCursor = NULL;
@@ -3661,24 +3661,26 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 	case WM_POINTERUPDATE:
 	case WM_POINTERUP:
 	{
-		UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
-		POINTER_INFO pointerInfo = {};
-		if (pGetPointerInfo && pGetPointerInfo(pointerId, &pointerInfo))
+		if ((aSexyApp != NULL) && (!aSexyApp->mNoDefer))
 		{
-			switch (pointerInfo.pointerType)
+			UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
+			POINTER_INFO pointerInfo = {};
+			if (pGetPointerInfo && pGetPointerInfo(pointerId, &pointerInfo))
 			{
-			case PT_TOUCH:
-			case PT_PEN:
-				aSexyApp->mIsTouch = true;
-				break;
+				switch (pointerInfo.pointerType)
+				{
+				case PT_TOUCH:
+				case PT_PEN:
+					aSexyApp->mIsTouch = true;
+					break;
 
-			case PT_MOUSE:
-			case PT_TOUCHPAD:
-				aSexyApp->mIsTouch = false;
-				break;
+				case PT_MOUSE:
+				case PT_TOUCHPAD:
+					aSexyApp->mIsTouch = false;
+					break;
+				}
 			}
 		}
-		break;
 	}
 	case WM_TOUCH:
 	{
@@ -3748,7 +3750,6 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			if (pCloseTouchInputHandle)
 				pCloseTouchInputHandle((HTOUCHINPUT)lParam);
 		}
-		break;
 	}
 	case WM_SIZE:
 	case WM_MOVE:
@@ -5031,8 +5032,8 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 					}
 
 					RehupFocus();
-					//if (wParam==SIZE_MAXIMIZED)
-					//	SwitchScreenMode(false);
+					/*if (wParam==SIZE_MAXIMIZED)
+						SwitchScreenMode(false);*/
 				}
 				break;
 			case WM_TIMER:
