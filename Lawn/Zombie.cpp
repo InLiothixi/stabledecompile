@@ -11005,7 +11005,7 @@ void Zombie::UpdateMowered()
     if (aMoweredReanim == nullptr || aMoweredReanim->mLoopCount > 0)
     {
         if (!mInPool)
-            DropAllParticles();
+            DropAllParticles(true);
         DieWithLoot();
     }
 }
