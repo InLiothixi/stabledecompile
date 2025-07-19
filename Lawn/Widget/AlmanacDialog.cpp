@@ -14,6 +14,7 @@
 #include "../../Sexy.TodLib/TodStringFile.h"
 #include "../../SexyAppFramework/WidgetManager.h"
 #include "../../Sexy.TodLib/Reanimator.h"
+#include "../../SexyAppFramework/Font.h"
 
 bool gZombieDefeated[NUM_ZOMBIE_TYPES] = { false };
 
@@ -603,11 +604,11 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 		}
 	}
 
-	int aHeaderHeight = TodDrawStringWrappedHelper(g, aHeader, Rect(484, 377, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, false);
-	int aDescriptionOffset = 17 - aHeaderHeight;
-	if (!ZombieHasDescription(mSelectedZombie)) aHeaderHeight = aDescriptionOffset = 0;
+	int aHeaderHeight = 0;
+	if (ZombieHasDescription(mSelectedZombie)) aHeaderHeight = TodDrawStringWrappedHelper(g, aHeader, Rect(484, 377, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, false);
+	int aBoxHeight = 142 - aHeaderHeight + Sexy::FONT_BRIANNETOD12->GetHeight();
 	int aDescriptionHeight = TodDrawStringWrappedHelper(g, aDescription, Rect(484, 377 + aHeaderHeight, 258, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, false);
-	mScrollbar->mScrollRange = aHeaderHeight + aDescriptionHeight - 142;
+	mScrollbar->mScrollRange = aDescriptionHeight - 142 + aHeaderHeight;
 	mScrollbar->SetDisabled(mScrollbar->mScrollRange <= 34);
 	int aClipWidthOffset = mScrollbar->mDisabled ? 10 : 0;
 
@@ -618,10 +619,10 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 
 	g->PushState();
 	g->mTransY -= mScrollbar->mScrollValue;
-	g->SetClipRect(484, 377 + aHeaderHeight + mScrollbar->mScrollValue, 248 + aClipWidthOffset, 142 + aDescriptionOffset);
+	g->SetClipRect(484, 377 + aHeaderHeight + mScrollbar->mScrollValue, 248 + aClipWidthOffset, aBoxHeight);
 
-	mScrollbar->Resize(738, 377 + aHeaderHeight, 8, 142 + aDescriptionOffset);
-	mScrollbar->mViewport = Rect(484, 377 + aHeaderHeight, 248 + aClipWidthOffset, 142 + aDescriptionOffset);
+	mScrollbar->Resize(738, 377 + aHeaderHeight, 8, aBoxHeight);
+	mScrollbar->mViewport = Rect(484, 377 + aHeaderHeight, 248 + aClipWidthOffset, aBoxHeight);
 	
 	TodDrawStringWrapped(g, aDescription, Rect(484, 377 + aHeaderHeight, 248 + aClipWidthOffset, 170), Sexy::FONT_BRIANNETOD12, Color(40, 50, 90), aAlign, true);
 	g->PopState();
