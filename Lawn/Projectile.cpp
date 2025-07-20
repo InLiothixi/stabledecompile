@@ -523,7 +523,11 @@ bool Projectile::IsSplashDamage(Zombie* theZombie)
 	return 
 		mProjectileType == ProjectileType::PROJECTILE_MELON || 
 		mProjectileType == ProjectileType::PROJECTILE_WINTERMELON || 
-		mProjectileType == ProjectileType::PROJECTILE_FIREBALL;
+		mProjectileType == ProjectileType::PROJECTILE_FIREBALL
+#ifdef _SPLASH_SNOWPEA
+		|| mProjectileType == ProjectileType::PROJECTILE_SNOWPEA
+#endif
+		;
 }
 
 //0x46D230
@@ -537,7 +541,7 @@ unsigned int Projectile::GetDamageFlags(Zombie* theZombie)
 		considerateHoming = mVelX < 0.0f;
 	}
 
-	if (IsSplashDamage(theZombie))
+	if (IsSplashDamage(theZombie) && mProjectileType != ProjectileType::PROJECTILE_SNOWPEA)
 	{
 		SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_HITS_SHIELD_AND_BODY, true);
 	}
@@ -574,7 +578,11 @@ bool Projectile::IsZombieHitBySplash(Zombie* theZombie)
 	int aDamageFlags = mDamageRangeFlags;
 
 	Rect aProjectileRect = GetProjectileRect();
-	if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL)
+	if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL
+#ifdef _SPLASH_SNOWPEA 
+		|| mProjectileType == ProjectileType::PROJECTILE_SNOWPEA
+#endif
+		)
 	{
 		if (mMotionType == MOTION_BACKWARDS) 
 		{
@@ -593,11 +601,23 @@ bool Projectile::IsZombieHitBySplash(Zombie* theZombie)
 		return false;
 	}
 
+#ifdef _SPLASH_SNOWPEA
+	if (!theZombie->CanBeChilled() && mProjectileType == ProjectileType::PROJECTILE_SNOWPEA)
+	{
+		return false;
+	}
+#endif
+
 	if (theZombie->mZombieType == ZombieType::ZOMBIE_BOSS)
 	{
 		aRowDeviation = 0;
 	}
-	if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL)
+	if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL 
+#ifdef _SPLASH_SNOWPEA
+		|| mProjectileType == PROJECTILE_SNOWPEA
+#endif
+
+		)
 	{
 		if (aRowDeviation != 0)
 		{
@@ -1072,7 +1092,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 			
 			for (int i = 0; i < mNumPierced; ++i) // Todo: Make a fallback incase this goes beyond the size
 			{
-				if (mPiercedZombies[i] == theZombieID)
+				if (mPiercedZombies[i] == theZombieID || theZombie->IsFlying())
 				{
 					isAlreadyPierced = true;
 					break;
@@ -1091,7 +1111,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 			if (theZombie->mShieldType != ShieldType::SHIELDTYPE_NONE && mNumPierced == 1)
 			{
 				mNumPierced++;
-				theZombie->TakeBodyDamage(10, GetDamageFlags(theZombie));
+				theZombie->TakeBodyDamage(8, GetDamageFlags(theZombie));
 			}
 		}
 	}

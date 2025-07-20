@@ -101,3 +101,4 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 
 // Rebalancing
 #define _PIERCING_CACTUS
+#define _SPLASH_SNOWPEA
