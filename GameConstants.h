@@ -78,7 +78,7 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 #endif
 
 // Resources
-//#define _ALLOW_RESOURCE_PACKS
+#define _ALLOW_RESOURCE_PACKS
 
 // Unused or Restored
 //#define _HAS_SCORE_SYSTEM
@@ -92,9 +92,9 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 // Quality Of Life
 #define _HAS_HEALTHBAR_TOGGLE
 //#define _ALLOW_SWIPE
-//#define _HAS_GAMESELECTOR_SPOTLIGHT
-//#define _HAS_ANIMATED_WOOD_SIGN
-//#define _HAS_KERNELPULT_BUTTER_IDLE
+#define _HAS_GAMESELECTOR_SPOTLIGHT
+#define _HAS_ANIMATED_WOOD_SIGN
+#define _HAS_KERNELPULT_BUTTER_IDLE
 
 // Quirky stuff
 //#define _HAS_ROOF_SLOPE_ANGLE
