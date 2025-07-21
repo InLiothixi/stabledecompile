@@ -1092,8 +1092,6 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
                 mState = PlantState::STATE_KERNELPULT_BUTTER;
             }
 #endif
-
-
             mShootingCounter = 30;
             break;
         }
@@ -3966,7 +3964,6 @@ void Plant::UpdateShooting()
             )
         {
             PlantWeapon aPlantWeapon = PlantWeapon::WEAPON_PRIMARY;
-#ifndef _HAS_KERNELPULT_BUTTER_IDLE
             if (mState == PlantState::STATE_KERNELPULT_BUTTER)
             {
                 Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
@@ -3975,7 +3972,7 @@ void Plant::UpdateShooting()
                 mState = PlantState::STATE_NOTREADY;
                 aPlantWeapon = PlantWeapon::WEAPON_SECONDARY;
             }
-#else
+#ifdef _HAS_KERNELPULT_BUTTER_IDLE
             if (Sexy::Rand(4) == 0)
             {
                 Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
