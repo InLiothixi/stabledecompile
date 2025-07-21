@@ -2674,13 +2674,13 @@ bool Board::CanZombieSpawnOnLevel(ZombieType theZombieType, int theLevel)
 		return gLawnApp->CanSpawnYetis();
 	}
 
-	if (abs(theLevel) < aZombieDef.mStartingLevel || aZombieDef.mPickWeight == 0)
+	if (theLevel < aZombieDef.mStartingLevel || aZombieDef.mPickWeight == 0)
 	{
 		return false;
 	}
 
 	TOD_ASSERT(gZombieAllowedLevels[theZombieType].mZombieType == theZombieType);
-	return gZombieAllowedLevels[theZombieType].mAllowedOnLevel[ClampInt(abs(theLevel) - 1, 0, 49)];
+	return gZombieAllowedLevels[theZombieType].mAllowedOnLevel[ClampInt(theLevel - 1, 0, 49)];
 }
 
 //0x40D6F0

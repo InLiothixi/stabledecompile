@@ -465,6 +465,9 @@ void ChallengeScreen::UpdateButtons()
 				aButton->Resize(38 + aColumn * 155, 93 + aRow * 119 - mScrollbar->mScrollValue, 104, 115);
 			else
 				aButton->Resize(38 + aColumn * 155, 125 + aRow * 145 - mScrollbar->mScrollValue, 104, 115);
+
+			aButton->mDisabled = aButton->mY + aButton->mHeight <= mScrollbar->mY || aButton->mY >= mScrollbar->mY + mScrollbar->mHeight;
+			aButton->mDoFinger = !aButton->mDisabled;
 		}
 	}
 	
