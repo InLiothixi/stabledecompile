@@ -2176,7 +2176,7 @@ void Board::FadeOutLevel()
 		DisplayAdvice(aMsg, MessageStyle::MESSAGE_STYLE_BIG_MIDDLE_FAST, AdviceType::ADVICE_NONE);
 		for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
 		{
-			mIceTimer[aRow] = mNextSurvivalStageCounter;
+			mIceTimer[aRow] = min(mIceTimer[aRow], mNextSurvivalStageCounter);
 		}
 	}
 	else
@@ -2188,7 +2188,7 @@ void Board::FadeOutLevel()
 		mApp->PlaySample(Sexy::SOUND_HUGE_WAVE);
 		for (int aRow = 0; aRow < MAX_GRID_SIZE_Y; aRow++)
 		{
-			mIceTimer[aRow] = mNextSurvivalStageCounter;
+			mIceTimer[aRow] = min(mIceTimer[aRow], mNextSurvivalStageCounter);
 		}
 	}
 
@@ -8691,7 +8691,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(200, 200, 200, 210));
-		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(0, 0, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->PopState();
 	}
 
@@ -8701,7 +8701,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(255, 255, 255, (int)(min(mNukeCounter, 150) / 150.0f * 255)));
-		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(0, 0, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->PopState();
 	}
 
@@ -8777,6 +8777,8 @@ void Board::DrawUITop(Graphics* g)
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		g->PushState();
+		g->mTransX = 0;
+		g->mTransY = 0;
 		int indicatorHeight = mChallenge->mShoutingCounter / 100.0f * 200;
 		g->SetColorizeImages(true);
 		g->SetColor(Color::White);
@@ -8820,7 +8822,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(0, 0, 0));
-		g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(0, 0, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->PopState();
 	}
 

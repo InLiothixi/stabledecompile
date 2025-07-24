@@ -5465,7 +5465,7 @@ void Plant::DoSpecial()
         mBoard->ShakeBoard(3, -4);
 
         BurnRow(mRow);
-        mBoard->mIceTimer[mRow] = 20;
+        mBoard->mIceTimer[mRow] = min(mBoard->mIceTimer[mRow], 20);
 
         Die();
         break;
