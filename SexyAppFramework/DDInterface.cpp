@@ -297,6 +297,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 	mFullscreenBits = mApp->mFullscreenBits;
 	mIsWindowed = IsWindowed;
 	mHasOldCursorArea = false;
+	mWideScreenOffsetX = 0;
 
 	OutputDebug(_S("Application requests %4lu x %4lu [%2d:%2d]\n"), mWidth, mHeight, mAspect.mNumerator, mAspect.mDenominator);
 
@@ -338,6 +339,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 				mWidth = mDisplayWidth;
 				mHeight = mDisplayHeight;
 				mAspect = mDisplayAspect;
+				mWideScreenOffsetX = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect) / 2.0f;
 
 				mPresentationRect.mWidth = mDisplayWidth;
 				mPresentationRect.mHeight = mDisplayHeight;
@@ -406,7 +408,6 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 		if (mIs3D && mAspect < mDesktopAspect)
 		{
 			mIsWidescreen = true;
-
 			// Set the display mode to the size of the desktop.
 			mDisplayWidth = mDesktopWidth;
 			mDisplayHeight = mDesktopHeight;
@@ -418,6 +419,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 				// but with the height requested by the application.
 				mAspect = mDisplayAspect;
 				mWidth = mHeight * mAspect;
+				mWideScreenOffsetX = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect) / 2.0f;
 
 				mPresentationRect.mWidth = mDisplayWidth;
 				mPresentationRect.mHeight = mDisplayHeight;

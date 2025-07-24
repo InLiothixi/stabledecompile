@@ -389,7 +389,7 @@ SexyAppBase::SexyAppBase()
 	mMinVidMemory3D = 6;
 	mRecommendedVidMemory3D = 14;
 	mRelaxUpdateBacklogCount = 0;
-	mWidescreenAware = false;
+	mWidescreenAware = true;
 	mEnableWindowAspect = false;
 	mWindowAspect.Set(4, 3);
 #ifdef _USE_WIDE_STRING

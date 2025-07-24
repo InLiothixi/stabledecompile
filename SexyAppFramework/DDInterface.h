@@ -96,6 +96,8 @@ public:
 
 	std::string				mErrorString;
 
+	int						mWideScreenOffsetX;
+
 public:
 	bool					CopyBitmap(LPDIRECTDRAWSURFACE theSurface, HBITMAP TheBitmap, int theX, int theY, int theWidth, int theHeight);
 	ulong					GetColorRef(ulong theRGB);

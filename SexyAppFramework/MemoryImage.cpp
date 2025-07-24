@@ -1911,8 +1911,6 @@ void MemoryImage::BltMatrixHelper(Image* theImage, float x, float y, const SexyM
 	}
 
 	SWHelper::SWDrawShape(aVerts, 4, anImage, theColor, theDrawMode, theClipRect, theSurface, theBytePitch, thePixelFormat, blend, false);
-	
- 
 }
 
 void MemoryImage::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3 &theMatrix, const Rect& theClipRect, const Color& theColor, int theDrawMode, const Rect &theSrcRect, bool blend)

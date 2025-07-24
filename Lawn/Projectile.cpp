@@ -1486,7 +1486,7 @@ void Projectile::Draw(Graphics* g)
 				aScaleX *= -1;
 
 			SexyTransform2D aTransform;
-			TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, aScaleX, aScaleY);
+			TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX + mApp->mDDInterface->mWideScreenOffsetX, aOffsetY + mBoard->mY, mRotation, aScaleX, aScaleY);
 			TodBltMatrix(&gProj, aImage, aTransform, gProj.mClipRect, Color::White, gProj.mDrawMode, aSrcRect);
 		}
 	}

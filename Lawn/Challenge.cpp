@@ -2431,7 +2431,7 @@ void Challenge::DrawBeghouled(Graphics* g)
 		mBoard->MouseHitTest(mApp->mWidgetManager->mLastMouseX, mApp->mWidgetManager->mLastMouseY, &aHitResult);
 		if (mChallengeGridX != -1 && mChallengeGridY != -1 && aHitResult.mObjectType != OBJECT_TYPE_COIN)
 		{
-			float aPixelX = mBoard->GridToPixelX(mChallengeGridX, mChallengeGridY) + 80;
+			float aPixelX = mBoard->GridToPixelX(mChallengeGridX, mChallengeGridY) + 80 + mApp->mDDInterface->mWideScreenOffsetX;
 			float aPixelY = mBoard->GridToPixelY(mChallengeGridX, mChallengeGridY) + 100;
 
 			SexyTransform2D aTransform;
@@ -2457,7 +2457,7 @@ void Challenge::DrawSlotMachine(Graphics* g)
 		g->SetColor(GetFlashingColor(mBoard->mMainCounter, 75));
 		g->SetColorizeImages(true);
 	}
-	g->mTransX = mBoard->mSeedBank->mX - mBoard->mX;
+	g->mTransX = mBoard->mSeedBank->mX - mBoard->mX + mApp->mDDInterface->mWideScreenOffsetX;
 	g->mTransY = mBoard->mSeedBank->mY - mBoard->mY;
 	mApp->ReanimationGet(mReanimChallenge)->Draw(g);
 	g->PopState();
@@ -5697,7 +5697,7 @@ void Challenge::TreeOfWisdomDraw(Graphics* g)
 		float aStrHeight = Sexy::FONT_HOUSEOFTERROR16->mAscent * aScale;
 
 		SexyTransform2D aMatrix;
-		TodScaleTransformMatrix(aMatrix, 400.0f - aStrWidth * 0.5f, 20.0f + aStrHeight * 0.5f, aScale, aScale);
+		TodScaleTransformMatrix(aMatrix, 400.0f - aStrWidth * 0.5f + mApp->mDDInterface->mWideScreenOffsetX, 20.0f + aStrHeight * 0.5f, aScale, aScale);
 		TodDrawStringMatrix(g, Sexy::FONT_HOUSEOFTERROR16, aMatrix, aSizeStr, Color(255, 255, 255));
 	}
 }
