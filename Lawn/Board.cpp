@@ -8064,7 +8064,7 @@ void Board::DrawFadeOut(Graphics* g)
 	}
 	g->mTransX = 0;
 	g->mTransY = 0;
-	g->FillRect(0, 0, mWidth, mHeight);
+	g->FillRect(0, 0, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 	g->PopState();
 }
 

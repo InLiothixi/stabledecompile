@@ -11,6 +11,7 @@
 #include "../SexyAppFrameWork/PerfTimer.h"
 #include "../SexyAppFrameWork/MemoryImage.h"
 #include "../SexyAppFramework/WidgetManager.h"
+#include "../SexyAppFramework/DDInterface.h"
 
 unsigned int gReanimatorDefCount;                     //[0x6A9EE4]
 ReanimatorDefinition* gReanimatorDefArray;   //[0x6A9EE8]
@@ -814,7 +815,7 @@ bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, int theRenderGroup, 
 	{
 		Color aOldColor = g->GetColor();  // 备份颜色
 		g->SetColor(aColor);
-		g->FillRect(-g->mTransX, -g->mTransY, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->SetColor(aOldColor);  // 还原颜色
 	}
 	return true;

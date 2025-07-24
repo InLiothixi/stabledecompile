@@ -405,7 +405,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 	{
 		OutputDebug(_S("Desktop is           %4lu x %4lu [%2d:%2d]\n"), mDesktopWidth, mDesktopHeight, mDesktopAspect.mNumerator, mDesktopAspect.mDenominator);
 
-		if (mIs3D && mAspect < mDesktopAspect)
+		if (/*mIs3D &&*/ mAspect < mDesktopAspect)
 		{
 			mIsWidescreen = true;
 			// Set the display mode to the size of the desktop.

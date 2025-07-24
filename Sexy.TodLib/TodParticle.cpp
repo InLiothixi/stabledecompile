@@ -6,6 +6,7 @@
 #include "../SexyAppFramework/Graphics.h"
 #include "../SexyAppFramework/D3DInterface.h"
 #include "../Sexy.TodLib/FilterEffect.h"
+#include "../SexyAppFramework/DDInterface.h"
 
 int gParticleDefCount;                      // [0x6A9F08]
 TodParticleDefinition* gParticleDefArray;   // [0x6A9F0C]
@@ -1106,8 +1107,7 @@ void RenderParticle(Graphics* g, TodParticle* theParticle, const Color& theColor
 		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
 			g->SetColor(Color::White);
 		
-
-		g->FillRect(-g->mTransX, -g->mTransY, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->SetColor(anOldColor);
 		g->SetDrawMode(anOldDrawMode);
 	}
@@ -1197,8 +1197,7 @@ void RenderParticleAdditive(Graphics* g, TodParticle* theParticle, const Color& 
 		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
 			g->SetColor(Color::White);
 
-
-		g->FillRect(-g->mTransX, -g->mTransY, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->SetColor(anOldColor);
 		g->SetDrawMode(anOldDrawMode);
 	}

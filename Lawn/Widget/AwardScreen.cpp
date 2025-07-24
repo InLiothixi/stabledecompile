@@ -289,7 +289,7 @@ void AwardScreen::Draw(Graphics* g)
 		g->DrawImage(Sexy::IMAGE_BACKGROUND6BOSS, -900, -400, 2800, 1200);
 		g->SetColorizeImages(false);
 		g->SetColor(Color(0, 0, 0, 64));
-		g->FillRect(0, 525, BOARD_WIDTH, BOARD_HEIGHT);
+		g->FillRect(0, 525, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 		g->DrawImage(Sexy::IMAGE_ZOMBIE_NOTE, 75, 60);
 		g->DrawImage(Sexy::IMAGE_CREDITS_ZOMBIENOTE, 149, 103, 475, 325);
 	}
@@ -407,7 +407,7 @@ void AwardScreen::Draw(Graphics* g)
 
 	int aFadeInAlpha = TodAnimateCurve(180, 0, mFadeInCounter, 255, 0, CURVE_LINEAR);
 	g->SetColor(IsPaperNote() ? Color(0, 0, 0, aFadeInAlpha) : Color(255, 255, 255, aFadeInAlpha));
-	g->FillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+	g->FillRect(0, 0, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
 }
 
 //0x4076A0
@@ -588,18 +588,12 @@ void AwardScreen::MouseUp(int x, int y, int theClickCount)
 // @Patoke: implement functions
 // GOTY @Patoke: 0x407C20
 void AwardScreen::DrawAchievements(Graphics* g) {
-	g->SetColorizeImages(true);
-	// Rect aTextWrap = Rect(0, 0, 0, 77); // unused
-	g->SetColor(Color(255, 255, 255));
-	g->FillRect(0, 0, mWidth, mHeight);
-	g->SetColorizeImages(false);
-
 	g->DrawImage(IMAGE_CHALLENGE_BACKGROUND, 0, 0);
 
 	TodDrawString(g, _S("ACHIEVEMENTS"), BOARD_WIDTH / 2, 58, FONT_HOUSEOFTERROR28, Color(220, 220, 220), DS_ALIGN_CENTER);
 
 	for (int i = 0; i < (int)mAchievementItems.size(); i++) {
-		SexyString aAchievementName = gAchievementList[mAchievementItems[i].mId].name;
+		SexyString aAchievementName = TodStringTranslate(gAchievementList[mAchievementItems[i].mId].name);
 		SexyString aAchievementDesc = gAchievementList[mAchievementItems[i].mId].description;
 
 		aAchievementName.append(_S(" Earned!"));
