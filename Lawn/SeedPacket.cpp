@@ -201,7 +201,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 		aImage = FilterEffectGetImage(aImage, aFilterEffect);
 	}
 
-	/*if (aSeedType == SeedType::SEED_POTATOMINE && g->mScaleX <= 1.0f)
+	if (aSeedType == SeedType::SEED_POTATOMINE && g->mScaleX <= 1.0f)
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 0, 0, g->mScaleX, g->mScaleY);
 	}
@@ -237,7 +237,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 8, 0, g->mScaleX, g->mScaleY);
 	}
-	elseif (aSeedType == SeedType::SEED_KERNELPULT && g->mScaleX <= 1.0f)
+	else if (aSeedType == SeedType::SEED_KERNELPULT && g->mScaleX <= 1.0f)
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 9, 0, g->mScaleX, g->mScaleY);
 	}
@@ -253,7 +253,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 	{
 		TodDrawImageCelScaledF(g, aImage, x, y, 12, 0, g->mScaleX, g->mScaleY);
 	}
-	else*/ 
+	else
 	{
 		g->PushState();
 		g->mScaleX = theScale * g->mScaleX;
