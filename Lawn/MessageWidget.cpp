@@ -424,7 +424,7 @@ void MessageWidget::Draw(Graphics* g)
 		if (aRectHeight > 0)
 		{
 			aOutlineColor = Color(0, 0, 0, 128);
-			Rect aRect(-gSexyAppBase->mDDInterface->mWideScreenOffsetX, aPosY, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, aRectHeight);
+			Rect aRect(-gSexyAppBase->mDDInterface->mWideScreenOffsetX, aPosY, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), aRectHeight);
 			g->SetColor(aOutlineColor);
 			g->FillRect(aRect);
 

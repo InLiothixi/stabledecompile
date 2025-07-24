@@ -96,6 +96,7 @@ public:
 
 	std::string				mErrorString;
 
+	int						mWideScreenExtraWidth;
 	int						mWideScreenOffsetX;
 
 public:

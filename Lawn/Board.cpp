@@ -8064,7 +8064,7 @@ void Board::DrawFadeOut(Graphics* g)
 	}
 	g->mTransX = 0;
 	g->mTransY = 0;
-	g->FillRect(0, 0, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+	g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 	g->PopState();
 }
 
@@ -8691,7 +8691,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(200, 200, 200, 210));
-		g->FillRect(0, 0, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+		g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 		g->PopState();
 	}
 
@@ -8701,7 +8701,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(255, 255, 255, (int)(min(mNukeCounter, 150) / 150.0f * 255)));
-		g->FillRect(0, 0, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+		g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 		g->PopState();
 	}
 
@@ -8822,7 +8822,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(0, 0, 0));
-		g->FillRect(0, 0, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+		g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 		g->PopState();
 	}
 

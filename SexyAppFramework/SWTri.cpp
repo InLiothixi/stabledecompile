@@ -6,6 +6,7 @@
 #ifdef _WIN64
 #include <intrin.h>
 #endif
+#include "DDInterface.h"
 
 //#include <CL/cl.hpp>
 
@@ -300,7 +301,7 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 {
 	float	tclx0 = theClipRect.mX;
 	float	tcly0 = theClipRect.mY;
-	float	tclx1 = theClipRect.mX + theClipRect.mWidth;
+	float	tclx1 = theClipRect.mX + theClipRect.mWidth + gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	float	tcly1 = theClipRect.mY + theClipRect.mHeight;
 
 	//

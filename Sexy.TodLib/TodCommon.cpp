@@ -738,7 +738,7 @@ void TodBltMatrix(Graphics* g, Image* theImage, const SexyMatrix3& theTransform,
 	}
 	else
 	{
-		g->mDestImage->BltMatrix(theImage, aOffsetX, aOffsetY, theTransform, Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT), theColor, theDrawMode, theSrcRect, g->mLinearBlend);
+		g->mDestImage->BltMatrix(theImage, aOffsetX, aOffsetY, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
 	}
 
 	gTodTriangleDrawAdditive = false;

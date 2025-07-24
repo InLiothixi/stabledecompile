@@ -289,7 +289,7 @@ void AwardScreen::Draw(Graphics* g)
 		g->DrawImage(Sexy::IMAGE_BACKGROUND6BOSS, -900, -400, 2800, 1200);
 		g->SetColorizeImages(false);
 		g->SetColor(Color(0, 0, 0, 64));
-		g->FillRect(0, 525, gSexyAppBase->mHeight * gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+		g->FillRect(-gSexyAppBase->mDDInterface->mWideScreenOffsetX, 525, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 		g->DrawImage(Sexy::IMAGE_ZOMBIE_NOTE, 75, 60);
 		g->DrawImage(Sexy::IMAGE_CREDITS_ZOMBIENOTE, 149, 103, 475, 325);
 	}
@@ -407,7 +407,7 @@ void AwardScreen::Draw(Graphics* g)
 
 	int aFadeInAlpha = TodAnimateCurve(180, 0, mFadeInCounter, 255, 0, CURVE_LINEAR);
 	g->SetColor(IsPaperNote() ? Color(0, 0, 0, aFadeInAlpha) : Color(255, 255, 255, aFadeInAlpha));
-	g->FillRect(0, 0, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+	g->FillRect(-gSexyAppBase->mDDInterface->mWideScreenOffsetX, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 }
 
 //0x4076A0

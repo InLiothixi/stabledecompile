@@ -815,7 +815,7 @@ bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, int theRenderGroup, 
 	{
 		Color aOldColor = g->GetColor();  // 备份颜色
 		g->SetColor(aColor);
-		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mHeight* gSexyAppBase->mDDInterface->mAspect, gSexyAppBase->mHeight);
+		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
 		g->SetColor(aOldColor);  // 还原颜色
 	}
 	return true;
