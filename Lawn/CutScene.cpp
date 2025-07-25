@@ -159,18 +159,17 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		aZombie->mPosY += Rand(15);  //RandRangeInt(0, 14);
 		aZombie->mPosX += Rand(15);  //RandRangeInt(0, 14);
 	}
-	aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4);
 
 	if (theZombieType == ZombieType::ZOMBIE_BUNGEE)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 0, 0);
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 0, 9);
 		aZombie->mRow = 0;
 		aZombie->mPosX = theGridX * 50.0f + 950.0f;
 		aZombie->mPosY = 50.0f;
 	}
 	else if (theZombieType == ZombieType::ZOMBIE_BOBSLED)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, 1000);
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, 1009);
 		aZombie->mRow = 0;
 		aZombie->mPosX = 1105.0f;
 		aZombie->mPosY = 480.0f;
@@ -178,6 +177,8 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (theZombieType == ZombieType::ZOMBIE_DOG_WALKER)
 	{
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4 + 9);
+
 		aZombie->mPosX += 40;
 		Zombie* aDog = mBoard->ZombieTryToGet(aZombie->mRelatedZombieID);
 		if (aDog) {
@@ -190,6 +191,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 #endif
 	else if (theZombieType == ZombieType::ZOMBIE_BALLOON)
 	{
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4 + 9);
 		aZombie->mY -= 30;
 		aZombie->mPosY -= 30;
 	}

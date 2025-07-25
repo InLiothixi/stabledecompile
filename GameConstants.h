@@ -27,6 +27,9 @@ const int           SEED_PACKET_HEIGHT = 70;
 const int           IMITATER_DIALOG_WIDTH = 500;
 const int           IMITATER_DIALOG_HEIGHT = 600;
 
+const int			WIDESCREEN_OFFSETX = -240;
+const int			WIDESCREEN_OFFSETY = -60;
+
 // ============================================================
 // ■ 关卡相关
 // ============================================================

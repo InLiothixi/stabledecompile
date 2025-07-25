@@ -72,6 +72,7 @@ Board::Board(LawnApp* theApp)
 	mCutScene = new CutScene();
 	mSpecialGraveStoneX = -1;
 	mSpecialGraveStoneY = -1;
+	memset(mBushesID, 0, sizeof(mBushesID));
 	for (int i = 0; i < MAX_GRID_SIZE_X; i++)
 	{
 		for (int j = 0; j < MAX_GRID_SIZE_Y; j++)
@@ -1273,6 +1274,72 @@ void Board::PickBackground()
 		}
 	}
 	PickSpecialGraveStone();
+
+	switch (mBackground) 
+	{
+		case BackgroundType::BACKGROUND_1_DAY:
+		case BackgroundType::BACKGROUND_2_NIGHT:
+		case BackgroundType::BACKGROUND_3_POOL:
+		case BackgroundType::BACKGROUND_4_FOG:
+		{
+			InitBushes();
+			break;
+		}
+	}
+}
+
+const ReanimationType gReanimBushesType[] = {
+	ReanimationType::REANIM_BUSHES3,
+	ReanimationType::REANIM_BUSHES5,
+	ReanimationType::REANIM_BUSHES4,
+	ReanimationType::REANIM_NIGHT_BUSHES3,
+	ReanimationType::REANIM_NIGHT_BUSHES5,
+	ReanimationType::REANIM_NIGHT_BUSHES4,
+};
+
+void Board::InitBushes() {
+	for (int i = 0; i < 6; i++) 
+	{
+		float posX = 0, posY = 0;
+		ReanimationType aReanimType = gReanimBushesType[(i + 3) % 3 + (StageIsNight() ? 3 : 0)];
+
+		switch (i) 
+		{
+			case 0:
+				posX = 710;
+				posY = -20;
+				break;
+			case 1:
+				posX = 720;
+				posY = 110;
+				break;
+			case 2:
+				posX = 730;
+				posY = 200;
+				break;
+			case 3:
+				posX = 735;
+				posY = 320;
+				break;
+			case 4:
+				posX = 730;
+				posY = 400;
+				break;
+			case 5:
+				posX = 740;
+				posY = 450;
+				break;
+		}
+
+		Reanimation* aBushReanim = mApp->AddReanimation(posX, posY, MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, i, 9), aReanimType);
+		aBushReanim->SetFramesForLayer("anim_rustle");
+		aBushReanim->mLastFrameTime = 1.0f;
+		aBushReanim->mAnimTime = 1.0f;
+		aBushReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+		aBushReanim->mLoopCount = 0;
+		aBushReanim->mAnimRate = 12.0f;
+		mBushesID[i] = mApp->ReanimationGetID(aBushReanim);
+	}
 }
 
 //0x40AB10
@@ -3010,6 +3077,17 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 			mZombies.DataArrayAlloc()->ZombieInitialize(theRow, ZombieType::ZOMBIE_BOBSLED, false, aZombie, theFromWave);
 		}
 	}
+
+	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && theFromWave >= 0)
+	{
+		Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[theRow]);
+		if (aBushReanim && !FloatApproxEqual(aBushReanim->mAnimTime, 0.0f))
+		{
+			aBushReanim->StartBlend(20);
+			aBushReanim->mAnimTime = 0.0f;
+		}
+	}
+
 	return aZombie;
 }
 
@@ -6672,11 +6750,15 @@ void Board::DrawBackdrop(Graphics* g)
 	{
 		if (aBgImage == Sexy::IMAGE_BACKGROUND_MUSHROOMGARDEN || aBgImage == Sexy::IMAGE_BACKGROUND_GREENHOUSE || aBgImage == Sexy::IMAGE_AQUARIUM1)
 		{
-			g->DrawImage(aBgImage, 0, 0);
+			g->DrawImage(aBgImage, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+		}
+		else if (aBgImage == Sexy::IMAGE_BACKGROUND6)
+		{
+			g->DrawImage(aBgImage, -BOARD_OFFSET, 0);
 		}
 		else
 		{
-			g->DrawImage(aBgImage, -BOARD_OFFSET, 0);
+			g->DrawImage(aBgImage, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		}
 	}
 
@@ -7035,6 +7117,7 @@ void Board::DrawGameObjects(Graphics* g)
 
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_BACKDROP, MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 0));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_BOTTOM_UI, aZPos);
+		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_FOREGROUND, MakeRenderOrder(RenderLayer::RENDER_LAYER_FOG, 0, 1));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_COIN_BANK, MakeRenderOrder(RenderLayer::RENDER_LAYER_COIN_BANK, 0, 0));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_TOP_UI, MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_TOP, 0, 0));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_SCREEN_FADE, MakeRenderOrder(RenderLayer::RENDER_LAYER_SCREEN_FADE, 0, 0));
@@ -7249,6 +7332,10 @@ void Board::DrawGameObjects(Graphics* g)
 			
 		case RenderObjectType::RENDER_ITEM_FOG:
 			DrawFog(g);
+			break;
+
+		case RenderObjectType::RENDER_ITEM_FOREGROUND:
+			DrawForeGround(g);
 			break;
 
 		case RenderObjectType::RENDER_ITEM_STORM:
@@ -8381,6 +8468,25 @@ void Board::DrawFog(Graphics* g)
 			}
 			g->SetColorizeImages(false);
 		}
+	}
+}
+
+void Board::DrawForeGround(Graphics* g)
+{
+	switch (mBackground)
+	{
+		case BackgroundType::BACKGROUND_1_DAY:
+			g->DrawImage(Sexy::IMAGE_BACKGROUND1_COVER, 685, 557);
+			break;
+		case BackgroundType::BACKGROUND_2_NIGHT:
+			g->DrawImage(Sexy::IMAGE_BACKGROUND2_COVER, 685, 557);
+			break;
+		case BackgroundType::BACKGROUND_3_POOL:
+			g->DrawImage(Sexy::IMAGE_BACKGROUND3_COVER, 671, 613);
+			break;
+		case BackgroundType::BACKGROUND_4_FOG:
+			g->DrawImage(Sexy::IMAGE_BACKGROUND4_COVER, 671, 613);
+			break;
 	}
 }
 

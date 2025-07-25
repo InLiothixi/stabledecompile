@@ -301,7 +301,8 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 {
 	float	tclx0 = theClipRect.mX;
 	float	tcly0 = theClipRect.mY;
-	float	tclx1 = theClipRect.mX + theClipRect.mWidth + gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	float	tclx1 = theClipRect.mX + theClipRect.mWidth;
+	if (tclx1 == BOARD_WIDTH) tclx1 += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	float	tcly1 = theClipRect.mY + theClipRect.mHeight;
 
 	//

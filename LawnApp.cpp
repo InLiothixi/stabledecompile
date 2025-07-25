@@ -3438,6 +3438,11 @@ void LawnApp::PreloadForUser()
 		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTORSCREEN_SPOTLIGHT, true);
 		if (mCompletedLoadingThreadTasks < aNumTasks)
 			mCompletedLoadingThreadTasks += 68;
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_BUSHES3, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_BUSHES4, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_BUSHES5, true);
+		if (mCompletedLoadingThreadTasks < aNumTasks)
+			mCompletedLoadingThreadTasks += 204;
 	}
 
 	if (mPlayerInfo)

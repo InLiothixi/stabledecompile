@@ -176,6 +176,12 @@ ReanimationParams gLawnReanimationArray[(int)ReanimationType::NUM_REANIMS] = { /
 	{ ReanimationType::REANIM_SELECTORSCREEN_SPOTLIGHT,             "reanim\\SelectorScreen_spotlight.reanim",         3 },
 	{ ReanimationType::REANIM_HEATWAVE_SHOOTER,						"reanim\\HeatWaveShooter.reanim",				   0 },
 	{ ReanimationType::REANIM_ZOMBIE_ZOMBOTANY,						"reanim\\ZombieZombotany.reanim",				   0 },
+	{ ReanimationType::REANIM_BUSHES3,								"reanim\\bushes3.reanim",						   3 },
+	{ ReanimationType::REANIM_BUSHES4,								"reanim\\bushes4.reanim",						   3 },
+	{ ReanimationType::REANIM_BUSHES5,								"reanim\\bushes5.reanim",						   3 },
+	{ ReanimationType::REANIM_NIGHT_BUSHES3,						"reanim\\Night_bushes3.reanim",					   3 },
+	{ ReanimationType::REANIM_NIGHT_BUSHES4,						"reanim\\Night_bushes4.reanim",					   3 },
+	{ ReanimationType::REANIM_NIGHT_BUSHES5,						"reanim\\Night_bushes5.reanim",					   3 },
 #ifdef _HAS_ZOMBATAR
 	{ ReanimationType::REANIM_ZOMBATAR,								"reanim\\zombatar_zombie_head.reanim",             0 }, // @Inliothixi: 006E73B8
 #endif

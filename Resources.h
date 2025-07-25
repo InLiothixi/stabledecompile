@@ -655,17 +655,21 @@ namespace Sexy
         IMAGE_BACKGROUND1_GAMEOVER_INTERIOR_OVERLAY_ID,
         IMAGE_BACKGROUND1_GAMEOVER_MASK_ID,
         IMAGE_BACKGROUND1UNSODDED_ID,
+        IMAGE_BACKGROUND1_COVER_ID,
         IMAGE_SOD1ROW_ID,
         IMAGE_SOD3ROW_ID,
         IMAGE_BACKGROUND2_ID,
         IMAGE_BACKGROUND2_GAMEOVER_INTERIOR_OVERLAY_ID,
         IMAGE_BACKGROUND2_GAMEOVER_MASK_ID,
+        IMAGE_BACKGROUND2_COVER_ID,
         IMAGE_BACKGROUND3_ID,
         IMAGE_BACKGROUND3_GAMEOVER_INTERIOR_OVERLAY_ID,
         IMAGE_BACKGROUND3_GAMEOVER_MASK_ID,
+        IMAGE_BACKGROUND3_COVER_ID,
         IMAGE_BACKGROUND4_ID,
         IMAGE_BACKGROUND4_GAMEOVER_INTERIOR_OVERLAY_ID,
         IMAGE_BACKGROUND4_GAMEOVER_MASK_ID,
+        IMAGE_BACKGROUND4_COVER_ID,
         IMAGE_FOG_ID,
         IMAGE_FOG_SOFTWARE_ID,
         IMAGE_BACKGROUND5_ID,
@@ -801,6 +805,7 @@ namespace Sexy
     extern int          SOUND_GRASSSTEP;                                        //0x6A71B8
     extern Image* IMAGE_DOOMSHROOM_EXPLOSION_BASE;                        //0x6A71BC
     extern Image* IMAGE_BACKGROUND3;                                      //0x6A71C0
+    extern Image* IMAGE_BACKGROUND3_COVER;
     extern int          SOUND_HATCHBACK_OPEN;                                   //0x6A71C4
     extern Image* IMAGE_TROPHY;                                           //0x6A71C8
     extern Image* IMAGE_SHOVELBANK;                                       //0x6A71CC
@@ -1078,6 +1083,7 @@ namespace Sexy
     extern int          SOUND_VASE_BREAKING;                                    //0x6A756C
     extern Image* IMAGE_FOG_SOFTWARE;                                     //0x6A7570
     extern Image* IMAGE_BACKGROUND4;                                      //0x6A7574
+    extern Image* IMAGE_BACKGROUND4_COVER;
     extern int          SOUND_GARGANTUAR_THUMP;                                 //0x6A7578
     extern Image* IMAGE_TACO;                                             //0x6A757C
     extern int          SOUND_ZOMBIE_ENTERING_WATER;                            //0x6A7580
@@ -1271,6 +1277,7 @@ namespace Sexy
     extern Image* IMAGE_BLANK;                                            //0x6A77BC
     extern Image* IMAGE_DIALOG_BOTTOMLEFT;                                //0x6A77C0
     extern Image* IMAGE_BACKGROUND1;                                      //0x6A77C4
+    extern Image* IMAGE_BACKGROUND1_COVER;
     extern Image* IMAGE_REANIM_ZOMBIE_SCREENDOOR2;                        //0x6A77C8
     extern Image* IMAGE_REANIM_ZOMBIE_LADDER_1_DAMAGE2;                   //0x6A77CC
     extern Image* IMAGE_REANIM_ZOMBIE_HEAD_SUNGLASSES2;                   //0x6A77D0
@@ -1505,6 +1512,7 @@ namespace Sexy
     extern Image* IMAGE_REANIM_ZOMBIE_CATAPULT_POLE;                      //0x6A7B00
     extern Image* IMAGE_STORE_MAINMENUBUTTON;                             //0x6A7B04
     extern Image* IMAGE_BACKGROUND2;                                      //0x6A7B08
+    extern Image* IMAGE_BACKGROUND2_COVER;
     extern Image* IMAGE_ALMANAC_ZOMBIECARD;                               //0x6A7B0C
     extern Image* IMAGE_REANIM_COINGLOW;                                  //0x6A7B10
     extern Image* IMAGE_CRATER_ROOF_CENTER;                               //0x6A7B14

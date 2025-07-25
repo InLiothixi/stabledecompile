@@ -131,6 +131,7 @@ public:
 	FilterEffect					mCameraFilter;
 	bool							mDrawOnlyCamera;
 	bool							mPaused;												//+0x164
+	ReanimationID					mBushesID[6];
 	GridSquareType					mGridSquareType[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];		//+0x168
 	int								mGridCelLook[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];			//+0x240
 	int								mGridCelOffset[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y][2];	//+0x318
@@ -393,6 +394,7 @@ public:
 	bool							CanDropLoot();
 	ZombieType						GetIntroducedZombieType();
 	void							PickSpecialGraveStone();
+	void							InitBushes();
 	float							GetPosYBasedOnRow(float thePosX, int theRow);
 	void							NextWaveComing();
 	bool							BungeeIsTargetingCell(int theGridX, int theGridY);
@@ -510,7 +512,7 @@ public:
 	int								GetKilledlZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags);
 
 	void							MovePlant(Plant* thePlant, int theGridX, int theGridY);
-
+	void							DrawForeGround(Graphics* g);
 };
 extern bool gShownMoreSunTutorial;
 
