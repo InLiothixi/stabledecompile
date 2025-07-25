@@ -1055,7 +1055,7 @@ void CutScene::CancelIntro()
 		{
 			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET, 0);
 			mBoard->mTreeX = -664;
-			mBoard->mPoleX = -WIDE_BOARD_WIDTH;
+			mBoard->mPoleX = -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX;
 		}
 		if (mBoard->mAdvice->mMessageStyle == MessageStyle::MESSAGE_STYLE_HOUSE_NAME)
 		{
@@ -1241,7 +1241,7 @@ void CutScene::AnimateBoard()
 		int aPanOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -aBoardOffset, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth);
 		int startOffsetX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
 		mBoard->mTreeX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -664);
-		mBoard->mPoleX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -WIDE_BOARD_WIDTH);
+		mBoard->mPoleX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX);
 		mBoard->Move(-aPanOffset, 0);
 	}
 	
@@ -1282,7 +1282,7 @@ void CutScene::AnimateBoard()
 		int aPanOffset = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth, 0);
 		int endOffsetX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
 		mBoard->mTreeX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -664, endOffsetX);
-		mBoard->mPoleX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -WIDE_BOARD_WIDTH, endOffsetX);
+		mBoard->mPoleX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX, endOffsetX);
 		mBoard->Move(-aPanOffset, 0);
 	}
 
