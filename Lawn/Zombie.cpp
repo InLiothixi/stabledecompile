@@ -4614,6 +4614,23 @@ void Zombie::UpdateZombieWalking()
     if (ZombieNotWalking())
         return;
 
+    if (mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON)
+    {
+        float aDestY = 290.0f;
+
+        if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
+        {
+            aDestY += 30.0f;
+        }
+        else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI)
+        {
+            aDestY += 15.0f;
+        }
+
+        mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
+        if (mBoard->mCutScene->mCutsceneTime < 1500) return;
+    }
+
     Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
     if (aBodyReanim)
     {
@@ -4901,7 +4918,7 @@ void Zombie::Update()
 
             if (mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON)
             {
-                if (mBoard->mCutScene->ShowZombieWalking())
+               // if (mBoard->mCutScene->ShowZombieWalking())
                 {
                     UpdateZombieChimney();
                     UpdateZombieWalking();
@@ -11394,12 +11411,12 @@ void Zombie::WalkIntoHouse()
     if (mBoard->mBackground == BackgroundType::BACKGROUND_1_DAY || mBoard->mBackground == BackgroundType::BACKGROUND_2_NIGHT ||
         mBoard->mBackground == BackgroundType::BACKGROUND_3_POOL || mBoard->mBackground == BackgroundType::BACKGROUND_4_FOG)
     {
-        mPosY = 290.0f;
+        // float aDestY = 290.0f;
         mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 2, 0);
 
         if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
         {
-            mPosY += 30.0f;
+            // aDestY += 30.0f;
         }
         else if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
         {
@@ -11407,7 +11424,7 @@ void Zombie::WalkIntoHouse()
         }
         else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI)
         {
-            mPosY += 15.0f;
+            // aDestY += 15.0f;
         }
 
         if (mBoard->StageHasPool())
@@ -11425,6 +11442,8 @@ void Zombie::WalkIntoHouse()
                 mPosX -= 80.0f;
             }
         }
+
+        // mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
     }
     else if (mBoard->mBackground == BackgroundType::BACKGROUND_5_ROOF || mBoard->mBackground == BackgroundType::BACKGROUND_6_BOSS)
     {
