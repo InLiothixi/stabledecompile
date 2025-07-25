@@ -30,6 +30,7 @@
 #include "../SexyAppFramework/WidgetManager.h"
 #include "../SexyAppFramework/SoundInstance.h"
 #include "Widget/AchievementsScreen.h"
+#include "../Sexy.TodLib/Definition.h"
 
 #include <immintrin.h> 
 
@@ -6096,12 +6097,24 @@ void Board::UpdateIce()
 				float aPosY = GridToPixelY(8, aRow);
 				if (aParticleIce)
 				{
+					for (int i = 0; i < aParticleIce->mParticleDef->mEmitterDefCount; ++i)
+					{
+						TodEmitterDefinition& aDef = aParticleIce->mParticleDef->mEmitterDefs[i];
+						if (aDef.mEmitterBoxX.mCountNodes == 1)
+							aDef.mEmitterBoxX.mNodes->mHighValue = BOARD_ICE_START - mIceMinX[aRow];
+					}
 					aParticleIce->SystemMove(aPosX, aPosY);
 				}
 				else
 				{
 					int aRenderPosition = MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, aRow, 3);
 					aParticleIce = mApp->AddTodParticle(aPosX, aPosY, aRenderPosition, ParticleEffect::PARTICLE_ICE_SPARKLE);
+					for (int i = 0; i < aParticleIce->mParticleDef->mEmitterDefCount; ++i)
+					{
+						TodEmitterDefinition& aDef = aParticleIce->mParticleDef->mEmitterDefs[i];
+						if (aDef.mEmitterBoxX.mCountNodes == 1)
+							aDef.mEmitterBoxX.mNodes->mHighValue = BOARD_ICE_START - mIceMinX[aRow];
+					}
 					mIceParticleID[aRow] = mApp->ParticleGetID(aParticleIce);
 				}
 			}
@@ -8198,7 +8211,7 @@ void Board::DrawUIBottom(Graphics* g)
 {
 	if (mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
 	{
-		bool isFastStretch = g->mFastStretch;
+		g->PushState();
 		g->mFastStretch = !mApp->Is3DAccelerated();
 		int aWaveTime = abs(mMainCounter / 8 % 22 - 11);
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
@@ -8207,14 +8220,13 @@ void Board::DrawUIBottom(Graphics* g)
 		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 320, 40, aWaveTime);
 		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 480, 40, aWaveTime);
 		TodDrawImageCelScaled(g, Sexy::IMAGE_WAVESIDE, 800- Sexy::IMAGE_WAVESIDE->mWidth, 40, 0, aWaveTime, -1.0f, 1.0f);
-		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
-		g->mFastStretch = isFastStretch;
+		g->PopState();
 
 	}
 
 	if (mBackground == BackgroundType::BACKGROUND_GREENHOUSE || mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM)
 	{
-		bool isFastStretch = g->mFastStretch;
+		g->PushState();
 		g->mFastStretch = !mApp->Is3DAccelerated();
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->DrawImage(
@@ -8222,8 +8234,7 @@ void Board::DrawUIBottom(Graphics* g)
 			Rect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, BOARD_WIDTH - WIDESCREEN_OFFSETX * 2, BOARD_HEIGHT - WIDESCREEN_OFFSETY * 2),
 			Rect(0, 0, IMAGE_BACKGROUND_GREENHOUSE_OVERLAY->mWidth, IMAGE_BACKGROUND_GREENHOUSE_OVERLAY->mHeight)
 		);
-		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
-		g->mFastStretch = isFastStretch;
+		g->PopState();
 	}
 
 	if (mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON)
