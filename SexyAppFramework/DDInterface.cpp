@@ -43,10 +43,8 @@ DDInterface::DDInterface(SexyAppBase* theApp)
 	mCursorX = 0;
 	mCursorY = 0;
 	mInRedraw = false;
-	//mCursorWidth = 54;
-	//mCursorHeight = 54;
-	mCursorWidth = 64; 
-	mCursorHeight = 64;
+	mCursorWidth = 54; 
+	mCursorHeight = 54;
 	mCursorImage = NULL;
 	mOldCursorArea = NULL;
 	mNewCursorArea = NULL;
@@ -407,7 +405,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 	{
 		OutputDebug(_S("Desktop is           %4lu x %4lu [%2d:%2d]\n"), mDesktopWidth, mDesktopHeight, mDesktopAspect.mNumerator, mDesktopAspect.mDenominator);
 
-		if (/*mIs3D &&*/ mAspect < mDesktopAspect)
+		if (mIs3D && mAspect < mDesktopAspect)
 		{
 			mIsWidescreen = true;
 			// Set the display mode to the size of the desktop.

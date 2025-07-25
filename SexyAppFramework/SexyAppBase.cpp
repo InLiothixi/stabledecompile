@@ -1396,8 +1396,8 @@ void SexyAppBase::DumpProgramInfo()
 
 	int anImgNum = 0;
 
-	int aThumbWidth = 64;
-	int aThumbHeight = 64;
+	int aThumbWidth = 54;
+	int aThumbHeight = 54;
 
 	ImageLib::Image anImageLibImage;
 	anImageLibImage.mWidth = aThumbWidth;
