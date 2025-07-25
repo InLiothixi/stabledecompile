@@ -73,7 +73,7 @@ Board::Board(LawnApp* theApp)
 	mSpecialGraveStoneX = -1;
 	mSpecialGraveStoneY = -1;
 	memset(mBushesID, 0, sizeof(mBushesID));
-	mPoleOffset = mTreeOffset = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
+	mPoleX = mTreeX = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
 	for (int i = 0; i < MAX_GRID_SIZE_X; i++)
 	{
 		for (int j = 0; j < MAX_GRID_SIZE_Y; j++)
@@ -3084,7 +3084,7 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 		Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[theRow]);
 		if (aBushReanim && !FloatApproxEqual(aBushReanim->mAnimTime, 0.0f))
 		{
-			aBushReanim->StartBlend(20);
+			aBushReanim->mLastFrameTime = 0.0f;
 			aBushReanim->mAnimTime = 0.0f;
 		}
 	}
@@ -8487,6 +8487,14 @@ void Board::DrawForeGround(Graphics* g)
 			break;
 		case BackgroundType::BACKGROUND_4_FOG:
 			g->DrawImage(Sexy::IMAGE_BACKGROUND4_COVER, 671, 613);
+			break;
+		case BackgroundType::BACKGROUND_5_ROOF:
+			g->DrawImage(Sexy::IMAGE_TREES, mTreeX, WIDESCREEN_OFFSETY);
+			g->DrawImage(Sexy::IMAGE_POLE, mPoleX, WIDESCREEN_OFFSETY);
+			break;
+		case BackgroundType::BACKGROUND_6_BOSS:
+			g->DrawImage(Sexy::IMAGE_NIGHT_TREES, mTreeX, WIDESCREEN_OFFSETY);
+			g->DrawImage(Sexy::IMAGE_NIGHT_POLE, mPoleX, WIDESCREEN_OFFSETY);
 			break;
 	}
 }

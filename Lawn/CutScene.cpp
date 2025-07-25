@@ -119,8 +119,11 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 
 	Zombie* aZombie = mBoard->AddZombieInRow(theZombieType, theGridY, -2);
 	TOD_ASSERT(aZombie);
-	aZombie->mPosX = theGridX * 56 + 830;
-	aZombie->mPosY = theGridY * 90 + 70;
+	bool aStageHasRoof = mBoard->StageHasRoof();
+
+	aZombie->mPosX = theGridX * STREET_ZOMBIE_GRID_SIZE_X + (aStageHasRoof ? STREET_ZOMBIE_ROOF_START_X : STREET_ZOMBIE_START_X);
+	aZombie->mPosY = theGridY * STREET_ZOMBIE_GRID_SIZE_Y + STREET_ZOMBIE_START_Y;
+
 	if (theGridX % 2 == 1)
 	{
 		aZombie->mPosY += 30.0f;
@@ -133,7 +136,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 	}
 	if (mBoard->StageHasRoof())
 	{
-		aZombie->mPosY -= theGridY * 2 - theGridX * 7 + 30;  //7 * (5 - theGridX) - 2 * (5 - theGridY) + 5;
+		aZombie->mPosY -= theGridY * 2 - theGridX * 7 + STREET_ZOMBIE_ROOF_OFFSET;  //7 * (5 - theGridX) - 2 * (5 - theGridY) + 5;
 		aZombie->mPosX -= 5.0f;
 	}
 	if (theZombieType == ZombieType::ZOMBIE_ZAMBONI)
@@ -160,16 +163,19 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		aZombie->mPosX += Rand(15);  //RandRangeInt(0, 14);
 	}
 
+	aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 8, (theGridX % 2) * 2 + theGridY * 4);
+
 	if (theZombieType == ZombieType::ZOMBIE_BUNGEE)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 0, 9);
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 8, 0);
+
 		aZombie->mRow = 0;
 		aZombie->mPosX = theGridX * 50.0f + 950.0f;
 		aZombie->mPosY = 50.0f;
 	}
 	else if (theZombieType == ZombieType::ZOMBIE_BOBSLED)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, 1009);
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 8, 1000);
 		aZombie->mRow = 0;
 		aZombie->mPosX = 1105.0f;
 		aZombie->mPosY = 480.0f;
@@ -177,8 +183,6 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (theZombieType == ZombieType::ZOMBIE_DOG_WALKER)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4 + 9);
-
 		aZombie->mPosX += 40;
 		Zombie* aDog = mBoard->ZombieTryToGet(aZombie->mRelatedZombieID);
 		if (aDog) {
@@ -191,7 +195,6 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 #endif
 	else if (theZombieType == ZombieType::ZOMBIE_BALLOON)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4 + 9);
 		aZombie->mY -= 30;
 		aZombie->mPosY -= 30;
 	}
@@ -1051,8 +1054,8 @@ void CutScene::CancelIntro()
 		if (!IsNonScrollingCutscene())
 		{
 			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET, 0);
-			mBoard->mTreeOffset = -664;
-			mBoard->mPoleOffset = -BOARD_WIDTH;
+			mBoard->mTreeX = -664;
+			mBoard->mPoleX = -WIDE_BOARD_WIDTH;
 		}
 		if (mBoard->mAdvice->mMessageStyle == MessageStyle::MESSAGE_STYLE_HOUSE_NAME)
 		{
@@ -1236,9 +1239,9 @@ void CutScene::AnimateBoard()
 	if (mCutsceneTime > aTimePanRightStart && mCutsceneTime <= aTimePanRightEnd)
 	{
 		int aPanOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -aBoardOffset, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth);
-		int startOffsetX = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
-		mBoard->mTreeOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -664);
-		mBoard->mPoleOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -BOARD_WIDTH);
+		int startOffsetX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
+		mBoard->mTreeX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -664);
+		mBoard->mPoleX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -WIDE_BOARD_WIDTH);
 		mBoard->Move(-aPanOffset, 0);
 	}
 	
@@ -1277,9 +1280,9 @@ void CutScene::AnimateBoard()
 	if (mCutsceneTime > aTimePanLeftStart)
 	{
 		int aPanOffset = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth, 0);
-		int endOffsetX = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
-		mBoard->mTreeOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -664, endOffsetX);
-		mBoard->mPoleOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -BOARD_WIDTH, endOffsetX);
+		int endOffsetX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
+		mBoard->mTreeX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -664, endOffsetX);
+		mBoard->mPoleX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -WIDE_BOARD_WIDTH, endOffsetX);
 		mBoard->Move(-aPanOffset, 0);
 	}
 

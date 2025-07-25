@@ -30,6 +30,13 @@ const int           IMITATER_DIALOG_HEIGHT = 600;
 const int			WIDESCREEN_OFFSETX = -240;
 const int			WIDESCREEN_OFFSETY = -60;
 
+const int			STREET_ZOMBIE_START_X = 1000; // PC: 830 - Console : 1000
+const int			STREET_ZOMBIE_ROOF_START_X = 900;
+const int			STREET_ZOMBIE_START_Y = 70;
+const int			STREET_ZOMBIE_GRID_SIZE_X = 30; // PC : 56 - Console : 30
+const int			STREET_ZOMBIE_GRID_SIZE_Y = 90;
+const int			STREET_ZOMBIE_ROOF_OFFSET = 30; // PC : 30 - Console : 15
+
 // ============================================================
 // ■ 关卡相关
 // ============================================================

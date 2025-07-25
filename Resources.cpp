@@ -223,6 +223,8 @@ bool Sexy::ExtractDelayLoad_Background4Resources(ResourceManager* theManager)
 // DelayLoad_Background5 Resources
 Image* Sexy::IMAGE_BACKGROUND5;
 Image* Sexy::IMAGE_BACKGROUND5_GAMEOVER_MASK;
+Image* Sexy::IMAGE_POLE;
+Image* Sexy::IMAGE_TREES;
 
 bool Sexy::ExtractDelayLoad_Background5Resources(ResourceManager* theManager)
 {
@@ -233,6 +235,8 @@ bool Sexy::ExtractDelayLoad_Background5Resources(ResourceManager* theManager)
 	{
 		IMAGE_BACKGROUND5 = aMgr.GetImageThrow("IMAGE_BACKGROUND5");
 		IMAGE_BACKGROUND5_GAMEOVER_MASK = aMgr.GetImageThrow("IMAGE_BACKGROUND5_GAMEOVER_MASK");
+		IMAGE_POLE = aMgr.GetImageThrow("IMAGE_POLE");
+		IMAGE_TREES = aMgr.GetImageThrow("IMAGE_TREES");
 	}
 	catch (ResourceManagerException&)
 	{
@@ -245,6 +249,8 @@ bool Sexy::ExtractDelayLoad_Background5Resources(ResourceManager* theManager)
 Image* Sexy::IMAGE_BACKGROUND6;
 Image* Sexy::IMAGE_BACKGROUND6BOSS;
 Image* Sexy::IMAGE_BACKGROUND6_GAMEOVER_MASK;
+Image* Sexy::IMAGE_NIGHT_POLE;
+Image* Sexy::IMAGE_NIGHT_TREES;
 
 bool Sexy::ExtractDelayLoad_Background6Resources(ResourceManager* theManager)
 {
@@ -256,6 +262,8 @@ bool Sexy::ExtractDelayLoad_Background6Resources(ResourceManager* theManager)
 		IMAGE_BACKGROUND6 = aMgr.GetImageThrow("IMAGE_BACKGROUND6");
 		IMAGE_BACKGROUND6BOSS = aMgr.GetImageThrow("IMAGE_BACKGROUND6BOSS");
 		IMAGE_BACKGROUND6_GAMEOVER_MASK = aMgr.GetImageThrow("IMAGE_BACKGROUND6_GAMEOVER_MASK");
+		IMAGE_NIGHT_POLE = aMgr.GetImageThrow("IMAGE_NIGHT_POLE");
+		IMAGE_NIGHT_TREES = aMgr.GetImageThrow("IMAGE_NIGHT_TREES");
 	}
 	catch (ResourceManagerException&)
 	{
@@ -2724,10 +2732,14 @@ void* gResources[(int)Sexy::ResourceId::RESOURCE_ID_MAX] =
 	/* DelayLoad_Background5 */
 	&Sexy::IMAGE_BACKGROUND5,
 	&Sexy::IMAGE_BACKGROUND5_GAMEOVER_MASK,
+	&Sexy::IMAGE_POLE,
+	&Sexy::IMAGE_TREES,
 	/* DelayLoad_Background6 */
 	&Sexy::IMAGE_BACKGROUND6,
 	&Sexy::IMAGE_BACKGROUND6BOSS,
 	&Sexy::IMAGE_BACKGROUND6_GAMEOVER_MASK,
+	&Sexy::IMAGE_NIGHT_POLE,
+	&Sexy::IMAGE_NIGHT_TREES,
 	/* DelayLoad_MushroomGarden */
 	&Sexy::IMAGE_BACKGROUND_MUSHROOMGARDEN,
 	/* DelayLoad_GreenHouseGarden */

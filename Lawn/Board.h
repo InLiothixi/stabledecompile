@@ -132,8 +132,8 @@ public:
 	bool							mDrawOnlyCamera;
 	bool							mPaused;												//+0x164
 	ReanimationID					mBushesID[6];
-	int								mPoleOffset;
-	int								mTreeOffset;
+	int								mPoleX;
+	int								mTreeX;
 	GridSquareType					mGridSquareType[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];		//+0x168
 	int								mGridCelLook[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];			//+0x240
 	int								mGridCelOffset[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y][2];	//+0x318

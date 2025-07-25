@@ -674,9 +674,13 @@ namespace Sexy
         IMAGE_FOG_SOFTWARE_ID,
         IMAGE_BACKGROUND5_ID,
         IMAGE_BACKGROUND5_GAMEOVER_MASK_ID,
+        IMAGE_POLE_ID,
+        IMAGE_TREES_ID,
         IMAGE_BACKGROUND6_ID,
         IMAGE_BACKGROUND6BOSS_ID,
         IMAGE_BACKGROUND6_GAMEOVER_MASK_ID,
+        IMAGE_NIGHT_POLE_ID,
+        IMAGE_NIGHT_TREES_ID,
         IMAGE_BACKGROUND_MUSHROOMGARDEN_ID,
         IMAGE_BACKGROUND_GREENHOUSE_ID,
         IMAGE_BACKGROUND_GREENHOUSE_OVERLAY_ID,
@@ -1158,6 +1162,8 @@ namespace Sexy
     extern Image* IMAGE_ALMANAC_IMITATER;                                 //0x6A767C
     extern Image* IMAGE_BACKGROUND6;                                  //0x6A7680
     extern Image* IMAGE_BACKGROUND6BOSS;                                  //0x6A7680
+    extern Image* IMAGE_NIGHT_POLE;
+    extern Image* IMAGE_NIGHT_TREES;
     extern Image* IMAGE_REANIM_DIAMOND;                                   //0x6A7684
     extern Image* IMAGE_PRESENTOPEN;                                      //0x6A7688
     extern Image* IMAGE_POOL_SHADING;                                     //0x6A768C
@@ -1233,6 +1239,8 @@ namespace Sexy
     extern Image* IMAGE_ZOMBIE_BOSS_FIREBALL_PARTICLES;                   //0x6A771C
     extern Image* IMAGE_PVZ_LOGO;                                         //0x6A7720
     extern Image* IMAGE_BACKGROUND5;                                      //0x6A7724
+    extern Image* IMAGE_POLE;
+    extern Image* IMAGE_TREES;
     extern int          SOUND_DIRT_RISE;                                        //0x6A7728
     extern Image* IMAGE_DIRTSMALL;                                        //0x6A772C
     extern Image* IMAGE_STORE_NEXTBUTTONHIGHLIGHT;                        //0x6A7730

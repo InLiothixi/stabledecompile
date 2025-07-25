@@ -43,8 +43,8 @@ DDInterface::DDInterface(SexyAppBase* theApp)
 	mCursorX = 0;
 	mCursorY = 0;
 	mInRedraw = false;
-	mCursorWidth = 54; 
-	mCursorHeight = 54;
+	mCursorWidth = 32; 
+	mCursorHeight = 32;
 	mCursorImage = NULL;
 	mOldCursorArea = NULL;
 	mNewCursorArea = NULL;
