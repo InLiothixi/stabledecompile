@@ -11450,10 +11450,15 @@ void Zombie::WalkIntoHouse()
             mPosX -= 28.0f;
         }
 
+        char* aTrackToPlay = "anim_idle";
+
+        if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
+            aTrackToPlay = "anim_idle_without_pole";
+
         Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
-        if (aBodyReanim && aBodyReanim->TrackExists("anim_walk") && mZombieType != ZombieType::ZOMBIE_POLEVAULTER && !aBodyReanim->IsAnimPlaying("anim_idle"))
+        if (aBodyReanim && aBodyReanim->TrackExists(aTrackToPlay))
         {
-            PlayZombieReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+            PlayZombieReanim(aTrackToPlay, ReanimLoopType::REANIM_LOOP, 0, 15.0f);
         }
     }
 }
