@@ -3079,7 +3079,7 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 		}
 	}
 
-	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && theFromWave >= 0)
+	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && !mApp->IsWhackAZombieLevel() && theFromWave >= 0)
 	{
 		Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[theRow]);
 		if (aBushReanim && !FloatApproxEqual(aBushReanim->mAnimTime, 0.0f))
@@ -8219,7 +8219,7 @@ void Board::DrawUIBottom(Graphics* g)
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->DrawImage(
 			IMAGE_BACKGROUND_GREENHOUSE_OVERLAY, 
-			Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT), 
+			Rect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, BOARD_WIDTH - WIDESCREEN_OFFSETX * 2, BOARD_HEIGHT - WIDESCREEN_OFFSETY * 2),
 			Rect(0, 0, IMAGE_BACKGROUND_GREENHOUSE_OVERLAY->mWidth, IMAGE_BACKGROUND_GREENHOUSE_OVERLAY->mHeight)
 		);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
