@@ -1051,6 +1051,8 @@ void CutScene::CancelIntro()
 		if (!IsNonScrollingCutscene())
 		{
 			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET, 0);
+			mBoard->mTreeOffset = -664;
+			mBoard->mPoleOffset = -BOARD_WIDTH;
 		}
 		if (mBoard->mAdvice->mMessageStyle == MessageStyle::MESSAGE_STYLE_HOUSE_NAME)
 		{
@@ -1234,6 +1236,9 @@ void CutScene::AnimateBoard()
 	if (mCutsceneTime > aTimePanRightStart && mCutsceneTime <= aTimePanRightEnd)
 	{
 		int aPanOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -aBoardOffset, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth);
+		int startOffsetX = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
+		mBoard->mTreeOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -664);
+		mBoard->mPoleOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -BOARD_WIDTH);
 		mBoard->Move(-aPanOffset, 0);
 	}
 	
@@ -1272,6 +1277,9 @@ void CutScene::AnimateBoard()
 	if (mCutsceneTime > aTimePanLeftStart)
 	{
 		int aPanOffset = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth, 0);
+		int endOffsetX = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
+		mBoard->mTreeOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -664, endOffsetX);
+		mBoard->mPoleOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -BOARD_WIDTH, endOffsetX);
 		mBoard->Move(-aPanOffset, 0);
 	}
 

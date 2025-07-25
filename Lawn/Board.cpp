@@ -73,6 +73,7 @@ Board::Board(LawnApp* theApp)
 	mSpecialGraveStoneX = -1;
 	mSpecialGraveStoneY = -1;
 	memset(mBushesID, 0, sizeof(mBushesID));
+	mPoleOffset = mTreeOffset = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
 	for (int i = 0; i < MAX_GRID_SIZE_X; i++)
 	{
 		for (int j = 0; j < MAX_GRID_SIZE_Y; j++)
