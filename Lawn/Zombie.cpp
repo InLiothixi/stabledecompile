@@ -11977,6 +11977,9 @@ void Zombie::UpdateBossFireball()
 
     if (aPosX < -180.0f)
     {
+        BossDestroyIceballInRow(mTargetRow);
+        BossDestroyFireball();
+
         aFireballReanim->ReanimationDie();
         mBossFireBallReanimID = ReanimationID::REANIMATIONID_NULL;
     }
