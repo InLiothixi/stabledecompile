@@ -11451,9 +11451,19 @@ void Zombie::WalkIntoHouse()
         }
 
         char* aTrackToPlay = "anim_idle";
+        float aChimneyScale = 1.0f;
 
-        if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
+        if (mZombieType == ZombieType::ZOMBIE_POLEVAULTER)
             aTrackToPlay = "anim_idle_without_pole";
+
+        if (mZombieType == ZombieType::ZOMBIE_LADDER && mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL)
+            aTrackToPlay = "anim_idle_without_ladder";
+        
+        if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR ||
+            mZombieType == ZombieType::ZOMBIE_ZAMBONI)
+            aChimneyScale = 0.75f;
+
+        mScaleZombie = min(mScaleZombie, aChimneyScale);
 
         Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
         if (aBodyReanim && aBodyReanim->TrackExists(aTrackToPlay))
