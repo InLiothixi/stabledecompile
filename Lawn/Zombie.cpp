@@ -11458,6 +11458,9 @@ void Zombie::WalkIntoHouse()
 
         if (mZombieType == ZombieType::ZOMBIE_LADDER && mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL)
             aTrackToPlay = "anim_idle_without_ladder";
+
+        if (mZombieType == ZombieType::ZOMBIE_BALLOON && !IsFlying())
+            aTrackToPlay = "anim_noidle";
         
         if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR ||
             mZombieType == ZombieType::ZOMBIE_ZAMBONI)
