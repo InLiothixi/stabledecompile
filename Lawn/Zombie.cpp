@@ -11060,8 +11060,8 @@ bool Zombie::SetupDrawZombieWon(Graphics* g)
     if (mFromWave != Zombie::ZOMBIE_WAVE_WINNER)
         return true;
 
-    if (!mBoard->mCutScene->ShowZombieWalking())
-        return false;
+    /*if (!mBoard->mCutScene->ShowZombieWalking())
+        return false;*/
 
     switch (mBoard->mBackground)
     {

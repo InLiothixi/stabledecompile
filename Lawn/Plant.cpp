@@ -2913,7 +2913,7 @@ void Plant::UpdateBowling()
         }
 
         mX -= aSpeed;
-        if (mX > 800 + mWidth * (aBodyReanim->mOverlayMatrix.m00 - 1) + mApp->mDDInterface->mWideScreenOffsetX)
+        if (mX > 800 + mWidth * (aBodyReanim->mOverlayMatrix.m00 - 1) - WIDESCREEN_OFFSETX)
             Die();
     }
 

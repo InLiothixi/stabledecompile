@@ -246,7 +246,7 @@ void LawnMower::Update()
         mApp->mSoundSystem->StopFoley(FoleyType::FOLEY_LAWNMOWER);
         Die();
     }
-    if (mPosX > WIDE_BOARD_WIDTH + mApp->mDDInterface->mWideScreenOffsetX)
+    if (mPosX > WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX)
     {
         Die();
     }
