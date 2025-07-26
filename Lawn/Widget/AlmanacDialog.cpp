@@ -524,8 +524,7 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 				aFolllower->BeginDraw(g);
 				g->SetClipRect(-42 - 50 * followerID, -51, 197, 187);
 				if (aFolllower->mZombieType != ZombieType::ZOMBIE_BUNGEE && aFolllower->mZombieType != ZombieType::ZOMBIE_BOSS &&
-					aFolllower->mZombieType != ZombieType::ZOMBIE_ZAMBONI && aFolllower->mZombieType != ZombieType::ZOMBIE_CATAPULT && 
-					aFolllower->mZombieType != ZombieType::ZOMBIE_BOBSLED)
+					aFolllower->mZombieType != ZombieType::ZOMBIE_ZAMBONI && aFolllower->mZombieType != ZombieType::ZOMBIE_CATAPULT)
 					aFolllower->DrawShadow(g);
 				if (followerID == 1) {
 					ZombieDrawPosition aDrawPos;
@@ -552,8 +551,7 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 		default: break;
 		}
 		if (mZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && mZombie->mZombieType != ZombieType::ZOMBIE_BOSS &&
-			mZombie->mZombieType != ZombieType::ZOMBIE_ZAMBONI && mZombie->mZombieType != ZombieType::ZOMBIE_CATAPULT &&
-			mZombie->mZombieType != ZombieType::ZOMBIE_BOBSLED)
+			mZombie->mZombieType != ZombieType::ZOMBIE_ZAMBONI && mZombie->mZombieType != ZombieType::ZOMBIE_CATAPULT)
 			mZombie->DrawShadow(g);
 		mZombie->Draw(g);
 

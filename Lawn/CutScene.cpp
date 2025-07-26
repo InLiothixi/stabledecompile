@@ -179,6 +179,14 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		aZombie->mRow = 0;
 		aZombie->mPosX = 1105.0f;
 		aZombie->mPosY = 480.0f;
+
+		for (int _i = 0; _i < 3; _i++)
+		{
+			Zombie* mZombie = mBoard->mZombies.DataArrayAlloc();
+			mZombie->ZombieInitialize(0, ZombieType::ZOMBIE_BOBSLED, false, aZombie, -2);
+			mZombie->mRow = 0;
+			mZombie->mPosY = aZombie->mPosY;
+		}
 	}
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
 	else if (theZombieType == ZombieType::ZOMBIE_DOG_WALKER)

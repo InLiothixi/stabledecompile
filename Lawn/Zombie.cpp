@@ -540,13 +540,13 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
         mPhaseCounter = 500;
         mVariant = false;
 
-        if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
+        /*if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
         {
             PlayZombieReanim("anim_jump", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 20.0f);
             mApp->ReanimationGet(mBodyReanimID)->mAnimTime = 1.0f;
             mAltitude = 18.0f;
         }
-        else if (IsOnBoard())
+        else*/ if (IsOnBoard())
         {
             PlayZombieReanim("anim_push", ReanimLoopType::REANIM_LOOP, 0, 30.0f);
         }
@@ -6210,11 +6210,11 @@ void Zombie::DrawBobsledReanim(Graphics* g, const ZombieDrawPosition& theDrawPos
     bool aDrawFront = false;
     bool aDrawBack = false;
     Zombie* aZombieLeader;
-    if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
+    /*if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
     {
         aZombieLeader = this;
     }
-    else
+    else*/
     {
         if (aPosition == -1)
         {
@@ -11376,8 +11376,8 @@ bool Zombie::IsFlying()
 //0x5346A0
 int Zombie::GetBobsledPosition()
 {
-    if (!IsOnBoard())
-        return -1;
+    /*if (!IsOnBoard())
+        return -1;*/
 
     if (mZombieType != ZombieType::ZOMBIE_BOBSLED)
     {

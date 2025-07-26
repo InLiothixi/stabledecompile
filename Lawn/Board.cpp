@@ -5595,8 +5595,11 @@ void Board::SpawnZombieWave()
 		for (int i = 0; i < MAX_ZOMBIES_IN_WAVE; i++)
 		{
 			ZombieType aZombieType = mZombiesInWave[mCurrentWave][i];
+
 			if (aZombieType == ZombieType::ZOMBIE_INVALID)
+			{
 				break;
+			}
 
 			if (aZombieType == ZombieType::ZOMBIE_BOBSLED && !CanAddBobSled())
 			{
