@@ -9890,6 +9890,11 @@ Rect Zombie::GetZombieRect()
         aZombieRect.mX = mWidth - aZombieRect.mX - aZombieRect.mWidth;
     }
 
+    if (mZombieType == ZombieType::ZOMBIE_BOBSLED && mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
+    {
+        aZombieRect.mWidth -= WIDESCREEN_OFFSETX;
+    }
+
     if (mZombiePhase == ZombiePhase::PHASE_ZAMBONI_FLAT && mZamboniFall)
     {
         aZombieRect.mX += 80;
