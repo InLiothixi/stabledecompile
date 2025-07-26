@@ -11070,7 +11070,7 @@ bool Zombie::HasShadow()
         mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING ||
         mZombiePhase == ZombiePhase::PHASE_RISING_FROM_GRAVE ||
         mZombiePhase == ZombiePhase::PHASE_DANCER_RISING ||
-        mZombiePhase == ZombiePhase::PHASE_BOBSLED_BOARDING ||
+        mZombiePhase == ZombiePhase::PHASE_BOBSLED_BOARDING && mFromWave != Zombie::ZOMBIE_WAVE_CUTSCENE ||
         mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT ||
         mZombiePhase == ZombiePhase::PHASE_DOLPHIN_INTO_POOL ||
         mZombiePhase == ZombiePhase::PHASE_SNORKEL_INTO_POOL ||
