@@ -7382,7 +7382,7 @@ bool Board::HasProgressMeter()
 		mApp->IsIZombieLevel())
 		return true;
 
-	if (mProgressMeterWidth == 0)
+	if (mProgressMeterWidth == 0 && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM)
 		return false;
 
 	if (mApp->IsContinuousChallenge() || 
