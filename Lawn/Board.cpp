@@ -3772,7 +3772,7 @@ void Board::UpdateToolTip()
 		mToolTip->SetWarningText(_S(""));
 
 		Rect aRect = aZombie->GetZombieRect();
-		mToolTip->mX = aRect.mWidth / 2 + aRect.mX + 5 - WIDESCREEN_OFFSETX;
+		mToolTip->mX = aRect.mWidth / 2 + aRect.mX + 5;
 		mToolTip->mY = aRect.mHeight + aRect.mY - 10;
 		if (aZombie->mZombieType == ZombieType::ZOMBIE_BUNGEE)
 		{
