@@ -131,9 +131,9 @@ void ToolTipWidget::Draw(Graphics* g)
 	{
 		aPosX = mMinLeft - (int)g->mTransX;
 	}
-	else if (aPosX + mWidth + g->mTransX > BOARD_WIDTH)
+	else if (aPosX + mWidth + g->mTransX > BOARD_WIDTH - WIDESCREEN_OFFSETX)
 	{
-		aPosX = BOARD_WIDTH - g->mTransX - mWidth;
+		aPosX = BOARD_WIDTH - WIDESCREEN_OFFSETX - g->mTransX - mWidth;
 	}
 
 	int aPosY = mY;
