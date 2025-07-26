@@ -121,7 +121,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 	TOD_ASSERT(aZombie);
 	bool aStageHasRoof = mBoard->StageHasRoof();
 
-	aZombie->mPosX = theGridX * STREET_ZOMBIE_GRID_SIZE_X + (aStageHasRoof ? STREET_ZOMBIE_ROOF_START_X : STREET_ZOMBIE_START_X);
+	aZombie->mPosX = theGridX * STREET_ZOMBIE_GRID_SIZE_X + (aStageHasRoof ? STREET_ZOMBIE_ROOF_START_X : STREET_ZOMBIE_START_X - 30);
 	aZombie->mPosY = theGridY * STREET_ZOMBIE_GRID_SIZE_Y + STREET_ZOMBIE_START_Y;
 
 	if (theGridX % 2 == 1)
