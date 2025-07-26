@@ -12765,7 +12765,7 @@ void Zombie::DropBalloonPropeller()
         aParticle->OverrideExtraAdditiveDraw(nullptr, aExtraAdditiveDraw);
         aParticle->OverrideExtraAdditiveColor(nullptr, aExtraAdditiveColor);
     }
-    aParticle->OverrideImage("Head", IMAGE_BLANK);
+    aParticle->OverrideImage("BalloonHead", IMAGE_BLANK);
 }
 
 void Zombie::DropPogoGlasses()

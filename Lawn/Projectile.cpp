@@ -1092,7 +1092,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 			
 			for (int i = 0; i < mNumPierced; ++i) // Todo: Make a fallback incase this goes beyond the size
 			{
-				if (mPiercedZombies[i] == theZombieID || theZombie->IsFlying())
+				if (mPiercedZombies[i] == theZombieID)
 				{
 					isAlreadyPierced = true;
 					break;
@@ -1112,6 +1112,11 @@ void Projectile::DoImpact(Zombie* theZombie)
 			{
 				mNumPierced++;
 				theZombie->TakeBodyDamage(8, GetDamageFlags(theZombie));
+			}
+
+			if (theZombie->IsFlying())
+			{
+				mNumPierced++;
 			}
 		}
 	}
