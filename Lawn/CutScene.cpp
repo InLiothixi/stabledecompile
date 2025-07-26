@@ -564,10 +564,10 @@ void CutScene::PlaceStreetZombies()
 			{
 				continue;
 			}
-			/*if (aZombieType == ZombieType::ZOMBIE_BOBSLED && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_BOBSLED_BONANZA)
+			if (aZombieType == ZombieType::ZOMBIE_BOBSLED && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_BOBSLED_BONANZA)
 			{
 				continue;
-			}*/
+			}
 
 			TOD_ASSERT(aZombieType >= 0 && aZombieType < ZombieType::NUM_ZOMBIE_TYPES);
 
