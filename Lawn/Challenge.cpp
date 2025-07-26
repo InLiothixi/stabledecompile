@@ -3286,9 +3286,9 @@ void Challenge::DrawRain(Graphics* g)
 	int aTimeOffsetXEst = TodAnimateCurve(0, 100, aTime, 0, -100, CURVE_LINEAR);
 	int aTimeOffsetYEst = TodAnimateCurve(0, 20, aTime % 20, -100, 0, CURVE_LINEAR);
 	// 绘制远景的雨
-	for (int aHorCnt = 9; aHorCnt > 0; aHorCnt--)
+	for (int aHorCnt = 9; aHorCnt > -2; aHorCnt--)
 	{
-		for (int aVerCnt = 7; aVerCnt > 0; aVerCnt--)
+		for (int aVerCnt = 7; aVerCnt > -2; aVerCnt--)
 		{
 			int aImageX = aTimeOffsetXEst + 100 * aHorCnt + aBoardOffsetX;
 			int aImageY = aTimeOffsetYEst + 100 * aVerCnt;
@@ -3300,9 +3300,9 @@ void Challenge::DrawRain(Graphics* g)
 	float aTimeOffsetXCls = TodAnimateCurve(0, 161, aTime % 161, 0, -100, CURVE_LINEAR);
 	float aTimeOffsetYCls = TodAnimateCurve(0, 33, aTime % 33, -100, 0, CURVE_LINEAR);
 	// 绘制近景的雨
-	for (int aHorCnt = 0; aHorCnt < 9; aHorCnt++)
+	for (int aHorCnt = -2; aHorCnt < 9; aHorCnt++)
 	{
-		for (int aVerCnt = 0; aVerCnt < 7; aVerCnt++)
+		for (int aVerCnt = -2; aVerCnt < 7; aVerCnt++)
 		{
 			float aRainScaleCls = 1.5f;
 			float aImageClsX = (aHorCnt * 100 + aTimeOffsetXCls) * aRainScaleCls + aBoardOffsetX;
