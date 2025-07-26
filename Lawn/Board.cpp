@@ -3772,7 +3772,7 @@ void Board::UpdateToolTip()
 		mToolTip->SetWarningText(_S(""));
 
 		Rect aRect = aZombie->GetZombieRect();
-		mToolTip->mX = aRect.mWidth / 2 + aRect.mX + 5 + WIDESCREEN_OFFSETX;
+		mToolTip->mX = aRect.mWidth / 2 + aRect.mX + 5 - WIDESCREEN_OFFSETX;
 		mToolTip->mY = aRect.mHeight + aRect.mY - 10;
 		if (aZombie->mZombieType == ZombieType::ZOMBIE_BUNGEE)
 		{
@@ -8178,8 +8178,8 @@ void Board::DrawTopRightUI(Graphics* g)
 	{
 		if (mChallenge->mChallengeState == STATECHALLENGE_ZEN_FADING)
 		{
-			mMenuButton->mY = TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, -10, -50, TodCurves::CURVE_EASE_IN_OUT);
-			mStoreButton->mX = TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 678, 800, TodCurves::CURVE_EASE_IN_OUT);
+			mMenuButton->mY = TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, -10, -50 + WIDESCREEN_OFFSETY, TodCurves::CURVE_EASE_IN_OUT);
+			mStoreButton->mX = TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 678, 800 - WIDESCREEN_OFFSETX, TodCurves::CURVE_EASE_IN_OUT);
 		}
 		else
 		{
