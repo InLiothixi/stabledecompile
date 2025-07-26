@@ -4614,28 +4614,55 @@ void Zombie::UpdateZombieWalking()
     if (ZombieNotWalking())
         return;
 
+    Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+
     if (mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON)
     {
         float aDestY = 290.0f;
+        float aPosOffsetX = 0.0f;
 
         if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
         {
             aDestY += 30.0f;
+        }
+        else if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
+        {
+            aPosOffsetX += 35.0f;
         }
         else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI)
         {
             aDestY += 15.0f;
         }
 
-        mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
-        if (mBoard->mCutScene->mCutsceneTime < 1500) return;
+        if (mBoard->StageHasPool())
+        {
+            if (mZombieType == ZombieType::ZOMBIE_FOOTBALL
+#ifdef _HAS_NEW_GIGA_ZOMBIES
+                || mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL
+#endif
+                )
+            {
+                aPosOffsetX -= 10.0f;
+            }
+            else
+            {
+                aPosOffsetX -= 80.0f;
+            }
+
+            if (aBodyReanim)
+            {
+                aBodyReanim->mOffsetX = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, 0, aPosOffsetX, TodCurves::CURVE_LINEAR);
+            }
+
+            mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
+            if (mBoard->mCutScene->mCutsceneTime < 1500) return;
+        }
     }
 
-    Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
     if (aBodyReanim)
     {
         float aSpeed;
-        if (IsBouncingPogo() || mZombiePhase == ZombiePhase::PHASE_BALLOON_FLYING || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_RIDING || 
+        if (IsBouncingPogo() || mZombiePhase == ZombiePhase::PHASE_BALLOON_FLYING || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_RIDING ||
             mZombiePhase == ZombiePhase::PHASE_SNORKEL_WALKING_IN_POOL || mZombieType == ZombieType::ZOMBIE_CATAPULT)
         {
             aSpeed = mVelX;
@@ -4644,7 +4671,7 @@ void Zombie::UpdateZombieWalking()
                 aSpeed *= CHILLED_SPEED_FACTOR;
             }
         }
-        else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI || mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_IN_JUMP || 
+        else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI || mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_IN_JUMP ||
             IsBobsledTeamWithSled() || mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || mZombiePhase == ZombiePhase::PHASE_SNORKEL_INTO_POOL)
         {
             aSpeed = mVelX;
@@ -4705,7 +4732,7 @@ void Zombie::UpdateZombieWalking()
             mPosX -= aSpeed;
         }
 
-        if ((mZombieType == ZombieType::ZOMBIE_FOOTBALL 
+        if ((mZombieType == ZombieType::ZOMBIE_FOOTBALL
 #ifdef _HAS_NEW_GIGA_ZOMBIES
             || mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL
 #endif
@@ -4735,13 +4762,13 @@ void Zombie::UpdateZombieWalking()
     else
     {
         bool doWalk = false;
-        if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || 
-            mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING || 
-            mZombieType == ZombieType::ZOMBIE_DANCER || 
-            mZombieType == ZombieType::ZOMBIE_BACKUP_DANCER || 
-            mZombieType == ZombieType::ZOMBIE_BOBSLED || 
-            mZombieType == ZombieType::ZOMBIE_POGO || 
-            mZombieType == ZombieType::ZOMBIE_DOLPHIN_RIDER || 
+        if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT ||
+            mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING ||
+            mZombieType == ZombieType::ZOMBIE_DANCER ||
+            mZombieType == ZombieType::ZOMBIE_BACKUP_DANCER ||
+            mZombieType == ZombieType::ZOMBIE_BOBSLED ||
+            mZombieType == ZombieType::ZOMBIE_POGO ||
+            mZombieType == ZombieType::ZOMBIE_DOLPHIN_RIDER ||
             mZombieType == ZombieType::ZOMBIE_BALLOON)
         {
             doWalk = true;
@@ -4777,6 +4804,7 @@ void Zombie::UpdateZombieWalking()
             }
         }
     }
+    
 }
 
 Plant* Zombie::IsStandingOnSpikeweed()
@@ -11297,6 +11325,12 @@ void Zombie::DrawShadow(Graphics* g)
         }
     }
 
+    Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+    if (aBodyReanim)
+    {
+        aShadowOffsetX += aBodyReanim->mOffsetX;
+    }
+
     if (mInPool)
     {
         TodDrawImageCenterScaledF(g, IMAGE_WHITEWATER_SHADOW, aShadowOffsetX, aShadowOffsetY + 67.0f, aScale, aScale);
@@ -11414,34 +11448,34 @@ void Zombie::WalkIntoHouse()
         // float aDestY = 290.0f;
         mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 2, 0);
 
-        if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
-        {
-            // aDestY += 30.0f;
-        }
-        else if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
-        {
-            mPosX += 35.0f;
-        }
-        else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI)
-        {
-            // aDestY += 15.0f;
-        }
-
-        if (mBoard->StageHasPool())
-        {
-            if (mZombieType == ZombieType::ZOMBIE_FOOTBALL 
-#ifdef _HAS_NEW_GIGA_ZOMBIES
-                || mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL
-#endif
-                )
-            {
-                mPosX -= 10.0f;
-            }
-            else
-            {
-                //mPosX -= 80.0f;
-            }
-        }
+//        if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
+//        {
+//            // aDestY += 30.0f;
+//        }
+//        else if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
+//        {
+//            mPosX += 35.0f;
+//        }
+//        else if (mZombieType == ZombieType::ZOMBIE_ZAMBONI)
+//        {
+//            // aDestY += 15.0f;
+//        }
+//
+//        if (mBoard->StageHasPool())
+//        {
+//            if (mZombieType == ZombieType::ZOMBIE_FOOTBALL 
+//#ifdef _HAS_NEW_GIGA_ZOMBIES
+//                || mZombieType == ZombieType::ZOMBIE_BLACK_FOOTBALL
+//#endif
+//                )
+//            {
+//                mPosX -= 10.0f;
+//            }
+//            else
+//            {
+//                mPosX -= 80.0f;
+//            }
+//        }
 
         // mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
     }
