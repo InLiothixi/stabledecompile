@@ -11439,7 +11439,7 @@ void Zombie::WalkIntoHouse()
             }
             else
             {
-                mPosX -= 80.0f;
+                //mPosX -= 80.0f;
             }
         }
 

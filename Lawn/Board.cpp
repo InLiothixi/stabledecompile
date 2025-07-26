@@ -3080,7 +3080,9 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 		}
 	}
 
-	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && !mApp->IsWhackAZombieLevel() && theFromWave >= 0)
+	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && !mApp->IsWhackAZombieLevel() && 
+		theZombieType != ZombieType::ZOMBIE_BACKUP_DANCER /*&& theZombieType != ZombieType::ZOMBIE_BOBSLED*/ && theZombieType != ZombieType::ZOMBIE_IMP 
+		&& theFromWave >= -1)
 	{
 		Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[theRow]);
 		if (aBushReanim && !FloatApproxEqual(aBushReanim->mAnimTime, 0.0f))
