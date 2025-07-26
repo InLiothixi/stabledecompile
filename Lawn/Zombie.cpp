@@ -609,7 +609,10 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
         aBodyReanim->SetTruncateDisappearingFrames(nullptr, false);
 
         mAltitude = 25.0f;
-        mPosY -= 55;
+        if (!IsOnBoard())
+            mPosY -= 55;
+        else
+            mPosY -= 25.0f;
 
         if (IsOnBoard())
         {
@@ -4648,15 +4651,14 @@ void Zombie::UpdateZombieWalking()
             {
                 aPosOffsetX -= 80.0f;
             }
-
-            if (aBodyReanim)
-            {
-                aBodyReanim->mOffsetX = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, 0, aPosOffsetX, TodCurves::CURVE_LINEAR);
-            }
-
-            mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
-            if (mBoard->mCutScene->mCutsceneTime < 1500) return;
         }
+
+        mPosY = TodAnimateCurveFloat(0, 1500, mBoard->mCutScene->mCutsceneTime, GetPosYBasedOnRow(mRow), aDestY, TodCurves::CURVE_LINEAR);
+        if (aBodyReanim)
+        {
+            aBodyReanim->mOffsetX = TodAnimateCurveFloat(1500, 9500, mBoard->mCutScene->mCutsceneTime, 0, aPosOffsetX, TodCurves::CURVE_LINEAR);
+        }
+        if (mBoard->mCutScene->mCutsceneTime < 1500) return;
     }
 
     if (aBodyReanim)
@@ -6482,6 +6484,7 @@ void Zombie::DrawReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, int t
         return;
     }
 
+    g->PushState();
     if (theDrawPos.mClipHeight > CLIP_HEIGHT_LIMIT)
     {
         float aDrawHeight = 120.0f - theDrawPos.mClipHeight + 71.0f;
@@ -6681,6 +6684,7 @@ void Zombie::DrawReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, int t
     }
 
     g->ClearClipRect();
+    g->PopState();
 }
 
 //0x52D6D0

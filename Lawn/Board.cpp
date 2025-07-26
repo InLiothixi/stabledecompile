@@ -1340,6 +1340,10 @@ void Board::InitBushes() {
 		aBushReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
 		aBushReanim->mLoopCount = 0;
 		aBushReanim->mAnimRate = 12.0f;
+		for (int i = 0; i < aBushReanim->mDefinition->mTracks.count; i++)
+		{
+			aBushReanim->mTrackInstances[i].mIgnoreClipRect = true;
+		}
 		mBushesID[i] = mApp->ReanimationGetID(aBushReanim);
 	}
 }
@@ -6692,6 +6696,8 @@ int Board::GetIceZPos(int theRow)
 //0x416140
 void Board::DrawIce(Graphics* g, int theGridY)
 {
+	g->PushState();
+	g->ClearClipRect();
 	int aPosY = GridToPixelY(8, theGridY) + 20;
 	int aHeight = Sexy::IMAGE_ICE->GetHeight();
 	int aWidth = Sexy::IMAGE_ICE->GetWidth();
@@ -6716,7 +6722,7 @@ void Board::DrawIce(Graphics* g, int theGridY)
 		g->DrawImage(Sexy::IMAGE_ICE, aRepeatDstRect, aRepeatSrcRect);
 	}
 	g->DrawImage(Sexy::IMAGE_ICE_CAP, mIceMinX[theGridY], aPosY);
-	g->SetColorizeImages(false);
+	g->PopState();
 }
 
 //0x416290
@@ -8487,6 +8493,8 @@ void Board::DrawFog(Graphics* g)
 
 void Board::DrawForeGround(Graphics* g)
 {
+	g->PushState();
+	g->ClearClipRect();
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_1_DAY:
@@ -8510,6 +8518,7 @@ void Board::DrawForeGround(Graphics* g)
 			g->DrawImage(Sexy::IMAGE_NIGHT_POLE, mPoleX, WIDESCREEN_OFFSETY);
 			break;
 	}
+	g->PopState();
 }
 
 //0x41AA00
