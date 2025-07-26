@@ -8226,11 +8226,14 @@ void Board::DrawUIBottom(Graphics* g)
 		g->mFastStretch = !mApp->Is3DAccelerated();
 		int aWaveTime = abs(mMainCounter / 8 % 22 - 11);
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
-		g->DrawImageCel(Sexy::IMAGE_WAVESIDE, 0, 40, aWaveTime);
-		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 160, 40, aWaveTime);
-		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 320, 40, aWaveTime);
-		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 480, 40, aWaveTime);
-		TodDrawImageCelScaled(g, Sexy::IMAGE_WAVESIDE, 800- Sexy::IMAGE_WAVESIDE->mWidth, 40, 0, aWaveTime, -1.0f, 1.0f);
+		g->DrawImageCel(Sexy::IMAGE_WAVESIDE, -240, 40, aWaveTime);
+		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, -80, 40, aWaveTime);
+		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 80, 40, aWaveTime);
+		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 240, 40, aWaveTime);
+		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 400, 40, aWaveTime);
+		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 560, 40, aWaveTime);
+		g->DrawImageCel(Sexy::IMAGE_WAVECENTER, 720, 40, aWaveTime);
+		TodDrawImageCelScaled(g, Sexy::IMAGE_WAVESIDE, (1040) - Sexy::IMAGE_WAVESIDE->mWidth, 40, 0, aWaveTime, -1.0f, 1.0f);
 		g->PopState();
 
 	}

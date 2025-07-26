@@ -5705,8 +5705,8 @@ void Challenge::TreeOfWisdomDraw(Graphics* g)
 //0x42CEE0
 void Challenge::TreeOfWisdomInit()
 {
-	ReanimatorEnsureDefinitionLoaded(REANIM_TREEOFWISDOM, true);
-	Reanimation* aReanimTree = mApp->AddReanimation(0.5f, 0.5f, 0, REANIM_TREEOFWISDOM);
+	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TREEOFWISDOM, true);
+	Reanimation* aReanimTree = mApp->AddReanimation(0.5f, 0.5f, 0, ReanimationType::REANIM_TREEOFWISDOM);
 	aReanimTree->mIsAttachment = true;
 	aReanimTree->AssignRenderGroupToPrefix("bg", 1);
 	aReanimTree->AssignRenderGroupToPrefix("tree", 2);
