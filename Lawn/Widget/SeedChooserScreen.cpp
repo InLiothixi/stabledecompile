@@ -1277,7 +1277,18 @@ void SeedChooserScreen::MouseDown(int x, int y, int theClickCount)
 					else ClickedSeedInBank(aChosenSeed);
 				}
 				else if (aChosenSeed.mSeedState == SEED_IN_CHOOSER)
-					ClickedSeedInChooser(aChosenSeed);
+				{
+					if (theClickCount == 1)
+					{
+						ClickedSeedInChooser(aChosenSeed);
+					}
+					else if (theClickCount == -1)
+					{
+						mApp->PlaySample(SOUND_TAP);
+						mApp->DoAlmanacDialog(aSeedType)->WaitForResult(true);
+						mApp->mMusic->MakeSureMusicIsPlaying(MUSIC_TUNE_CHOOSE_YOUR_SEEDS);
+					}
+				}
 			}
 		}
 	}
