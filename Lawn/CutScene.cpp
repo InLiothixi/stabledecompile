@@ -183,9 +183,17 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		for (int _i = 0; _i < 3; _i++)
 		{
 			Zombie* mZombie = mBoard->mZombies.DataArrayAlloc();
-			mZombie->ZombieInitialize(0, ZombieType::ZOMBIE_BOBSLED, false, aZombie, -2);
+			mZombie->ZombieInitialize(theGridY, ZombieType::ZOMBIE_BOBSLED, false, aZombie, -2);
 			mZombie->mRow = 0;
 			mZombie->mPosY = aZombie->mPosY;
+			int aRenderOffset = 0;
+			if (_i == 0)
+				aRenderOffset = -2;
+			else if (_i == 1)
+				aRenderOffset = -1;
+			else
+				aRenderOffset = -3;
+			mZombie->mRenderOrder = aZombie->mRenderOrder + aRenderOffset;
 		}
 	}
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS

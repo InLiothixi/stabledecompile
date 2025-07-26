@@ -6204,7 +6204,7 @@ void Zombie::UpdateReanim()
 //0x52C6D0
 void Zombie::DrawBobsledReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, bool theBeforeZombie)
 {
-    if (!IsOnBoard() && mFromWave != Zombie::ZOMBIE_WAVE_CUTSCENE) return;
+    /*if (!IsOnBoard() && mFromWave != Zombie::ZOMBIE_WAVE_CUTSCENE) return;*/
     
     int aPosition = GetBobsledPosition();
     bool aDrawFront = false;
@@ -6230,18 +6230,19 @@ void Zombie::DrawBobsledReanim(Graphics* g, const ZombieDrawPosition& theDrawPos
         }
     }
 
-    if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
-    {
-        if (theBeforeZombie)  // 选卡界面中，依次绘制雪橇背面、僵尸本体和雪橇正面
-        {
-            aDrawBack = true;
-        }
-        else
-        {
-            aDrawFront = true;
-        }
-    }
-    else if (mZombiePhase == ZombiePhase::PHASE_BOBSLED_CRASHING)
+    //if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE)
+    //{
+    //    if (theBeforeZombie)  // 选卡界面中，依次绘制雪橇背面、僵尸本体和雪橇正面
+    //    {
+    //        aDrawBack = true;
+    //    }
+    //    else
+    //    {
+    //        aDrawFront = true;
+    //    }
+    //}
+    //else 
+    if (mZombiePhase == ZombiePhase::PHASE_BOBSLED_CRASHING)
     {
         if (aPosition == 0 && !theBeforeZombie)  // 雪橇损坏后，在绘制领头僵尸结束后绘制雪橇背面和雪橇正面
         {
