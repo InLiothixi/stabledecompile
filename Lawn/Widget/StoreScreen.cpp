@@ -470,17 +470,17 @@ void StoreScreen::Draw(Graphics* g)
     g->DrawImage(Sexy::IMAGE_STORE_SIGN, 285, aStoreSignPosY);
 
     Graphics gBackButton(*g);
-    gBackButton.mTransX = mBackButton->mX;
+    gBackButton.mTransX = mBackButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
     gBackButton.mTransY = mBackButton->mY;
     mBackButton->Render(&gBackButton);
 
     Graphics gPrevButton(*g);
-    gPrevButton.mTransX = mPrevButton->mX;
+    gPrevButton.mTransX = mPrevButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
     gPrevButton.mTransY = mPrevButton->mY;
     mPrevButton->Render(&gPrevButton);
 
     Graphics gNextButton(*g);
-    gNextButton.mTransX = mNextButton->mX;
+    gNextButton.mTransX = mNextButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
     gNextButton.mTransY = mNextButton->mY;
     mNextButton->Render(&gNextButton);
 
