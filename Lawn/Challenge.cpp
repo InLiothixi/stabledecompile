@@ -5620,6 +5620,9 @@ int Challenge::TreeOfWisdomGetSize()
 //0x42CA30
 void Challenge::TreeOfWisdomDraw(Graphics* g)
 {
+	g->PushState();
+	g->mTransX += WIDESCREEN_OFFSETX;
+	g->mTransY += WIDESCREEN_OFFSETY;
 	bool aMouseOn = TreeOfWisdomMouseOn(mApp->mWidgetManager->mLastMouseX - mBoard->mX, mApp->mWidgetManager->mLastMouseY - mBoard->mY);
 
 	Reanimation* aReanimTree = mApp->ReanimationGet(mReanimChallenge);
@@ -5655,6 +5658,7 @@ void Challenge::TreeOfWisdomDraw(Graphics* g)
 		aReanimTree->mEnableExtraOverlayDraw = false;
 	}
 	aReanimTree->DrawRenderGroup(g, 4);  // 绘制根部
+	g->PopState();
 
 	if (mChallengeState == STATECHALLENGE_TREE_GIVE_WISDOM || mChallengeState == STATECHALLENGE_TREE_BABBLING)
 	{
@@ -5707,6 +5711,10 @@ void Challenge::TreeOfWisdomInit()
 {
 	ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_TREEOFWISDOM, true);
 	Reanimation* aReanimTree = mApp->AddReanimation(0.5f, 0.5f, 0, ReanimationType::REANIM_TREEOFWISDOM);
+	for (int i = 0; i < aReanimTree->mDefinition->mTracks.count; i++)
+	{
+		aReanimTree->mTrackInstances[i].mIgnoreClipRect = true;
+	}
 	aReanimTree->mIsAttachment = true;
 	aReanimTree->AssignRenderGroupToPrefix("bg", 1);
 	aReanimTree->AssignRenderGroupToPrefix("tree", 2);

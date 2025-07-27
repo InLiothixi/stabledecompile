@@ -186,6 +186,8 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mHeadParticleID = ParticleSystemID::PARTICLESYSTEMID_NULL;
     mSquashHeadColumn = -1;
 
+    mIsAllergicToNuts = false;
+
     const ZombieDefinition& aZombieDef = GetZombieDefinition(mZombieType);
     RenderLayer aRenderLayer = RenderLayer::RENDER_LAYER_ZOMBIE;
     int aRenderOffset = 4;
@@ -197,8 +199,11 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     switch (theType)
     {
     case ZombieType::ZOMBIE_NORMAL:  //0x5227E9
+    {
         LoadPlainZombieReanim();
+        mIsAllergicToNuts = RandRangeInt(0, 1000) == 0;
         break;
+    }
 
     case ZombieType::ZOMBIE_DUCKY_TUBE:  //0x5227F8
         LoadPlainZombieReanim();
@@ -5609,6 +5614,11 @@ void Zombie::AnimateChewEffect()
     {
         if (aPlant->mSeedType == SeedType::SEED_WALLNUT || aPlant->mSeedType == SeedType::SEED_TALLNUT || aPlant->mSeedType == SeedType::SEED_GIANT_WALLNUT)
         {
+            if (mIsAllergicToNuts)
+            {
+                mBodyHealth = 0;
+                PlayDeathAnim(0U);
+            }
             int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
             ZombieDrawPosition aDrawPos;
             GetDrawPos(aDrawPos);
@@ -10759,7 +10769,11 @@ void Zombie::PlayDeathAnim(unsigned int theDamageFlags)
         aDeathTrackName = "anim_death2";
     }
 
-  
+    if (mIsAllergicToNuts && mHasHead) 
+    {
+        aDeathAnimRate = 14.0f;
+        aDeathTrackName = "anim_walnutdeath";
+    }
    
     PlayZombieReanim(aDeathTrackName, ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, theBlendTime, aDeathAnimRate);
 

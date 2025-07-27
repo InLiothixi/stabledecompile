@@ -176,6 +176,7 @@ public:
     FilterEffect                    mButterFilterEffect;
     ParticleSystemID                mHeadParticleID;
     int                             mSquashHeadColumn;
+    bool                            mIsAllergicToNuts;
 
 public:
     Zombie();
