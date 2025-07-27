@@ -3089,10 +3089,11 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 		&& theFromWave >= -1)
 	{
 		Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[theRow]);
-		if (aBushReanim && !FloatApproxEqual(aBushReanim->mAnimTime, 0.0f))
+		if (aBushReanim && aBushReanim->mLoopCount > 0)
 		{
 			aBushReanim->mLastFrameTime = 0.0f;
 			aBushReanim->mAnimTime = 0.0f;
+			aBushReanim->mLoopCount = 0;
 		}
 	}
 

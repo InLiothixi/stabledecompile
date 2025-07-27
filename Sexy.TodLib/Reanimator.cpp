@@ -383,8 +383,8 @@ void ReanimationCreateAtlas(ReanimatorDefinition* theDefinition, ReanimationType
 
 	TodHesitationTrace("atlas '%s'", aParam.mReanimFileName);
 	int aDuration = max(aTimer.GetDuration(), 0.0);
-	if (aDuration > 20 && theReanimationType != ReanimationType::REANIM_NONE)  //（仅内测版）创建时间过长的报告
-		TodTraceAndLog("LOADING:Long atlas '%s' %d ms on %s", aParam.mReanimFileName, aDuration, gGetCurrentLevelName().c_str());
+	//if (aDuration > 20 && theReanimationType != ReanimationType::REANIM_NONE)  //（仅内测版）创建时间过长的报告
+	//	TodTraceAndLog("LOADING:Long atlas '%s' %d ms on %s", aParam.mReanimFileName, aDuration, gGetCurrentLevelName().c_str());
 }
 
 void ReanimationPreload(ReanimationType theReanimationType)
@@ -1182,13 +1182,13 @@ void ReanimatorEnsureDefinitionLoaded(ReanimationType theReanimType, bool theIsP
 		if (gSexyAppBase->mShutdown || gAppCloseRequest())  // 预加载时若程序退出，则取消加载
 			return;
 	}
-	else  // < 以下部分仅内测版执行 >
-	{
-		if (gAppHasUsedCheatKeys())
-			TodTraceAndLog("Cheater failed to preload '%s' on %s", aReanimParams->mReanimFileName, gGetCurrentLevelName().c_str());
-		else
-			TodTraceAndLog("Non-cheater failed to preload '%s' on %s", aReanimParams->mReanimFileName, gGetCurrentLevelName().c_str());
-	}  // < 以上部分仅内测版执行 >
+	//else  // < 以下部分仅内测版执行 >
+	//{
+	//	if (gAppHasUsedCheatKeys())
+	//		TodTraceAndLog("Cheater failed to preload '%s' on %s", aReanimParams->mReanimFileName, gGetCurrentLevelName().c_str());
+	//	else
+	//		TodTraceAndLog("Non-cheater failed to preload '%s' on %s", aReanimParams->mReanimFileName, gGetCurrentLevelName().c_str());
+	//}  // < 以上部分仅内测版执行 >
 
 	PerfTimer aTimer;
 	aTimer.Start();
@@ -1200,8 +1200,8 @@ void ReanimatorEnsureDefinitionLoaded(ReanimationType theReanimType, bool theIsP
 		TodErrorMessageBox(aBuf, "Error");
 	}
 	int aDuration = aTimer.GetDuration();
-	if (aDuration > 100)  //（仅内测版）创建时间过长的报告
-		TodTraceAndLog("LOADING:Long reanim '%s' %d ms on %s", aReanimParams->mReanimFileName, aDuration, gGetCurrentLevelName().c_str());
+	//if (aDuration > 100)  //（仅内测版）创建时间过长的报告
+	//	TodTraceAndLog("LOADING:Long reanim '%s' %d ms on %s", aReanimParams->mReanimFileName, aDuration, gGetCurrentLevelName().c_str());
 }
 
 //0x473750

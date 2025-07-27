@@ -3447,8 +3447,8 @@ void Zombie::DragUnder()
 {
     mZombieHeight = ZombieHeight::HEIGHT_DRAGGED_UNDER;
     StopEating();
-    DropHelm(0U);
-    DropShield(0U);
+    //DropHelm(0U);
+    //DropShield(0U);
     DropFlag();
     ReanimReenableClipping();
 }
