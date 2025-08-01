@@ -401,6 +401,7 @@ SexyAppBase::SexyAppBase()
 	mPreviewHWnd = NULL;
 	mIsParticleEditor = false;
 	mIsTouch = false;
+	mResolutionMode = 0;
 
 	int i;
 
@@ -4625,13 +4626,22 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F11)
+	/*else if (theKey == VK_F11)
 	{
 		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 			DumpProgramInfo();
 		else
 			TakeScreenshot();
 
+		return true;
+	}*/
+	else if (theKey == VK_F11)
+	{
+		if (mFullScreenWindow && Is3DAccelerated())
+		{
+			mResolutionMode = (mResolutionMode + 1) % 9;
+			SwitchScreenMode(mIsWindowed);
+		}
 		return true;
 	}
 	else if (theKey == VK_F2)

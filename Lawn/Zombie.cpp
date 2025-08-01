@@ -114,6 +114,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mHelmetJustGotShotCounter = 0;
     mShieldJustGotShotCounter = 0;
     mShieldRecoilCounter = 0;
+    mHelmetRecoilCounter = 0;
     mChilledCounter = 0;
     mIceTrapCounter = 0;
     mButteredCounter = 0;
@@ -4990,6 +4991,10 @@ void Zombie::Update()
         {
             mShieldRecoilCounter--;
         }
+        if (mHelmetRecoilCounter > 0)
+        {
+            mHelmetRecoilCounter--;
+        }
         if (mZombieFade > 0)
         {
             mZombieFade--;
@@ -5707,6 +5712,7 @@ void Zombie::AnimateChewEffect()
         }
         else if (aZombie->mHelmType != HelmType::HELMTYPE_NONE && aZombie->mHelmHealth > 0) {
             aZombie->mHelmetJustGotShotCounter = max(aZombie->mHelmetJustGotShotCounter, 25);
+            aZombie->mHelmetRecoilCounter = max(aZombie->mHelmetRecoilCounter, 12);
             if (aZombie->mJustGotShotCounter < 0) {
                 aZombie->mJustGotShotCounter = 0;
             }
@@ -6628,7 +6634,17 @@ void Zombie::DrawReanim(Graphics* g, const ZombieDrawPosition& theDrawPos, int t
             aBodyReanim->mEnableExtraAdditiveDraw = true;
         }
 
+        g->PushState();
+        if (aBodyReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE)
+            g->mTransX -= 2; // Some dude offseted the helmet by like 2px to the right in Console!!!!!
+        float aHelmetHitOffset = 0.0f;
+        if (mHelmetRecoilCounter > 0)
+        {
+            aHelmetHitOffset = TodAnimateCurveFloat(12, 0, mHelmetRecoilCounter, 3.0f, 0.0f, TodCurves::CURVE_LINEAR);
+        }
+        g->mTransX += aHelmetHitOffset;
         aBodyReanim->DrawRenderGroup(g, RENDER_GROUP_HELMET);
+        g->PopState();
     }
 
     if (mHelmType == HelmType::HELMTYPE_TRAFFIC_CONE || mHelmType == HelmType::HELMTYPE_BUCKET || mHelmType == HelmType::HELMTYPE_FOOTBALL || mHelmType == HelmType::HELMTYPE_DIGGER ||
@@ -9225,7 +9241,14 @@ int Zombie::TakeHelmDamage(int theDamage, unsigned int theDamageFlags)
         {
             mHelmetJustGotShotCounter = 25;
 
-            if (TestBit(theDamageFlags, (int)DamageFlags::DAMAGE_LOBBED) && mJustGotShotCounter < 0)
+            bool isLobbed = TestBit(theDamageFlags, (int)DamageFlags::DAMAGE_LOBBED);
+
+            if (isLobbed && !TestBit(theDamageFlags, (int)DamageFlags::DAMAGE_DOESNT_CAUSE_FLASH) && !TestBit(theDamageFlags, (int)DamageFlags::DAMAGE_HITS_SHIELD_AND_BODY))
+            {
+                mHelmetRecoilCounter = 12;
+            }
+
+            if (isLobbed && mJustGotShotCounter < 0)
             {
                 mJustGotShotCounter = 0;
             }

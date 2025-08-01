@@ -106,7 +106,8 @@ public:
     bool                            mVariant;                                   //+0x50
     bool                            mIsEating;                                  //+0x51
     int                             mJustGotShotCounter;                        //+0x54
-    int                             mHelmetJustGotShotCounter;                  
+    int                             mHelmetJustGotShotCounter;                 
+    int                             mHelmetRecoilCounter;                       //+0x5C
     int                             mShieldJustGotShotCounter;                  //+0x58
     int                             mShieldRecoilCounter;                       //+0x5C
     int                             mZombieAge;                                 //+0x60

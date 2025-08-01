@@ -34,6 +34,7 @@ public:
 	virtual void                ButtonMouseEnter(int theId);
 	virtual void                ButtonPress(int theId, int theClickCount);
 	virtual void                ButtonDepress(int theId);
+	void						DisableButtons(bool isDisabled);
 };
 
 #endif

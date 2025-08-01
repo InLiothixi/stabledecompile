@@ -480,7 +480,23 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 			aReanimFlag.SetFramesForLayer("Zombie_flag");
 			aReanimFlag.Draw(&aMemoryGraphics);
 		}
+
+		if (theZombieType == ZombieType::ZOMBIE_TRAFFIC_CONE) 
+		{
+			aReanim.AssignRenderGroupToTrack("anim_cone", RENDER_GROUP_HELMET);
+		}
+		else if (theZombieType == ZombieType::ZOMBIE_PAIL) 
+		{
+			aReanim.AssignRenderGroupToTrack("anim_bucket", RENDER_GROUP_HELMET);
+		}
+
 		aReanim.Draw(&aMemoryGraphics);
+
+		if (theZombieType == ZombieType::ZOMBIE_TRAFFIC_CONE || theZombieType == ZombieType::ZOMBIE_PAIL)
+		{
+			aReanim.mOverlayMatrix.m02 -= 2;
+			aReanim.DrawRenderGroup(&aMemoryGraphics, RENDER_GROUP_HELMET);
+		}
 	}
 	else if (aZombieDef.mReanimationType == ReanimationType::REANIM_BOSS)
 	{

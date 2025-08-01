@@ -945,7 +945,8 @@ void GameSelector::DrawOverlay(Graphics* g)
 			aTrophyParticle->Draw(g);
 	}
 
-	mToolTip->Draw(g);
+	if (mWidgetManager->mFocusWidget == this)
+		mToolTip->Draw(g);
 
 	Reanimation* aHandReanim = mApp->ReanimationTryToGet(mHandReanimID);
 	if (aHandReanim)
@@ -980,14 +981,14 @@ void GameSelector::DrawOverlay(Graphics* g)
 //0x44B0D0
 void GameSelector::UpdateTooltip()
 {
-	if (!mApp->HasFinishedAdventure() || mApp->GetDialog(Dialogs::DIALOG_MESSAGE))
+	if (!mApp->HasFinishedAdventure() || mApp->GetDialog(Dialogs::DIALOG_MESSAGE) || mWidgetManager->mFocusWidget != this)
 		return;
 
 	if (mHasTrophy)
 	{
-		int aMouseX = mApp->mWidgetManager->mLastMouseX;
-		int aMouseY = mApp->mWidgetManager->mLastMouseY;
-		if (aMouseX >= 50 && aMouseX < 135 && aMouseY >= 280 && aMouseY <= 505 
+		int aMouseX = mX + mApp->mWidgetManager->mLastMouseX;
+		int aMouseY = mY + mApp->mWidgetManager->mLastMouseY;
+		if (aMouseX >= mX + 50 && aMouseX < mX + 135 && aMouseY >= mY + 280 && aMouseY <= mY + 505
 #ifdef _HAS_ACHIEVEMENTS 
 			|| mTrophyButton && mTrophyButton->mIsOver
 #endif 
@@ -996,22 +997,22 @@ void GameSelector::UpdateTooltip()
 			if (mApp->EarnedGoldTrophy())
 			{
 				mToolTip->SetLabel(LawnApp::Pluralize(mApp->mPlayerInfo->mFinishedAdventure, _S("[GOLD_SUNFLOWER_TOOLTIP]"), _S("[GOLD_SUNFLOWER_TOOLTIP_PLURAL]")));
-				mToolTip->mX = 32;
+				mToolTip->mX = mX + 32;
 #ifdef _HAS_ACHIEVEMENTS 
-				mToolTip->mY = 465;
+				mToolTip->mY = mY + 465;
 #else
-				mToolTip->mY = 510;
+				mToolTip->mY = mY + 510;
 #endif
 				mToolTip->mVisible = true;
 			}
 			else
 			{
 				mToolTip->SetLabel(_S("[SILVER_SUNFLOWER_TOOLTIP]"));
-				mToolTip->mX = 20;
+				mToolTip->mX = mX + 20;
 #ifdef _HAS_ACHIEVEMENTS 
-				mToolTip->mY = 450;
+				mToolTip->mY = mY + 450;
 #else
-				mToolTip->mY = 495;
+				mToolTip->mY = mY + 495;
 #endif
 				mToolTip->mVisible = true;
 			}
@@ -1932,7 +1933,7 @@ void GameSelector::SlideTo(int theX, int theY) {
 void GameSelector::ShowAchievementsScreen() {
 	SlideTo(0, -mApp->mHeight);
 	mWidgetManager->SetFocus(mAchievementsWidget);
-	
+	mMoreWidget->SetDisabled(true);
 	DisableButtons(true);
 }
 
@@ -1943,14 +1944,14 @@ void GameSelector::ShowZombatarScreen() {
 	mZombatarWidget->mBackButton->mButtonImage = Sexy::IMAGE_BLANK;
 	mZombatarWidget->mBackButton->mDownImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
 	mZombatarWidget->mBackButton->mOverImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
-	
+	mMoreWidget->DisableButtons(true);
 	DisableButtons(true);
 }
 
 void GameSelector::ShowMoreScreen() {
 	SlideTo(mApp->mWidth, 0);
 	mWidgetManager->SetFocus(mMoreWidget);
-	
+	mMoreWidget->DisableButtons(false);
 	DisableButtons(true);
 }
 
@@ -1965,12 +1966,14 @@ void GameSelector::ShowQuickplayScreen() {
 	mLevelSelectorWidget->SelectStage(1, false);
 	mLevelSelectorWidget->mHasFinishedSliding = false;
 	mLevelSelectorWidget->mIsSlidingOut = false;
+	mMoreWidget->DisableButtons(true);
 	DisableButtons(true);
 }
 
 void GameSelector::ShowGameSelectorScreen() {
 	SlideTo(0, 0);
 	mWidgetManager->SetFocus(this);
+	mMoreWidget->DisableButtons(true);
 	DisableButtons(false);
 }
 

@@ -333,6 +333,7 @@ public:
 
 	bool					mIsParticleEditor;
 	bool					mIsTouch;
+	int						mResolutionMode;
 
 protected:	
 	void					RehupFocus();

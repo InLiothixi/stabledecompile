@@ -184,8 +184,9 @@ void QuickplayWidget::Update() {
 		else if (mSlidingOutCounter == 0)
 		{
 			mSlidingOutCounter = -1;
-			mApp->mGameSelector->SlideTo(mApp->mWidth, 0);
-			mApp->mGameSelector->mWidgetManager->SetFocus(mApp->mGameSelector->mMoreWidget);
+			mApp->mGameSelector->SlideTo(0, 0);
+			mApp->mGameSelector->mWidgetManager->SetFocus(mApp->mGameSelector);
+			mApp->mGameSelector->DisableButtons(false);
 		}
 	}
 

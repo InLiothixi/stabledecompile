@@ -676,6 +676,11 @@ void Projectile::DoSplashDamage(Zombie* theZombie)
 			{
 				aZombie->TakeDamage(aSplashDamage, aDamageFlags);
 			}
+
+			if (TestBit(aDamageFlags, (int)DamageFlags::DAMAGE_HITS_SHIELD_AND_BODY) && mMotionType == ProjectileMotion::MOTION_LOBBED)
+			{
+				aZombie->mHelmetRecoilCounter = 12;
+			}
 		}
 	}
 }

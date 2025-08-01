@@ -229,6 +229,11 @@ bool DDInterface::Do3DTest(HWND theHWND)
 	return false;
 }
 
+static const int mWidths[] = { 800, 1066, 1280 };
+static const int mHeights[] = { 600, 720, 800 };
+static const int mNumWidths = sizeof(mWidths) / sizeof(int);
+static const int mNumHeights = sizeof(mHeights) / sizeof(int);
+
 int DDInterface::Init(HWND theWindow, bool IsWindowed)
 {
 	AutoCrit anAutoCrit(mCritSect);
@@ -437,6 +442,40 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 				mPresentationRect.mY = 0;
 			}
 		}
+
+		//if (mIs3D && mApp->mWidescreenAware)
+		//{
+		//	mIsWidescreen = true;
+		//	// Set the display mode to the size of the desktop.
+		//	mDisplayWidth = mDesktopWidth;
+		//	mDisplayHeight = mDesktopHeight;
+		//	mDisplayAspect = mDesktopAspect;
+
+		//	int widthIndex = mApp->mResolutionMode % mNumWidths;
+		//	int heightIndex = mApp->mResolutionMode / mNumWidths;
+
+		//	// Setup the draw buffer(s) at the same aspect ratio as the desktop,
+		//	// but with the height requested by the application.
+		//	mWidth = mWidths[widthIndex];
+		//	mHeight = mHeights[heightIndex];
+		//	mAspect.Set(mWidth, mHeight);
+		//	mWideScreenExtraWidth = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect);
+		//	mWideScreenOffsetX = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect) / 2.0f;
+
+		//	mPresentationRect.mWidth = mDisplayWidth;
+		//	mPresentationRect.mHeight = mDisplayHeight;
+		//	mPresentationRect.mX = 0;
+		//	mPresentationRect.mY = 0;
+		//}
+		//else if(mIs3D)
+		//{
+		//	// Set the dest rect for drawing the back buffer to the center of
+		//	// the wide display.
+		//	mPresentationRect.mWidth = mWidth * mDisplayHeight / mHeight;
+		//	mPresentationRect.mHeight = mDisplayHeight;
+		//	mPresentationRect.mX = (mDisplayWidth - mPresentationRect.mWidth) / 2;
+		//	mPresentationRect.mY = 0;
+		//}
 
 		OutputDebug(_S("Display is           %4lu x %4lu [%2d:%2d]\n"), mDisplayWidth, mDisplayHeight, mDisplayAspect.mNumerator, mDisplayAspect.mDenominator);
 

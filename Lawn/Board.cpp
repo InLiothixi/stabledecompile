@@ -3084,7 +3084,7 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 		}
 	}
 
-	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && !mApp->IsWhackAZombieLevel() && 
+	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && !mApp->IsWhackAZombieLevel() && !mApp->IsIZombieLevel() && !mApp->IsScaryPotterLevel() &&
 		theZombieType != ZombieType::ZOMBIE_BACKUP_DANCER /*&& theZombieType != ZombieType::ZOMBIE_BOBSLED*/ && theZombieType != ZombieType::ZOMBIE_IMP 
 		&& theFromWave >= -1)
 	{

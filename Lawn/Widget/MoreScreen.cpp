@@ -41,6 +41,7 @@ MoreWidget::MoreWidget(LawnApp* theApp) {
 	mQuickplayButton->mTranslateX = 0;
 	mQuickplayButton->mTranslateY = 0;
 #endif
+	DisableButtons(true);
 }
 
 MoreWidget::~MoreWidget() {
@@ -59,6 +60,14 @@ void MoreWidget::Update() {
 	mQuickplayButton->MarkDirty();
 #endif
 
+}
+
+void MoreWidget::DisableButtons(bool isDisabled)
+{
+	mBackButton->SetDisabled(isDisabled);
+#ifdef _HAS_LEVELSELECTOR
+	mQuickplayButton->SetDisabled(isDisabled);
+#endif
 }
 
 void MoreWidget::Draw(Graphics* g) {
