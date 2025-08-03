@@ -571,7 +571,7 @@ Reanimation* CreditScreen::PlayReanim(int aIndex)
     {
         aCreditsReanim = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_CREDITS_MAIN2);
         aCreditsReanim->AssignRenderGroupToPrefix("Background", 1);
-        aCreditsReanim->AssignRenderGroupToPrefix("attacher__Zombie", 2);
+        aCreditsReanim->AssignRenderGroupToTrack("attacher__Zombie", 2);
         aCreditsReanim->AssignRenderGroupToPrefix("Words", 3);
         aCreditsReanim->AssignRenderGroupToPrefix("SpotFront", 3);
         aCreditsReanim->AssignRenderGroupToPrefix("attacher__undead", 2);
@@ -579,7 +579,8 @@ Reanimation* CreditScreen::PlayReanim(int aIndex)
     else if (aIndex == 3)
     {
         aCreditsReanim = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_CREDITS_MAIN3);
-        aCreditsReanim->AssignRenderGroupToPrefix("Background", 1);
+        aCreditsReanim->AssignRenderGroupToTrack("Background", 1);
+        aCreditsReanim->AssignRenderGroupToTrack("Background2", 1);
         aCreditsReanim->AssignRenderGroupToPrefix("attacher__Zombie", 2);
         aCreditsReanim->AssignRenderGroupToPrefix("attacher__DiscoLights", 2);
         aCreditsReanim->AssignRenderGroupToPrefix("Words", 3);
@@ -591,6 +592,11 @@ Reanimation* CreditScreen::PlayReanim(int aIndex)
     {
         TOD_ASSERT();
         return nullptr;
+    }
+
+    for (int i = 0; i < aCreditsReanim->mDefinition->mTracks.count; i++)
+    {
+        aCreditsReanim->mTrackInstances[i].mIgnoreClipRect = true;
     }
 
     aCreditsReanim->mIsAttachment = true;
@@ -716,7 +722,7 @@ void CreditScreen::DrawOverlay(Graphics* g)
         if (aFadeAlpha > 0)
         {
             g->SetColor(Color(0, 0, 0, aFadeAlpha));
-            g->FillRect(0, 0, mWidth, mHeight);
+            g->FillRect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, mWidth - WIDESCREEN_OFFSETX * 2, mHeight - WIDESCREEN_OFFSETY * 2);
         }
     }
 }
@@ -755,7 +761,7 @@ void CreditScreen::Draw(Graphics* g)
     if (!mPreloaded)
     {
         g->SetColor(Color::Black);
-        g->FillRect(0, 0, mWidth, mHeight);
+        g->FillRect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, mWidth - WIDESCREEN_OFFSETX * 2, mHeight - WIDESCREEN_OFFSETY * 2);
         mDrawCount = 1;
         return;
     }
@@ -763,11 +769,11 @@ void CreditScreen::Draw(Graphics* g)
     mDrawCount++;
     if (mDrawCount == 2)
     {
-        g->DrawImage(IMAGE_BACKGROUND1, 0, 0);
-        g->DrawImage(IMAGE_BACKGROUND2, 0, 0);
-        g->DrawImage(IMAGE_BACKGROUND3, 0, 0);
-        g->DrawImage(IMAGE_BACKGROUND4, 0, 0);
-        g->DrawImage(IMAGE_BACKGROUND5, 0, 0);
+        g->DrawImage(IMAGE_BACKGROUND1, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+        g->DrawImage(IMAGE_BACKGROUND2, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+        g->DrawImage(IMAGE_BACKGROUND3, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+        g->DrawImage(IMAGE_BACKGROUND4, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+        g->DrawImage(IMAGE_BACKGROUND5, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
         DrawReanimToPreload(g, ReanimationType::REANIM_CREDITS_BOSSDANCE);
         DrawReanimToPreload(g, ReanimationType::REANIM_CREDITS_CRAZYDAVE);
         DrawReanimToPreload(g, ReanimationType::REANIM_ZOMBIE_CREDITS_DANCE);
@@ -775,7 +781,7 @@ void CreditScreen::Draw(Graphics* g)
         DrawReanimToPreload(g, ReanimationType::REANIM_SUNFLOWER);
     }
     g->SetColor(Color::Black);
-    g->FillRect(0, 0, mWidth, mHeight);
+    g->FillRect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, mWidth - WIDESCREEN_OFFSETX * 2, mHeight - WIDESCREEN_OFFSETY * 2);
 
     Reanimation* aCreditsReanim = mApp->ReanimationGet(mCreditsReanimID);
     int aFrameCount = aCreditsReanim->mDefinition->mTracks.tracks->mTransforms.count - 1;
@@ -815,21 +821,21 @@ void CreditScreen::Draw(Graphics* g)
         {
             g->PushState();
             g->ClipRect(aTransformBackground2.mTransX, aTransformBackground2.mTransY, aTransformBackground2.mImage->mWidth - 1, aTransformBackground2.mImage->mHeight - 1);
-            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground2.mTransX - BOARD_WIDTH / 2, aTransformBackground2.mTransY - BOARD_HEIGHT / 2);
+            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground2.mTransX - BOARD_WIDTH / 2 + WIDESCREEN_OFFSETX, aTransformBackground2.mTransY - BOARD_HEIGHT / 2 + WIDESCREEN_OFFSETY);
             g->PopState();
         }
         if (aTransformBackground3.mFrame != -1.0f)
         {
             g->PushState();
             g->ClipRect(aTransformBackground3.mTransX, aTransformBackground3.mTransY, aTransformBackground3.mImage->mWidth - 1, aTransformBackground3.mImage->mHeight - 1);
-            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground3.mTransX - BOARD_WIDTH / 2, aTransformBackground3.mTransY - BOARD_HEIGHT / 2);
+            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground3.mTransX - BOARD_WIDTH / 2 + WIDESCREEN_OFFSETX, aTransformBackground3.mTransY - BOARD_HEIGHT / 2 + WIDESCREEN_OFFSETY);
             g->PopState();
         }
         if (aTransformBackground4.mFrame != -1.0f)
         {
             g->PushState();
             g->ClipRect(aTransformBackground4.mTransX, aTransformBackground4.mTransY, aTransformBackground4.mImage->mWidth - 1, aTransformBackground4.mImage->mHeight - 1);
-            g->DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2, aTransformBackground4.mTransY - BOARD_HEIGHT / 2);
+            g->DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2 + WIDESCREEN_OFFSETX, aTransformBackground4.mTransY - BOARD_HEIGHT / 2 + WIDESCREEN_OFFSETY);
             g->PopState();
         }
     }
@@ -838,6 +844,7 @@ void CreditScreen::Draw(Graphics* g)
         int aBackground1Index = aCreditsReanim->FindTrackIndex("Background");
         ReanimatorTransform aTransformBackground1;
         aCreditsReanim->GetCurrentTransform(aBackground1Index, &aTransformBackground1);
+
         int aBackground3Index = aCreditsReanim->FindTrackIndex("Background3");
         ReanimatorTransform aTransformBackground3;
         aCreditsReanim->GetCurrentTransform(aBackground3Index, &aTransformBackground3);
@@ -849,7 +856,7 @@ void CreditScreen::Draw(Graphics* g)
         {
             g->PushState();
             g->ClipRect(aTransformBackground1.mTransX, aTransformBackground1.mTransY, aTransformBackground1.mImage->mWidth - 1, aTransformBackground1.mImage->mHeight - 1);
-            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground1.mTransX - BOARD_WIDTH / 2 + 330, aTransformBackground1.mTransY - BOARD_HEIGHT / 2 - 50);
+            g->DrawImageF(IMAGE_BACKGROUND1, aTransformBackground1.mTransX - BOARD_WIDTH / 2 + 330 + WIDESCREEN_OFFSETX, aTransformBackground1.mTransY - BOARD_HEIGHT / 2 - 50 + WIDESCREEN_OFFSETY);
             g->PopState();
         }
         if (aTransformBackground3.mFrame != -1.0f)
@@ -858,7 +865,7 @@ void CreditScreen::Draw(Graphics* g)
             g->mTransX += aTransformBackground3.mTransX - 20.0f;
             g->mTransY += aTransformBackground3.mTransY - 260.0f;
             g->ClipRect(20, 260, aTransformBackground3.mImage->mWidth - 1, aTransformBackground3.mImage->mHeight - 1);
-            g->DrawImageF(IMAGE_BACKGROUND3, -220.0f, 0.0f);
+            g->DrawImageF(IMAGE_BACKGROUND3, -220.0f + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
             g->DrawImageF(IMAGE_POOL, 34.0f, 278.0f);
             g->PopState();
         }
@@ -866,7 +873,7 @@ void CreditScreen::Draw(Graphics* g)
         {
             g->PushState();
             g->ClipRect(aTransformBackground4.mTransX, aTransformBackground4.mTransY, aTransformBackground4.mImage->mWidth - 1, aTransformBackground4.mImage->mHeight - 1);
-            g->DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2, aTransformBackground4.mTransY - BOARD_HEIGHT / 2);
+            g->DrawImageF(IMAGE_BACKGROUND2, aTransformBackground4.mTransX - BOARD_WIDTH / 2 + WIDESCREEN_OFFSETX, aTransformBackground4.mTransY - BOARD_HEIGHT / 2 + WIDESCREEN_OFFSETY);
             g->PopState();
         }
     }

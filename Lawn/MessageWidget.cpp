@@ -258,7 +258,7 @@ void MessageWidget::DrawReanimatedText(Graphics* g, Font* theFont, const Color& 
 		aFinalColor.mAlpha = anAlpha;
 
 		aTransform.mTransX += aTextReanim->mOverlayMatrix.m02 + gSexyAppBase->mDDInterface->mWideScreenOffsetX;
-		aTransform.mTransY += aTextReanim->mOverlayMatrix.m12 + thePosY - BOARD_HEIGHT / 2;
+		aTransform.mTransY += aTextReanim->mOverlayMatrix.m12 + thePosY - BOARD_HEIGHT / 2 + gSexyAppBase->mDDInterface->mWideScreenOffsetY;
 		if (mReanimType == ReanimationType::REANIM_TEXT_FADE_ON && mDisplayTime - mDuration < mSlideOffTime)
 		{
 			float aStretch = 1.0f - aTextReanim->mAnimTime;
@@ -424,7 +424,7 @@ void MessageWidget::Draw(Graphics* g)
 		if (aRectHeight > 0)
 		{
 			aOutlineColor = Color(0, 0, 0, 128);
-			Rect aRect(-gSexyAppBase->mDDInterface->mWideScreenOffsetX, aPosY, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), aRectHeight);
+			Rect aRect(-gSexyAppBase->mDDInterface->mWideScreenOffsetX, aPosY - gSexyAppBase->mDDInterface->mWideScreenOffsetY, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), aRectHeight);
 			g->SetColor(aOutlineColor);
 			g->FillRect(aRect);
 

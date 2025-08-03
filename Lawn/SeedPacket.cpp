@@ -593,7 +593,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		else
 		{
 			SexyMatrix3 aMatrix;
-			TodScaleTransformMatrix(aMatrix, aTextOffsetX * g->mScaleX + x + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aTextOffsetY * g->mScaleY + y, g->mScaleX, g->mScaleY);
+			TodScaleTransformMatrix(aMatrix, aTextOffsetX * g->mScaleX + x + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aTextOffsetY * g->mScaleY + y + gSexyAppBase->mDDInterface->mWideScreenOffsetY, g->mScaleX, g->mScaleY);
 			//if (g->mScaleX > 1.8f)
 			{
 				g->SetLinearBlend(false);

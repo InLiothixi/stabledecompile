@@ -98,6 +98,8 @@ public:
 
 	int						mWideScreenExtraWidth;
 	int						mWideScreenOffsetX;
+	int						mWideScreenExtraHeight;
+	int						mWideScreenOffsetY;
 
 public:
 	bool					CopyBitmap(LPDIRECTDRAWSURFACE theSurface, HBITMAP TheBitmap, int theX, int theY, int theWidth, int theHeight);

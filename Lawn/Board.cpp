@@ -74,7 +74,7 @@ Board::Board(LawnApp* theApp)
 	mSpecialGraveStoneX = -1;
 	mSpecialGraveStoneY = -1;
 	memset(mBushesID, 0, sizeof(mBushesID));
-	mPoleX = mTreeX = WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX + 70;
+	mPoleX = mTreeX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
 	for (int i = 0; i < MAX_GRID_SIZE_X; i++)
 	{
 		for (int j = 0; j < MAX_GRID_SIZE_Y; j++)
@@ -8502,6 +8502,8 @@ void Board::DrawForeGround(Graphics* g)
 {
 	g->PushState();
 	g->ClearClipRect();
+	g->mClipRect.mWidth -= WIDESCREEN_OFFSETX;
+	g->mClipRect.mHeight -= WIDESCREEN_OFFSETY;
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_1_DAY:

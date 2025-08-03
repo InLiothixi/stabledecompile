@@ -55,6 +55,10 @@ DDInterface::DDInterface(SexyAppBase* theApp)
 	mOldCursorAreaImage = NULL;
 	mInitCount = 0;
 	mRefreshRate = 60;
+	mWideScreenExtraWidth = 0;
+	mWideScreenOffsetX = 0;
+	mWideScreenExtraHeight = 0;
+	mWideScreenOffsetY = 0;
 	mMillisecondsPerFrame = 1000 / mRefreshRate;
 
 	mD3DInterface = new D3DInterface;
@@ -230,7 +234,7 @@ bool DDInterface::Do3DTest(HWND theHWND)
 }
 
 static const int mWidths[] = { 800, 1066, 1280 };
-static const int mHeights[] = { 600, 720, 800 };
+static const int mHeights[] = { 600, 720};
 static const int mNumWidths = sizeof(mWidths) / sizeof(int);
 static const int mNumHeights = sizeof(mHeights) / sizeof(int);
 
@@ -302,6 +306,8 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 	mHasOldCursorArea = false;
 	mWideScreenExtraWidth = 0;
 	mWideScreenOffsetX = 0;
+	mWideScreenExtraHeight = 0;
+	mWideScreenOffsetY = 0;
 
 	OutputDebug(_S("Application requests %4lu x %4lu [%2d:%2d]\n"), mWidth, mHeight, mAspect.mNumerator, mAspect.mDenominator);
 
@@ -343,8 +349,8 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 				mWidth = mDisplayWidth;
 				mHeight = mDisplayHeight;
 				mAspect = mDisplayAspect;
-				mWideScreenExtraWidth = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect);
-				mWideScreenOffsetX = mWideScreenExtraWidth / 2.0f;
+				//mWideScreenExtraWidth = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect);
+				//mWideScreenOffsetX = mWideScreenExtraWidth / 2.0f;
 
 				mPresentationRect.mWidth = mDisplayWidth;
 				mPresentationRect.mHeight = mDisplayHeight;
@@ -410,40 +416,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 	{
 		OutputDebug(_S("Desktop is           %4lu x %4lu [%2d:%2d]\n"), mDesktopWidth, mDesktopHeight, mDesktopAspect.mNumerator, mDesktopAspect.mDenominator);
 
-		if (mIs3D && mAspect < mDesktopAspect)
-		{
-			mIsWidescreen = true;
-			// Set the display mode to the size of the desktop.
-			mDisplayWidth = mDesktopWidth;
-			mDisplayHeight = mDesktopHeight;
-			mDisplayAspect = mDesktopAspect;
-
-			if (mApp->mWidescreenAware)
-			{
-				// Setup the draw buffer(s) at the same aspect ratio as the desktop,
-				// but with the height requested by the application.
-				mAspect = mDisplayAspect;
-				mWidth = mHeight * mAspect;
-				mWideScreenExtraWidth = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect);
-				mWideScreenOffsetX = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect) / 2.0f;
-
-				mPresentationRect.mWidth = mDisplayWidth;
-				mPresentationRect.mHeight = mDisplayHeight;
-				mPresentationRect.mX = 0;
-				mPresentationRect.mY = 0;
-			}
-			else
-			{
-				// Set the dest rect for drawing the back buffer to the center of
-				// the wide display.
-				mPresentationRect.mWidth = mWidth * mDisplayHeight / mHeight;
-				mPresentationRect.mHeight = mDisplayHeight;
-				mPresentationRect.mX = (mDisplayWidth - mPresentationRect.mWidth) / 2;
-				mPresentationRect.mY = 0;
-			}
-		}
-
-		//if (mIs3D && mApp->mWidescreenAware)
+		//if (mIs3D && mAspect < mDesktopAspect)
 		//{
 		//	mIsWidescreen = true;
 		//	// Set the display mode to the size of the desktop.
@@ -451,31 +424,57 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 		//	mDisplayHeight = mDesktopHeight;
 		//	mDisplayAspect = mDesktopAspect;
 
-		//	int widthIndex = mApp->mResolutionMode % mNumWidths;
-		//	int heightIndex = mApp->mResolutionMode / mNumWidths;
+		//	if (mApp->mWidescreenAware)
+		//	{
+		//		// Setup the draw buffer(s) at the same aspect ratio as the desktop,
+		//		// but with the height requested by the application.
+		//		mAspect = mDisplayAspect;
+		//		mWidth = mHeight * mAspect;
+		//		mWideScreenExtraWidth = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect);
+		//		mWideScreenOffsetX = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect) / 2.0f;
 
-		//	// Setup the draw buffer(s) at the same aspect ratio as the desktop,
-		//	// but with the height requested by the application.
-		//	mWidth = mWidths[widthIndex];
-		//	mHeight = mHeights[heightIndex];
-		//	mAspect.Set(mWidth, mHeight);
-		//	mWideScreenExtraWidth = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect);
-		//	mWideScreenOffsetX = ((gSexyAppBase->mHeight * mAspect) - gSexyAppBase->mHeight * gSexyAppBase->mWindowAspect) / 2.0f;
+		//		mPresentationRect.mWidth = mDisplayWidth;
+		//		mPresentationRect.mHeight = mDisplayHeight;
+		//		mPresentationRect.mX = 0;
+		//		mPresentationRect.mY = 0;
+		//	}
+		//	else
+		//	{
+		//		// Set the dest rect for drawing the back buffer to the center of
+		//		// the wide display.
+		//		mPresentationRect.mWidth = mWidth * mDisplayHeight / mHeight;
+		//		mPresentationRect.mHeight = mDisplayHeight;
+		//		mPresentationRect.mX = (mDisplayWidth - mPresentationRect.mWidth) / 2;
+		//		mPresentationRect.mY = 0;
+		//	}
+		//}
 
-		//	mPresentationRect.mWidth = mDisplayWidth;
-		//	mPresentationRect.mHeight = mDisplayHeight;
-		//	mPresentationRect.mX = 0;
-		//	mPresentationRect.mY = 0;
-		//}
-		//else if(mIs3D)
-		//{
-		//	// Set the dest rect for drawing the back buffer to the center of
-		//	// the wide display.
-		//	mPresentationRect.mWidth = mWidth * mDisplayHeight / mHeight;
-		//	mPresentationRect.mHeight = mDisplayHeight;
-		//	mPresentationRect.mX = (mDisplayWidth - mPresentationRect.mWidth) / 2;
-		//	mPresentationRect.mY = 0;
-		//}
+		if (mApp->mWidescreenAware)
+		{
+			mIsWidescreen = true;
+			// Set the display mode to the size of the desktop.
+			mDisplayWidth = mDesktopWidth;
+			mDisplayHeight = mDesktopHeight;
+			mDisplayAspect = mDesktopAspect;
+
+			int widthIndex = mApp->mResolutionMode % mNumWidths;
+			int heightIndex = mApp->mResolutionMode / mNumWidths;
+
+			// Setup the draw buffer(s) at the same aspect ratio as the desktop,
+			// but with the height requested by the application.
+			mWidth = mWidths[widthIndex];
+			mHeight = mHeights[heightIndex];
+			mAspect.Set(mWidth, mHeight);
+			mWideScreenExtraWidth = mWidth - gSexyAppBase->mWidth;
+			mWideScreenOffsetX = mWideScreenExtraWidth / 2.0f;
+			mWideScreenExtraHeight = mHeight - gSexyAppBase->mHeight;
+			mWideScreenOffsetY = mWideScreenExtraHeight / 2.0f;
+
+			mPresentationRect.mWidth = mDisplayWidth;
+			mPresentationRect.mHeight = mDisplayHeight;
+			mPresentationRect.mX = 0;
+			mPresentationRect.mY = 0;
+		}
 
 		OutputDebug(_S("Display is           %4lu x %4lu [%2d:%2d]\n"), mDisplayWidth, mDisplayHeight, mDisplayAspect.mNumerator, mDisplayAspect.mDenominator);
 

@@ -8,6 +8,7 @@
 #include "SexyMatrix.h"
 #include <math.h>
 #include "SexyAppBase.h"
+#include "DDInterface.h"
 
 using namespace Sexy;
 
@@ -159,7 +160,11 @@ bool Graphics::GetLinearBlend()
 
 void Graphics::ClearRect(int theX, int theY, int theWidth, int theHeight)
 {
-	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight).Intersection(mClipRect);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight).Intersection(aClipRect);
 	mDestImage->ClearRect(aDestRect);
 }
 
@@ -173,7 +178,11 @@ void Graphics::FillRect(int theX, int theY, int theWidth, int theHeight)
 	if (mColor.mAlpha == 0)
 		return;
 
-	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight).Intersection(mClipRect);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight).Intersection(aClipRect);
 	mDestImage->FillRect(aDestRect, mColor, mDrawMode);
 }
 
@@ -189,7 +198,12 @@ void Graphics::DrawRect(int theX, int theY, int theWidth, int theHeight)
 
 	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight);	
 	Rect aFullDestRect = Rect(theX + mTransX, theY + mTransY, theWidth + 1, theHeight + 1);	
-	Rect aFullClippedRect = aFullDestRect.Intersection(mClipRect);
+
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	Rect aFullClippedRect = aFullDestRect.Intersection(aClipRect);
 
 	if (aFullDestRect == aFullClippedRect)
 	{		
@@ -275,10 +289,14 @@ void Graphics::PolyFill(const Point *theVertexList, int theNumVertices, bool con
     int k, y0, y1, y, i, j, xl, xr;
     int *ind;		/* list of vertex indices, sorted by mPFPoints[ind[j]].y */		
 
-	int aMinX = mClipRect.mX;
-	int aMaxX = mClipRect.mX + mClipRect.mWidth - 1;
-	int aMinY = mClipRect.mY;
-	int aMaxY = mClipRect.mY + mClipRect.mHeight - 1;
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	int aMinX = aClipRect.mX;
+	int aMaxX = aClipRect.mX + aClipRect.mWidth - 1;
+	int aMinY = aClipRect.mY;
+	int aMaxY = aClipRect.mY + aClipRect.mHeight - 1;
 
     mPFNumVertices = theNumVertices;
     mPFPoints = theVertexList;
@@ -400,10 +418,14 @@ void Graphics::PolyFillAA(const Point *theVertexList, int theNumVertices, bool c
     int k, y0, y1, y, j, xl, xr;
     int *ind;		/* list of vertex indices, sorted by mPFPoints[ind[j]].y */		
 
-	int aMinX = mClipRect.mX;
-	int aMaxX = mClipRect.mX + mClipRect.mWidth - 1;
-	int aMinY = mClipRect.mY;
-	int aMaxY = mClipRect.mY + mClipRect.mHeight - 1;
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	int aMinX = aClipRect.mX;
+	int aMaxX = aClipRect.mX + aClipRect.mWidth - 1;
+	int aMinY = aClipRect.mY;
+	int aMaxY = aClipRect.mY + aClipRect.mHeight - 1;
 
     mPFNumVertices = theNumVertices;
     mPFPoints = theVertexList;
@@ -558,24 +580,28 @@ bool Graphics::DrawLineClipHelper(double* theStartX, double* theStartY, double* 
 		std::swap(aStartY,aEndY);
 	}
 
-	if (aStartX < mClipRect.mX)
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	if (aStartX < aClipRect.mX)
 	{
-		if (aEndX < mClipRect.mX)
+		if (aEndX < aClipRect.mX)
 			return false;
 					
 		double aSlope = (aEndY - aStartY) / (aEndX - aStartX);
-		aStartY += (mClipRect.mX - aStartX ) * aSlope;
-		aStartX = mClipRect.mX;
+		aStartY += (aClipRect.mX - aStartX ) * aSlope;
+		aStartX = aClipRect.mX;
 	}
 
-	if (aEndX >= mClipRect.mX + mClipRect.mWidth)
+	if (aEndX >= aClipRect.mX + aClipRect.mWidth)
 	{
-		if (aStartX >= mClipRect.mX + mClipRect.mWidth)
+		if (aStartX >= aClipRect.mX + aClipRect.mWidth)
 			return false;
 
 		double aSlope = (aEndY - aStartY) / (aEndX - aStartX);
-		aEndY += (mClipRect.mX + mClipRect.mWidth - 1 - aEndX) * aSlope;
-		aEndX = mClipRect.mX + mClipRect.mWidth - 1;
+		aEndY += (aClipRect.mX + aClipRect.mWidth - 1 - aEndX) * aSlope;
+		aEndX = aClipRect.mX + aClipRect.mWidth - 1;
 	}
 
 	// Clip Y
@@ -586,25 +612,25 @@ bool Graphics::DrawLineClipHelper(double* theStartX, double* theStartY, double* 
 	}
 
 
-	if (aStartY < mClipRect.mY)
+	if (aStartY < aClipRect.mY)
 	{
-		if (aEndY < mClipRect.mY)
+		if (aEndY < aClipRect.mY)
 			return false;
 					
 		double aSlope = (aEndX - aStartX) / (aEndY - aStartY);
-		aStartX += (mClipRect.mY - aStartY ) * aSlope;			
+		aStartX += (aClipRect.mY - aStartY ) * aSlope;
 
-		aStartY = mClipRect.mY;
+		aStartY = aClipRect.mY;
 	}
 
-	if (aEndY >= mClipRect.mY + mClipRect.mHeight)
+	if (aEndY >= aClipRect.mY + aClipRect.mHeight)
 	{
-		if (aStartY >= mClipRect.mY + mClipRect.mHeight)
+		if (aStartY >= aClipRect.mY + aClipRect.mHeight)
 			return false;
 
 		double aSlope = (aEndX - aStartX) / (aEndY - aStartY);
-		aEndX += (mClipRect.mY + mClipRect.mHeight - 1 - aEndY) * aSlope;			
-		aEndY = mClipRect.mY + mClipRect.mHeight - 1;
+		aEndX += (aClipRect.mY + aClipRect.mHeight - 1 - aEndY) * aSlope;
+		aEndY = aClipRect.mY + aClipRect.mHeight - 1;
 	}
 
 	*theStartX = aStartX;
@@ -643,8 +669,12 @@ void Graphics::DrawLineAA(int theStartX, int theStartY, int theEndX, int theEndY
 
 void Graphics::DrawString(const SexyString& theString, int theX, int theY)
 {
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
 	if (mFont != NULL)
-		mFont->DrawString(this, theX, theY, theString, mColor, mClipRect);
+		mFont->DrawString(this, theX, theY, theString, mColor, aClipRect);
 }
 
 void Graphics::DrawImage(Sexy::Image* theImage, int theX, int theY)
@@ -658,7 +688,11 @@ void Graphics::DrawImage(Sexy::Image* theImage, int theX, int theY)
 	theX += mTransX;
 	theY += mTransY;	
 
-	Rect aDestRect = Rect(theX, theY, theImage->GetWidth(), theImage->GetHeight()).Intersection(mClipRect);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	Rect aDestRect = Rect(theX, theY, theImage->GetWidth(), theImage->GetHeight()).Intersection(aClipRect);
 	Rect aSrcRect(aDestRect.mX - theX, aDestRect.mY - theY, aDestRect.mWidth, aDestRect.mHeight);
 
 	if ((aSrcRect.mWidth > 0) && (aSrcRect.mHeight > 0))
@@ -677,14 +711,18 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, const Rect& theSrc
 	theX += mTransX;
 	theY += mTransY;
 
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
 	if (mScaleX!=1 || mScaleY!=1)
 	{
 		Rect aDestRect(mScaleOrigX+floor((theX-mScaleOrigX)*mScaleX),mScaleOrigY+floor((theY-mScaleOrigY)*mScaleY),ceil(theSrcRect.mWidth*mScaleX),ceil(theSrcRect.mHeight*mScaleY));
-		mDestImage->StretchBlt(theImage, aDestRect, theSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
+		mDestImage->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 		return;
 	}
 
-	Rect aDestRect = Rect(theX, theY, theSrcRect.mWidth, theSrcRect.mHeight).Intersection(mClipRect);
+	Rect aDestRect = Rect(theX, theY, theSrcRect.mWidth, theSrcRect.mHeight).Intersection(aClipRect);
 	Rect aSrcRect(theSrcRect.mX + aDestRect.mX - theX, theSrcRect.mY + aDestRect.mY - theY, aDestRect.mWidth, aDestRect.mHeight);
 
 	if ((aSrcRect.mWidth > 0) && (aSrcRect.mHeight > 0))
@@ -714,7 +752,11 @@ void Graphics::DrawImageMirror(Image* theImage, int theX, int theY, const Rect& 
 		(theSrcRect.mY + theSrcRect.mHeight > theImage->GetHeight()))
 		return;	
 
-	Rect aDestRect = Rect(theX, theY, theSrcRect.mWidth, theSrcRect.mHeight).Intersection(mClipRect);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	Rect aDestRect = Rect(theX, theY, theSrcRect.mWidth, theSrcRect.mHeight).Intersection(aClipRect);
 
 	int aTotalClip = theSrcRect.mWidth - aDestRect.mWidth;
 	int aLeftClip = aDestRect.mX - theX;
@@ -736,7 +778,11 @@ void Graphics::DrawImageMirror(Image* theImage, const Rect& theDestRect, const R
 
 	Rect aDestRect = Rect(theDestRect.mX + mTransX, theDestRect.mY + mTransY, theDestRect.mWidth, theDestRect.mHeight);
 
-	mDestImage->StretchBltMirror(theImage, aDestRect, theSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	mDestImage->StretchBltMirror(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 }
 
 
@@ -745,14 +791,22 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, int theStretchedWi
 	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theStretchedWidth, theStretchedHeight);
 	Rect aSrcRect = Rect(0, 0, theImage->mWidth, theImage->mHeight);
 
-	mDestImage->StretchBlt(theImage, aDestRect, aSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	mDestImage->StretchBlt(theImage, aDestRect, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 }
 
 void Graphics::DrawImage(Image* theImage, const Rect& theDestRect, const Rect& theSrcRect)
 {	
 	Rect aDestRect = Rect(theDestRect.mX + mTransX, theDestRect.mY + mTransY, theDestRect.mWidth, theDestRect.mHeight);
 
-	mDestImage->StretchBlt(theImage, aDestRect, theSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	mDestImage->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 }
 
 void Graphics::DrawImageF(Image* theImage, float theX, float theY)
@@ -761,7 +815,12 @@ void Graphics::DrawImageF(Image* theImage, float theX, float theY)
 	theY += mTransY;	
 
 	Rect aSrcRect(0, 0, theImage->mWidth, theImage->mHeight);
-	mDestImage->BltF(theImage, theX, theY, aSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode);
+
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
+	mDestImage->BltF(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode);
 }
 
 void Graphics::DrawImageF(Image* theImage, float theX, float theY, const Rect& theSrcRect)
@@ -771,8 +830,12 @@ void Graphics::DrawImageF(Image* theImage, float theX, float theY, const Rect& t
 
 	theX += mTransX;
 	theY += mTransY;
+
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
 	
-	mDestImage->BltF(theImage, theX, theY, theSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode);
+	mDestImage->BltF(theImage, theX, theY, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode);
 }
 
 void Graphics::DrawImageRotated(Image* theImage, int theX, int theY, double theRot, const Rect *theSrcRect)
@@ -821,13 +884,17 @@ void Graphics::DrawImageRotatedF(Image* theImage, float theX, float theY, double
 	theX += mTransX;
 	theY += mTransY;	
 
+	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
+	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
 	if (theSrcRect==NULL)
 	{
 		Rect aSrcRect(0,0,theImage->mWidth,theImage->mHeight);
-		mDestImage->BltRotated(theImage, theX, theY, aSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY);
+		mDestImage->BltRotated(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY);
 	}
 	else
-		mDestImage->BltRotated(theImage, theX, theY, *theSrcRect, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY);
+		mDestImage->BltRotated(theImage, theX, theY, *theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY);
 }
 
 void Graphics::DrawImageMatrix(Image* theImage, const SexyMatrix3 &theMatrix, float x, float y)

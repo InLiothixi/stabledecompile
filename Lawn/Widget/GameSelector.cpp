@@ -749,7 +749,7 @@ void GameSelector::Draw(Graphics* g)
 		float aStringWidth = Sexy::FONT_BRIANNETOD16->StringWidth(aWelcomeStr);
 		SexyTransform2D aOffsetMatrix;
 		// @Patoke: add position so it moves when sliding to position
-		aOffsetMatrix.Translate(170.5f - (int)(aStringWidth * 0.5f) + mX + mApp->mDDInterface->mWideScreenOffsetX, 102.5f + mY);
+		aOffsetMatrix.Translate(170.5f - (int)(aStringWidth * 0.5f) + mX + mApp->mDDInterface->mWideScreenOffsetX, 102.5f + mY + mApp->mDDInterface->mWideScreenOffsetY);
 		TodDrawStringMatrix(g, Sexy::FONT_BRIANNETOD16, aOverlayMatrix * aOffsetMatrix, aWelcomeStr, Color(255, 245, 200));
 	}
 }

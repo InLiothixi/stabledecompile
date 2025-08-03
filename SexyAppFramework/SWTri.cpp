@@ -304,6 +304,8 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 	float	tclx1 = theClipRect.mX + theClipRect.mWidth;
 	if (tclx1 == BOARD_WIDTH) tclx1 += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	float	tcly1 = theClipRect.mY + theClipRect.mHeight;
+	if (tcly1 == BOARD_HEIGHT) tcly1 += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+
 
 	//
 	// Okay, now we're gonna render.  We have the vertex list.

@@ -471,17 +471,17 @@ void StoreScreen::Draw(Graphics* g)
 
     Graphics gBackButton(*g);
     gBackButton.mTransX = mBackButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
-    gBackButton.mTransY = mBackButton->mY;
+    gBackButton.mTransY = mBackButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
     mBackButton->Render(&gBackButton);
 
     Graphics gPrevButton(*g);
     gPrevButton.mTransX = mPrevButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
-    gPrevButton.mTransY = mPrevButton->mY;
+    gPrevButton.mTransY = mPrevButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
     mPrevButton->Render(&gPrevButton);
 
     Graphics gNextButton(*g);
     gNextButton.mTransX = mNextButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
-    gNextButton.mTransY = mNextButton->mY;
+    gNextButton.mTransY = mNextButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
     mNextButton->Render(&gNextButton);
 
     if (!mHatchTimer && mHatchOpen)

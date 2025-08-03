@@ -186,7 +186,7 @@ void TitleScreen::Draw(Graphics* g)
 		float aRotation = -aRollLen / 180 * PI * 2;
 		float aScale = TodAnimateCurveFloatTime(0, mTotalBarWidth, mCurBarWidth, 1, 0.5f, TodCurves::CURVE_LINEAR);
 		SexyTransform2D aTransform;
-		TodScaleRotateTransformMatrix(aTransform, aGrassX + 11.0f + aRollLen + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aGrassY - 3.0f - 35.0f * aScale + 35.0f, aRotation, aScale, aScale);
+		TodScaleRotateTransformMatrix(aTransform, aGrassX + 11.0f + aRollLen + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aGrassY - 3.0f - 35.0f * aScale + 35.0f + gSexyAppBase->mDDInterface->mWideScreenOffsetY, aRotation, aScale, aScale);
 		Rect aSrcRect(0, 0, IMAGE_REANIM_SODROLLCAP->mWidth, IMAGE_REANIM_SODROLLCAP->mHeight);
 		TodBltMatrix(g, IMAGE_REANIM_SODROLLCAP, aTransform, g->mClipRect, Color::White, g->mDrawMode, aSrcRect);
 	}
