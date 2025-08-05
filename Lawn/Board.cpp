@@ -8863,8 +8863,8 @@ void Board::DrawUITop(Graphics* g)
 
 	if (LawnApp::ChallengeUsesMicrophone(mApp->mGameMode) && mApp->mGameScene == SCENE_PLAYING) {
 		g->PushState();
-		g->mTransX = 0;
-		g->mTransY = 0;
+		g->mTransX = mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = mApp->mDDInterface->mWideScreenOffsetY;
 		int volume = min((int)(mApp->mVoiceVolume / SHOUT_THRESHOLD * 100), 100);
 		for (int i = 0; i < 100; i++) {
 			g->PushState();
@@ -8894,6 +8894,8 @@ void Board::DrawUITop(Graphics* g)
 
 		for (int i = 0; i < volume; i++) {
 			g->PushState();
+			g->mTransX = mApp->mDDInterface->mWideScreenOffsetX;
+			g->mTransY = mApp->mDDInterface->mWideScreenOffsetY;
 			g->SetColorizeImages(true);
 
 			int currentY = 588 - 2 * i;
@@ -8923,8 +8925,8 @@ void Board::DrawUITop(Graphics* g)
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		g->PushState();
-		g->mTransX = 0;
-		g->mTransY = 0;
+		g->mTransX = mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = mApp->mDDInterface->mWideScreenOffsetY;
 		int indicatorHeight = mChallenge->mShoutingCounter / 100.0f * 200;
 		g->SetColorizeImages(true);
 		g->SetColor(Color::White);
@@ -8932,29 +8934,29 @@ void Board::DrawUITop(Graphics* g)
 		g->PopState();
 
 		g->PushState();
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE, 522, 129);
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 2, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -2, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 2, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -2, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE2, 602, 113);
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 4, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -4, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 4, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -4, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE3, 626, 115);
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE4, 691, 109);
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 8, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -8, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 8, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -8, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE5, 691, 122);
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 2, -2, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 2, -2, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE6, 686, 69);
-		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE);
-		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE);
+		g->mTransX = TodAnimateCurveFloat(0, 150, mMainCounter % 150, -5, 5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 5, -5, TodCurves::CURVE_BOUNCE) + mApp->mDDInterface->mWideScreenOffsetY;
 		g->DrawImageF(Sexy::IMAGE_LENSEFLARE7, 681, 16);
-		g->mTransX = 0;
-		g->mTransY = 0;
+		g->mTransX = mApp->mDDInterface->mWideScreenOffsetX;
+		g->mTransY = mApp->mDDInterface->mWideScreenOffsetY;
 		g->SetColorizeImages(true);
 		g->SetColor(Color::White);
 		g->mColor.mAlpha = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 191, 255, TodCurves::CURVE_BOUNCE);
