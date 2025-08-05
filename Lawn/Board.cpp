@@ -6768,7 +6768,7 @@ void Board::DrawBackdrop(Graphics* g)
 	{
 		g->DrawImage(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		g->DrawImage(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149);
-		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, 0, 773, TodCurves::CURVE_LINEAR);
+		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, -WIDESCREEN_OFFSETX, 773 - WIDESCREEN_OFFSETX, TodCurves::CURVE_LINEAR);
 		Rect aSrcRect(232, 0, aWidth, Sexy::IMAGE_BACKGROUND1->GetHeight());
 		g->DrawImage(Sexy::IMAGE_BACKGROUND1, 232 - BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, aSrcRect);
 	}
