@@ -2022,8 +2022,11 @@ void Challenge::UpdateStormyNight()
 			return;
 		}
 	}
+	else
+	{
+		mChallengeStateCounter--;
+	}
 
-	mChallengeStateCounter--;
 	if ((mChallengeStateCounter == 300 && (mChallengeState == STATECHALLENGE_STORM_FLASH_1 || mChallengeState == STATECHALLENGE_STORM_FLASH_2)) ||
 		(mChallengeStateCounter == 150 && (mChallengeState == STATECHALLENGE_STORM_FLASH_1 || mChallengeState == STATECHALLENGE_STORM_FLASH_3)))
 	{

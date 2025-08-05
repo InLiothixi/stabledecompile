@@ -449,7 +449,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 		//	}
 		//}
 
-		if (mApp->mWidescreenAware)
+		if (mIs3D && mApp->mWidescreenAware)
 		{
 			mIsWidescreen = true;
 			// Set the display mode to the size of the desktop.
@@ -473,6 +473,15 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 			mPresentationRect.mWidth = mDisplayWidth;
 			mPresentationRect.mHeight = mDisplayHeight;
 			mPresentationRect.mX = 0;
+			mPresentationRect.mY = 0;
+		}
+		else
+		{
+			// Set the dest rect for drawing the back buffer to the center of
+			// the wide display.
+			mPresentationRect.mWidth = mWidth * mDisplayHeight / mHeight;
+			mPresentationRect.mHeight = mDisplayHeight;
+			mPresentationRect.mX = (mDisplayWidth - mPresentationRect.mWidth) / 2;
 			mPresentationRect.mY = 0;
 		}
 

@@ -6770,7 +6770,7 @@ void Board::DrawBackdrop(Graphics* g)
 		g->DrawImage(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149);
 		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, 0, 773, TodCurves::CURVE_LINEAR);
 		Rect aSrcRect(232, 0, aWidth, Sexy::IMAGE_BACKGROUND1->GetHeight());
-		g->DrawImage(Sexy::IMAGE_BACKGROUND1, 232 - BOARD_OFFSET, 0, aSrcRect);
+		g->DrawImage(Sexy::IMAGE_BACKGROUND1, 232 - BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, aSrcRect);
 	}
 	else if (aBgImage)
 	{
@@ -8502,8 +8502,8 @@ void Board::DrawForeGround(Graphics* g)
 {
 	g->PushState();
 	g->ClearClipRect();
-	g->mClipRect.mWidth -= WIDESCREEN_OFFSETX;
-	g->mClipRect.mHeight -= WIDESCREEN_OFFSETY;
+	g->mClipRect.mWidth += mApp->mDDInterface->mWideScreenOffsetX;
+	g->mClipRect.mHeight += mApp->mDDInterface->mWideScreenOffsetY;
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_1_DAY:
