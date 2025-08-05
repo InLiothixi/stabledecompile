@@ -8960,7 +8960,10 @@ void Board::DrawUITop(Graphics* g)
 		g->SetColorizeImages(true);
 		g->SetColor(Color::White);
 		g->mColor.mAlpha = TodAnimateCurveFloat(0, 150, mMainCounter % 150, 191, 255, TodCurves::CURVE_BOUNCE);
-		g->DrawImageF(Sexy::IMAGE_AWARDPICKUPGLOW, 727, -86);
+		const float scaleXY = 3.2f;
+		const float offsetX = (Sexy::IMAGE_AWARDPICKUPGLOW->GetWidth() * scaleXY - Sexy::IMAGE_AWARDPICKUPGLOW->GetWidth()) / 2;
+		const float offsetY = (Sexy::IMAGE_AWARDPICKUPGLOW->GetHeight() * scaleXY - Sexy::IMAGE_AWARDPICKUPGLOW->GetHeight()) / 2;
+		TodDrawImageScaledF(g, Sexy::IMAGE_AWARDPICKUPGLOW, 727 - offsetX, -86 - offsetY, scaleXY, scaleXY);
 		g->PopState();
 	}
 
