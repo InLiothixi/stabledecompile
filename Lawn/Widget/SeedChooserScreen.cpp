@@ -1336,12 +1336,17 @@ void SeedChooserScreen::CloseSeedChooser()
 void SeedChooserScreen::KeyDown(KeyCode theKey)
 {
 	mBoard->DoTypingCheck(theKey);
+
+	if (theKey == KeyCode::KEYCODE_ESCAPE && !mMenuButton->mDisabled && mBoard->mCutScene->mCutsceneTime >= 4250 + mBoard->mCutScene->mCrazyDaveTime)
+	{
+		mApp->DoNewOptions(false);
+	}
 }
 
 //0x486EA0
 void SeedChooserScreen::KeyChar(SexyChar theChar)
 {
-	if (mChooseState == CHOOSE_VIEW_LAWN && (theChar == ' ' || theChar == '\r' || theChar == '\u001B'))
+	if (mChooseState == CHOOSE_VIEW_LAWN && mViewLawnTime > 251 && (theChar == ' ' || theChar == '\r' || theChar == '\u001B'))
 		CancelLawnView();
 	else if (mApp->mTodCheatKeys && theChar == '\u001B' && mBoard->mCutScene->mSeedChoosing)
 		PickRandomSeeds();

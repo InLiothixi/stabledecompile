@@ -8453,7 +8453,7 @@ void Board::UpdateFog()
 void Board::DrawFog(Graphics* g)
 {
 	Image* aImageFog = mApp->Is3DAccelerated() ? Sexy::IMAGE_FOG : Sexy::IMAGE_FOG_SOFTWARE;
-	for (int x = 0; x < MAX_GRID_SIZE_X; x++)
+	for (int x = 0; x < MAX_FOG_GRID_SIZE_X; x++)
 	{
 		for (int y = 0; y < MAX_GRID_SIZE_Y + 1; y++)
 		{
@@ -9252,9 +9252,14 @@ void Board::KeyDown(KeyCode theKey)
 			mApp->DoPauseDialog();
 		}
 	}
-	else if (theKey == KeyCode::KEYCODE_ESCAPE && mApp->mGameMode != GAMEMODE_CHALLENGE_ZEN_GARDEN)
+	else if (theKey == KeyCode::KEYCODE_ESCAPE)
 	{
-		if (mCursorObject->mCursorType != CursorType::CURSOR_TYPE_NORMAL && mCursorObject->mCursorType != CursorType::CURSOR_TYPE_HAMMER)
+		if (mApp->mGameMode == GAMEMODE_CHALLENGE_ZEN_GARDEN)
+		{
+			TryToSaveGame();
+			mApp->DoBackToMain();
+		}
+		else if (mCursorObject->mCursorType != CursorType::CURSOR_TYPE_NORMAL && mCursorObject->mCursorType != CursorType::CURSOR_TYPE_HAMMER)
 		{
 			RefreshSeedPacketFromCursor();
 		}
