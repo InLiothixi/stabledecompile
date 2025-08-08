@@ -260,7 +260,7 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 		g->mScaleY = theScale * g->mScaleY;
 		if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
 		{
-			g->mClipRect.mY = y + theOffsetY + 10;
+			g->mClipRect.mY = y + theOffsetY + 10 + gSexyAppBase->mDDInterface->mWideScreenOffsetY;
 			y -= 180;
 		}
 		if (theSeedType == SeedType::SEED_ZOMBIE_POLEVAULTER)

@@ -163,11 +163,11 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		aZombie->mPosX += Rand(15);  //RandRangeInt(0, 14);
 	}
 
-	aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 8, (theGridX % 2) * 2 + theGridY * 4);
+	aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4);
 
 	if (theZombieType == ZombieType::ZOMBIE_BUNGEE)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 8, 0);
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 0, 0);
 
 		aZombie->mRow = 0;
 		aZombie->mPosX = theGridX * 50.0f + 950.0f;
@@ -175,7 +175,7 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 	}
 	else if (theZombieType == ZombieType::ZOMBIE_BOBSLED)
 	{
-		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 8, 1000);
+		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, 1000);
 		aZombie->mRow = 0;
 		aZombie->mPosX = 1105.0f;
 		aZombie->mPosY = 480.0f;
@@ -772,13 +772,13 @@ bool CutScene::CanGetPacketUpgrade(int theUpgradeIndex)
 void CutScene::StartLevelIntro()
 {
 	mCutsceneTime = 0;
-	mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X, -IMAGE_SEEDBANK->GetHeight());
+	mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X, -IMAGE_SEEDBANK->GetHeight() + WIDESCREEN_OFFSETY);
 
 	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
 		mBoard->mMenuButton->mBtnNoDraw = true;
 
 	mApp->mSeedChooserScreen->mMouseVisible = false;
-	mApp->mSeedChooserScreen->Move(0, SEED_CHOOSER_OFFSET_Y);
+	mApp->mSeedChooserScreen->Move(0, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY);
 	mApp->mSeedChooserScreen->mMenuButton->mBtnNoDraw = true;
 	mBoard->mShowShovel = false;
 	mBoard->mSeedBank->mCutSceneDarken = 255;
@@ -921,7 +921,7 @@ void CutScene::StartLevelIntro()
 	{
 		mCrazyDaveDialogStart = 3300;
 		mUpsellHideBoard = true;
-		mBoard->mMenuButton->mBtnNoDraw = false;
+		//mBoard->mMenuButton->mBtnNoDraw = false;
 	}
 	else if (mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_1 && !mApp->HasBeatenChallenge(GameMode::GAMEMODE_SCARY_POTTER_1))
 	{
@@ -1125,7 +1125,7 @@ void CutScene::CancelIntro()
 		}
 		if (!mApp->IsChallengeWithoutSeedBank())
 		{
-			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, 0);
+			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, WIDESCREEN_OFFSETY);
 		}
 
 		mBoard->mEnableGraveStones = true;
@@ -1147,7 +1147,7 @@ void CutScene::CancelIntro()
 
 		if (mBoard->mTutorialState != TutorialState::TUTORIAL_ZEN_GARDEN_PICKUP_WATER)
 		{
-			mBoard->mMenuButton->mBtnNoDraw = false;
+			//mBoard->mMenuButton->mBtnNoDraw = false;
 		}
 		mApp->mSoundSystem->StopFoley(FoleyType::FOLEY_DIGGER);
 	}
@@ -1274,9 +1274,9 @@ void CutScene::AnimateBoard()
 		// ====================================================================================================
 		if (mCutsceneTime > aTimeSeedChoserSlideOnStart && mCutsceneTime <= aTimeSeedChoserSlideOnEnd)
 		{
-			aSeedChoser->Move(0, CalcPosition(aTimeSeedChoserSlideOnStart, aTimeSeedChoserSlideOnEnd, SEED_CHOOSER_OFFSET_Y, 0));
-			aSeedChoser->mMenuButton->mY = CalcPosition(aTimeSeedChoserSlideOnStart, aTimeSeedChoserSlideOnEnd, -50, -10);
-			aSeedChoser->mMenuButton->mBtnNoDraw = false;
+			aSeedChoser->Move(0, CalcPosition(aTimeSeedChoserSlideOnStart, aTimeSeedChoserSlideOnEnd, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY, 0));
+			aSeedChoser->mMenuButton->mY = CalcPosition(aTimeSeedChoserSlideOnStart, aTimeSeedChoserSlideOnEnd, -50 + WIDESCREEN_OFFSETY, -10);
+			//aSeedChoser->mMenuButton->mBtnNoDraw = false;
 		}
 		// ====================================================================================================
 		// △ 选卡界面滑落
@@ -1285,7 +1285,7 @@ void CutScene::AnimateBoard()
 		int aTimeSeedChoserSlideOffEnd = TimeSeedChoserSlideOffEnd + mCrazyDaveTime;
 		if (mCutsceneTime > aTimeSeedChoserSlideOffStart && mCutsceneTime <= aTimeSeedChoserSlideOffEnd)
 		{
-			aSeedChoser->Move(0, CalcPosition(aTimeSeedChoserSlideOffStart, aTimeSeedChoserSlideOffEnd, 0, SEED_CHOOSER_OFFSET_Y));
+			aSeedChoser->Move(0, CalcPosition(aTimeSeedChoserSlideOffStart, aTimeSeedChoserSlideOffEnd, 0, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY));
 			aSeedChoser->mMenuButton->mDisabled = true;
 		}
 	}
@@ -1314,7 +1314,7 @@ void CutScene::AnimateBoard()
 	int aTimeSeedBankOnEnd = TimeSeedBankOnEnd + aTimePrepareEnd + mCrazyDaveTime;
 	if (!mApp->IsChallengeWithoutSeedBank() && mCutsceneTime > aTimeSeedBankOnStart && mCutsceneTime <= aTimeSeedBankOnEnd)
 	{
-		int aSeedBankY = CalcPosition(aTimeSeedBankOnStart, aTimeSeedBankOnEnd, -IMAGE_SEEDBANK->GetHeight(), 0);
+		int aSeedBankY = CalcPosition(aTimeSeedBankOnStart, aTimeSeedBankOnEnd, -IMAGE_SEEDBANK->GetHeight() + WIDESCREEN_OFFSETY, 0);
 		mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X, aSeedBankY);
 	}
 	int aTimeSeedBankRightStart = TimeSeedBankRightStart + mCrazyDaveTime;
@@ -1612,7 +1612,7 @@ void CutScene::Update()
 		mBoard->RemoveCutsceneZombies();
 		if (mBoard->mTutorialState != TutorialState::TUTORIAL_ZEN_GARDEN_PICKUP_WATER)
 		{
-			mBoard->mMenuButton->mBtnNoDraw = false;
+			//mBoard->mMenuButton->mBtnNoDraw = false;
 		}
 
 		ShowShovel();
@@ -1744,7 +1744,7 @@ void CutScene::AdvanceCrazyDaveDialog(bool theJustSkipping)
 	if (mApp->mCrazyDaveMessageIndex == 3200)
 	{
 		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_TREE_FOOD] = PURCHASE_COUNT_OFFSET + 5;
-		mBoard->mMenuButton->mBtnNoDraw = false;
+		//mBoard->mMenuButton->mBtnNoDraw = false;
 		mBoard->mStoreButton->mBtnNoDraw = false;
 	}
 
@@ -2304,7 +2304,7 @@ void CutScene::UpdateUpsell()
 		{
 			mBoard->mStoreButton->Resize(510, 420, 210, 46);
 			mBoard->mMenuButton->Resize(510, 480, 210, 46);
-			mBoard->mMenuButton->mBtnNoDraw = false;
+			//mBoard->mMenuButton->mBtnNoDraw = false;
 			mBoard->mStoreButton->mBtnNoDraw = false;
 		}
 		return;

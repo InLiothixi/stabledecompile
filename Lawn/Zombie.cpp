@@ -6833,7 +6833,7 @@ void Zombie::DrawBungeeCord(Graphics* g, int theOffsetX, int theOffsetY)
         g->mColor = ColorAdd(aHighlightColor, g->mColor);
     }
 
-    for (float y = aPosY - aCordCelHeight; y > -aCordCelHeight; y -= aCordCelHeight)
+    for (float y = aPosY - aCordCelHeight; y > -aCordCelHeight - mApp->mDDInterface->mWideScreenOffsetY; y -= aCordCelHeight)
     {
         TodDrawImageScaledF(g, IMAGE_BUNGEECORD, theOffsetX + 61.0f - 4.0f / mScaleZombie, y - mPosY + 1, mScaleZombie, mScaleZombie);
     }
@@ -6841,7 +6841,7 @@ void Zombie::DrawBungeeCord(Graphics* g, int theOffsetX, int theOffsetY)
 
     if (mZombiePhase != ZombiePhase::PHASE_ZOMBIE_BURNED && (mMindControlled || IS_CHILLED || mJustGotShotCounter > 0)) {
         g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
-        for (float y = aPosY - aCordCelHeight; y > -aCordCelHeight; y -= aCordCelHeight)
+        for (float y = aPosY - aCordCelHeight; y > -aCordCelHeight - mApp->mDDInterface->mWideScreenOffsetY; y -= aCordCelHeight)
         {
             TodDrawImageScaledF(g, IMAGE_BUNGEECORD, theOffsetX + 61.0f - 4.0f / mScaleZombie, y - mPosY + 1, mScaleZombie, mScaleZombie);
         }

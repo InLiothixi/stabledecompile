@@ -228,6 +228,8 @@ Board::Board(LawnApp* theApp)
 		mStoreButton->mBtnNoDraw = true;
 		mStoreButton->SetLabel(_S("[GET_FULL_VERSION_BUTTON]"));
 	}	
+
+	mMenuButton->mBtnNoDraw = true;
 }
 
 //0x408670、0x408690
@@ -7134,7 +7136,10 @@ void Board::DrawGameObjects(Graphics* g)
 		}
 		else if (mCutScene->IsAfterSeedChooser() || mCutScene->IsInShovelTutorial() || mHelpIndex == AdviceType::ADVICE_CLICK_TO_CONTINUE)
 		{
-			aZPos = MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 1);
+			if (StageHasRoof())
+				aZPos = MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 1);
+			else
+				aZPos = MakeRenderOrder(RenderLayer::RENDER_LAYER_ABOVE_UI, 0, 0);
 		}
 		else
 		{
@@ -7815,8 +7820,8 @@ void Board::DrawDebugText(Graphics* g)
 {
 	mApp->mDebugTexts.clear();
 	g->PushState();
-	g->mTransX = 0;
-	g->mTransY = 0;
+	g->mTransX = mApp->mDDInterface->mWideScreenOffsetX;
+	g->mTransY = mApp->mDDInterface->mWideScreenOffsetY + 10;
 
 	switch (mDebugTextMode)
 	{
