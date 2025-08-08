@@ -2847,10 +2847,10 @@ bool SexyAppBase::DrawDirtyStuff()
 		if (mShowFPS)
 		{
 			Graphics g(mDDInterface->GetScreenImage());
-			g.DrawImage(gFPSImage,mDDInterface->mWidth-gFPSImage->GetWidth()-10,mHeight-gFPSImage->GetHeight()-10);
+			g.DrawImage(gFPSImage,mDDInterface->mWidth-gFPSImage->GetWidth()-10, mDDInterface->mHeight-gFPSImage->GetHeight()-10);
 		
 			if (mPlayingDemoBuffer)
-				g.DrawImage(gDemoTimeLeftImage, mDDInterface->mWidth -gDemoTimeLeftImage->GetWidth()-10,mHeight-gFPSImage->GetHeight()-gDemoTimeLeftImage->GetHeight()-15);
+				g.DrawImage(gDemoTimeLeftImage, mDDInterface->mWidth -gDemoTimeLeftImage->GetWidth()-10, mDDInterface->mHeight-gFPSImage->GetHeight()-gDemoTimeLeftImage->GetHeight()-15);
 		}
 
 		if (mWaitForVSync && mIsPhysWindowed && mSoftVSyncWait)
