@@ -7581,7 +7581,10 @@ void Board::DrawLevel(Graphics* g)
 	// ====================================================================================================
 	// ▲ 获取完整的关卡名称的字符串
 	// ====================================================================================================
+	int aPosX = 780;
+	int aPosY = 595;
 	SexyString aLevelStr;
+	const int fontHeight = Sexy::FONT_HOUSEOFTERROR16->GetHeight();
 	if (mApp->IsAdventureMode())
 	{
 		aLevelStr = TodStringTranslate(_S("[LEVEL]")) + _S("") + mApp->GetStageString(mLevel);
@@ -7596,7 +7599,8 @@ void Board::DrawLevel(Graphics* g)
 			{
 				SexyString aFlagStr = mApp->Pluralize(aFlags, _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
 				SexyString aCompletedStr = TodReplaceString(_S("[FLAGS_COMPLETED]"), _S("{FLAGS}"), aFlagStr);
-				aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str());
+				aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str()); // "%s - %s"
+				aPosY -= fontHeight / 2;
 			}
 		}
 		else if (mApp->IsEndlessIZombie(mApp->mGameMode) || mApp->IsEndlessScaryPotter(mApp->mGameMode))
@@ -7609,7 +7613,8 @@ void Board::DrawLevel(Graphics* g)
 			if (aStreak > 0)
 			{
 				SexyString aStreakStr = TodReplaceNumberString(_S("[ENDLESS_STREAK]"), _S("{STREAK}"), aStreak);
-				aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
+				aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str()); // "%s - %s"
+				aPosY -= fontHeight / 2;
 			}
 		}
 	}
@@ -7617,8 +7622,6 @@ void Board::DrawLevel(Graphics* g)
 	// ====================================================================================================
 	// ▲ 正式开始绘制关卡名称字符串
 	// ====================================================================================================
-	int aPosX = 780;
-	int aPosY = 595;
 	if (HasProgressMeter())
 	{
 		aPosX = 593;
@@ -7628,7 +7631,8 @@ void Board::DrawLevel(Graphics* g)
 		aPosY += TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, 50, TodCurves::CURVE_EASE_IN_OUT);
 	}
 
-	TodDrawString(g, aLevelStr, aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_RIGHT);
+	TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - 94, aPosY - fontHeight, 94, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
+	//TodDrawString(g, aLevelStr, aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_RIGHT);
 
 	for (int i = 0; i < 10; ++i)
 	{
