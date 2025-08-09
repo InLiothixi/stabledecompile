@@ -7599,8 +7599,13 @@ void Board::DrawLevel(Graphics* g)
 			{
 				SexyString aFlagStr = mApp->Pluralize(aFlags, _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
 				SexyString aCompletedStr = TodReplaceString(_S("[FLAGS_COMPLETED]"), _S("{FLAGS}"), aFlagStr);
-				aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str()); // "%s - %s"
-				aPosY -= fontHeight / 2;
+				if (mApp->mDDInterface->mWideScreenExtraHeight == 0)
+					aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str()); 
+				else 
+				{
+					aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str());
+					aPosY -= fontHeight / 2;
+				}
 			}
 		}
 		else if (mApp->IsEndlessIZombie(mApp->mGameMode) || mApp->IsEndlessScaryPotter(mApp->mGameMode))
@@ -7613,8 +7618,13 @@ void Board::DrawLevel(Graphics* g)
 			if (aStreak > 0)
 			{
 				SexyString aStreakStr = TodReplaceNumberString(_S("[ENDLESS_STREAK]"), _S("{STREAK}"), aStreak);
-				aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str()); // "%s - %s"
-				aPosY -= fontHeight / 2;
+				if (mApp->mDDInterface->mWideScreenExtraHeight == 0)
+					aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
+				else
+				{
+					aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
+					aPosY -= fontHeight / 2;
+				}
 			}
 		}
 	}
@@ -7631,8 +7641,10 @@ void Board::DrawLevel(Graphics* g)
 		aPosY += TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, 50, TodCurves::CURVE_EASE_IN_OUT);
 	}
 
-	TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - 94, aPosY - fontHeight, 94, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
-	//TodDrawString(g, aLevelStr, aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_RIGHT);
+	if (mApp->mDDInterface->mWideScreenExtraHeight == 0)
+		TodDrawString(g, aLevelStr, aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_RIGHT);
+	else
+		TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - 94, aPosY - fontHeight, 94, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
 
 	for (int i = 0; i < 10; ++i)
 	{
