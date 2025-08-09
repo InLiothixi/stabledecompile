@@ -137,7 +137,7 @@ void SeedPacket::SetActivate(bool theActive)
 //0x487250
 void SeedPacket::Update()
 {
-	if (mApp->mGameScene != GameScenes::SCENE_PLAYING || mPacketType == SeedType::SEED_NONE)
+	if (mApp && mApp->mGameScene != GameScenes::SCENE_PLAYING || mPacketType == SeedType::SEED_NONE)
 	{
 		return;
 	}
