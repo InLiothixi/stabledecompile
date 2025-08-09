@@ -7650,7 +7650,7 @@ void Board::DrawLevel(Graphics* g)
 	{
 		TouchInfo touch = mWidgetManager->mTouches[i];
 		if (touch.id != 0)
-			g->DrawCircle(touch.x, touch.y, 20, 20 * PI);
+			g->DrawCircle(touch.x, touch.y, 20, 10 * PI);
 	}
 }
 
