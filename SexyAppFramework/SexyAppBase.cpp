@@ -3965,7 +3965,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 							adjustedHeight = (int)(newWidth * HRatio);
 						}
 
-						if (gSexyAppBase->mWidescreenAware)
+						/*if (gSexyAppBase->mWidescreenAware)
 						{
 							gSexyAppBase->mDDInterface->mWidth = newWidth;
 							gSexyAppBase->mDDInterface->mHeight = newHeight;
@@ -3976,7 +3976,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 							gSexyAppBase->mDDInterface->mPresentationRect.mX = 0;
 							gSexyAppBase->mDDInterface->mPresentationRect.mY = 0;
 						}
-						else
+						else*/
 						{
 
 							gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
@@ -4002,6 +4002,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 						FillRect(hdc, &rect, blackBrush);
 						DeleteObject(blackBrush);
 						ReleaseDC(gSexyAppBase->mHWnd, hdc);
+
 						if (aSexyApp->mRunning)
 							aSexyApp->Redraw(NULL);
 
@@ -5473,7 +5474,7 @@ void SexyAppBase::MakeWindow()
 			originHeight = aWindowRect.bottom;
 		}*/
 
-		if (gSexyAppBase->mWidescreenAware)
+		/*if (gSexyAppBase->mWidescreenAware)
 		{
 			gSexyAppBase->mDDInterface->mWidth = mPreferredWIDTH;
 			gSexyAppBase->mDDInterface->mHeight = mPreferredHEIGHT;
@@ -5484,7 +5485,7 @@ void SexyAppBase::MakeWindow()
 			gSexyAppBase->mDDInterface->mPresentationRect.mX = 0;
 			gSexyAppBase->mDDInterface->mPresentationRect.mY = 0;
 		}
-		else
+		else*/
 		{
 
 			gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;

@@ -344,7 +344,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 			::AdjustWindowRectEx(&rc, info.dwStyle, false, info.dwExStyle);
 			::MoveWindow(theWindow, max(0, rc.left), max(0, rc.top), rc.right - rc.left, rc.bottom - rc.top, false);
 
-			if (mApp->mWidescreenAware)
+			if (mApp->mWidescreenAware && !IsWindowed)
 			{
 				mWidth = mDisplayWidth;
 				mHeight = mDisplayHeight;
@@ -449,7 +449,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 		//	}
 		//}
 
-		if (mIs3D && mApp->mWidescreenAware)
+		if (mIs3D && mApp->mWidescreenAware && !mIsWindowed)
 		{
 			mIsWidescreen = true;
 			// Set the display mode to the size of the desktop.
