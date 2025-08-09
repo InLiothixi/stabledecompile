@@ -9306,7 +9306,7 @@ void Board::KeyDown(KeyCode theKey)
 	}
 	else if (theKey == KeyCode::KEYCODE_ESCAPE)
 	{
-		if (mApp->mGameMode == GAMEMODE_CHALLENGE_ZEN_GARDEN)
+		if (mApp->mGameMode == GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GAMEMODE_TREE_OF_WISDOM)
 		{
 			TryToSaveGame();
 			mApp->DoBackToMain();
