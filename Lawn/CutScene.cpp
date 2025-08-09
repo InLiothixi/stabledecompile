@@ -1127,6 +1127,10 @@ void CutScene::CancelIntro()
 		{
 			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, WIDESCREEN_OFFSETY);
 		}
+		else if (!mBoard->ChooseSeedsOnCurrentLevel())
+		{
+			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, 0);
+		}
 
 		mBoard->mEnableGraveStones = true;
 		ShowShovel();

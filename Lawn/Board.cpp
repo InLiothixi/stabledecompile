@@ -80,16 +80,25 @@ Board::Board(LawnApp* theApp)
 		for (int j = 0; j < MAX_GRID_SIZE_Y; j++)
 		{
 			mGridSquareType[i][j] = GridSquareType::GRIDSQUARE_GRASS;
-			mGridCelLook[i][j] = Rand(20);
+			//mGridCelLook[i][j] = Rand(20);
 			mGridCelOffset[i][j][0] = Rand(10) - 5;
 			mGridCelOffset[i][j][1] = Rand(10) - 5;
 		}
 
+		/*for (int k = 0; k < MAX_GRID_SIZE_Y + 1; k++)
+		{
+			mGridCelFog[i][k] = 0;
+		}*/
+	}
+	for (int i = 0; i < MAX_GRID_SIZE_X + 4; i++)
+	{
 		for (int k = 0; k < MAX_GRID_SIZE_Y + 1; k++)
 		{
+			mGridCelLook[i][k] = Rand(20);
 			mGridCelFog[i][k] = 0;
 		}
 	}
+
 	mFogOffset = 0.0f;
 	mSunCountDown = 0;
 	mShakeCounter = 0;
@@ -3086,19 +3095,6 @@ Zombie* Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 		}
 	}
 
-	if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && !mApp->IsWhackAZombieLevel() && !mApp->IsIZombieLevel() && !mApp->IsScaryPotterLevel() &&
-		theZombieType != ZombieType::ZOMBIE_BACKUP_DANCER /*&& theZombieType != ZombieType::ZOMBIE_BOBSLED*/ && theZombieType != ZombieType::ZOMBIE_IMP 
-		&& theFromWave >= -1)
-	{
-		Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[theRow]);
-		if (aBushReanim && aBushReanim->mLoopCount > 0)
-		{
-			aBushReanim->mLastFrameTime = 0.0f;
-			aBushReanim->mAnimTime = 0.0f;
-			aBushReanim->mLoopCount = 0;
-		}
-	}
-
 	return aZombie;
 }
 
@@ -5599,6 +5595,8 @@ void Board::SpawnZombieWave()
 		{
 			ZombieType aZombieType = mZombiesInWave[mCurrentWave][i];
 
+			Zombie* aZombie = nullptr;
+
 			if (aZombieType == ZombieType::ZOMBIE_INVALID)
 			{
 				break;
@@ -5608,12 +5606,32 @@ void Board::SpawnZombieWave()
 			{
 				for (int i = 0; i < MAX_ZOMBIE_FOLLOWERS; i++)
 				{
-					AddZombie(ZombieType::ZOMBIE_NORMAL, mCurrentWave);  // 生成 4 只普通僵尸以代替雪橇僵尸小队
+					aZombie = AddZombie(ZombieType::ZOMBIE_NORMAL, mCurrentWave);  // 生成 4 只普通僵尸以代替雪橇僵尸小队
 				}
 			}
 			else
 			{
-				AddZombie(aZombieType, mCurrentWave);
+				aZombie = AddZombie(aZombieType, mCurrentWave);
+			}
+
+			if (aZombie && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL)
+			{
+				bool isAllowedToAnimate = true;
+
+				if (StageHasFog() && mGridCelFog[8][aZombie->mRow] > 0) isAllowedToAnimate = false;
+
+				if (isAllowedToAnimate && 
+					aZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && aZombie->mZombieType != ZombieType::ZOMBIE_DIGGER)
+				{
+					Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[aZombie->mRow]);
+					if (aBushReanim && aBushReanim->mLoopCount > 0)
+					{
+						aBushReanim->StartBlend(20);
+						aBushReanim->mLastFrameTime = 0.0f;
+						aBushReanim->mAnimTime = 0.0f;
+						aBushReanim->mLoopCount = 0;
+					}
+				}
 			}
 		}
 	}
@@ -8371,7 +8389,7 @@ void Board::ClearFogAroundPlant(Plant* thePlant, int theSize)
 	int aStartX = thePlant->mPlantCol - theSize - aFogOffsetX;
 	int aEndX = thePlant->mPlantCol + theSize - aFogOffsetX;
 	aStartX = max(aStartX, aLeft);
-	aEndX = min(aEndX, MAX_GRID_SIZE_X - 1);
+	aEndX = min(aEndX, MAX_GRID_SIZE_X + 4);
 
 	int aStartY = thePlant->mRow - theSize;
 	int aEndY = thePlant->mRow + theSize;
@@ -8423,7 +8441,7 @@ void Board::UpdateFog()
 	}
 
 	int aLeft = LeftFogColumn();
-	for (int x = aLeft; x < MAX_GRID_SIZE_X; x++)
+	for (int x = aLeft; x < MAX_GRID_SIZE_X + 4; x++)
 	{
 		for (int y = 0; y < MAX_GRID_SIZE_Y + 1; y++)
 		{
@@ -8453,11 +8471,12 @@ void Board::UpdateFog()
 void Board::DrawFog(Graphics* g)
 {
 	Image* aImageFog = mApp->Is3DAccelerated() ? Sexy::IMAGE_FOG : Sexy::IMAGE_FOG_SOFTWARE;
-	for (int x = 0; x < MAX_FOG_GRID_SIZE_X; x++)
+	for (int x = 0; x < MAX_GRID_SIZE_X + 4; x++)
 	{
 		for (int y = 0; y < MAX_GRID_SIZE_Y + 1; y++)
 		{
 			int aFadeAmount = mGridCelFog[x][y];
+
 			if (aFadeAmount == 0)
 				continue;
 
@@ -8472,7 +8491,7 @@ void Board::DrawFog(Graphics* g)
 			float aTime = mMainCounter * PI * 2;
 			// 与行、列有关的初始相位
 			float aPhaseX = 6 * PI * x / MAX_GRID_SIZE_X;
-			float aPhaseY = 6 * PI * y / (MAX_GRID_SIZE_Y + 1);
+			float aPhaseY = 6 * PI * y / MAX_GRID_SIZE_Y;
 			// 根据初相和时间计算当前相位
 			float aMotion = 13 + 4 * sin(aTime / 900 + aPhaseY) + 8 * sin(aTime / 500 + aPhaseX);
 

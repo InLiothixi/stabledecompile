@@ -377,7 +377,7 @@ void Projectile::CheckForCollision()
 
 	Zombie* aTargetZombie = mMotionType == ProjectileMotion::MOTION_HOMING ?  mBoard->ZombieTryToGet(mTargetZombieID) : nullptr;
 
-	if ((mPosX > WIDE_BOARD_WIDTH - WIDESCREEN_OFFSETX || mPosX + mWidth < WIDESCREEN_OFFSETX) && !aTargetZombie)
+	if ((mPosX > WIDE_BOARD_WIDTH || mPosX + mWidth < 0) && !aTargetZombie)
 	{
 		Die();
 		return;

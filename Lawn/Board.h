@@ -19,7 +19,6 @@
 using namespace Sexy;
 
 #define MAX_GRID_SIZE_X 9
-#define MAX_FOG_GRID_SIZE_X 12
 #define MAX_GRID_SIZE_Y 6
 #define MAX_ZOMBIES_IN_WAVE 50
 #define MAX_ZOMBIE_WAVES 100
@@ -136,9 +135,9 @@ public:
 	int								mPoleX;
 	int								mTreeX;
 	GridSquareType					mGridSquareType[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];		//+0x168
-	int								mGridCelLook[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y];			//+0x240
-	int								mGridCelOffset[MAX_FOG_GRID_SIZE_X][MAX_GRID_SIZE_Y][2];	//+0x318
-	int								mGridCelFog[MAX_FOG_GRID_SIZE_X][MAX_GRID_SIZE_Y + 1];		//+0x4C8
+	int								mGridCelLook[MAX_GRID_SIZE_X + 4][MAX_GRID_SIZE_Y];			//+0x240
+	int								mGridCelOffset[MAX_GRID_SIZE_X][MAX_GRID_SIZE_Y][2];	//+0x318
+	int								mGridCelFog[MAX_GRID_SIZE_X + 4][MAX_GRID_SIZE_Y + 1];		//+0x4C8
 	bool							mEnableGraveStones;										//+0x5C4
 	int								mSpecialGraveStoneX;									//+0x5C8
 	int								mSpecialGraveStoneY;									//+0x5CC
