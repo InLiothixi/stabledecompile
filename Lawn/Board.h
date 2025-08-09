@@ -514,6 +514,7 @@ public:
 	int								GetKilledlZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags);
 
 	void							MovePlant(Plant* thePlant, int theGridX, int theGridY);
+	void							DrawCover(Graphics* g);
 	void							DrawForeGround(Graphics* g);
 };
 extern bool gShownMoreSunTutorial;

@@ -7166,6 +7166,7 @@ void Board::DrawGameObjects(Graphics* g)
 
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_BACKDROP, MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 0));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_BOTTOM_UI, aZPos);
+		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_COVER, MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 6, 9));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_FOREGROUND, MakeRenderOrder(RenderLayer::RENDER_LAYER_FOG, 0, 1));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_COIN_BANK, MakeRenderOrder(RenderLayer::RENDER_LAYER_COIN_BANK, 0, 0));
 		AddUIRenderItem(aRenderList, aRenderItemCount, RenderObjectType::RENDER_ITEM_TOP_UI, MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_TOP, 0, 0));
@@ -7381,6 +7382,10 @@ void Board::DrawGameObjects(Graphics* g)
 			
 		case RenderObjectType::RENDER_ITEM_FOG:
 			DrawFog(g);
+			break;
+
+		case RenderObjectType::RENDER_ITEM_COVER:
+			DrawCover(g);
 			break;
 
 		case RenderObjectType::RENDER_ITEM_FOREGROUND:
@@ -8522,6 +8527,30 @@ void Board::DrawFog(Graphics* g)
 	}
 }
 
+void Board::DrawCover(Graphics* g)
+{
+	g->PushState();
+	g->ClearClipRect();
+	g->mClipRect.mWidth += mApp->mDDInterface->mWideScreenOffsetX;
+	g->mClipRect.mHeight += mApp->mDDInterface->mWideScreenOffsetY;
+	switch (mBackground)
+	{
+	case BackgroundType::BACKGROUND_1_DAY:
+		g->DrawImage(Sexy::IMAGE_BACKGROUND1_COVER, 685, 557);
+		break;
+	case BackgroundType::BACKGROUND_2_NIGHT:
+		g->DrawImage(Sexy::IMAGE_BACKGROUND2_COVER, 685, 557);
+		break;
+	case BackgroundType::BACKGROUND_3_POOL:
+		g->DrawImage(Sexy::IMAGE_BACKGROUND3_COVER, 671, 613);
+		break;
+	case BackgroundType::BACKGROUND_4_FOG:
+		g->DrawImage(Sexy::IMAGE_BACKGROUND4_COVER, 671, 613);
+		break;
+	}
+	g->PopState();
+}
+
 void Board::DrawForeGround(Graphics* g)
 {
 	g->PushState();
@@ -8530,18 +8559,6 @@ void Board::DrawForeGround(Graphics* g)
 	g->mClipRect.mHeight += mApp->mDDInterface->mWideScreenOffsetY;
 	switch (mBackground)
 	{
-		case BackgroundType::BACKGROUND_1_DAY:
-			g->DrawImage(Sexy::IMAGE_BACKGROUND1_COVER, 685, 557);
-			break;
-		case BackgroundType::BACKGROUND_2_NIGHT:
-			g->DrawImage(Sexy::IMAGE_BACKGROUND2_COVER, 685, 557);
-			break;
-		case BackgroundType::BACKGROUND_3_POOL:
-			g->DrawImage(Sexy::IMAGE_BACKGROUND3_COVER, 671, 613);
-			break;
-		case BackgroundType::BACKGROUND_4_FOG:
-			g->DrawImage(Sexy::IMAGE_BACKGROUND4_COVER, 671, 613);
-			break;
 		case BackgroundType::BACKGROUND_5_ROOF:
 			g->DrawImage(Sexy::IMAGE_TREES, mTreeX, WIDESCREEN_OFFSETY);
 			g->DrawImage(Sexy::IMAGE_POLE, mPoleX, WIDESCREEN_OFFSETY);
@@ -10396,10 +10413,10 @@ void Board::OffsetYForPlanting(int& theY, SeedType theSeedType)
 	{
 		theY += 15;
 	}
-	if (theSeedType == SeedType::SEED_SPIKEWEED || theSeedType == SeedType::SEED_SPIKEROCK)
+	/*if (theSeedType == SeedType::SEED_SPIKEWEED || theSeedType == SeedType::SEED_SPIKEROCK)
 	{
 		theY -= 15;
-	}
+	}*/
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mBackground == BackgroundType::BACKGROUND_GREENHOUSE)
 	{
 		theY -= 25;
