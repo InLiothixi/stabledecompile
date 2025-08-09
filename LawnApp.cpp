@@ -1357,7 +1357,7 @@ void LawnApp::Init()
 	}
 	else
 	{
-		MsgBox("dependency files missing! Please get the dependency.pak from the Stable Decompile Github Repo or contact the developers.")
+		MsgBox("dependency files missing! Please get the dependency.pak from the Stable Decompile Github Repo. Contact the developers.", "Error");
 	}
 
 	if (GetFileAttributesExA("extension\\properties\\resources.xml", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("extension\\properties\\resources.xml"))
