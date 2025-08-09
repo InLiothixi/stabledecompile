@@ -1125,7 +1125,13 @@ void CutScene::CancelIntro()
 		}
 		if (!mApp->IsChallengeWithoutSeedBank())
 		{
-			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, WIDESCREEN_OFFSETY);
+			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, 0);
+		}
+		
+		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
+			mApp->mGameMode == GameMode::GAMEMODE_INTRO || mApp->mGameMode == GameMode::GAMEMODE_UPSELL)
+		{
+			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, -IMAGE_SEEDBANK->GetHeight() + WIDESCREEN_OFFSETY);
 		}
 		else if (!mBoard->ChooseSeedsOnCurrentLevel())
 		{

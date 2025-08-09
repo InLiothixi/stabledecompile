@@ -7680,7 +7680,7 @@ void Board::DrawZenButtons(Graphics* g)
 	int aOffsetY = 0;
 	if (mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_ZEN_FADING)
 	{
-		aOffsetY = TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, -72, TodCurves::CURVE_EASE_IN_OUT);
+		aOffsetY = TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, -72 + WIDESCREEN_OFFSETY, TodCurves::CURVE_EASE_IN_OUT);
 	}
 
 	for (GameObjectType aTool = GameObjectType::OBJECT_TYPE_WATERING_CAN; aTool <= GameObjectType::OBJECT_TYPE_NEXT_GARDEN; aTool = (GameObjectType)(aTool + 1))
@@ -7693,7 +7693,7 @@ void Board::DrawZenButtons(Graphics* g)
 		if (aTool == GameObjectType::OBJECT_TYPE_NEXT_GARDEN)
 		{
 			aButtonRect.mX = 564;
-			if (!mMenuButton->mBtnNoDraw)
+			if (!mMenuButton->mDisabled) //mMenuButton->mBtnNoDraw
 			{
 				g->DrawImage(Sexy::IMAGE_ZEN_NEXTGARDEN, aButtonRect.mX + 2, aButtonRect.mY + aOffsetY);
 			}

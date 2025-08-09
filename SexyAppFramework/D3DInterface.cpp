@@ -258,8 +258,24 @@ bool D3DInterface::InitD3D()
 	if(CheckDXError(mDD->QueryInterface(IID_IDirect3D7, (LPVOID*) &mD3D),"QueryInterface IID_IDirect3D7"))
 		return false;
 
-	if(CheckDXError(mD3D->CreateDevice(IID_IDirect3DHALDevice, mDDSDrawSurface, &mD3DDevice),"CreateDevice IID_IDirect3DHALDevice"))
-		return false;
+	// Todo: Check if this even did anything...
+	GUID deviceGUID = IID_IDirect3DHALDevice;
+	HRESULT hr = mD3D->CreateDevice(IID_IDirect3DHALDevice, mDDSDrawSurface, &mD3DDevice);
+	if (FAILED(hr)) 
+	{
+		deviceGUID = IID_IDirect3DMMXDevice;
+		hr = mD3D->CreateDevice(IID_IDirect3DMMXDevice, mDDSDrawSurface, &mD3DDevice);
+		if (FAILED(hr))
+		{
+			deviceGUID = IID_IDirect3DRGBDevice;
+			hr = mD3D->CreateDevice(IID_IDirect3DRGBDevice, mDDSDrawSurface, &mD3DDevice);
+		}
+		if (FAILED(hr)) 
+		{
+			mErrorString = "No Direct3D device available";
+			return false;
+		}
+	}
 
 	D3DDEVICEDESC7 aCaps;
 	ZeroMemory(&aCaps,sizeof(aCaps));
@@ -311,7 +327,7 @@ bool D3DInterface::InitD3D()
 
 	// Create ZBuffer
 	DDPIXELFORMAT ddpfZBuffer;
-	mD3D->EnumZBufferFormats( IID_IDirect3DHALDevice, EnumZBufferCallback, (VOID*)&ddpfZBuffer );
+	mD3D->EnumZBufferFormats(deviceGUID, EnumZBufferCallback, (VOID*)&ddpfZBuffer );
 
 	DDSURFACEDESC2 ddsd;
 	ZeroMemory( &ddsd, sizeof(DDSURFACEDESC2) );

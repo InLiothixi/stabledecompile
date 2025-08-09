@@ -113,7 +113,7 @@ public:
 	bool HadWarning() { return !mWarning.empty(); }
 	bool HadError() { return !mFailureReason.empty(); }
 	bool Is3DSupported() { return !HadError(); }
-	bool Is3DRecommended() { return !HadError() && !HadWarning(); }
+	bool Is3DRecommended() { return !HadError(); } // && !HadWarning()
 	std::string GetWarning() { return mWarning; }
 	std::string GetError() { return mFailureReason; }
 	bool ResultsChanged() { return mResultsChanged; }
