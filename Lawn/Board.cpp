@@ -6728,9 +6728,9 @@ void Board::Update()
 		UpdateFog();
 		mChallenge->Update();
 		UpdateLevelEndSequence();
-		mPrevMouseX = mApp->mWidgetManager->mLastMouseX;
-		mPrevMouseY = mApp->mWidgetManager->mLastMouseY;
 	}
+	mPrevMouseX = mApp->mWidgetManager->mLastMouseX;
+	mPrevMouseY = mApp->mWidgetManager->mLastMouseY;
 }
 
 //0x416080
@@ -7688,7 +7688,7 @@ void Board::DrawLevel(Graphics* g)
 	}
 	else if (mAllowSpeedMod && !mLevelAwardSpawned)
 	{
-		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth(GetSpeedString()) + 30;
+		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth(GetSpeedString()) + 8;
 	}
 	if (mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_ZEN_FADING)
 	{

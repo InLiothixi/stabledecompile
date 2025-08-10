@@ -1849,7 +1849,7 @@ void LawnApp::UpdateFrames()
 				}
 			}
 
-			if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SPEED) {
+			if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SPEED && !mBoard->HasLevelAwardDropped()) {
 				if (mBoard->mTimeStopCounter > 0)
 				{
 					mBoard->mTimeStopCounter--;

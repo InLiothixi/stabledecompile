@@ -6275,7 +6275,7 @@ void Challenge::MouseDownButterAZombie(int theX, int theY)
 	Zombie* aZombie = nullptr;
 	Zombie* aTopZombie = nullptr;
 	while (mBoard->IterateZombies(aZombie)) {
-		if (!aZombie->IsDeadOrDying() && aZombie->mButteredCounter == 0 && aZombie->EffectedByDamage(0U)) {
+		if (!aZombie->IsDeadOrDying() && aZombie->mButteredCounter == 0 && aZombie->EffectedByDamage(1U)) {
 			Rect aZombieRect = aZombie->GetZombieRect();
 			if (GetCircleRectOverlap(theX, theY, 45, aZombieRect)) {
 				if (aTopZombie == nullptr || aZombie->mRenderOrder >= aTopZombie->mRenderOrder) {
