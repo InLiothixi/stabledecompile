@@ -200,6 +200,11 @@ Board::Board(LawnApp* theApp)
 	mHeldCounter = -1;
 	mHeldStartX = -1;
 	mHeldStartY = -1;
+	mAllowSpeedMod = false;
+	mPrevSpeedMod = SpeedMod::SPEED_NORMAL;
+	mSpeedMod = SpeedMod::SPEED_NORMAL;
+	mSlowMoCounter = 0;
+	mQECounter = 0;
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
 	{
@@ -237,8 +242,6 @@ Board::Board(LawnApp* theApp)
 		mStoreButton->mBtnNoDraw = true;
 		mStoreButton->SetLabel(_S("[GET_FULL_VERSION_BUTTON]"));
 	}	
-
-	mMenuButton->mBtnNoDraw = true;
 }
 
 //0x408670、0x408690
@@ -6614,10 +6617,6 @@ void Board::Update()
 		mStoreButton->Update();
 	}
 	
-	mApp->mEffectSystem->Update();
-	mAdvice->Update();
-	UpdateTutorial();
-	
 	if (mCobCannonCursorDelayCounter > 0)
 	{
 		mCobCannonCursorDelayCounter--;
@@ -6648,43 +6647,90 @@ void Board::Update()
 	{
 		mCoinBankFadeCount--;
 	}
+
 	UpdateLayers();
+	
+	if (mQECounter > 0)
+		mQECounter--;
 
-	if (mTimeStopCounter > 0)
-		return;
+	int aUpdateCount = 1;
 
-	mEffectCounter++;
-	if (StageHasPool() && !mIceTrapCounter && mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON && !mCutScene->IsSurvivalRepick())
+	if (mAllowSpeedMod && !mLevelAwardSpawned)
 	{
-		mApp->mPoolEffect->mPoolCounter++;
+		switch (mSpeedMod)
+		{
+		case SpeedMod::SPEED_SLOWMO:
+			++mSlowMoCounter;
+			if (mSlowMoCounter < 4)
+				aUpdateCount = 0;
+			else
+				mSlowMoCounter = 0;
+			break;
+
+		case SpeedMod::SPEED_SLOW:
+			++mSlowMoCounter;
+			if (mSlowMoCounter < 2)
+				aUpdateCount = 0;
+			else
+				mSlowMoCounter = 0;
+			break;
+
+		case SpeedMod::SPEED_NORMAL:
+			aUpdateCount = 1;
+			break;
+
+		case SpeedMod::SPEED_FAST:
+			aUpdateCount = 2;
+			break;
+
+		case SpeedMod::SPEED_VERY_FAST:
+			aUpdateCount = 4;
+			break;
+
+		case SpeedMod::SPEED_SONIC:
+			aUpdateCount = 8;
+			break;
+		}
 	}
-	if (mBackground == BackgroundType::BACKGROUND_3_POOL && mPoolSparklyParticleID == ParticleSystemID::PARTICLESYSTEMID_NULL && mDrawCount > 0)
+
+	for (int i = 0; i < aUpdateCount; i++)
 	{
-		int aRenderPosition = MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 2, 0);
-		TodParticleSystem* aPoolParticle = mApp->AddTodParticle(450, 295, aRenderPosition, ParticleEffect::PARTICLE_POOL_SPARKLY);
-		mPoolSparklyParticleID = mApp->ParticleGetID(aPoolParticle);
+		mApp->mEffectSystem->Update();
+		mAdvice->Update();
+		UpdateTutorial();
+		mEffectCounter++;
+		if (StageHasPool() && !mIceTrapCounter && mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON && !mCutScene->IsSurvivalRepick())
+		{
+			mApp->mPoolEffect->mPoolCounter++;
+		}
+		if (mBackground == BackgroundType::BACKGROUND_3_POOL && mPoolSparklyParticleID == ParticleSystemID::PARTICLESYSTEMID_NULL && mDrawCount > 0)
+		{
+			int aRenderPosition = MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 2, 0);
+			TodParticleSystem* aPoolParticle = mApp->AddTodParticle(450, 295, aRenderPosition, ParticleEffect::PARTICLE_POOL_SPARKLY);
+			mPoolSparklyParticleID = mApp->ParticleGetID(aPoolParticle);
+		}
+
+		/*for (auto it = mLightSourceV.begin(); it != mLightSourceV.end(); ) {
+			int& value = it->first;
+
+			--value;
+			if (value <= 0) {
+				it = mLightSourceV.erase(it);
+			}
+			else {
+				++it;
+			}
+		}*/
+
+		UpdateGridItems();
+		UpdateFwoosh();
+		UpdateGame();
+		UpdateFog();
+		mChallenge->Update();
+		UpdateLevelEndSequence();
+		mPrevMouseX = mApp->mWidgetManager->mLastMouseX;
+		mPrevMouseY = mApp->mWidgetManager->mLastMouseY;
 	}
-
-	/*for (auto it = mLightSourceV.begin(); it != mLightSourceV.end(); ) {
-		int& value = it->first;
-
-		--value;
-		if (value <= 0) {
-			it = mLightSourceV.erase(it);
-		}
-		else {
-			++it;
-		}
-	}*/
-
-	UpdateGridItems();
-	UpdateFwoosh();
-	UpdateGame();
-	UpdateFog();
-	mChallenge->Update();
-	UpdateLevelEndSequence();
-	mPrevMouseX = mApp->mWidgetManager->mLastMouseX;
-	mPrevMouseY = mApp->mWidgetManager->mLastMouseY;
 }
 
 //0x416080
@@ -7640,6 +7686,10 @@ void Board::DrawLevel(Graphics* g)
 	{
 		aPosX = 593;
 	}
+	else if (mAllowSpeedMod && !mLevelAwardSpawned)
+	{
+		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth(GetSpeedString()) + 30;
+	}
 	if (mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_ZEN_FADING)
 	{
 		aPosY += TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, 50, TodCurves::CURVE_EASE_IN_OUT);
@@ -7664,6 +7714,36 @@ void Board::DrawLevel(Graphics* g)
 	}
 }
 
+float Board::GetSpeedValue(SpeedMod theMod)
+{
+	switch (theMod)
+	{
+	case SpeedMod::SPEED_SLOWMO:    return 0.25f;
+	case SpeedMod::SPEED_SLOW:      return 0.5f;
+	case SpeedMod::SPEED_FAST:      return 2.0f;
+	case SpeedMod::SPEED_VERY_FAST: return 4.0f;
+	case SpeedMod::SPEED_SONIC:     return 8.0f;
+	default:              return 1.0f;
+	}
+}
+
+SexyString Board::GetSpeedString()
+{
+	float prevSpeed = GetSpeedValue(mPrevSpeedMod);
+	float currentSpeed = GetSpeedValue(mSpeedMod);
+
+	float t = (35 - mQECounter) / 35.0f;  
+	float interpSpeed = prevSpeed + (currentSpeed - prevSpeed) * t;
+
+	char speedStr[16];
+	if (interpSpeed >= 1.0f)
+		snprintf(speedStr, sizeof(speedStr), "%.1fx", interpSpeed);
+	else 
+		snprintf(speedStr, sizeof(speedStr), "%.2fx", interpSpeed);
+
+	return speedStr;
+}
+
 void Board::DrawSpeed(Graphics* g)
 {
 	// ====================================================================================================
@@ -7672,6 +7752,7 @@ void Board::DrawSpeed(Graphics* g)
 	int aPosX = 780;
 	int aPosY = 595;
 	const int fontHeight = Sexy::FONT_HOUSEOFTERROR16->GetHeight();
+	SexyString aSpeedStr = GetSpeedString();
 	
 	// ====================================================================================================
 	// ▲ 正式开始绘制关卡名称字符串
@@ -7682,9 +7763,25 @@ void Board::DrawSpeed(Graphics* g)
 		aPosY -= Sexy::IMAGE_FLAGMETERPARTS->GetHeight() + 8;
 	}
 
-	TodDrawString(g, "1.0x", aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(237, 241, 170), DrawStringJustification::DS_ALIGN_RIGHT);
-}
+	float aScale = 1.0f;
+	if (mQECounter == 0)
+	{
+		float aStrWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(aSpeedStr);
 
+		TodDrawString(g, GetSpeedString(), aPosX - aStrWidth / 2, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(237, 241, 170), DrawStringJustification::DS_ALIGN_CENTER);
+	}
+	else
+	{
+		aScale = TodAnimateCurveFloat(35, 0, mQECounter, 1.0f, 1.2f, TodCurves::CURVE_BOUNCE);
+
+		float aStrWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(aSpeedStr);
+		float aStrHeight = Sexy::FONT_HOUSEOFTERROR16->mAscent;
+
+		SexyTransform2D aMatrix;
+		TodScaleTransformMatrix(aMatrix, aPosX - aStrWidth + mApp->mDDInterface->mWideScreenOffsetX, aPosY + mApp->mDDInterface->mWideScreenOffsetY, aScale, aScale);
+		TodDrawStringMatrix(g, Sexy::FONT_HOUSEOFTERROR16, aMatrix, aSpeedStr, Color(237, 241, 170));
+	}
+}
 
 //0x4182D0
 void Board::DrawZenWheelBarrowButton(Graphics* g, int theOffsetY)
@@ -8944,7 +9041,7 @@ void Board::DrawUITop(Graphics* g)
 	{
 		DrawProgressMeter(g);
 		DrawLevel(g);
-		if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
+		if (mAllowSpeedMod && !mLevelAwardSpawned)
 			DrawSpeed(g);
 	}
 	if (mStoreButton && mApp->IsLastStand())
@@ -9369,6 +9466,26 @@ void Board::KeyChar(SexyChar theChar)
 		mApp->mShowHealthBar = !mApp->mShowHealthBar;
 	}
 #endif
+
+	if (!mApp->mDebugKeysEnabled && mAllowSpeedMod && !mLevelAwardSpawned)
+	{
+		if (theChar == 'q')
+		{
+			mPrevSpeedMod = mSpeedMod;
+			if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
+				mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
+
+			if (mPrevSpeedMod != mSpeedMod)	mQECounter = 35;
+		}
+		if (theChar == 'e')
+		{
+			mPrevSpeedMod = mSpeedMod;
+			if (mSpeedMod < SpeedMod::SPEED_SONIC)
+				mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
+
+			if (mPrevSpeedMod != mSpeedMod)	mQECounter = 35;
+		}
+	}
 
 #ifdef _DEBUG 
 	if(!mApp->mDebugKeysEnabled)

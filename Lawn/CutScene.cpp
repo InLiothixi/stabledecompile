@@ -921,7 +921,7 @@ void CutScene::StartLevelIntro()
 	{
 		mCrazyDaveDialogStart = 3300;
 		mUpsellHideBoard = true;
-		//mBoard->mMenuButton->mBtnNoDraw = false;
+		mBoard->mMenuButton->mBtnNoDraw = false;
 	}
 	else if (mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_1 && !mApp->HasBeatenChallenge(GameMode::GAMEMODE_SCARY_POTTER_1))
 	{
@@ -1127,15 +1127,21 @@ void CutScene::CancelIntro()
 		{
 			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, 0);
 		}
-		
+		else if (!mApp->IsChallengeWithoutSeedBank() && IsNonScrollingCutscene())
+		{
+			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, 0);
+		}
+
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 			mApp->mGameMode == GameMode::GAMEMODE_INTRO || mApp->mGameMode == GameMode::GAMEMODE_UPSELL)
 		{
 			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, -IMAGE_SEEDBANK->GetHeight() + WIDESCREEN_OFFSETY);
 		}
-		else if (!mBoard->ChooseSeedsOnCurrentLevel())
+
+		if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM &&
+			mApp->mGameMode != GameMode::GAMEMODE_UPSELL && mApp->mGameMode != GameMode::GAMEMODE_INTRO)
 		{
-			mBoard->mSeedBank->Move(SEED_BANK_OFFSET_X_END, 0);
+			mBoard->mAllowSpeedMod = true;
 		}
 
 		mBoard->mEnableGraveStones = true;
@@ -1157,7 +1163,7 @@ void CutScene::CancelIntro()
 
 		if (mBoard->mTutorialState != TutorialState::TUTORIAL_ZEN_GARDEN_PICKUP_WATER)
 		{
-			//mBoard->mMenuButton->mBtnNoDraw = false;
+			mBoard->mMenuButton->mBtnNoDraw = false;
 		}
 		mApp->mSoundSystem->StopFoley(FoleyType::FOLEY_DIGGER);
 	}
@@ -1622,7 +1628,13 @@ void CutScene::Update()
 		mBoard->RemoveCutsceneZombies();
 		if (mBoard->mTutorialState != TutorialState::TUTORIAL_ZEN_GARDEN_PICKUP_WATER)
 		{
-			//mBoard->mMenuButton->mBtnNoDraw = false;
+			mBoard->mMenuButton->mBtnNoDraw = false;
+		}
+
+		if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM &&
+			mApp->mGameMode != GameMode::GAMEMODE_UPSELL && mApp->mGameMode != GameMode::GAMEMODE_INTRO)
+		{
+			mBoard->mAllowSpeedMod = true;
 		}
 
 		ShowShovel();
@@ -1754,7 +1766,7 @@ void CutScene::AdvanceCrazyDaveDialog(bool theJustSkipping)
 	if (mApp->mCrazyDaveMessageIndex == 3200)
 	{
 		mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_TREE_FOOD] = PURCHASE_COUNT_OFFSET + 5;
-		//mBoard->mMenuButton->mBtnNoDraw = false;
+		mBoard->mMenuButton->mBtnNoDraw = false;
 		mBoard->mStoreButton->mBtnNoDraw = false;
 	}
 
@@ -2314,7 +2326,7 @@ void CutScene::UpdateUpsell()
 		{
 			mBoard->mStoreButton->Resize(510, 420, 210, 46);
 			mBoard->mMenuButton->Resize(510, 480, 210, 46);
-			//mBoard->mMenuButton->mBtnNoDraw = false;
+			mBoard->mMenuButton->mBtnNoDraw = false;
 			mBoard->mStoreButton->mBtnNoDraw = false;
 		}
 		return;

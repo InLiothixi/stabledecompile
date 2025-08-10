@@ -106,6 +106,14 @@ struct BungeeDropGrid
 
 class Board : public Widget, public ButtonListener
 {
+	enum SpeedMod {
+		SPEED_SLOWMO,  
+		SPEED_SLOW,       
+		SPEED_NORMAL,     
+		SPEED_FAST,      
+		SPEED_VERY_FAST,  
+		SPEED_SONIC       
+	};
 public:
 	LawnApp*						mApp;													//+0x8C
 	DataArray<Zombie>				mZombies;												//+0x90
@@ -248,6 +256,11 @@ public:
 	bool							mHeld;
 	int								mHeldStartX;
 	int								mHeldStartY;
+	bool							mAllowSpeedMod;
+	SpeedMod						mPrevSpeedMod;
+	SpeedMod						mSpeedMod;
+	int								mSlowMoCounter;
+	int								mQECounter;
 	//std::vector<std::pair<int, Rect>>	mLightSourceV; // int -> duration, Rect -> lightRect
 
 public:
@@ -516,6 +529,8 @@ public:
 	void							MovePlant(Plant* thePlant, int theGridX, int theGridY);
 	void							DrawCover(Graphics* g);
 	void							DrawForeGround(Graphics* g);
+	float							GetSpeedValue(SpeedMod theMod);
+	SexyString						GetSpeedString();
 	void							DrawSpeed(Graphics* g);
 };
 extern bool gShownMoreSunTutorial;
