@@ -5773,7 +5773,7 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
     case SeedType::SEED_SPLITPEA:
     case SeedType::SEED_GATLINGPEA:
     case SeedType::SEED_LEFTPEATER:
-        aProjectileType = ProjectileType::PROJECTILE_PEA;
+        aProjectileType = ProjectileType::PROJECTILE_FIREBALL;
         break;
     case SeedType::SEED_SNOWPEA:
         aProjectileType = ProjectileType::PROJECTILE_SNOWPEA;

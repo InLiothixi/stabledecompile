@@ -139,7 +139,43 @@ void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, in
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL)
 	{
-		TOD_ASSERT();
+		//TOD_ASSERT();
+		bool needsReanim = true;
+		Attachment* aAttachment = gEffectSystem->mAttachmentHolder->mAttachments.DataArrayTryToGet(mAttachmentID);
+		if (aAttachment)
+		{
+			for (auto effects : aAttachment->mEffectArray)
+			{
+				if (effects.mEffectType == EffectType::EFFECT_REANIM)
+				{
+					Reanimation* aReanim = mApp->ReanimationTryToGet((ReanimationID)effects.mEffectID);
+					if (aReanim && aReanim->mReanimationType == ReanimationType::REANIM_FIRE_PEA)
+					{
+						needsReanim = false;
+						break;
+					}
+				}
+			}
+		}
+
+		if (needsReanim)
+		{
+			float aOffsetX = -25.0f;
+			float aOffsetY = -25.0f;
+			Reanimation* aFirePeaReanim = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_FIRE_PEA);
+			if (mMotionType == ProjectileMotion::MOTION_BACKWARDS)
+			{
+				aFirePeaReanim->OverrideScale(-1.0f, 1.0f);
+				aOffsetX += 80.0f;
+			}
+			aFirePeaReanim->SetPosition(mPosX + aOffsetX, mPosY + aOffsetY);
+			aFirePeaReanim->mLoopType = ReanimLoopType::REANIM_LOOP;
+			aFirePeaReanim->mAnimRate = RandRangeFloat(50.0f, 80.0f);
+			if (mFilterEffect != FilterEffect::FILTER_EFFECT_NONE) {
+				aFirePeaReanim->mFilterEffect = mFilterEffect;
+			}
+			AttachReanim(mAttachmentID, aFirePeaReanim, aOffsetX, aOffsetY);
+		}
 	}
 	else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG)
 	{
