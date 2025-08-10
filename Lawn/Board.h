@@ -516,6 +516,7 @@ public:
 	void							MovePlant(Plant* thePlant, int theGridX, int theGridY);
 	void							DrawCover(Graphics* g);
 	void							DrawForeGround(Graphics* g);
+	void							DrawSpeed(Graphics* g);
 };
 extern bool gShownMoreSunTutorial;
 

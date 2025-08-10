@@ -7600,11 +7600,13 @@ void Board::DrawLevel(Graphics* g)
 				SexyString aFlagStr = mApp->Pluralize(aFlags, _S("[ONE_FLAG]"), _S("[COUNT_FLAGS]"));
 				SexyString aCompletedStr = TodReplaceString(_S("[FLAGS_COMPLETED]"), _S("{FLAGS}"), aFlagStr);
 				if (mApp->mDDInterface->mWideScreenExtraHeight == 0)
-					aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str()); 
+				{
+					aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str());
+				}
 				else 
 				{
 					aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str());
-					aPosY -= fontHeight / 2;
+					//aPosY -= fontHeight / 1.5f;
 				}
 			}
 		}
@@ -7619,11 +7621,13 @@ void Board::DrawLevel(Graphics* g)
 			{
 				SexyString aStreakStr = TodReplaceNumberString(_S("[ENDLESS_STREAK]"), _S("{STREAK}"), aStreak);
 				if (mApp->mDDInterface->mWideScreenExtraHeight == 0)
+				{
 					aLevelStr = StrFormat(_S("%s - %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
+				}
 				else
 				{
 					aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
-					aPosY -= fontHeight / 2;
+					//aPosY -= fontHeight / 1.5f;
 				}
 			}
 		}
@@ -7640,11 +7644,17 @@ void Board::DrawLevel(Graphics* g)
 	{
 		aPosY += TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, 50, TodCurves::CURVE_EASE_IN_OUT);
 	}
-
 	if (mApp->mDDInterface->mWideScreenExtraHeight == 0)
+	{
 		TodDrawString(g, aLevelStr, aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_RIGHT);
+	}
 	else
-		TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - 94, aPosY - fontHeight, 94, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
+	{
+		SexyString translatedtext = TodStringTranslate(aLevelStr);
+		int strWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(translatedtext);
+		int strHeight = max(TodDrawStringWrappedHelper(g, translatedtext, Rect(aPosX + 6 - strWidth / 2, aPosY + 76, 100, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER, false, true) - 30, 0);
+		TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - 92, aPosY - fontHeight / 1.5f - strHeight / 2, 100, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
+	}
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -7653,6 +7663,28 @@ void Board::DrawLevel(Graphics* g)
 			g->DrawCircle(touch.x, touch.y, 20, 10 * PI);
 	}
 }
+
+void Board::DrawSpeed(Graphics* g)
+{
+	// ====================================================================================================
+	// ▲ 获取完整的关卡名称的字符串
+	// ====================================================================================================
+	int aPosX = 780;
+	int aPosY = 595;
+	const int fontHeight = Sexy::FONT_HOUSEOFTERROR16->GetHeight();
+	
+	// ====================================================================================================
+	// ▲ 正式开始绘制关卡名称字符串
+	// ====================================================================================================
+	if (HasProgressMeter())
+	{
+		aPosX -= 30;
+		aPosY -= Sexy::IMAGE_FLAGMETERPARTS->GetHeight() + 8;
+	}
+
+	TodDrawString(g, "1.0x", aPosX, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(237, 241, 170), DrawStringJustification::DS_ALIGN_RIGHT);
+}
+
 
 //0x4182D0
 void Board::DrawZenWheelBarrowButton(Graphics* g, int theOffsetY)
@@ -8912,6 +8944,8 @@ void Board::DrawUITop(Graphics* g)
 	{
 		DrawProgressMeter(g);
 		DrawLevel(g);
+		if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
+			DrawSpeed(g);
 	}
 	if (mStoreButton && mApp->IsLastStand())
 	{
