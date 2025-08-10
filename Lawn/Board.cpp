@@ -9043,7 +9043,7 @@ void Board::DrawUITop(Graphics* g)
 	{
 		DrawProgressMeter(g);
 		DrawLevel(g);
-		if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScenes == GameScene::SCENE_PLAYING)
+		if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 			DrawSpeed(g);
 	}
 	if (mStoreButton && mApp->IsLastStand())
@@ -9469,7 +9469,7 @@ void Board::KeyChar(SexyChar theChar)
 	}
 #endif
 
-	if (!mApp->mDebugKeysEnabled && mAllowSpeedMod && !mLevelAwardSpawned)
+	if (!mApp->mDebugKeysEnabled && mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 	{
 		if (theChar == 'q')
 		{
