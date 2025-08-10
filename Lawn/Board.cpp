@@ -5684,8 +5684,8 @@ void Board::UpdateGameObjects()
 		aLawnMower->Update();
 	}
 
-	mCursorPreview->Update();
-	mCursorObject->Update();
+	/*mCursorPreview->Update();
+	mCursorObject->Update();*/
 
 	for (int i = 0; i < mSeedBank->mNumPackets; i++)
 	{
@@ -6655,7 +6655,7 @@ void Board::Update()
 
 	int aUpdateCount = 1;
 
-	if (mAllowSpeedMod && !mLevelAwardSpawned)
+	if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScene::SCENE_PLAYING)
 	{
 		switch (mSpeedMod)
 		{
@@ -6729,6 +6729,8 @@ void Board::Update()
 		mChallenge->Update();
 		UpdateLevelEndSequence();
 	}
+	mCursorPreview->Update();
+	mCursorObject->Update();
 	mPrevMouseX = mApp->mWidgetManager->mLastMouseX;
 	mPrevMouseY = mApp->mWidgetManager->mLastMouseY;
 }
@@ -7686,7 +7688,7 @@ void Board::DrawLevel(Graphics* g)
 	{
 		aPosX = 593;
 	}
-	else if (mAllowSpeedMod && !mLevelAwardSpawned)
+	else if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScene::SCENE_PLAYING)
 	{
 		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth(GetSpeedString()) + 8;
 	}
@@ -9041,7 +9043,7 @@ void Board::DrawUITop(Graphics* g)
 	{
 		DrawProgressMeter(g);
 		DrawLevel(g);
-		if (mAllowSpeedMod && !mLevelAwardSpawned)
+		if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScene::SCENE_PLAYING)
 			DrawSpeed(g);
 	}
 	if (mStoreButton && mApp->IsLastStand())
