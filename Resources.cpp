@@ -1858,6 +1858,7 @@ int Sexy::SOUND_ZOMBIESPLASH;
 int Sexy::SOUND_ZOMBIE_ENTERING_WATER;
 int Sexy::SOUND_ZOMBIE_FALLING_1;
 int Sexy::SOUND_ZOMBIE_FALLING_2;
+int Sexy::SOUND_REVERSE_WAKEUP;
 
 bool Sexy::ExtractLoadingSoundsResources(ResourceManager* theManager)
 {
@@ -2033,6 +2034,7 @@ bool Sexy::ExtractLoadingSoundsResources(ResourceManager* theManager)
 		SOUND_ZOMBIE_ENTERING_WATER = aMgr.GetSoundThrow("SOUND_ZOMBIE_ENTERING_WATER");
 		SOUND_ZOMBIE_FALLING_1 = aMgr.GetSoundThrow("SOUND_ZOMBIE_FALLING_1");
 		SOUND_ZOMBIE_FALLING_2 = aMgr.GetSoundThrow("SOUND_ZOMBIE_FALLING_2");
+		SOUND_REVERSE_WAKEUP = aMgr.GetSoundThrow("SOUND_REVERSE_WAKEUP");
 	}
 	catch (ResourceManagerException&)
 	{
@@ -2603,6 +2605,7 @@ void* gResources[(int)Sexy::ResourceId::RESOURCE_ID_MAX] =
 	&Sexy::SOUND_ZOMBIE_ENTERING_WATER,
 	&Sexy::SOUND_ZOMBIE_FALLING_1,
 	&Sexy::SOUND_ZOMBIE_FALLING_2,
+	&Sexy::SOUND_REVERSE_WAKEUP,
 	&Sexy::SOUND_PUFF,
 	&Sexy::SOUND_FUME,
 	&Sexy::SOUND_HUGE_WAVE,

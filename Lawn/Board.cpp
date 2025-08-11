@@ -9477,7 +9477,11 @@ void Board::KeyChar(SexyChar theChar)
 			if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
 				mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
 
-			if (mPrevSpeedMod != mSpeedMod)	mQECounter = 35;
+			if (mPrevSpeedMod != mSpeedMod)
+			{
+				mApp->PlayFoley(FoleyType::FOLEY_REVERSE_WAKEUP);
+				mQECounter = 35;
+			}
 		}
 		if (theChar == 'e')
 		{
@@ -9485,7 +9489,11 @@ void Board::KeyChar(SexyChar theChar)
 			if (mSpeedMod < SpeedMod::SPEED_SONIC)
 				mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
 
-			if (mPrevSpeedMod != mSpeedMod)	mQECounter = 35;
+			if (mPrevSpeedMod != mSpeedMod)	
+			{
+				mApp->PlayFoley(FoleyType::FOLEY_WAKEUP);
+				mQECounter = 35;
+			}
 		}
 	}
 

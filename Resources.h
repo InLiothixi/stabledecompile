@@ -651,6 +651,7 @@ namespace Sexy
         SOUND_FINALFANFARE_ID,
         SOUND_CRAZYDAVESCREAM_ID,
         SOUND_CRAZYDAVESCREAM2_ID,
+        SOUND_REVERSE_WAKEUP,
         IMAGE_BACKGROUND1_ID,
         IMAGE_BACKGROUND1_GAMEOVER_INTERIOR_OVERLAY_ID,
         IMAGE_BACKGROUND1_GAMEOVER_MASK_ID,
@@ -1279,6 +1280,7 @@ namespace Sexy
     extern Image* IMAGE_DIALOG_CENTERMIDDLE;                              //0x6A77A4
     extern Image* IMAGE_ZOMBIEBOBSLEDHEAD;                                //0x6A77A8
     extern int          SOUND_WAKEUP;                                           //0x6A77AC
+    extern int          SOUND_REVERSE_WAKEUP;                                           
     extern Image* IMAGE_STAR_PARTICLES;                                   //0x6A77B0
     extern Image* IMAGE_CRATER_ROOF_LEFT;                                 //0x6A77B4
     extern Font* FONT_DWARVENTODCRAFT36GREENINSET;                       //0x6A77B8
