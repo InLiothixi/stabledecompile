@@ -2395,7 +2395,8 @@ void Challenge::DrawArtChallenge(Graphics* g)
 			SeedType aSeedType = GetArtChallengeSeed(aCol, aRow);
 			if (aSeedType != SEED_NONE && mBoard->GetTopPlantAt(aCol, aRow, TOPPLANT_ONLY_NORMAL_POSITION) == nullptr)
 			{
-				Plant::DrawSeedType(g, aSeedType, SEED_NONE, VARIATION_NORMAL, mBoard->GridToPixelX(aCol, aRow), mBoard->GridToPixelY(aCol, aRow));
+				Plant::DrawSeedType(g, aSeedType, SEED_NONE, VARIATION_NORMAL, mBoard->GridToPixelX(aCol, aRow), mBoard->GridToPixelY(aCol, aRow) +
+					PlantDrawHeightOffset(mBoard, nullptr, aSeedType, aCol, aRow, true));
 			}
 		}
 	}
