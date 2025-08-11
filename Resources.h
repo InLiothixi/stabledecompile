@@ -324,6 +324,12 @@ namespace Sexy
         IMAGE_REANIM_PEASHOOTER_SPROUT_POWERED_ID,
         IMAGE_SCROLLBG_ID,
         IMAGE_SCROLLOVERLAY_ID,
+        IMAGE_PAUSE_BUTTON_ID,
+        IMAGE_PAUSE_BUTTON_PRESSED_ID,
+        IMAGE_SPEEDUP_BUTTON_ID,
+        IMAGE_SPEEDUP_BUTTON_PRESSED_ID,
+        IMAGE_SLOWDOWN_BUTTON_ID,
+        IMAGE_SLOWDOWN_BUTTON_PRESSED_ID,
         IMAGE_AWARDPICKUPGLOW_ID,
         IMAGE_ZOMBIE_SEAWEED_ID,
         IMAGE_PINATA_ID,
@@ -1204,6 +1210,12 @@ namespace Sexy
     extern Image* IMAGE_REANIM_PEASHOOTER_SPROUT_POWERED;
     extern Image* IMAGE_SCROLLBG;
     extern Image* IMAGE_SCROLLOVERLAY;
+    extern Image* IMAGE_PAUSE_BUTTON;
+    extern Image* IMAGE_PAUSE_BUTTON_PRESSED;
+    extern Image* IMAGE_SPEEDUP_BUTTON;
+    extern Image* IMAGE_SPEEDUP_BUTTON_PRESSED;
+    extern Image* IMAGE_SLOWDOWN_BUTTON;
+    extern Image* IMAGE_SLOWDOWN_BUTTON_PRESSED;
     extern Image* IMAGE_PROJECTILE;                                    //0x6A76A8
     extern Image* IMAGE_PROJECTILEPEA;                                    //0x6A76A8
     extern int          SOUND_GROAN2;                                           //0x6A76AC

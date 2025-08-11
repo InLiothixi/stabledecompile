@@ -114,6 +114,11 @@ class Board : public Widget, public ButtonListener
 		SPEED_VERY_FAST,  
 		SPEED_SONIC       
 	};
+	enum {
+		SLOWDOWN,
+		PAUSE,
+		SPEEDUP
+	};
 public:
 	LawnApp*						mApp;													//+0x8C
 	DataArray<Zombie>				mZombies;												//+0x90
@@ -127,6 +132,9 @@ public:
 	MessageWidget*					mAdvice;												//+0x140
 	SeedBank*						mSeedBank;												//+0x144
 	GameButton*						mMenuButton;											//+0x148
+	NewLawnButton*					mSlowdownButton;
+	NewLawnButton*					mPauseButton;
+	NewLawnButton*					mSpeedupButton;
 	GameButton*						mStoreButton;											//+0x14C
 	bool							mIgnoreMouseUp;											//+0x150
 	ToolTipWidget*					mToolTip;												//+0x154
@@ -532,6 +540,10 @@ public:
 	float							GetSpeedValue(SpeedMod theMod);
 	SexyString						GetSpeedString();
 	void							DrawSpeed(Graphics* g);
+
+	virtual void					AddedToManager(WidgetManager* theWidgetManager);
+	virtual void					RemovedFromManager(WidgetManager* theWidgetManager);
+	virtual void					ButtonDepress(int theId);
 };
 extern bool gShownMoreSunTutorial;
 

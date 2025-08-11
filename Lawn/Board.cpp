@@ -189,6 +189,28 @@ Board::Board(LawnApp* theApp)
 	mDebugTextMode = DebugTextMode::DEBUG_TEXT_NONE;
 	mMenuButton = new GameButton(0);
 	mMenuButton->mDrawStoneButton = true;
+	{
+		mSlowdownButton = MakeNewButton(Board::SLOWDOWN, this, "", nullptr, Sexy::IMAGE_SLOWDOWN_BUTTON, Sexy::IMAGE_SLOWDOWN_BUTTON_PRESSED, Sexy::IMAGE_SLOWDOWN_BUTTON_PRESSED);
+		mSlowdownButton->Resize(0, 0, Sexy::IMAGE_SLOWDOWN_BUTTON->GetWidth(), Sexy::IMAGE_SLOWDOWN_BUTTON->GetHeight());
+		mSlowdownButton->mBtnNoDraw = true;
+		mSlowdownButton->mDoFinger = true;
+		mSlowdownButton->mTranslateX = 0;
+		mSlowdownButton->mTranslateY = 0;
+
+		mPauseButton = MakeNewButton(Board::PAUSE, this, "", nullptr, Sexy::IMAGE_PAUSE_BUTTON, Sexy::IMAGE_PAUSE_BUTTON_PRESSED, Sexy::IMAGE_PAUSE_BUTTON_PRESSED);
+		mPauseButton->Resize(0, 0, Sexy::IMAGE_PAUSE_BUTTON->GetWidth(), Sexy::IMAGE_PAUSE_BUTTON->GetHeight());
+		mPauseButton->mBtnNoDraw = true;
+		mPauseButton->mDoFinger = true;
+		mPauseButton->mTranslateX = 0;
+		mPauseButton->mTranslateY = 0;
+
+		mSpeedupButton = MakeNewButton(Board::SPEEDUP, this, "", nullptr, Sexy::IMAGE_SPEEDUP_BUTTON, Sexy::IMAGE_SPEEDUP_BUTTON_PRESSED, Sexy::IMAGE_SPEEDUP_BUTTON_PRESSED);
+		mSpeedupButton->Resize(0, 0, Sexy::IMAGE_SPEEDUP_BUTTON->GetWidth(), Sexy::IMAGE_SPEEDUP_BUTTON->GetHeight());
+		mSpeedupButton->mBtnNoDraw = true;
+		mSpeedupButton->mDoFinger = true;
+		mSpeedupButton->mTranslateX = 0;
+		mSpeedupButton->mTranslateY = 0;
+	}
 	mStoreButton = nullptr;
 	mIgnoreMouseUp = false;
 	mNukeCounter = 0;
@@ -254,6 +276,18 @@ Board::~Board()
 	if (mMenuButton)
 	{
 		delete mMenuButton;
+	}
+	if (mSlowdownButton)
+	{
+		delete mSlowdownButton;
+	}
+	if (mPauseButton)
+	{
+		delete mPauseButton;
+	}
+	if (mSpeedupButton)
+	{
+		delete mSpeedupButton;
 	}
 	if (mStoreButton)
 	{
@@ -3397,7 +3431,7 @@ PlantingReason Board::CanPlantAt(int theGridX, int theGridY, SeedType theSeedTyp
 //0x40E520
 void Board::UpdateCursor()
 {
-	if (mApp->IsScreenSaver() || mWidgetManager == NULL|| mWidgetManager->mOverWidget == NULL) return;
+	if (mApp->IsScreenSaver() || mWidgetManager == NULL|| mWidgetManager->mOverWidget == NULL || mSlowdownButton->mIsOver || mPauseButton->mIsOver || mSpeedupButton->mIsOver) return;
 
 	int aMouseX = mApp->mWidgetManager->mLastMouseX - mX;
 	int aMouseY = mApp->mWidgetManager->mLastMouseY - mY;
@@ -3412,8 +3446,7 @@ void Board::UpdateCursor()
 		return;
 
 	if ((mPaused || mBoardFadeOutCounter >= 0 || mTimeStopCounter > 0 || 
-		mApp->mGameScene != SCENE_PLAYING) && mWidgetManager->mOverWidget != NULL
-		)
+		mApp->mGameScene != SCENE_PLAYING) && mWidgetManager->mOverWidget != NULL)
 	{
 		mApp->SetCursor(Sexy::CURSOR_POINTER);
 		return;
@@ -5329,6 +5362,11 @@ void Board::Pause(bool thePause)
 		if (!mApp->mMusic->mMusicInterface)
 			mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
 		mApp->mMusic->GameMusicPause(thePause);
+
+		if (!thePause)
+		{
+			mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON;
+		}
 	}
 }
 
@@ -7636,6 +7674,8 @@ void Board::DrawLevel(Graphics* g)
 	int aPosY = 595;
 	SexyString aLevelStr;
 	const int fontHeight = Sexy::FONT_HOUSEOFTERROR16->GetHeight();
+	int containerWidth = 100;
+
 	if (mApp->IsAdventureMode())
 	{
 		aLevelStr = TodStringTranslate(_S("[LEVEL]")) + _S("") + mApp->GetStageString(mLevel);
@@ -7683,17 +7723,21 @@ void Board::DrawLevel(Graphics* g)
 			}
 		}
 	}
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM)
+		containerWidth = 125;
 	
 	// ====================================================================================================
 	// ▲ 正式开始绘制关卡名称字符串
 	// ====================================================================================================
+
 	if (HasProgressMeter())
 	{
 		aPosX = 593;
 	}
 	else if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 	{
-		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth(GetSpeedString()) + 8;
+		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth("1.0x") + 8 + 101;
 	}
 	if (mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_ZEN_FADING)
 	{
@@ -7707,8 +7751,8 @@ void Board::DrawLevel(Graphics* g)
 	{
 		SexyString translatedtext = TodStringTranslate(aLevelStr);
 		int strWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(translatedtext);
-		int strHeight = max(TodDrawStringWrappedHelper(g, translatedtext, Rect(aPosX + 6 - strWidth / 2, aPosY + 76, 100, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER, false, true) - 30, 0);
-		TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - 92, aPosY - fontHeight / 1.5f - strHeight / 2, 100, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
+		int strHeight = max(TodDrawStringWrappedHelper(g, translatedtext, Rect(aPosX + 6 - strWidth / 2, aPosY + 76, containerWidth, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER, false, true) - 30, 0);
+		TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - (containerWidth - 8), aPosY - fontHeight / 1.5f - strHeight / 2, containerWidth, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
 	}
 
 	for (int i = 0; i < 10; ++i)
@@ -7758,7 +7802,8 @@ void Board::DrawSpeed(Graphics* g)
 	int aPosY = 595;
 	const int fontHeight = Sexy::FONT_HOUSEOFTERROR16->GetHeight();
 	SexyString aSpeedStr = GetSpeedString();
-	
+	float aStrWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth("1.0x");
+
 	// ====================================================================================================
 	// ▲ 正式开始绘制关卡名称字符串
 	// ====================================================================================================
@@ -7768,22 +7813,52 @@ void Board::DrawSpeed(Graphics* g)
 		aPosY -= Sexy::IMAGE_FLAGMETERPARTS->GetHeight() + 8;
 	}
 
+	mSpeedupButton->mX = aPosX - aStrWidth - 12 - Sexy::IMAGE_SPEEDUP_BUTTON->GetWidth();
+	mSpeedupButton->mY = aPosY - fontHeight / 2 - 4;
+
+	mSlowdownButton->mButtonImage = mSpeedMod < SpeedMod::SPEED_NORMAL ? IMAGE_SLOWDOWN_BUTTON_PRESSED : IMAGE_SLOWDOWN_BUTTON;
+	mSpeedupButton->mButtonImage = mSpeedMod > SpeedMod::SPEED_NORMAL ? IMAGE_SPEEDUP_BUTTON_PRESSED : IMAGE_SPEEDUP_BUTTON;
+
+	mPauseButton->mX = mSpeedupButton->mX - Sexy::IMAGE_SPEEDUP_BUTTON->GetWidth() - 4;
+	mPauseButton->mY = mSpeedupButton->mY;
+
+	mSlowdownButton->mX = mPauseButton->mX - Sexy::IMAGE_SLOWDOWN_BUTTON->GetWidth() - 4;
+	mSlowdownButton->mY = mPauseButton->mY;
+
+	Graphics gSlowdownButton(*g);
+	gSlowdownButton.mTransX = mSlowdownButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
+	gSlowdownButton.mTransY = mSlowdownButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
+
+	Graphics gPauseButton(*g);
+	gPauseButton.mTransX = mPauseButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
+	gPauseButton.mTransY = mPauseButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
+
+	Graphics gSpeedupButton(*g);
+	gSpeedupButton.mTransX = mSpeedupButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
+	gSpeedupButton.mTransY = mSpeedupButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
+
+	mSlowdownButton->SetDisabled(mSpeedMod == SpeedMod::SPEED_SLOWMO);
+	mSpeedupButton->SetDisabled(mSpeedMod == SpeedMod::SPEED_SONIC);
+
+	if (!mSlowdownButton->mDisabled)
+		mSlowdownButton->Render(&gSlowdownButton);
+	mPauseButton->Render(&gPauseButton);
+	if (!mSpeedupButton->mDisabled)
+		mSpeedupButton->Render(&gSpeedupButton);
+
+	float curStrWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(GetSpeedString());
+
 	float aScale = 1.0f;
 	if (mQECounter == 0)
 	{
-		float aStrWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(aSpeedStr);
-
-		TodDrawString(g, GetSpeedString(), aPosX - aStrWidth / 2, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(237, 241, 170), DrawStringJustification::DS_ALIGN_CENTER);
+		TodDrawString(g, GetSpeedString(), aPosX - curStrWidth / 2, aPosY, Sexy::FONT_HOUSEOFTERROR16, Color(237, 241, 170), DrawStringJustification::DS_ALIGN_CENTER);
 	}
 	else
 	{
 		aScale = TodAnimateCurveFloat(35, 0, mQECounter, 1.0f, 1.2f, TodCurves::CURVE_BOUNCE);
 
-		float aStrWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(aSpeedStr);
-		float aStrHeight = Sexy::FONT_HOUSEOFTERROR16->mAscent;
-
 		SexyTransform2D aMatrix;
-		TodScaleTransformMatrix(aMatrix, aPosX - aStrWidth + mApp->mDDInterface->mWideScreenOffsetX, aPosY + mApp->mDDInterface->mWideScreenOffsetY, aScale, aScale);
+		TodScaleTransformMatrix(aMatrix, aPosX - curStrWidth + mApp->mDDInterface->mWideScreenOffsetX, aPosY + mApp->mDDInterface->mWideScreenOffsetY, aScale, aScale);
 		TodDrawStringMatrix(g, Sexy::FONT_HOUSEOFTERROR16, aMatrix, aSpeedStr, Color(237, 241, 170));
 	}
 }
@@ -11787,10 +11862,51 @@ void Board::MovePlant(Plant* thePlant, int theGridX, int theGridY)
 	DoPlantingEffects(theGridX, theGridY, thePlant);
 }
 
+void Board::AddedToManager(WidgetManager* theWidgetManager)
+{
+	Widget::AddedToManager(theWidgetManager);
+	theWidgetManager->AddWidget(mSlowdownButton);
+	theWidgetManager->AddWidget(mPauseButton);
+	theWidgetManager->AddWidget(mSpeedupButton);
+}
 
+void Board::RemovedFromManager(WidgetManager* theWidgetManager)
+{
+	Widget::RemovedFromManager(theWidgetManager);
+	theWidgetManager->RemoveWidget(mSlowdownButton);
+	theWidgetManager->RemoveWidget(mPauseButton);
+	theWidgetManager->RemoveWidget(mSpeedupButton);
+}
 
+void Board::ButtonDepress(int theId)
+{	
+	if (theId == Board::SLOWDOWN)
+	{
+		mPrevSpeedMod = mSpeedMod;
+		if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
+			mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
 
+		if (mPrevSpeedMod != mSpeedMod)
+		{
+			mApp->PlayFoley(FoleyType::FOLEY_REVERSE_WAKEUP);
+			mQECounter = 35;
+		}
+	}
+	else if (theId == Board::PAUSE)
+	{
+		mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON_PRESSED;
+		mApp->DoPauseDialog();
+	}
+	else if (theId == Board::SPEEDUP)
+	{
+		mPrevSpeedMod = mSpeedMod;
+		if (mSpeedMod < SpeedMod::SPEED_SONIC)
+			mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
 
-
-
-
+		if (mPrevSpeedMod != mSpeedMod)
+		{
+			mApp->PlayFoley(FoleyType::FOLEY_WAKEUP);
+			mQECounter = 35;
+		}
+	}
+}
