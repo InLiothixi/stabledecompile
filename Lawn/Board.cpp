@@ -4688,7 +4688,7 @@ bool Board::MouseHitTestPlant(int x, int y, HitResult* theHitResult)
 
 	Plant* aPlant;
 	aPlant = SpecialPlantHitTest(x, y);
-	if (aPlant)
+	if (aPlant && (aPlant->mSeedType == SEED_COBCANNON && aPlant->mState == PlantState::STATE_COBCANNON_READY || aPlant->mSeedType != SEED_COBCANNON))
 	{
 		theHitResult->mObject = aPlant;
 		theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_PLANT;
@@ -4732,6 +4732,9 @@ bool Board::MouseHitTestPlant(int x, int y, HitResult* theHitResult)
 		theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_NONE;
 		return false;
 	}
+
+	if (aPlant->mSeedType == SEED_COBCANNON && aPlant->mState != PlantState::STATE_COBCANNON_READY)
+		return false;
 
 	theHitResult->mObject = aPlant;
 	theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_PLANT;
