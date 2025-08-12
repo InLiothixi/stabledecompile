@@ -52,6 +52,7 @@ public:
 	bool						mHasFinishedSliding;
 	bool						mIsSlidingOut;
 	int							mSlidingOutCounter;
+	float						mPreviousScrollPosition;
 
 public:
 	QuickplayWidget(LawnApp* theApp);

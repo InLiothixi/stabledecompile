@@ -32,7 +32,6 @@ QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
 	mIsSwiping = false;
 	mSwipeStartX = -1;
 	mSwipeVelocityX = 0.0f;
-	mMaxScrollPosition = 1068;
 	mTrackWidth = 780;
 	mSwitchStagesCounter = -1;
 	mHasFinishedSliding = false;
@@ -113,6 +112,8 @@ QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
 	thePreviousId = -1;
 	theCurrentId = 1;
 
+	const int aPlayerLevel = mApp->mRIPMode ? mApp->mPlayerInfo->mRIPLevel : mApp->mPlayerInfo->mLevel;
+
 	for (int i = 0; i < FINAL_LEVEL; i++) {
 		int aLevel = i + 1;
 		int aStage = (int) (i / 10.0f);
@@ -122,8 +123,46 @@ QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
 		aLevelButton->mDoFinger = true;
 		aLevelButton->mFrameNoDraw = true;
 		aLevelButton->Resize(10 + 186 * aSubLevel, -IMAGE_LEVELSELECTOR_LEVEL_BUTTON_HIGHLIGHT->mHeight, IMAGE_LEVELSELECTOR_LEVEL_BUTTON_HIGHLIGHT->mWidth, IMAGE_LEVELSELECTOR_LEVEL_BUTTON_HIGHLIGHT->mHeight);
-		aLevelButton->mVisible = false;
+		if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+		{
+			aLevelButton->mVisible = true;
+		}
+		else
+		{
+			aLevelButton->mVisible = i < aPlayerLevel;
+		}
 	}
+
+	mPreviousScrollPosition = 0;
+
+	if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+	{
+		mMaxScrollPosition = 1069;
+	}
+	else
+	{
+		mMaxScrollPosition = 20 + 186 * min(aPlayerLevel, 9) + 175 - BOARD_WIDTH;
+	}
+
+	if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+	{
+		mNightStageButton->SetDisabled(false);
+		mPoolStageButton->SetDisabled(false);
+		mFogStageButton->SetDisabled(false);
+		mRoofStageButton->SetDisabled(false);
+	}
+	else
+	{
+		mNightStageButton->SetDisabled(aPlayerLevel < 11);
+		mPoolStageButton->SetDisabled(aPlayerLevel < 21);
+		mFogStageButton->SetDisabled(aPlayerLevel < 31);
+		mRoofStageButton->SetDisabled(aPlayerLevel < 41);
+	}
+
+	mNightStageButton->mVisible = !mNightStageButton->mDisabled;
+	mPoolStageButton->mVisible = !mPoolStageButton->mDisabled;
+	mFogStageButton->mVisible = !mFogStageButton->mDisabled;
+	mRoofStageButton->mVisible = !mRoofStageButton->mDisabled;
 
 	mBackButton = MakeNewButton(
 		QuickplayWidget::Quickplay_Back,
@@ -217,7 +256,7 @@ void QuickplayWidget::Update() {
 				{
 					mScrollableDown = true;
 					mIsDraggingThumb = true;
-					float aThumbWidth = mApp->mWidth / mMaxScrollPosition * mTrackWidth;
+					float aThumbWidth = (mApp->mWidth / (mApp->mWidth + mMaxScrollPosition)) * mTrackWidth;
 					float aScrollPosition = (mWidgetManager->mLastMouseX - (aThumbWidth / 2.0f)) / (mTrackWidth - aThumbWidth) * mMaxScrollPosition;
 					mScrollPosition = max(0, min(aScrollPosition, mMaxScrollPosition));
 				}
@@ -225,7 +264,7 @@ void QuickplayWidget::Update() {
 			else if (mScrollableDown && IS_DOWN) {
 				if (mIsDraggingThumb)
 				{
-					float aThumbWidth = mApp->mWidth / mMaxScrollPosition * mTrackWidth;
+					float aThumbWidth = (mApp->mWidth / (mApp->mWidth + mMaxScrollPosition)) * mTrackWidth;
 					float aScrollPosition = (mWidgetManager->mLastMouseX - (aThumbWidth / 2.0f)) / (mTrackWidth - aThumbWidth) * mMaxScrollPosition;
 					mScrollPosition = max(0, min(aScrollPosition, mMaxScrollPosition));
 				}
@@ -279,11 +318,42 @@ void QuickplayWidget::Update() {
 			mSwitchStagesCounter = 50;
 			mHasFinishedSliding = true;
 
+			const int aPlayerLevel = mApp->mRIPMode ? mApp->mPlayerInfo->mRIPLevel : mApp->mPlayerInfo->mLevel;
+
+			if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+			{
+				mNightStageButton->SetDisabled(false);
+				mPoolStageButton->SetDisabled(false);
+				mFogStageButton->SetDisabled(false);
+				mRoofStageButton->SetDisabled(false);
+			}
+			else 
+			{
+				mNightStageButton->SetDisabled(aPlayerLevel < 11);
+				mPoolStageButton->SetDisabled(aPlayerLevel < 21);
+				mFogStageButton->SetDisabled(aPlayerLevel < 31);
+				mRoofStageButton->SetDisabled(aPlayerLevel < 41);
+			}
+
+			mNightStageButton->mVisible = !mNightStageButton->mDisabled;
+			mPoolStageButton->mVisible = !mPoolStageButton->mDisabled;
+			mFogStageButton->mVisible = !mFogStageButton->mDisabled;
+			mRoofStageButton->mVisible = !mRoofStageButton->mDisabled;
+
 			{
 				int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RoofStage)) - 1;
 				for (int aLevel = 0; aLevel < 10; aLevel++) {
-					ButtonWidget* aLevelButton = mLevelButtons[10 * aCurStage + aLevel];
-					aLevelButton->mVisible = true;
+					const int theLevel = 10 * aCurStage + aLevel;
+					ButtonWidget* aLevelButton = mLevelButtons[theLevel];
+
+					if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+					{
+						aLevelButton->mVisible = true;
+					}
+					else
+					{
+						aLevelButton->mVisible = theLevel < aPlayerLevel;
+					}
 				}
 			}
 		}
@@ -344,7 +414,7 @@ void QuickplayWidget::Update() {
 				}
 
 				DisableButtons(false);
-				mIsScrollable = true;
+				mIsScrollable = mMaxScrollPosition > 0;
 			}
 		}
 	}
@@ -387,7 +457,7 @@ void QuickplayWidget::Draw(Graphics* g) {
 
 	if (mIsScrollable)
 	{
-		float aThumbWidth = mApp->mWidth / mMaxScrollPosition * mTrackWidth;
+		float aThumbWidth = (mApp->mWidth / (mApp->mWidth + mMaxScrollPosition)) * mTrackWidth;
 		const float aThumbX = 10 + mScrollPosition / (float)mMaxScrollPosition * (mTrackWidth - aThumbWidth);
 		const int aThumbAlpha = (int)(mScrollAmount * 10) != 0 || mIsDraggingThumb || aScrollArea.Contains(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY) ? 255 : 128;
 
@@ -481,6 +551,34 @@ void QuickplayWidget::ButtonDepress(int theId)
 		{
 			mApp->mRIPMode = false;
 		}
+
+		const int aPlayerLevel = mApp->mRIPMode ? mApp->mPlayerInfo->mRIPLevel : mApp->mPlayerInfo->mLevel;
+
+		if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+		{
+			mNightStageButton->SetDisabled(false);
+			mPoolStageButton->SetDisabled(false);
+			mFogStageButton->SetDisabled(false);
+			mRoofStageButton->SetDisabled(false);
+		}
+		else
+		{
+			mNightStageButton->SetDisabled(aPlayerLevel < 11);
+			mPoolStageButton->SetDisabled(aPlayerLevel < 21);
+			mFogStageButton->SetDisabled(aPlayerLevel < 31);
+			mRoofStageButton->SetDisabled(aPlayerLevel < 41);
+		}
+
+		mNightStageButton->mVisible = !mNightStageButton->mDisabled;
+		mPoolStageButton->mVisible = !mPoolStageButton->mDisabled;
+		mFogStageButton->mVisible = !mFogStageButton->mDisabled;
+		mRoofStageButton->mVisible = !mRoofStageButton->mDisabled;
+
+		int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min((aPlayerLevel + 10) / 10, QuickplayWidget::Quickplay_RoofStage));
+
+		if (aCurStage > theCurrentId) aCurStage = theCurrentId;
+
+		SelectStage(aCurStage, theCurrentId != thePreviousId);
 	}
 	if (theId > QuickplayWidget::Quickplay_RIP)
 	{
@@ -537,10 +635,30 @@ void QuickplayWidget::SelectStage(int theId, bool doTransition)
 		mSwitchStagesCounter = 100;
 
 		{
+			const int aPlayerLevel = mApp->mRIPMode ? mApp->mPlayerInfo->mRIPLevel : mApp->mPlayerInfo->mLevel;
+
 			int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RIP)) - 1;
 			for (int aLevel = 0; aLevel < 10; aLevel++) {
-				ButtonWidget* aLevelButton = mLevelButtons[10 * aCurStage + aLevel];
-				aLevelButton->mVisible = true;
+				const int theLevel = 10 * aCurStage + aLevel;
+				ButtonWidget* aLevelButton = mLevelButtons[theLevel];
+				if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+				{
+					aLevelButton->mVisible = true;
+				}
+				else
+				{
+					aLevelButton->mVisible = theLevel < aPlayerLevel;
+				}
+			}
+
+			mPreviousScrollPosition = mScrollPosition;
+			if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+			{
+				mMaxScrollPosition = 1069;
+			}
+			else
+			{
+				mMaxScrollPosition = 20 + 186 * min(max(0, aPlayerLevel - 1 - (10 * aCurStage)), 9) + 175 - BOARD_WIDTH;
 			}
 		}
 	}
@@ -591,9 +709,11 @@ void QuickplayWidget::DrawButton(Graphics* g, int theLevelIndex)
 	if (!aLevelButton->mVisible)	return;
 
 	int aLevel = theLevelIndex;
-	int aStage = (int)(theLevelIndex / 10.0f);
+	int aStage = theLevelIndex / 10;
 	int aSubLevel = aLevel % 10;
-	aLevelButton->mX = 10 + 186 * aSubLevel - mScrollPosition;
+
+	int theScrollPosition = mScrollPosition;
+	aLevelButton->mX = 10 + 186 * aSubLevel - theScrollPosition;
 
 	if (aStage == 0)
 	{

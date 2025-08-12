@@ -81,6 +81,7 @@ public:
     bool                mPlantedPlants[(int)SeedType::SEED_LEFTPEATER]; //+GOTY @InLiothixie
     bool                mAckZombatarTOS;
     bool                mDidRIPMode;
+    int                 mRIPLevel;
 
 public:
     PlayerInfo();
