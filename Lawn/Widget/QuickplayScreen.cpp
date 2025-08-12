@@ -574,11 +574,40 @@ void QuickplayWidget::ButtonDepress(int theId)
 		mFogStageButton->mVisible = !mFogStageButton->mDisabled;
 		mRoofStageButton->mVisible = !mRoofStageButton->mDisabled;
 
+		{
+			int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RIP)) - 1;
+			for (int aLevel = 0; aLevel < 10; aLevel++) {
+				const int theLevel = 10 * aCurStage + aLevel;
+				ButtonWidget* aLevelButton = mLevelButtons[theLevel];
+				if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+				{
+					aLevelButton->mVisible = true;
+				}
+				else
+				{
+					aLevelButton->mVisible = theLevel < aPlayerLevel;
+				}
+			}
+
+			mPreviousScrollPosition = mScrollPosition;
+			if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)
+			{
+				mMaxScrollPosition = 1069;
+			}
+			else
+			{
+				mMaxScrollPosition = 20 + 186 * min(max(0, aPlayerLevel - 1 - (10 * aCurStage)), 9) + 175 - BOARD_WIDTH;
+			}
+		}
+
+		mIsScrollable = mMaxScrollPosition > 0;
+
 		int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min((aPlayerLevel + 10) / 10, QuickplayWidget::Quickplay_RoofStage));
 
 		if (aCurStage > theCurrentId) aCurStage = theCurrentId;
 
-		SelectStage(aCurStage, theCurrentId != thePreviousId);
+		if (theCurrentId != thePreviousId)
+			SelectStage(aCurStage, true);
 	}
 	if (theId > QuickplayWidget::Quickplay_RIP)
 	{
