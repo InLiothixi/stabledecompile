@@ -7828,14 +7828,20 @@ void Board::DrawSpeed(Graphics* g)
 	Graphics gSlowdownButton(*g);
 	gSlowdownButton.mTransX = mSlowdownButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
 	gSlowdownButton.mTransY = mSlowdownButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
+	gSlowdownButton.mTransX += TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountX, TodCurves::CURVE_BOUNCE);
+	gSlowdownButton.mTransY += TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountY, TodCurves::CURVE_BOUNCE);
 
 	Graphics gPauseButton(*g);
 	gPauseButton.mTransX = mPauseButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
 	gPauseButton.mTransY = mPauseButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
+	gPauseButton.mTransX += TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountX, TodCurves::CURVE_BOUNCE);
+	gPauseButton.mTransY += TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountY, TodCurves::CURVE_BOUNCE);
 
 	Graphics gSpeedupButton(*g);
 	gSpeedupButton.mTransX = mSpeedupButton->mX + mApp->mDDInterface->mWideScreenOffsetX;
 	gSpeedupButton.mTransY = mSpeedupButton->mY + mApp->mDDInterface->mWideScreenOffsetY;
+	gSpeedupButton.mTransX += TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountX, TodCurves::CURVE_BOUNCE);
+	gSpeedupButton.mTransY += TodAnimateCurve(12, 0, mShakeCounter, 0, mShakeAmountY, TodCurves::CURVE_BOUNCE);
 
 	mSlowdownButton->SetDisabled(mSpeedMod == SpeedMod::SPEED_SLOWMO);
 	mSpeedupButton->SetDisabled(mSpeedMod == SpeedMod::SPEED_SONIC);

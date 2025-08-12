@@ -1292,7 +1292,7 @@ void CutScene::AnimateBoard()
 		{
 			aSeedChoser->Move(0, CalcPosition(aTimeSeedChoserSlideOnStart, aTimeSeedChoserSlideOnEnd, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY, 0));
 			aSeedChoser->mMenuButton->mY = CalcPosition(aTimeSeedChoserSlideOnStart, aTimeSeedChoserSlideOnEnd, -50 + WIDESCREEN_OFFSETY, -10);
-			//aSeedChoser->mMenuButton->mBtnNoDraw = false;
+			aSeedChoser->mMenuButton->mBtnNoDraw = false;
 		}
 		// ====================================================================================================
 		// △ 选卡界面滑落
