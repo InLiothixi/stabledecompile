@@ -20,7 +20,8 @@ private:
 		Quickplay_NightStage,
 		Quickplay_PoolStage,
 		Quickplay_FogStage,
-		Quickplay_RoofStage
+		Quickplay_RoofStage,
+		Quickplay_RIP
     };
 public:
 	LawnApp*					mApp;  
@@ -32,6 +33,7 @@ public:
 	NewLawnButton*				mPoolStageButton;
 	NewLawnButton*				mFogStageButton;
 	NewLawnButton*				mRoofStageButton;
+	NewLawnButton*				mRIPButton;
 	ButtonWidget*				mLevelButtons[50];
 	bool						mIsScrollable;
 	float						mScrollAmount;

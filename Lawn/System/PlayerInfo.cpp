@@ -103,6 +103,7 @@ void PlayerInfo::SyncDetails(DataSync& theSync)
 		SafeSync(theSync.SyncBool(mPlantedPlants[i]));
 	}
 	SafeSync(theSync.SyncBool(mAckZombatarTOS));
+	SafeSync(theSync.SyncBool(mDidRIPMode));
 }
 
 //0x469400
@@ -190,6 +191,7 @@ void PlayerInfo::Reset()
 	memset(mShownAchievements, 0, sizeof(mShownAchievements));
 	memset(mPlantedPlants, 0, sizeof(mPlantedPlants));
 	mAckZombatarTOS = false;
+	mDidRIPMode = false;
 }
 
 void PlayerInfo::AddCoins(int theAmount)

@@ -117,7 +117,7 @@ QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
 		int aLevel = i + 1;
 		int aStage = (int) (i / 10.0f);
 		int aSubLevel = aLevel % 10;
-		ButtonWidget* aLevelButton = new ButtonWidget(QuickplayWidget::Quickplay_RoofStage + aLevel, this);
+		ButtonWidget* aLevelButton = new ButtonWidget(QuickplayWidget::Quickplay_RIP + aLevel, this);
 		mLevelButtons[i] = aLevelButton;
 		aLevelButton->mDoFinger = true;
 		aLevelButton->mFrameNoDraw = true;
@@ -138,6 +138,20 @@ QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
 	mBackButton->Resize(278, 528.5f, Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT->mWidth, Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT->mHeight);
 	mBackButton->mTranslateX = 0;
 	mBackButton->mTranslateY = 0;
+
+	mRIPButton = MakeNewButton(
+		QuickplayWidget::Quickplay_RIP,
+		this,
+		_S(""),
+		nullptr,
+		Sexy::IMAGE_BLANK,
+		Sexy::IMAGE_BLANK,
+		Sexy::IMAGE_BLANK
+	);
+	mRIPButton->mClip = false;
+	mRIPButton->Resize(11.85f, 311, 99, 96);
+	mRIPButton->mTranslateX = 0;
+	mRIPButton->mTranslateY = 0;
 }
 
 QuickplayWidget::~QuickplayWidget() {
@@ -154,6 +168,8 @@ QuickplayWidget::~QuickplayWidget() {
 	for (ButtonWidget* aLevelButton : mLevelButtons) delete aLevelButton;
 	if (mBackButton)
 		delete mBackButton;
+	if (mRIPButton)
+		delete mRIPButton;
 }
 
 void QuickplayWidget::Update() {
@@ -341,9 +357,13 @@ void QuickplayWidget::Update() {
 }
 
 void QuickplayWidget::Draw(Graphics* g) {
-	g->SetLinearBlend(false);
 	g->DrawImage(IMAGE_ZOMBATAR_MAIN_BG, 0, 0);
-	g->SetLinearBlend(true);
+	g->DrawImageF(Sexy::IMAGE_RIP_LEVER_HOLDER, 11.85f, 311.0f);
+
+	if (!mApp->mRIPMode)
+		g->DrawImage(Sexy::IMAGE_RIP_LEVER_STICK, 72, 318);
+	else
+		g->DrawImage(Sexy::IMAGE_RIP_LEVER_STICK_PRESSED, 69, 374);
 
 	Graphics leafG(*g);
 	leafG.mTransX -= BOARD_WIDTH;
@@ -354,13 +374,13 @@ void QuickplayWidget::Draw(Graphics* g) {
 
 	if (thePreviousId != theCurrentId)
 	{
-		int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(thePreviousId, QuickplayWidget::Quickplay_RoofStage)) - 1;
+		int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(thePreviousId, QuickplayWidget::Quickplay_RIP)) - 1;
 		for (int aLevel = 0; aLevel < 10; aLevel++)
 			DrawButton(g, 10 * aCurStage + aLevel);
 	}
 
 	{
-		int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RoofStage)) - 1;
+		int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RIP)) - 1;
 		for (int aLevel = 0; aLevel < 10; aLevel++)
 			DrawButton(g, 10 * aCurStage + aLevel);
 	}
@@ -368,13 +388,13 @@ void QuickplayWidget::Draw(Graphics* g) {
 	if (mIsScrollable)
 	{
 		float aThumbWidth = mApp->mWidth / mMaxScrollPosition * mTrackWidth;
-		const float aThumbX = 10 +  mScrollPosition / (float)mMaxScrollPosition * (mTrackWidth - aThumbWidth);
+		const float aThumbX = 10 + mScrollPosition / (float)mMaxScrollPosition * (mTrackWidth - aThumbWidth);
 		const int aThumbAlpha = (int)(mScrollAmount * 10) != 0 || mIsDraggingThumb || aScrollArea.Contains(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY) ? 255 : 128;
 
 		Graphics gScrollBar(*g);
 		gScrollBar.SetColorizeImages(true);
 
-		gScrollBar.SetColor(Color(0x808080)); 
+		gScrollBar.SetColor(Color(0x808080));
 		gScrollBar.mColor.mAlpha = aThumbAlpha / 2;
 		gScrollBar.FillRect(aScrollArea);
 
@@ -411,6 +431,7 @@ void QuickplayWidget::AddedToManager(WidgetManager* theWidgetManager)
 	this->AddWidget(mDayStageButton);
 	for (ButtonWidget* aButton : mLevelButtons)	this->AddWidget(aButton);
 	this->AddWidget(mBackButton);
+	this->AddWidget(mRIPButton);
 }
 
 //0x44BCA0
@@ -424,6 +445,7 @@ void QuickplayWidget::RemovedFromManager(WidgetManager* theWidgetManager)
 	this->RemoveWidget(mDayStageButton);
 	for (ButtonWidget* aButton : mLevelButtons)	this->RemoveWidget(aButton);
 	this->RemoveWidget(mBackButton);
+	this->RemoveWidget(mRIPButton);
 }
 
 //0x44BD80
@@ -436,17 +458,36 @@ void QuickplayWidget::OrderInManagerChanged()
 	this->PutInfront(mDayStageButton, this);
 	for (ButtonWidget* aButton : mLevelButtons)	this->PutInfront(aButton, this);
 	this->PutInfront(mBackButton, this);
+	this->PutInfront(mRIPButton, this);
 	this->PutBehind(mApp->mGameSelector->mOverlayWidget, this);
 }
 
 void QuickplayWidget::ButtonDepress(int theId)
 {
-	if (theId <= QuickplayWidget::Quickplay_RoofStage)
-		return;
-
-	int level = theId - Quickplay_RoofStage;
-	mApp->KillGameSelector();
-	mApp->PreNewGame(GameMode::GAMEMODE_ADVENTURE, true, level);
+	if (theId == QuickplayWidget::Quickplay_RIP)
+	{
+		if (!mApp->mRIPMode)
+		{
+			if (!mApp->mPlayerInfo->mDidRIPMode)
+			{
+				mApp->DoConfirmRIPMode();
+			}
+			else
+			{
+				mApp->mRIPMode = true;
+			}
+		}
+		else
+		{
+			mApp->mRIPMode = false;
+		}
+	}
+	if (theId > QuickplayWidget::Quickplay_RIP)
+	{
+		int level = theId - QuickplayWidget::Quickplay_RIP;
+		mApp->KillGameSelector();
+		mApp->PreNewGame(GameMode::GAMEMODE_ADVENTURE, true, level);
+	}
 }
 
 void QuickplayWidget::ButtonMouseEnter(int theId)
@@ -459,19 +500,24 @@ void QuickplayWidget::ButtonMouseEnter(int theId)
 
 void QuickplayWidget::ButtonPress(int theId, int theClickCount)
 {
-	mApp->PlaySample(Sexy::SOUND_TAP);
-
-	if (theId <= QuickplayWidget::Quickplay_RoofStage)
+	if (theId < QuickplayWidget::Quickplay_RIP)
 	{
 		SelectStage(theId, true);
+		return;
 	}
+	else if (theId == QuickplayWidget::Quickplay_RIP)
+	{
+		mApp->PlaySample(Sexy::SOUND_GRAVEBUTTON);
+		return;
+	}
+	mApp->PlaySample(Sexy::SOUND_TAP);
 }
 
 void QuickplayWidget::SelectStage(int theId, bool doTransition)
 {
 	mIsScrollable = false;
 
-	bool isStageButton = theId <= QuickplayWidget::Quickplay_RoofStage;
+	bool isStageButton = theId < QuickplayWidget::Quickplay_RIP;
 
 	if (theId == QuickplayWidget::Quickplay_Back)
 	{
@@ -491,7 +537,7 @@ void QuickplayWidget::SelectStage(int theId, bool doTransition)
 		mSwitchStagesCounter = 100;
 
 		{
-			int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RoofStage)) - 1;
+			int aCurStage = max(QuickplayWidget::Quickplay_DayStage, min(theCurrentId, QuickplayWidget::Quickplay_RIP)) - 1;
 			for (int aLevel = 0; aLevel < 10; aLevel++) {
 				ButtonWidget* aLevelButton = mLevelButtons[10 * aCurStage + aLevel];
 				aLevelButton->mVisible = true;

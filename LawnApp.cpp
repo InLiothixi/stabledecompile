@@ -168,6 +168,7 @@ LawnApp::LawnApp()
 	mShowHealthBar = false;
 	mVoiceVolume = 0.0f;
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
+	mRIPMode = false;
 }
 
 //0x44EDD0、0x44EDF0
@@ -2237,6 +2238,12 @@ void LawnApp::ButtonDepress(int theId)
 			KillDialog(Dialogs::DIALOG_CHECKING_UPDATES);
 			return;
 
+		case Dialogs::DIALOG_CONFIRM_RIP_MODE:
+			KillDialog(Dialogs::DIALOG_CONFIRM_RIP_MODE);
+			mRIPMode = true;
+			mPlayerInfo->mDidRIPMode = true;
+			return;
+
 		default:
 			KillDialog(theId - 2000);
 			return;
@@ -4122,4 +4129,17 @@ bool LawnApp::TryToInitializePA()
 		return false;
 
 	return true;
+}
+
+
+void LawnApp::DoConfirmRIPMode()
+{
+	LawnDialog* aDialog = (LawnDialog*)DoDialog(
+		Dialogs::DIALOG_CONFIRM_RIP_MODE,
+		true,
+		_S("Turn On R.I.P. Mode?"),
+		_S("Are you sure you are up to the challenge?\nThe game will be extra difficult- one game over and you're back to the beginning."),
+		_S(""),
+		Dialog::BUTTONS_YES_NO
+	);
 }

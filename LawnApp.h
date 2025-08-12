@@ -149,6 +149,8 @@ public:
 	static							Rect gBoardBounds;
 	std::vector<SexyString>			mDebugTexts;
 
+	bool							mRIPMode;
+
 public:
 	LawnApp();
 	virtual ~LawnApp();
@@ -358,6 +360,8 @@ public:
 
 	void							ShowParticleEditor();
 	bool							TryToInitializePA();
+
+	void							DoConfirmRIPMode();
 };
 
 SexyString							LawnGetCurrentLevelName();

@@ -80,6 +80,7 @@ public:
     bool                mShownAchievements[(int)AchievementId::MAX_ACHIEVEMENTS];             //+GOTY @Patoke: 0x38    
     bool                mPlantedPlants[(int)SeedType::SEED_LEFTPEATER]; //+GOTY @InLiothixie
     bool                mAckZombatarTOS;
+    bool                mDidRIPMode;
 
 public:
     PlayerInfo();
