@@ -181,6 +181,41 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
                 aBodyReanim->mAnimRate = RandRangeFloat(12.0f, 18.0f);
             else if (mSeedType == SeedType::SEED_GIANT_WALLNUT)
                 aBodyReanim->mAnimRate = RandRangeFloat(6.0f, 10.0f);
+
+            {
+                char* aTrackToPlay = "anim_blink";
+                int aHit = Rand(10);
+                if (aHit < 1 && aBodyReanim->TrackExists("anim_blink_twitch"))
+                {
+                    aTrackToPlay = "anim_blink_twitch";
+                }
+                else
+                {
+                    aTrackToPlay = aHit < 7 ? "anim_blink_twice" : "anim_blink_thrice";
+                }
+
+                Reanimation* aBlinkReanim = mApp->mEffectSystem->mReanimationHolder->AllocReanimation(0.0f, 0.0f, 0, aBodyReanim->mReanimationType);
+                aBlinkReanim->SetFramesForLayer(aTrackToPlay);
+                aBlinkReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_FULL_LAST_FRAME_AND_HOLD;
+                aBlinkReanim->mAnimRate = 0.0f;
+                aBlinkReanim->mAnimTime = RandRangeFloat(0.0f, 1.0f);
+                aBlinkReanim->mColorOverride = aBodyReanim->mColorOverride;
+
+                if (aBodyReanim->TrackExists("anim_face"))
+                {
+                    aBlinkReanim->AttachToAnotherReanimation(aBodyReanim, "anim_face");
+                }
+                else if (aBodyReanim->TrackExists("anim_idle"))
+                {
+                    aBlinkReanim->AttachToAnotherReanimation(aBodyReanim, "anim_idle");
+                }
+                else
+                {
+                    TodTrace("Missing anim_idle for blink");
+                }
+
+                aBlinkReanim->mFilterEffect = aBodyReanim->mFilterEffect;
+            }
         }
 
         aBodyReanim->mIsAttachment = true;
