@@ -4442,8 +4442,8 @@ void Plant::GetPeaHeadOffset(int& theOffsetX, int& theOffsetY)
 
     ReanimatorTransform aTransform;
     aBodyReanim->GetCurrentTransform(aTrackIndex, &aTransform);
-    theOffsetX = aTransform.mTransX;
-    theOffsetY = aTransform.mTransY;
+    theOffsetX = aTransform.mTransX * aBodyReanim->mOverlayMatrix.m00;
+    theOffsetY = aTransform.mTransY * aBodyReanim->mOverlayMatrix.m11;
 }
 
 //0x465460
@@ -5917,7 +5917,7 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
     {
         int aOffsetX, aOffsetY;
         GetPeaHeadOffset(aOffsetX, aOffsetY);
-        aOriginX = mX + aOffsetX - 56;
+        aOriginX = mX + aOffsetX + 27;        
         aOriginY = mY + aOffsetY - 33;
     }
     else if (mSeedType == SeedType::SEED_GATLINGPEA)
@@ -5935,7 +5935,7 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
 
         if (thePlantWeapon == PlantWeapon::WEAPON_SECONDARY)
         {
-            aOriginX = mX + aOffsetX - 64;
+            aOriginX = mX + aOffsetX - 67; // -40
         }
         else
         {
@@ -6037,12 +6037,7 @@ void Plant::Fire(Zombie* theTargetZombie, int theRow, PlantWeapon thePlantWeapon
         }
     }
 
-    int theOrder = mRenderOrder;
-
-    if (mSeedType == SeedType::SEED_SPLITPEA && thePlantWeapon == PlantWeapon::WEAPON_SECONDARY)   theOrder += 1;
-    else theOrder -= 1;
-
-    Projectile* aProjectile = mBoard->AddProjectile(aOriginX, aOriginY, theOrder, theRow, aProjectileType);
+    Projectile* aProjectile = mBoard->AddProjectile(aOriginX, aOriginY, mRenderOrder - 1, theRow, aProjectileType);
     aProjectile->mDamageRangeFlags = GetDamageRangeFlags(thePlantWeapon);
 
     if (aProjectileType == ProjectileType::PROJECTILE_COBBIG && !FloatApproxEqual(mRad, 0.0f))
