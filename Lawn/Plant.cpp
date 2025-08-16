@@ -1011,9 +1011,9 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
         Reanimation* aHeadReanim2 = mApp->ReanimationGet(mHeadReanimID2);
         aHeadReanim2->StartBlend(20);
         aHeadReanim2->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
-        aHeadReanim2->mAnimRate = 35.0f;
+        aHeadReanim2->mAnimRate = 45.0f;
         aHeadReanim2->SetFramesForLayer("anim_splitpea_shooting");
-        mShootingCounter = 26;
+        mShootingCounter = 51;
     }
     else if (aHeadReanim && aHeadReanim->TrackExists("anim_shooting"))
     {
@@ -1032,9 +1032,13 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
         aHeadReanim->mAnimRate = 35.0f;
         aHeadReanim->SetFramesForLayer(aTrackToPlay);
         
-        if ((mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_LEFTPEATER))
+        if ((mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_LEFTPEATER))
         {
             aHeadReanim->mAnimRate = 45.0f;
+            mShootingCounter = 51;
+        }
+        else if (mSeedType == SeedType::SEED_SPLITPEA)
+        {
             mShootingCounter = 51;
         }
         else if (mSeedType == SeedType::SEED_GATLINGPEA)
@@ -1265,6 +1269,7 @@ void Plant::UpdateShooter()
         }
         else if (mSeedType == SeedType::SEED_SPLITPEA)
         {
+            FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_SECONDARY);
         }
         else if (mSeedType == SeedType::SEED_CACTUS)
@@ -3920,6 +3925,34 @@ void Plant::UpdateShooting()
             Fire(nullptr, mRow, PlantWeapon::WEAPON_PRIMARY);
         }
     }
+    else if (mSeedType == SeedType::SEED_SPLITPEA)
+    {
+        Reanimation* aHeadFrontReanim = mApp->ReanimationTryToGet(mHeadReanimID);
+        Reanimation* aHeadBackReanim = mApp->ReanimationTryToGet(mHeadReanimID2);
+
+        if (aHeadBackReanim->mLoopType == ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD)
+        {
+            if (mShootingCounter == 25)
+            {
+                aHeadBackReanim->StartBlend(20);
+                aHeadBackReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+                aHeadBackReanim->mAnimRate = 45.0f;
+                aHeadBackReanim->SetFramesForLayer("anim_splitpea_shooting");
+            }
+            else if (mShootingCounter == 1 || mShootingCounter == 26)
+            {
+                Fire(nullptr, mRow, PlantWeapon::WEAPON_SECONDARY);
+            }
+        }
+
+        if (aHeadFrontReanim->mLoopType == ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD)
+        {
+            if (mShootingCounter == 26)
+            {
+                Fire(nullptr, mRow, PlantWeapon::WEAPON_PRIMARY);
+            }
+        }
+    }
     else if (mSeedType == SeedType::SEED_CATTAIL)
     {
         if (mShootingCounter == 19)
@@ -3952,19 +3985,6 @@ void Plant::UpdateShooting()
             if (aHeadReanim3->mLoopType == ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD)
             {
                 Fire(nullptr, rowAbove, PlantWeapon::WEAPON_PRIMARY);
-            }
-        }
-        else if (mSeedType == SeedType::SEED_SPLITPEA)
-        {
-            Reanimation* aHeadBackReanim = mApp->ReanimationTryToGet(mHeadReanimID2);
-            Reanimation* aHeadFrontReanim = mApp->ReanimationTryToGet(mHeadReanimID);
-            if (aHeadFrontReanim->mLoopType == ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD && mLaunchCounter == 1)
-            {
-                Fire(nullptr, mRow, PlantWeapon::WEAPON_PRIMARY);
-            }
-            if (aHeadBackReanim->mLoopType == ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD)
-            {
-                Fire(nullptr, mRow, PlantWeapon::WEAPON_SECONDARY);
             }
         }
         else if (mState == PlantState::STATE_CACTUS_LOW)

@@ -681,7 +681,9 @@ void GameSelector::Draw(Graphics* g)
 
 	for (int i = 0; i < 6; i++)
 	{
-		mApp->ReanimationGet(mCloudReanimID[i])->Draw(g);
+		Reanimation* aCloudReanim = mApp->ReanimationTryToGet(mCloudReanimID[i]);
+		if (aCloudReanim)
+			aCloudReanim->Draw(g);
 	}
 
 	aSelectorReanim->DrawRenderGroup(g, 2);  // "SelectorScreen_BG_Center"
