@@ -11901,6 +11901,7 @@ void Board::ButtonDepress(int theId)
 	else if (theId == Board::PAUSE)
 	{
 		mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON_PRESSED;
+		mApp->PlaySample(Sexy::SOUND_PAUSE);
 		mApp->DoPauseDialog();
 	}
 	else if (theId == Board::SPEEDUP)

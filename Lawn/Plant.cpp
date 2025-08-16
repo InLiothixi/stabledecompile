@@ -1,3 +1,4 @@
+
 #include "Coin.h"
 #include "Plant.h"
 #include "Board.h"
@@ -238,9 +239,6 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         else
         {
             mLaunchCounter = RandRangeInt(0, mLaunchRate);
-
-            if (mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_LEFTPEATER)
-                mLaunchCounter = max(mLaunchCounter, 26);
         }
     }
     else
@@ -1034,16 +1032,19 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
         aHeadReanim->mAnimRate = 35.0f;
         aHeadReanim->SetFramesForLayer(aTrackToPlay);
         
-        mShootingCounter = 33;
-        if (mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_LEFTPEATER)
+        if ((mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_LEFTPEATER))
         {
             aHeadReanim->mAnimRate = 45.0f;
-            mShootingCounter = 26;
+            mShootingCounter = 51;
         }
         else if (mSeedType == SeedType::SEED_GATLINGPEA)
         {
             aHeadReanim->mAnimRate = 38.0f;
             mShootingCounter = 100;
+        }
+        else
+        {
+            mShootingCounter = 33;
         }
 
         if (mState == PlantState::STATE_HEAT_WAVE_POWERED)
@@ -1251,9 +1252,6 @@ void Plant::UpdateShooter()
     {
         mLaunchCounter = mLaunchRate - Sexy::Rand(15);
 
-        if (mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_LEFTPEATER)
-            mLaunchCounter = max(mLaunchCounter, 26);
-
         if (mState == PlantState::STATE_HEAT_WAVE_POWERED)
             mLaunchCounter = 26;
 
@@ -1290,7 +1288,8 @@ void Plant::UpdateShooter()
     {
         FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
     }
-    if (mLaunchCounter == 25)
+
+    /*if (mLaunchCounter == 25)
     {
         if (mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_LEFTPEATER)
         {
@@ -1301,7 +1300,7 @@ void Plant::UpdateShooter()
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_SECONDARY);
         }
-    }
+    }*/
 }
 
 //0x45F980
@@ -3902,6 +3901,21 @@ void Plant::UpdateShooting()
     else if (mSeedType == SeedType::SEED_GATLINGPEA)
     {
         if (mShootingCounter == 18 || mShootingCounter == 35 || mShootingCounter == 51 || mShootingCounter == 68)
+        {
+            Fire(nullptr, mRow, PlantWeapon::WEAPON_PRIMARY);
+        }
+    }
+    else if (mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_LEFTPEATER)
+    {
+        if (mShootingCounter == 25)
+        {
+            Reanimation* aHeadReanim = mApp->ReanimationTryToGet(mHeadReanimID);
+            aHeadReanim->StartBlend(20);
+            aHeadReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+            aHeadReanim->mAnimRate = 45.0f;
+            aHeadReanim->SetFramesForLayer("anim_shooting");
+        }
+        else if (mShootingCounter == 1 || mShootingCounter == 26)
         {
             Fire(nullptr, mRow, PlantWeapon::WEAPON_PRIMARY);
         }
