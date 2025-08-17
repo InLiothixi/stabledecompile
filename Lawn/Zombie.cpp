@@ -6486,7 +6486,7 @@ void Zombie::DrawDancerReanim(Graphics* g)
     {
         g->SetColorizeImages(true);
         g->SetColor(aSpotLightColor);
-        TodDrawImageScaledF(g, IMAGE_SPOTLIGHT, -30.0f, -480.0f, 4.0f, 4.0f);
+        TodDrawImageScaledF(g, IMAGE_SPOTLIGHT, -30.0f, -480.0f - 31, 4.0f, 4.2f);
         g->SetColorizeImages(false);
     }
 }
