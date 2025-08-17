@@ -1329,6 +1329,12 @@ void SeedChooserScreen::CloseSeedChooser()
 			aSeedPacket.mActive = false;
 		}
 	}
+
+	mStartButton->SetDisabled(true);
+	mImitaterButton->SetDisabled(true);
+	mStoreButton->SetDisabled(true);
+	mAlmanacButton->SetDisabled(true);
+	mMenuButton->SetDisabled(true);
 	mBoard->mCutScene->EndSeedChooser();
 }
 
