@@ -54,10 +54,10 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 		PFILE* pFile = p_fopen(("resourcepack\\" + theFileName).c_str(), "rb");
 
 		if (pFile == nullptr)
-			pFile = p_fopen(("extension\\" + theFileName), "rb");
+			pFile = p_fopen(("extension\\" + theFileName).c_str(), "rb");
 
 		if (pFile == nullptr)
-			pFile = p_fopen(("dependency\\" + theFileName), "rb");
+			pFile = p_fopen(("dependency\\" + theFileName).c_str(), "rb");
 
 		if (pFile == nullptr)
 			pFile = p_fopen(theFileName.c_str(), "rb");
@@ -86,10 +86,10 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 		PFILE* pFile = p_fopen(("resourcepack\\" + theFileName).c_str(), "rb");
 
 		if (pFile == nullptr)
-			pFile = p_fopen(("extension\\" + theFileName), "rb");
+			pFile = p_fopen(("extension\\" + theFileName).c_str(), "rb");
 
 		if (pFile == nullptr)
-			pFile = p_fopen(("dependency\\" + theFileName), "rb");
+			pFile = p_fopen(("dependency\\" + theFileName).c_str(), "rb");
 
 		if (pFile == nullptr)
 			pFile = p_fopen(theFileName.c_str(), "rb");
