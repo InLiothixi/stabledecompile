@@ -373,7 +373,7 @@ void AlmanacDialog::DrawPlants(Graphics* g)
 
 		if (mApp->Is3DAccelerated())
 		{
-			g->SetClipRect(475, 0, 397, 500);
+			g->SetClipRect(475 + WIDESCREEN_OFFSETX, 0 + WIDESCREEN_OFFSETY, 397, 500);
 			g->mTransY -= 145;
 			mApp->mPoolEffect->PoolEffectDraw(g, aNight);
 			g->mTransY += 145;
