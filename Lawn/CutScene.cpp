@@ -163,14 +163,14 @@ void CutScene::PlaceAZombie(ZombieType theZombieType, int theGridX, int theGridY
 		aZombie->mPosX += Rand(15);  //RandRangeInt(0, 14);
 	}
 
-	aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4);
+	aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_LAWN, 0, (theGridX % 2) * 2 + theGridY * 4 + (Is2x2Zombie(aZombie->mZombieType) ? 4 : 0));
 
 	if (theZombieType == ZombieType::ZOMBIE_BUNGEE)
 	{
 		aZombie->mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 0, 0);
 
 		aZombie->mRow = 0;
-		aZombie->mPosX = theGridX * 50.0f + 950.0f;
+		aZombie->mPosX = theGridX * 50.0f + 950.0f - WIDESCREEN_OFFSETX;
 		aZombie->mPosY = 50.0f;
 	}
 	else if (theZombieType == ZombieType::ZOMBIE_BOBSLED)

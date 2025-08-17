@@ -425,7 +425,7 @@ void SeedChooserScreen::Draw(Graphics* g)
 	}
 	TodDrawString(g, _S("[CHOOSE_YOUR_PLANTS]"), 229, 110, Sexy::FONT_DWARVENTODCRAFT18YELLOW, Color::White, DS_ALIGN_CENTER);
 
-	int aNumSeeds = Has7Rows() ? 49 : 39;
+	int aNumSeeds = Has7Rows() ? 49 : 40;
 	if (mAllowBetaSeedpackets) 
 	{
 		aNumSeeds += NUM_SEEDS_IN_CHOOSER - SEED_IMITATER;
