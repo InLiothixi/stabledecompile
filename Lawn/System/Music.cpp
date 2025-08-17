@@ -51,7 +51,17 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 
 	if (anExt.compare("wav") && anExt.compare("ogg") && anExt.compare("mp3"))  // 如果不是这三种拓展名
 	{
-		PFILE* pFile = p_fopen(theFileName.c_str(), "rb");
+		PFILE* pFile = p_fopen(("resourcepack\\" + theFileName).c_str(), "rb");
+
+		if (pFile == nullptr)
+			pFile = p_fopen(("extension\\" + theFileName), "rb");
+
+		if (pFile == nullptr)
+			pFile = p_fopen(("dependency\\" + theFileName), "rb");
+
+		if (pFile == nullptr)
+			pFile = p_fopen(theFileName.c_str(), "rb");
+
 		if (pFile == nullptr)
 			return false;
 
@@ -73,7 +83,17 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 	}
 	else
 	{
-		PFILE* pFile = p_fopen(theFileName.c_str(), "rb");
+		PFILE* pFile = p_fopen(("resourcepack\\" + theFileName).c_str(), "rb");
+
+		if (pFile == nullptr)
+			pFile = p_fopen(("extension\\" + theFileName), "rb");
+
+		if (pFile == nullptr)
+			pFile = p_fopen(("dependency\\" + theFileName), "rb");
+
+		if (pFile == nullptr)
+			pFile = p_fopen(theFileName.c_str(), "rb");
+
 		if (pFile == nullptr)
 			return false;
 
