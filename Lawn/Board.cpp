@@ -9130,10 +9130,10 @@ void Board::DrawUITop(Graphics* g)
 
 	if (!mApp->IsScreenSaver() && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM))
 	{
-		DrawProgressMeter(g);
-		DrawLevel(g);
 		if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 			DrawSpeed(g);
+		DrawProgressMeter(g);
+		DrawLevel(g);
 	}
 	if (mStoreButton && mApp->IsLastStand())
 	{
