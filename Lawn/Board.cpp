@@ -8772,8 +8772,8 @@ void Board::DrawCover(Graphics* g)
 {
 	g->PushState();
 	g->ClearClipRect();
-	g->mClipRect.mWidth += mApp->mDDInterface->mWideScreenOffsetX;
-	g->mClipRect.mHeight += mApp->mDDInterface->mWideScreenOffsetY;
+	g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth;
+	g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight;
 	switch (mBackground)
 	{
 	case BackgroundType::BACKGROUND_1_DAY:
