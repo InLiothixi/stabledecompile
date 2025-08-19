@@ -214,7 +214,7 @@ HRESULT CALLBACK D3DInterface::PixelFormatsCallback(LPDDPIXELFORMAT theFormat, L
 void D3DInterface::UpdateViewport()
 {
 	HRESULT hr;
-	RECT aRect;
+	/*RECT aRect;
 	GetClientRect(mHWnd, &aRect);
 
 	POINT aTopLeft = {aRect.left, aRect.top};
@@ -222,13 +222,13 @@ void D3DInterface::UpdateViewport()
 	::ClientToScreen(mHWnd, &aTopLeft);
 	::ClientToScreen(mHWnd, &aBotRight);
 
-	RECT aScreenRect = {aTopLeft.x, aTopLeft.y, aBotRight.x, aBotRight.y};
+	RECT aScreenRect = {aTopLeft.x, aTopLeft.y, aBotRight.x, aBotRight.y};*/
 
 	D3DVIEWPORT7 &aD3DViewport = mD3DViewport;
 	aD3DViewport.dwX = 0;
 	aD3DViewport.dwY = 0;
-	aD3DViewport.dwWidth = aScreenRect.right - aScreenRect.left;
-	aD3DViewport.dwHeight = aScreenRect.bottom - aScreenRect.top;
+	aD3DViewport.dwWidth = mWidth;/*aScreenRect.right - aScreenRect.left;*/
+	aD3DViewport.dwHeight = mHeight;/*aScreenRect.bottom - aScreenRect.top;*/
 	aD3DViewport.dvMinZ = 0; //-2048.0f;
 	aD3DViewport.dvMaxZ = 1; //2048.0f;
 

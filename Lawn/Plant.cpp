@@ -4532,15 +4532,15 @@ void Plant::DrawMagnetItems(Graphics* g)
             {
                 aImage = IMAGE_REANIM_ZOMBIE_SCREENDOOR3;
             }
-            else if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_DOOR_1)
+            else if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_TRASHCAN_1)
             {
                 aImage = IMAGE_REANIM_ZOMBIE_TRASHCAN1;
             }
-            else if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_DOOR_2)
+            else if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_TRASHCAN_2)
             {
                 aImage = IMAGE_REANIM_ZOMBIE_TRASHCAN2;
             }
-            else if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_DOOR_3)
+            else if (aMagnetItem->mItemType == MagnetItemType::MAGNET_ITEM_TRASHCAN_3)
             {
                 aImage = IMAGE_REANIM_ZOMBIE_TRASHCAN3;
             }

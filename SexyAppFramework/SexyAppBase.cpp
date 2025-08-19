@@ -201,6 +201,12 @@ unsigned char gDraggingCursorData[] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	0x00
 };
+
+static const int mWidths[] = { 800, 1066, 1280 };
+static const int mHeights[] = { 600, 720 };
+static const int mNumWidths = sizeof(mWidths) / sizeof(int);
+static const int mNumHeights = sizeof(mHeights) / sizeof(int);
+
 static DDImage* gFPSImage = NULL; 
 
 //////////////////////////////////////////////////////////////////////////
@@ -3955,35 +3961,26 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 						int adjustedWidth = newWidth;
 						int adjustedHeight = newHeight;
 
-						const float WRatio = 4.0f / 3.0f;
-						const float HRatio = 3.0f / 4.0f;
+						const int widthIndex = aSexyApp->mResolutionMode % mNumWidths;
+						const int heightIndex = aSexyApp->mResolutionMode / mNumWidths;
 
-						if (newWidth > newHeight * WRatio) {
+						const float WRatio = mWidths[widthIndex] / (float)mHeights[heightIndex];
+						const float HRatio = mHeights[heightIndex] / (float)mWidths[widthIndex];
+
+						if (newWidth >= newHeight * WRatio) 
+						{
 							adjustedWidth = (int)(newHeight * WRatio);
 						}
-						else if (newHeight > newWidth * HRatio) {
+						else if (newHeight >= newWidth * HRatio) 
+						{
 							adjustedHeight = (int)(newWidth * HRatio);
 						}
 
-						/*if (gSexyAppBase->mWidescreenAware)
-						{
-							gSexyAppBase->mDDInterface->mWidth = newWidth;
-							gSexyAppBase->mDDInterface->mHeight = newHeight;
-							gSexyAppBase->mDDInterface->mAspect = gSexyAppBase->mWindowAspect;
-
-							gSexyAppBase->mDDInterface->mPresentationRect.mWidth = newWidth;
-							gSexyAppBase->mDDInterface->mPresentationRect.mHeight = newHeight;
-							gSexyAppBase->mDDInterface->mPresentationRect.mX = 0;
-							gSexyAppBase->mDDInterface->mPresentationRect.mY = 0;
-						}
-						else*/
-						{
-
-							gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
-							gSexyAppBase->mDDInterface->mPresentationRect.mHeight = adjustedHeight;
-							gSexyAppBase->mDDInterface->mPresentationRect.mX = (newWidth - adjustedWidth) / 2;
-							gSexyAppBase->mDDInterface->mPresentationRect.mY = (newHeight - adjustedHeight) / 2;
-						}
+						gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
+						gSexyAppBase->mDDInterface->mPresentationRect.mHeight = adjustedHeight;
+						gSexyAppBase->mDDInterface->mPresentationRect.mX = (newWidth - adjustedWidth) / 2;
+						gSexyAppBase->mDDInterface->mPresentationRect.mY = (newHeight - adjustedHeight) / 2;
+						
 
 						gSexyAppBase->mScreenBounds.mX = (gSexyAppBase->mWidth - gSexyAppBase->mDDInterface->mWidth) / 2;
 						gSexyAppBase->mScreenBounds.mY = (gSexyAppBase->mHeight - gSexyAppBase->mDDInterface->mHeight) / 2;
@@ -4067,9 +4064,15 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 
 	case WM_GETMINMAXINFO: 
 	{
-		MINMAXINFO* pMinMax = (MINMAXINFO*)lParam;
-		pMinMax->ptMinTrackSize.x = 816;
-		pMinMax->ptMinTrackSize.y = 639;
+		if (aSexyApp!=NULL)
+		{
+			const int widthIndex = aSexyApp->mResolutionMode % mNumWidths;
+			const int heightIndex = aSexyApp->mResolutionMode / mNumWidths;
+
+			MINMAXINFO* pMinMax = (MINMAXINFO*)lParam;
+			pMinMax->ptMinTrackSize.x = mWidths[widthIndex] + 16;
+			pMinMax->ptMinTrackSize.y = mHeights[heightIndex] + 39;
+		}
 		break;
 	}
 
@@ -4100,13 +4103,16 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			int adjustedWidth = newWidth;
 			int adjustedHeight = newHeight;
 
-			const float WRatio = 4.0f / 3.0f;
-			const float HRatio = 3.0f / 4.0f;
+			const int widthIndex = aSexyApp->mResolutionMode % mNumWidths;
+			const int heightIndex = aSexyApp->mResolutionMode / mNumWidths;
 
-			if (newWidth > newHeight * WRatio) {
+			const float WRatio = mWidths[widthIndex] / (float)mHeights[heightIndex];
+			const float HRatio = mHeights[heightIndex] / (float)mWidths[widthIndex];
+
+			if (newWidth >= newHeight * WRatio) {
 				adjustedWidth = (int)(newHeight * WRatio);
 			}
-			else if (newHeight > newWidth * HRatio) {
+			else if (newHeight >= newWidth * HRatio) {
 				adjustedHeight = (int)(newWidth * HRatio);
 			}
 
@@ -5242,11 +5248,14 @@ void SexyAppBase::MakeWindow()
 
 		if (!isMaximized && mIsWindowed && !mFullScreenWindow)
 		{
+			const int widthIndex = mResolutionMode % mNumWidths;
+			const int heightIndex = mResolutionMode / mNumWidths;
+
 			RECT aRect2;
 			aRect2.left = 0;
 			aRect2.top = 0;
-			aRect2.right = mPreferredWIDTH != -1 ? mPreferredWIDTH : 800;
-			aRect2.bottom = mPreferredHEIGHT != -1 ? mPreferredHEIGHT : 600;
+			aRect2.right = mPreferredWIDTH != -1 ? mPreferredWIDTH : mWidths[widthIndex];
+			aRect2.bottom = mPreferredHEIGHT != -1 ? mPreferredHEIGHT : mHeights[heightIndex];
 
 			BOOL worked2 = AdjustWindowRect(&aRect2, aWindowStyle, FALSE);
 
@@ -5447,57 +5456,37 @@ void SexyAppBase::MakeWindow()
 
 	if (mIsWindowed && !mFullScreenWindow)
 	{
-		int adjustedWidth = mPreferredWIDTH != -1 ? mPreferredWIDTH : 800;
-		int adjustedHeight = mPreferredHEIGHT != -1 ? mPreferredHEIGHT : 600;
+		const int widthIndex = mResolutionMode % mNumWidths;
+		const int heightIndex = mResolutionMode / mNumWidths;
+
+		int adjustedWidth = mPreferredWIDTH != -1 ? mPreferredWIDTH : mWidths[widthIndex];
+		int adjustedHeight = mPreferredHEIGHT != -1 ? mPreferredHEIGHT : mHeights[heightIndex];
 
 		int originWidth = adjustedWidth;
 		int originHeight = adjustedHeight;
-		const float WRatio = 4.0f / 3.0f;
-		const float HRatio = 3.0f / 4.0f;
 
-		const int stretchWidth = (int)round(adjustedHeight * WRatio);
-		const int stretchHeight = (int)round(adjustedWidth * HRatio);
+		const float WRatio = mWidths[widthIndex] / (float)mHeights[heightIndex];
+		const float HRatio = mHeights[heightIndex] / (float)mWidths[widthIndex];
 
-		if (adjustedWidth > stretchWidth) {
-			adjustedWidth = stretchWidth;
-		}
-		else if (adjustedHeight > stretchHeight) {
-			adjustedHeight = stretchHeight;
-		}
-
-		/*if (mPreferredMAXIMIZED) {
-			RECT aWindowRect;
-			GetClientRect(gSexyAppBase->mHWnd, &aWindowRect);
-			adjustedWidth = aWindowRect.right;
-			adjustedHeight = aWindowRect.bottom;
-			originWidth = aWindowRect.right;
-			originHeight = aWindowRect.bottom;
-		}*/
-
-		/*if (gSexyAppBase->mWidescreenAware)
+		if (originWidth >= originHeight * WRatio) 
 		{
-			gSexyAppBase->mDDInterface->mWidth = mPreferredWIDTH;
-			gSexyAppBase->mDDInterface->mHeight = mPreferredHEIGHT;
-			gSexyAppBase->mDDInterface->mAspect = gSexyAppBase->mWindowAspect;
-
-			gSexyAppBase->mDDInterface->mPresentationRect.mWidth = mPreferredWIDTH;
-			gSexyAppBase->mDDInterface->mPresentationRect.mHeight = mPreferredHEIGHT;
-			gSexyAppBase->mDDInterface->mPresentationRect.mX = 0;
-			gSexyAppBase->mDDInterface->mPresentationRect.mY = 0;
+			adjustedWidth = (int)(originHeight * WRatio);
 		}
-		else*/
+		else if (originHeight >= originWidth * HRatio) 
 		{
-
-			gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
-			gSexyAppBase->mDDInterface->mPresentationRect.mHeight = adjustedHeight;
-			gSexyAppBase->mDDInterface->mPresentationRect.mX = (originWidth - adjustedWidth) / 2;
-			gSexyAppBase->mDDInterface->mPresentationRect.mY = (originHeight - adjustedHeight) / 2;
+			adjustedHeight = (int)(originWidth * HRatio);
 		}
+
+		gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
+		gSexyAppBase->mDDInterface->mPresentationRect.mHeight = adjustedHeight;
+		gSexyAppBase->mDDInterface->mPresentationRect.mX = (originWidth - adjustedWidth) / 2;
+		gSexyAppBase->mDDInterface->mPresentationRect.mY = (originHeight - adjustedHeight) / 2;
 
 		gSexyAppBase->mScreenBounds.mX = (gSexyAppBase->mWidth - gSexyAppBase->mDDInterface->mWidth) / 2;
 		gSexyAppBase->mScreenBounds.mY = (gSexyAppBase->mHeight - gSexyAppBase->mDDInterface->mHeight) / 2;
 		gSexyAppBase->mScreenBounds.mWidth = gSexyAppBase->mDDInterface->mWidth;
 		gSexyAppBase->mScreenBounds.mHeight = gSexyAppBase->mDDInterface->mHeight;
+
 		gSexyAppBase->mWidgetManager->Resize(gSexyAppBase->mScreenBounds, gSexyAppBase->mDDInterface->mPresentationRect);
 
 		/*HDC hdc = GetDC(gSexyAppBase->mHWnd);
@@ -6307,23 +6296,27 @@ int SexyAppBase::InitDDInterface()
 	{
 		if (mIsWindowed && !mFullScreenWindow)
 		{
-			int aWidth = mIsWindowed && !mFullScreenWindow && mPreferredWIDTH != -1 ? mPreferredWIDTH : mWidth;
-			int aHeight = mIsWindowed && !mFullScreenWindow && mPreferredHEIGHT != -1 ? mPreferredHEIGHT : mHeight;
+			const int widthIndex = mResolutionMode % mNumWidths;
+			const int heightIndex = mResolutionMode / mNumWidths;
+
+			int aWidth = mIsWindowed && !mFullScreenWindow && mPreferredWIDTH != -1 ? mPreferredWIDTH : mWidths[widthIndex];
+			int aHeight = mIsWindowed && !mFullScreenWindow && mPreferredHEIGHT != -1 ? mPreferredHEIGHT : mHeights[heightIndex];
 
 			int adjustedWidth = aWidth;
 			int adjustedHeight = aHeight;
 
-			const float WRatio = 4.0f / 3.0f;
-			const float HRatio = 3.0f / 4.0f;
+			const float WRatio = mWidths[widthIndex] / (float)mHeights[heightIndex];
+			const float HRatio = mHeights[heightIndex] / (float)mWidths[widthIndex];
 
-			if (aWidth > aHeight * WRatio) {
+			if (aWidth >= aHeight * WRatio)
+			{
 				adjustedWidth = (int)(aHeight * WRatio);
 			}
-			else if (aHeight > aWidth * HRatio) {
+			else if (aHeight >= aWidth * HRatio)
+			{
 				adjustedHeight = (int)(aWidth * HRatio);
 			}
 
-		
 			mDDInterface->mPresentationRect.mWidth = adjustedWidth;
 			mDDInterface->mPresentationRect.mHeight = adjustedHeight;
 			mDDInterface->mPresentationRect.mX = (aWidth - adjustedWidth) / 2;
@@ -7839,35 +7832,26 @@ void SexyAppBase::Set3DAcclerated(bool is3D, bool reinit)
 			int adjustedWidth = mPreferredWIDTH;
 			int adjustedHeight = mPreferredHEIGHT;
 
-			const float WRatio = 4.0f / 3.0f;
-			const float HRatio = 3.0f / 4.0f;
+			const int widthIndex = mResolutionMode % mNumWidths;
+			const int heightIndex = mResolutionMode / mNumWidths;
 
-			if (adjustedWidth > adjustedHeight * WRatio) {
-				adjustedWidth = (int)(adjustedHeight * WRatio);
-			}
-			else if (adjustedHeight > adjustedWidth * HRatio) {
-				adjustedHeight = (int)(adjustedWidth * HRatio);
-			}
+			const float WRatio = mWidths[widthIndex] / (float)mHeights[heightIndex];
+			const float HRatio = mHeights[heightIndex] / (float)mWidths[widthIndex];
 
-			if (gSexyAppBase->mWidescreenAware)
+			if (mPreferredWIDTH >= mPreferredHEIGHT * WRatio)
 			{
-				gSexyAppBase->mDDInterface->mWidth = mPreferredWIDTH;
-				gSexyAppBase->mDDInterface->mHeight = mPreferredHEIGHT;
-				gSexyAppBase->mDDInterface->mAspect = gSexyAppBase->mWindowAspect;
-
-				gSexyAppBase->mDDInterface->mPresentationRect.mWidth = mPreferredWIDTH;
-				gSexyAppBase->mDDInterface->mPresentationRect.mHeight = mPreferredHEIGHT;
-				gSexyAppBase->mDDInterface->mPresentationRect.mX = 0;
-				gSexyAppBase->mDDInterface->mPresentationRect.mY = 0;
+				adjustedWidth = (int)(mPreferredHEIGHT * WRatio);
 			}
-			else
+			else if (mPreferredHEIGHT >= mPreferredWIDTH * HRatio)
 			{
-
-				gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
-				gSexyAppBase->mDDInterface->mPresentationRect.mHeight = adjustedHeight;
-				gSexyAppBase->mDDInterface->mPresentationRect.mX = (mPreferredWIDTH - adjustedWidth) / 2;
-				gSexyAppBase->mDDInterface->mPresentationRect.mY = (mPreferredHEIGHT - adjustedHeight) / 2;
+				adjustedHeight = (int)(mPreferredWIDTH * HRatio);
 			}
+
+			gSexyAppBase->mDDInterface->mPresentationRect.mWidth = adjustedWidth;
+			gSexyAppBase->mDDInterface->mPresentationRect.mHeight = adjustedHeight;
+			gSexyAppBase->mDDInterface->mPresentationRect.mX = (mPreferredWIDTH - adjustedWidth) / 2;
+			gSexyAppBase->mDDInterface->mPresentationRect.mY = (mPreferredHEIGHT - adjustedHeight) / 2;
+			
 
 			gSexyAppBase->mScreenBounds.mX = (gSexyAppBase->mWidth - gSexyAppBase->mDDInterface->mWidth) / 2;
 			gSexyAppBase->mScreenBounds.mY = (gSexyAppBase->mHeight - gSexyAppBase->mDDInterface->mHeight) / 2;
