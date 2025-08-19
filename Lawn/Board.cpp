@@ -8747,8 +8747,13 @@ void Board::DrawFog(Graphics* g)
 				aLightnessVariant = 255;
 			}
 
+			g->PushState();
 			g->SetColorizeImages(true);
 			g->SetColor(Color(aColorVariant, aColorVariant, aLightnessVariant, aFadeAmount));
+
+			g->ClearClipRect();
+			g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth - 1;
+			g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight - 1;
 
 			Rect srcRect(aImageFog->GetCelWidth() * aCelCol, 0, aImageFog->GetCelWidth(), aImageFog->GetCelHeight());
 			g->DrawImageF(aImageFog, aPosX, aPosY, srcRect);
@@ -8758,7 +8763,7 @@ void Board::DrawFog(Graphics* g)
 				g->DrawImageF(aImageFog, aPosX + 80, aPosY, srcRect);
 				//g->DrawImageCel(aImageFog, aPosX + 80 + 31, aPosY, aCelCol, 0);
 			}
-			g->SetColorizeImages(false);
+			g->PopState();
 		}
 	}
 }
@@ -8791,8 +8796,8 @@ void Board::DrawForeGround(Graphics* g)
 {
 	g->PushState();
 	g->ClearClipRect();
-	g->mClipRect.mWidth += mApp->mDDInterface->mWideScreenOffsetX;
-	g->mClipRect.mHeight += mApp->mDDInterface->mWideScreenOffsetY;
+	g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth - 1;
+	g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight - 1;
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_5_ROOF:

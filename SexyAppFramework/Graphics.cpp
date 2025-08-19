@@ -161,8 +161,8 @@ bool Graphics::GetLinearBlend()
 void Graphics::ClearRect(int theX, int theY, int theWidth, int theHeight)
 {
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight).Intersection(aClipRect);
 	mDestImage->ClearRect(aDestRect);
@@ -179,8 +179,8 @@ void Graphics::FillRect(int theX, int theY, int theWidth, int theHeight)
 		return;
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	Rect aDestRect = Rect(theX + mTransX, theY + mTransY, theWidth, theHeight).Intersection(aClipRect);
 	mDestImage->FillRect(aDestRect, mColor, mDrawMode);
@@ -200,8 +200,8 @@ void Graphics::DrawRect(int theX, int theY, int theWidth, int theHeight)
 	Rect aFullDestRect = Rect(theX + mTransX, theY + mTransY, theWidth + 1, theHeight + 1);	
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	Rect aFullClippedRect = aFullDestRect.Intersection(aClipRect);
 
@@ -290,8 +290,8 @@ void Graphics::PolyFill(const Point *theVertexList, int theNumVertices, bool con
     int *ind;		/* list of vertex indices, sorted by mPFPoints[ind[j]].y */		
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	int aMinX = aClipRect.mX;
 	int aMaxX = aClipRect.mX + aClipRect.mWidth - 1;
@@ -419,8 +419,8 @@ void Graphics::PolyFillAA(const Point *theVertexList, int theNumVertices, bool c
     int *ind;		/* list of vertex indices, sorted by mPFPoints[ind[j]].y */		
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	int aMinX = aClipRect.mX;
 	int aMaxX = aClipRect.mX + aClipRect.mWidth - 1;
@@ -581,8 +581,8 @@ bool Graphics::DrawLineClipHelper(double* theStartX, double* theStartY, double* 
 	}
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	if (aStartX < aClipRect.mX)
 	{
@@ -670,8 +670,8 @@ void Graphics::DrawLineAA(int theStartX, int theStartY, int theEndX, int theEndY
 void Graphics::DrawString(const SexyString& theString, int theX, int theY)
 {
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	if (mFont != NULL)
 		mFont->DrawString(this, theX, theY, theString, mColor, aClipRect);
@@ -689,8 +689,8 @@ void Graphics::DrawImage(Sexy::Image* theImage, int theX, int theY)
 	theY += mTransY;	
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	Rect aDestRect = Rect(theX, theY, theImage->GetWidth(), theImage->GetHeight()).Intersection(aClipRect);
 	Rect aSrcRect(aDestRect.mX - theX, aDestRect.mY - theY, aDestRect.mWidth, aDestRect.mHeight);
@@ -712,8 +712,8 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, const Rect& theSrc
 	theY += mTransY;
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	if (mScaleX!=1 || mScaleY!=1)
 	{
@@ -753,8 +753,8 @@ void Graphics::DrawImageMirror(Image* theImage, int theX, int theY, const Rect& 
 		return;	
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	Rect aDestRect = Rect(theX, theY, theSrcRect.mWidth, theSrcRect.mHeight).Intersection(aClipRect);
 
@@ -779,8 +779,8 @@ void Graphics::DrawImageMirror(Image* theImage, const Rect& theDestRect, const R
 	Rect aDestRect = Rect(theDestRect.mX + mTransX, theDestRect.mY + mTransY, theDestRect.mWidth, theDestRect.mHeight);
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	mDestImage->StretchBltMirror(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 }
@@ -792,8 +792,8 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, int theStretchedWi
 	Rect aSrcRect = Rect(0, 0, theImage->mWidth, theImage->mHeight);
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	mDestImage->StretchBlt(theImage, aDestRect, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 }
@@ -803,8 +803,8 @@ void Graphics::DrawImage(Image* theImage, const Rect& theDestRect, const Rect& t
 	Rect aDestRect = Rect(theDestRect.mX + mTransX, theDestRect.mY + mTransY, theDestRect.mWidth, theDestRect.mHeight);
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	mDestImage->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mFastStretch);
 }
@@ -817,8 +817,8 @@ void Graphics::DrawImageF(Image* theImage, float theX, float theY)
 	Rect aSrcRect(0, 0, theImage->mWidth, theImage->mHeight);
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	mDestImage->BltF(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode);
 }
@@ -832,8 +832,8 @@ void Graphics::DrawImageF(Image* theImage, float theX, float theY, const Rect& t
 	theY += mTransY;
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 	
 	mDestImage->BltF(theImage, theX, theY, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode);
 }
@@ -885,8 +885,8 @@ void Graphics::DrawImageRotatedF(Image* theImage, float theX, float theY, double
 	theY += mTransY;	
 
 	Rect aClipRect = Rect(mClipRect.mX, mClipRect.mY, mClipRect.mWidth, mClipRect.mHeight);
-	if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
 	if (theSrcRect==NULL)
 	{

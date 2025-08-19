@@ -637,10 +637,16 @@ void Reanimation::ReanimBltMatrix(Graphics* g, Image* theImage, SexyMatrix3& the
 		Graphics altG(*g);
 		altG.mTransX = 0;
 		altG.mTransY = 0;
-		altG.SetClipRect(theClipRect);
 		altG.SetDrawMode(theDrawMode);
 		altG.SetLinearBlend(false);
+		altG.SetFastStretch(true);
 		bool isMirrored = aScaleX < 0;
+
+
+		altG.ClearClipRect();
+		altG.mClipRect.mWidth = BOARD_WIDTH + gSexyAppBase->mDDInterface->mWideScreenExtraWidth - 1;
+		altG.mClipRect.mHeight = BOARD_HEIGHT + gSexyAppBase->mDDInterface->mWideScreenExtraHeight - 1;
+		
 		
 		if (FloatApproxEqual(abs(aScaleX), 1.0f) && FloatApproxEqual(abs(aScaleY), 1.0f))  // 如果无拉伸
 		{
