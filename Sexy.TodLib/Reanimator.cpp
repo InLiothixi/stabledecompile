@@ -546,8 +546,7 @@ void BlendTransform(ReanimatorTransform* theResult, const ReanimatorTransform& t
 {
 	theResult->mTransX = FloatLerp(theTransform1.mTransX, theTransform2.mTransX, theBlendFactor);
 	theResult->mTransY = FloatLerp(theTransform1.mTransY, theTransform2.mTransY, theBlendFactor);
-	const bool flipX = ShouldFlipHorizontally(theTransform1.mSkewX, theTransform2.mScaleX) ||
-		ShouldFlipHorizontally(theTransform1.mSkewY, theTransform2.mScaleY);
+	const bool flipX = ShouldFlipHorizontally(theTransform1.mSkewX, theTransform2.mSkewX);
 
 	theResult->mScaleX = FloatLerp(theTransform1.mScaleX, theTransform2.mScaleX * (flipX ? -1 : 1), theBlendFactor);
 	theResult->mScaleY = FloatLerp(theTransform1.mScaleY, theTransform2.mScaleY, theBlendFactor);
@@ -566,6 +565,7 @@ void BlendTransform(ReanimatorTransform* theResult, const ReanimatorTransform& t
 		aSkewY2 = theTransform1.mSkewY;  // （aSkewY2 -= 360.0f）
 	while (aSkewY2 < theTransform1.mSkewY - 180.0f)
 		aSkewY2 = theTransform1.mSkewY;  // （aSkewY2 += 360.0f）
+
 	if (!flipX)
 	{
 		theResult->mSkewX = FloatLerp(theTransform1.mSkewX, aSkewX2, theBlendFactor);
@@ -701,6 +701,7 @@ bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, int theRenderGroup, 
 	ReanimatorTransform aTransform;
 	ReanimatorTrackInstance* aTrackInstance = &mTrackInstances[theTrackIndex];  // 目标轨道的指针
 	GetCurrentTransform(theTrackIndex, &aTransform);  // 取得当前动画变换
+	if (aTransform.mScaleX < 0 && aTransform.mImage != NULL && aTransform.mImage->mWidth)	aTransform.mTransX += aTransform.mImage->GetWidth() * fabs(aTransform.mScaleX);
 	int aImageFrame = FloatRoundToInt(aTransform.mFrame);  // 图像在贴图中所处的份数
 	if (aImageFrame < 0)  // 不存在图像时，返回
 		return false;
