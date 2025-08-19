@@ -144,24 +144,25 @@ with
 
 ### Programmers
   InLiothixie
-  YourLocalMoon
-  Electr0Gunner
 
 ### Bug Hunter
   Exter
   Unnamed
 
 ### Artists
+  Andreko
   ReatExists
   Nostalgic2137
   Fruko
 
 ### Animators
-  Unnamed
+  Unnamed 
 
 ### Music Composers
-  Drenco
+  Drenco 
 
 ### Special Thanks
-  Exter
-  Adnini
+  YourLocalMoon 
+  Electr0Gunner 
+  Exter 
+  Adnini 
