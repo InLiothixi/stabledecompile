@@ -71,8 +71,8 @@ SeedChooserScreen::SeedChooserScreen()
 	if (!mApp->mTodCheatKeys)
 	{
 		mRandomButton->mBtnNoDraw = true;
-		mRandomButton->mDisabled = true;
 	}
+	mRandomButton->mDisabled = true;
 
 	Color aBtnColor = Color(42, 42, 90);
 	Image* aBtnImage = Sexy::IMAGE_SEEDCHOOSER_BUTTON2;
@@ -1335,6 +1335,7 @@ void SeedChooserScreen::CloseSeedChooser()
 	mStoreButton->SetDisabled(true);
 	mAlmanacButton->SetDisabled(true);
 	mMenuButton->SetDisabled(true);
+	mRandomButton->SetDisabled(true);
 	mBoard->mCutScene->EndSeedChooser();
 }
 

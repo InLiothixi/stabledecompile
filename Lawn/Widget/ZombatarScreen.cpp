@@ -65,7 +65,7 @@ void ZombatarWidget::Update() {
 }
 
 void ZombatarWidget::Draw(Graphics* g) {
-	g->DrawImage(IMAGE_ZOMBATAR_MAIN_BG, 0, 0);
+	//g->DrawImage(IMAGE_ZOMBATAR_MAIN_BG, 0, 0);
 
 	Graphics leafG(*g);
 	leafG.mTransX -= BOARD_WIDTH;
