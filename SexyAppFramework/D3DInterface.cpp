@@ -403,9 +403,12 @@ bool D3DInterface::PreDraw()
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, TRUE);
 
 		// filter states 
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFG_POINT); 
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, D3DTFG_POINT); 
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, D3DTFG_POINT); 
+		mD3DDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, TRUE);
+		mD3DDevice->SetTextureStageState(0, D3DTSS_MAXMIPLEVEL, 0);
+
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFN_LINEAR);
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, D3DTFG_LINEAR);
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, D3DTFP_LINEAR);
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_COLORARG2, D3DTA_CURRENT );
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG2, D3DTA_CURRENT );
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_COLORARG1, D3DTA_TEXTURE );
@@ -1185,13 +1188,13 @@ static void SetLinearFilter(LPDIRECT3DDEVICE7 theDevice, bool linear)
 {
 	if (gLinearFilter != linear)
 	{
-		D3DTEXTUREMAGFILTER aFilter = linear ? D3DTFG_LINEAR : D3DTFG_POINT;
+		//D3DTEXTUREMAGFILTER aFilter = linear ? D3DTFG_ANISOTROPIC : D3DTFG_POINT;
 
 		const char *aDebugContext = linear ? "SetTextureStageState LINEAR" : "SetTextureStageState Point";
 
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, aFilter), aDebugContext);
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, aFilter),aDebugContext);
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, aFilter),aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, linear ? D3DTFN_LINEAR : D3DTFG_POINT), aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, linear ? D3DTFG_LINEAR : D3DTFG_POINT),aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, linear ? D3DTFP_LINEAR : D3DTFG_POINT),aDebugContext);
 		gLinearFilter = linear;
 	}
 }
