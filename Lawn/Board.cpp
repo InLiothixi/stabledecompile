@@ -8796,8 +8796,8 @@ void Board::DrawForeGround(Graphics* g)
 {
 	g->PushState();
 	g->ClearClipRect();
-	g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth - 1;
-	g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight - 1;
+	g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth;
+	g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight;
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_5_ROOF:

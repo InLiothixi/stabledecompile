@@ -666,9 +666,8 @@ void Reanimation::ReanimBltMatrix(Graphics* g, Image* theImage, SexyMatrix3& the
 
 
 		altG.ClearClipRect();
-		altG.mClipRect.mWidth = BOARD_WIDTH + gSexyAppBase->mDDInterface->mWideScreenExtraWidth - 1;
-		altG.mClipRect.mHeight = BOARD_HEIGHT + gSexyAppBase->mDDInterface->mWideScreenExtraHeight - 1;
-		
+		altG.mClipRect.mWidth = BOARD_WIDTH + gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
+		altG.mClipRect.mHeight = BOARD_HEIGHT + gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
 		
 		if (FloatApproxEqual(abs(aScaleX), 1.0f) && FloatApproxEqual(abs(aScaleY), 1.0f))  // 如果无拉伸
 		{
