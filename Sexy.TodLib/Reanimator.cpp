@@ -530,17 +530,32 @@ void Reanimation::Update()
 	}
 }
 
+float NormalizeAngle(float angle)
+{
+	return fmodf(angle + 180.0f, 360.0f) - 180.0f;
+}
+
+bool ShouldFlipHorizontally(float fromSkewX, float toSkewX)
+{
+	float delta = NormalizeAngle(toSkewX - fromSkewX);
+	return delta > 90.0f || delta < -90.0f;
+}
+
 //0x471E50
 void BlendTransform(ReanimatorTransform* theResult, const ReanimatorTransform& theTransform1, const ReanimatorTransform& theTransform2, float theBlendFactor)
 {
 	theResult->mTransX = FloatLerp(theTransform1.mTransX, theTransform2.mTransX, theBlendFactor);
 	theResult->mTransY = FloatLerp(theTransform1.mTransY, theTransform2.mTransY, theBlendFactor);
-	theResult->mScaleX = FloatLerp(theTransform1.mScaleX, theTransform2.mScaleX, theBlendFactor);
+	const bool flipX = ShouldFlipHorizontally(theTransform1.mSkewX, theTransform2.mScaleX) ||
+		ShouldFlipHorizontally(theTransform1.mSkewY, theTransform2.mScaleY);
+
+	theResult->mScaleX = FloatLerp(theTransform1.mScaleX, theTransform2.mScaleX * (flipX ? -1 : 1), theBlendFactor);
 	theResult->mScaleY = FloatLerp(theTransform1.mScaleY, theTransform2.mScaleY, theBlendFactor);
 	theResult->mAlpha = FloatLerp(theTransform1.mAlpha, theTransform2.mAlpha, theBlendFactor);
 
 	float aSkewX2 = theTransform2.mSkewX;
 	float aSkewY2 = theTransform2.mSkewY;
+
 	// 推测这里原意是为了确保从两个变换之间的倾斜角度不超过 π（WP 版），
 	// 原版（以及内测版）实际为，倾斜超过 π 时 theTransform2 变换无效
 	while (aSkewX2 > theTransform1.mSkewX + 180.0f)
@@ -551,9 +566,16 @@ void BlendTransform(ReanimatorTransform* theResult, const ReanimatorTransform& t
 		aSkewY2 = theTransform1.mSkewY;  // （aSkewY2 -= 360.0f）
 	while (aSkewY2 < theTransform1.mSkewY - 180.0f)
 		aSkewY2 = theTransform1.mSkewY;  // （aSkewY2 += 360.0f）
-
-	theResult->mSkewX = FloatLerp(theTransform1.mSkewX, aSkewX2, theBlendFactor);
-	theResult->mSkewY = FloatLerp(theTransform1.mSkewY, aSkewY2, theBlendFactor);
+	if (!flipX)
+	{
+		theResult->mSkewX = FloatLerp(theTransform1.mSkewX, aSkewX2, theBlendFactor);
+		theResult->mSkewY = FloatLerp(theTransform1.mSkewY, aSkewY2, theBlendFactor);
+	}
+	else
+	{
+		theResult->mSkewX = theTransform1.mSkewX;
+		theResult->mSkewY = theTransform1.mSkewY;
+	}
 	theResult->mFrame = theTransform1.mFrame;
 	theResult->mFont = theTransform1.mFont;
 	theResult->mText = theTransform1.mText;
