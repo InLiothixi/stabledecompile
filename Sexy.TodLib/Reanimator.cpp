@@ -701,7 +701,11 @@ bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, int theRenderGroup, 
 	ReanimatorTransform aTransform;
 	ReanimatorTrackInstance* aTrackInstance = &mTrackInstances[theTrackIndex];  // 目标轨道的指针
 	GetCurrentTransform(theTrackIndex, &aTransform);  // 取得当前动画变换
-	if (aTransform.mScaleX < 0 && aTransform.mImage != NULL && aTransform.mImage->mWidth)	aTransform.mTransX += aTransform.mImage->GetWidth() * fabs(aTransform.mScaleX);
+	if (aTransform.mScaleX < 0 && aTransform.mImage)	
+	{
+		if (reinterpret_cast<uintptr_t>(aTransform.mImage) > 0x1000)
+			aTransform.mTransX += aTransform.mImage->GetWidth() * fabs(aTransform.mScaleX);
+	}
 	int aImageFrame = FloatRoundToInt(aTransform.mFrame);  // 图像在贴图中所处的份数
 	if (aImageFrame < 0)  // 不存在图像时，返回
 		return false;
