@@ -412,12 +412,9 @@ bool D3DInterface::PreDraw()
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, TRUE);
 
 		// filter states 
-		mD3DDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, TRUE);
-		mD3DDevice->SetTextureStageState(0, D3DTSS_MAXMIPLEVEL, 0);
-
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFN_LINEAR);
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, D3DTFG_LINEAR);
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, D3DTFP_LINEAR);
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFN_POINT);
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, D3DTFG_POINT);
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, D3DTFP_NONE);
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_COLORARG2, D3DTA_CURRENT );
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG2, D3DTA_CURRENT );
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_COLORARG1, D3DTA_TEXTURE );
@@ -456,7 +453,7 @@ static LPDIRECTDRAWSURFACE7 CreateTextureSurface(LPDIRECT3DDEVICE7 theDevice, LP
 	
 	aDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 	
-	aDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE;	
+	aDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE;
 //	aDesc.ddsCaps.dwCaps2 = DDSCAPS2_TEXTUREMANAGE;
 	aDesc.ddsCaps.dwCaps2 = DDSCAPS2_D3DTEXTUREMANAGE;
 
@@ -1197,13 +1194,12 @@ static void SetLinearFilter(LPDIRECT3DDEVICE7 theDevice, bool linear)
 {
 	if (gLinearFilter != linear)
 	{
-		//D3DTEXTUREMAGFILTER aFilter = linear ? D3DTFG_ANISOTROPIC : D3DTFG_POINT;
+		//D3DTEXTUREMAGFILTER aFilter = linear ? D3DTFG_LINEAR : D3DTFG_POINT;
 
 		const char *aDebugContext = linear ? "SetTextureStageState LINEAR" : "SetTextureStageState Point";
 
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, linear ? D3DTFN_LINEAR : D3DTFG_POINT), aDebugContext);
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, linear ? D3DTFG_LINEAR : D3DTFG_POINT),aDebugContext);
-		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, linear ? D3DTFP_LINEAR : D3DTFG_POINT),aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, linear ? D3DTFG_POINT : D3DTFN_POINT), aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, linear ? D3DTFG_POINT : D3DTFG_POINT),aDebugContext);
 		gLinearFilter = linear;
 	}
 }
