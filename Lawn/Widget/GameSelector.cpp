@@ -1151,6 +1151,22 @@ void GameSelector::Update()
 	}
 
 	Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
+
+	{
+		int aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Right");
+		ReanimatorTransform aTransform;
+		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
+		aTransform.mTransY += mOverlayWidget->mY;
+		aTransform.mTransY -= 41.0f;
+		mZombatarWidget->mY = aTransform.mTransY;
+		mLevelSelectorWidget->mY = aTransform.mTransY;
+		
+		aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Left");
+		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
+		aTransform.mTransY += mOverlayWidget->mY;
+		mMoreWidget->mY = aTransform.mTransY + 80.0f;
+	}
+
 	Reanimation* aWoodSignReanim = mApp->ReanimationGet(mWoodSignID);
 
 	switch (mSelectorState)
