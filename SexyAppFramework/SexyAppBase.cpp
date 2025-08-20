@@ -2122,8 +2122,8 @@ void SexyAppBase::ReadFromRegistry()
 	RegistryReadInteger(_S("PreferredHEIGHT"), &mPreferredHEIGHT);
 	RegistryReadBoolean(_S("PreferredMAXIMIZED"), &mPreferredMAXIMIZED);
 
-	const int widthIndex = aSexyApp->mResolutionMode % mNumWidths;
-	const int heightIndex = aSexyApp->mResolutionMode / mNumWidths;
+	const int widthIndex = mResolutionMode % mNumWidths;
+	const int heightIndex = mResolutionMode / mNumWidths;
 
 	mPreferredWIDTH = max(mWidths[widthIndex], mPreferredWIDTH);
 	mPreferredHEIGHT = max(mHeights[heightIndex], mPreferredHEIGHT);
