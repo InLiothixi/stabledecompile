@@ -1332,6 +1332,7 @@ void Zombie::BungeeStealTarget()
         {
             mTargetPlantID = (PlantID)mBoard->mPlants.DataArrayGetID(aPlant);
             aPlant->mOnBungeeState = PlantOnBungeeState::GETTING_GRABBED_BY_BUNGEE;
+            mApp->RemoveReanimation(aPlant->mLightReanimID);
             mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
 
             GridItem* aLadder = mBoard->GetLadderAt(aPlant->mPlantCol, aPlant->mRow);

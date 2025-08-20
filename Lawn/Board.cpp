@@ -2602,6 +2602,8 @@ void Board::GetPlantsOnLawn(int theGridX, int theGridY, PlantsOnLawn* thePlantOn
 	Plant* aPlant = nullptr;
 	while (IteratePlants(aPlant))
 	{
+		if (aPlant->mBurnedCounter != -1) continue;
+
 		SeedType aSeedType = aPlant->mSeedType;
 		if (aSeedType == SeedType::SEED_IMITATER && aPlant->mImitaterType != SeedType::SEED_NONE)
 		{

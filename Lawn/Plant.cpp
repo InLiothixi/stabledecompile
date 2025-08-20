@@ -5287,7 +5287,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
 //0x466390
 void Plant::MouseDown(int x, int y, int theClickCount)
 {
-    if (theClickCount < 0)
+    if (theClickCount < 0 || mBurnedCounter != -1)
         return;
 
     if (mState == PlantState::STATE_COBCANNON_READY)
