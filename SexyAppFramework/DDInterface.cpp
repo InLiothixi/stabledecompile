@@ -403,7 +403,7 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 	{
 		OutputDebug(_S("Desktop is           %4lu x %4lu [%2d:%2d]\n"), mDesktopWidth, mDesktopHeight, mDesktopAspect.mNumerator, mDesktopAspect.mDenominator);
 
-		if (mApp->mWidescreenAware && !mIsWindowed)
+		if (mApp->mWidescreenAware)
 		{
 			mIsWidescreen = true;
 
@@ -414,8 +414,16 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 			mHeight = mHeights[heightIndex];
 			mAspect.Set(mWidth, mHeight);
 
-			mDisplayWidth = mWidth;
-			mDisplayHeight = mHeight;
+			if (mHeight * (mDesktopWidth / (float)mDesktopHeight) >= mHeight * (mWidth / (float)mHeight))
+			{
+				mDisplayWidth = mHeight * (mDesktopWidth / (float)mDesktopHeight);
+				mDisplayHeight = mHeight;
+			}
+			else if (mWidth * (mDesktopHeight / (float)mDesktopWidth) >= mWidth * (mHeight / (float)mWidth))
+			{
+				mDisplayWidth = mWidth;
+				mDisplayHeight = mWidth * (mDesktopHeight / (float)mDesktopWidth);
+			}
 			mDisplayAspect = mAspect;
 
 			mWideScreenExtraWidth = mWidth - gSexyAppBase->mWidth;
@@ -423,10 +431,10 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 			mWideScreenExtraHeight = mHeight - gSexyAppBase->mHeight;
 			mWideScreenOffsetY = mWideScreenExtraHeight / 2.0f;
 
-			mPresentationRect.mWidth = mDisplayWidth;
-			mPresentationRect.mHeight = mDisplayHeight;
-			mPresentationRect.mX = 0;
-			mPresentationRect.mY = 0;
+			mPresentationRect.mWidth = mWidth;
+			mPresentationRect.mHeight = mHeight;
+			mPresentationRect.mX = (mDisplayWidth - mWidth) / 2;
+			mPresentationRect.mY = (mDisplayHeight - mHeight) / 2;
 		}
 		else
 		{
@@ -452,7 +460,8 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 
 		if (FAILED(aResult) && mFullscreenBits != 32)
 		{
-			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, 32); // todo: remove this incase this did not do anything... 32 bit fallback
+			mFullscreenBits = 32;
+			aResult = mDD->SetDisplayMode(mDisplayWidth, mDisplayHeight, mFullscreenBits); // todo: remove this incase this did not do anything... 32 bit fallback
 		}
 
 		if (GotDXError(aResult, "SetDisplayMode FullScreen"))

@@ -211,6 +211,12 @@ HRESULT CALLBACK D3DInterface::PixelFormatsCallback(LPDDPIXELFORMAT theFormat, L
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+static const int mWidthss[] = { 800, 1066, 1280 };
+static const int mHeightss[] = { 600, 720 };
+static const int mNumWidthss = sizeof(mWidths) / sizeof(int);
+static const int mNumHeightss = sizeof(mHeights) / sizeof(int);
+
 void D3DInterface::UpdateViewport()
 {
 	HRESULT hr;
@@ -224,11 +230,14 @@ void D3DInterface::UpdateViewport()
 
 	RECT aScreenRect = {aTopLeft.x, aTopLeft.y, aBotRight.x, aBotRight.y};*/
 
+	const int widthIndex = gSexyAppBase->mResolutionMode % mNumWidthss;
+	const int heightIndex = gSexyAppBase->mResolutionMode / mNumWidthss;
+
 	D3DVIEWPORT7 &aD3DViewport = mD3DViewport;
 	aD3DViewport.dwX = 0;
 	aD3DViewport.dwY = 0;
-	aD3DViewport.dwWidth = mWidth;/*aScreenRect.right - aScreenRect.left;*/
-	aD3DViewport.dwHeight = mHeight;/*aScreenRect.bottom - aScreenRect.top;*/
+	aD3DViewport.dwWidth = mWidthss[widthIndex];/*aScreenRect.right - aScreenRect.left;*/
+	aD3DViewport.dwHeight = mHeightss[heightIndex];/*aScreenRect.bottom - aScreenRect.top;*/
 	aD3DViewport.dvMinZ = 0; //-2048.0f;
 	aD3DViewport.dvMaxZ = 1; //2048.0f;
 

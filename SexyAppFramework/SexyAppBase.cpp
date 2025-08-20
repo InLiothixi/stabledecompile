@@ -407,7 +407,7 @@ SexyAppBase::SexyAppBase()
 	mPreviewHWnd = NULL;
 	mIsParticleEditor = false;
 	mIsTouch = false;
-	mResolutionMode = 4;
+	mResolutionMode = 2;
 
 	int i;
 
