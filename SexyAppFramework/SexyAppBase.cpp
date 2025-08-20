@@ -2122,6 +2122,12 @@ void SexyAppBase::ReadFromRegistry()
 	RegistryReadInteger(_S("PreferredHEIGHT"), &mPreferredHEIGHT);
 	RegistryReadBoolean(_S("PreferredMAXIMIZED"), &mPreferredMAXIMIZED);
 
+	const int widthIndex = aSexyApp->mResolutionMode % mNumWidths;
+	const int heightIndex = aSexyApp->mResolutionMode / mNumWidths;
+
+	mPreferredWIDTH = max(mWidths[widthIndex], mPreferredWIDTH);
+	mPreferredHEIGHT = max(mHeights[heightIndex], mPreferredHEIGHT);
+
 	if (RegistryReadInteger(_S("CustomCursors"), &anInt))
 		EnableCustomCursors(anInt != 0);	
 			
