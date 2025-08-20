@@ -546,11 +546,6 @@ void BlendTransform(ReanimatorTransform* theResult, const ReanimatorTransform& t
 {
 	theResult->mTransX = FloatLerp(theTransform1.mTransX, theTransform2.mTransX, theBlendFactor);
 	theResult->mTransY = FloatLerp(theTransform1.mTransY, theTransform2.mTransY, theBlendFactor);
-	const bool flipX = ShouldFlipHorizontally(theTransform1.mSkewX, theTransform2.mSkewX);
-
-	theResult->mScaleX = FloatLerp(theTransform1.mScaleX, theTransform2.mScaleX * (flipX ? -1 : 1), theBlendFactor);
-	theResult->mScaleY = FloatLerp(theTransform1.mScaleY, theTransform2.mScaleY, theBlendFactor);
-	theResult->mAlpha = FloatLerp(theTransform1.mAlpha, theTransform2.mAlpha, theBlendFactor);
 
 	float aSkewX2 = theTransform2.mSkewX;
 	float aSkewY2 = theTransform2.mSkewY;
@@ -565,6 +560,13 @@ void BlendTransform(ReanimatorTransform* theResult, const ReanimatorTransform& t
 		aSkewY2 = theTransform1.mSkewY;  // （aSkewY2 -= 360.0f）
 	while (aSkewY2 < theTransform1.mSkewY - 180.0f)
 		aSkewY2 = theTransform1.mSkewY;  // （aSkewY2 += 360.0f）
+
+	const bool flipX = ShouldFlipHorizontally(theTransform1.mSkewX, theTransform2.mSkewX);
+
+	theResult->mScaleX = FloatLerp(theTransform1.mScaleX, theTransform2.mScaleX * (flipX ? -1 : 1), theBlendFactor);
+	theResult->mScaleY = FloatLerp(theTransform1.mScaleY, theTransform2.mScaleY, theBlendFactor);
+	theResult->mAlpha = FloatLerp(theTransform1.mAlpha, theTransform2.mAlpha, theBlendFactor);
+
 
 	if (!flipX)
 	{
