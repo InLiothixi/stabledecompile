@@ -1396,6 +1396,11 @@ void Projectile::Update()
 		mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_PROJECTILE, mRow, 0);
 	}
 
+	if (mPosX > 710 - mWidth)
+	{
+		mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, mRow, 8);
+	}
+
 	if (mClickBackoffCounter > 0)
 	{
 		mClickBackoffCounter--;
