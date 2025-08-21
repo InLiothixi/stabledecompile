@@ -174,7 +174,7 @@ bool Trail::GetNormalAtPoint(int nIndex, SexyVector2& theNormal)
 //0x51BD00
 void Trail::Draw(Graphics* g)
 {
-	if (mDead || mNumTrailPoints < 2)
+	if (mDead || mNumTrailPoints < 2 || !gSexyAppBase->Is3DAccelerated())
 		return;
 
 	float aTimeValue = mTrailAge / (float)(mTrailDuration - 1);
