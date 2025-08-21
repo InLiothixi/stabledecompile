@@ -1385,7 +1385,7 @@ void Board::InitBushes()
 		int aRenderOrder;
 
 		/*if (i == 0)	aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 0);
-		else*/ aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, i, 1);
+		else*/ aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, i, 1);
 
 		Reanimation* aBushReanim = mApp->AddReanimation(posX, posY, aRenderOrder, aReanimType);
 		aBushReanim->SetFramesForLayer("anim_rustle");
