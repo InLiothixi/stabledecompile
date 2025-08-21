@@ -7454,7 +7454,7 @@ void Board::DrawGameObjects(Graphics* g)
 		{
 			Reanimation* aReanimation = aRenderItem.mReanimation;
 
-			if (!mApp->Is3DAccelerated() && aReanimation->mReanimationType >= ReanimationType::REANIM_BUSHES3 && aReanimation->mReanimationType <= ReanimationType::REANIM_NIGHT_BUSHES5 && FloatApproxEqual(aReanimation->mAnimTime, 1.0f))
+			if (!mApp->Is3DAccelerated() && aReanimation->mReanimationType >= ReanimationType::REANIM_BUSHES3 && aReanimation->mReanimationType <= ReanimationType::REANIM_NIGHT_BUSHES5 /*&& FloatApproxEqual(aReanimation->mAnimTime, 1.0f)*/)
 			{
 				const int _i = aReanimation->mReanimationType - ReanimationType::REANIM_BUSHES3;
 				if (mApp->mDirtyBushes[_i])
