@@ -148,6 +148,7 @@ public:
 
 	static							Rect gBoardBounds;
 	std::vector<SexyString>			mDebugTexts;
+	MemoryImage*					mDirtyBushes[6];
 
 	bool							mRIPMode;
 

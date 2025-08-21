@@ -2948,7 +2948,7 @@ void DDImage::BltF(Image* theImage, float theX, float theY, const Rect& theSrcRe
 	}
 	else
 	{
-		BltRotated(theImage, theX, theY, theSrcRect, theClipRect.Intersection(Rect(0, 0, mDDInterface->GetScreenImage()->GetWidth(), mDDInterface->GetScreenImage()->GetHeight())), theColor, theDrawMode, 0, 0, 0);
+ 		BltRotated(theImage, theX, theY, theSrcRect, theClipRect.Intersection(Rect(0, 0, BOARD_WIDTH + gSexyAppBase->mDDInterface->mWideScreenExtraWidth, BOARD_HEIGHT + gSexyAppBase->mDDInterface->mWideScreenExtraHeight)), theColor, theDrawMode, 0, 0, 0);
 	}
 }
 

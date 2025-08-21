@@ -169,6 +169,7 @@ LawnApp::LawnApp()
 	mVoiceVolume = 0.0f;
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
 	mRIPMode = false;
+	memset(&mDirtyBushes, 0, sizeof(mDirtyBushes));
 }
 
 //0x44EDD0、0x44EDF0
@@ -3454,8 +3455,46 @@ void LawnApp::PreloadForUser()
 		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_BUSHES3, true);
 		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_BUSHES4, true);
 		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_BUSHES5, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_NIGHT_BUSHES3, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_NIGHT_BUSHES4, true);
+		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_NIGHT_BUSHES5, true);
 		if (mCompletedLoadingThreadTasks < aNumTasks)
-			mCompletedLoadingThreadTasks += 204;
+			mCompletedLoadingThreadTasks += 408;
+
+		for (int _i = 0; _i < 6; _i++)
+		{
+			const ReanimationType aReanimType = (ReanimationType)((int)ReanimationType::REANIM_BUSHES3 + _i);
+			const bool isEven = _i % 2 == 0;
+			const int aWidth = isEven ?  337 : 364;
+			const int aHeight = isEven ? 243 : 291;
+			const float aPosX = isEven ? -7.3f : 1.2f;
+			const float aPosY = isEven ? 26.6f : 39.8f;
+
+			MemoryImage* aDirtyBush = new MemoryImage();
+			aDirtyBush->mWidth = aWidth;
+			aDirtyBush->mHeight = aHeight;
+			int aNumBits = aWidth * aHeight;
+			aDirtyBush->mBits = new unsigned long[aNumBits + 1];
+			aDirtyBush->mHasTrans = true;
+			aDirtyBush->mHasAlpha = true;
+			memset(aDirtyBush->mBits, 0, aNumBits * 4);
+			aDirtyBush->mBits[aNumBits] = Sexy::MEMORYCHECK_ID;
+
+			Reanimation aBushReanim;
+			aBushReanim.ReanimationInitializeType(aPosX, aPosY, aReanimType);
+			aBushReanim.SetFramesForLayer("anim_rustle");
+			aBushReanim.mLastFrameTime = 0.0f;
+			aBushReanim.mAnimTime = 0.0f;
+			aBushReanim.mAnimRate = 0.0f;
+			aBushReanim.mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+
+			Graphics aImage(aDirtyBush);
+			aImage.SetLinearBlend(true);
+			aImage.SetFastStretch(false);
+			aBushReanim.Draw(&aImage);
+
+			mDirtyBushes[_i] = aDirtyBush;
+		}
 	}
 
 	if (mPlayerInfo)

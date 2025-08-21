@@ -265,6 +265,7 @@ MemoryImage* ReanimatorCache::MakeCachedMowerFrame(LawnMowerType theMowerType)
 		aImage = MakeBlankMemoryImage(90, 100);
 		Graphics aMemoryGraphics(aImage);
 		aMemoryGraphics.SetLinearBlend(true);
+		aMemoryGraphics.SetFastStretch(false);
 		aMemoryGraphics.mScaleX = 0.85f;
 		aMemoryGraphics.mScaleY = 0.85f;
 		DrawReanimatorFrame(&aMemoryGraphics, 10.0f, 0.0f, ReanimationType::REANIM_LAWNMOWER, "anim_normal", DrawVariation::VARIATION_NORMAL);
@@ -275,6 +276,7 @@ MemoryImage* ReanimatorCache::MakeCachedMowerFrame(LawnMowerType theMowerType)
 		aImage = MakeBlankMemoryImage(90, 100);
 		Graphics aMemoryGraphics(aImage);
 		aMemoryGraphics.SetLinearBlend(true);
+		aMemoryGraphics.SetFastStretch(false);
 		aMemoryGraphics.mScaleX = 0.8f;
 		aMemoryGraphics.mScaleY = 0.8f;
 		DrawReanimatorFrame(&aMemoryGraphics, 10.0f, 25.0f, ReanimationType::REANIM_POOL_CLEANER, nullptr, DrawVariation::VARIATION_NORMAL);
@@ -285,6 +287,7 @@ MemoryImage* ReanimatorCache::MakeCachedMowerFrame(LawnMowerType theMowerType)
 		aImage = MakeBlankMemoryImage(90, 100);
 		Graphics aMemoryGraphics(aImage);
 		aMemoryGraphics.SetLinearBlend(true);
+		aMemoryGraphics.SetFastStretch(false);
 		aMemoryGraphics.mScaleX = 0.85f;
 		aMemoryGraphics.mScaleY = 0.85f;
 		DrawReanimatorFrame(&aMemoryGraphics, 10.0f, 0.0f, ReanimationType::REANIM_ROOF_CLEANER, nullptr, DrawVariation::VARIATION_NORMAL);
@@ -295,6 +298,7 @@ MemoryImage* ReanimatorCache::MakeCachedMowerFrame(LawnMowerType theMowerType)
 		aImage = MakeBlankMemoryImage(90, 100);
 		Graphics aMemoryGraphics(aImage);
 		aMemoryGraphics.SetLinearBlend(true);
+		aMemoryGraphics.SetFastStretch(false);
 		aMemoryGraphics.mScaleX = 0.85f;
 		aMemoryGraphics.mScaleY = 0.85f;
 		DrawReanimatorFrame(&aMemoryGraphics, 10.0f, 0.0f, ReanimationType::REANIM_LAWNMOWER, "anim_tricked", DrawVariation::VARIATION_NORMAL);
@@ -316,6 +320,7 @@ MemoryImage* ReanimatorCache::MakeCachedPlantFrame(SeedType theSeedType, DrawVar
 	MemoryImage* aMemoryImage = MakeBlankMemoryImage(aWidth, aHeight);
 	Graphics aMemoryGraphics(aMemoryImage);
 	aMemoryGraphics.SetLinearBlend(true);
+	aMemoryGraphics.SetFastStretch(false);
 
 	PlantDefinition& aPlantDef = GetPlantDefinition(theSeedType);
 	TOD_ASSERT(aPlantDef.mReanimationType != ReanimationType::REANIM_NONE);
@@ -380,6 +385,7 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 	MemoryImage* aMemoryImage = MakeBlankMemoryImage(maxWidth, maxHeight);
 	Graphics aMemoryGraphics(aMemoryImage);
 	aMemoryGraphics.SetLinearBlend(true);
+	aMemoryGraphics.SetFastStretch(false);
 
 	ZombieType aUseZombieType = theZombieType;
 	if (theZombieType == ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE)
@@ -543,6 +549,7 @@ MemoryImage* ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)
 		MemoryImage* aMemoryImage2 = MakeBlankMemoryImage(200, 210);
 		Graphics aMemoryGraphics2(aMemoryImage2);
 		aMemoryGraphics2.SetLinearBlend(true);
+		aMemoryGraphics2.SetFastStretch(false);
 		aReanim.Draw(&aMemoryGraphics2);
 		aMemoryGraphics.DrawImageF(aMemoryImage2, 0, relativeY);
 	}

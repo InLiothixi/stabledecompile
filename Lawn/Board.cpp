@@ -1347,7 +1347,8 @@ const ReanimationType gReanimBushesType[] = {
 	ReanimationType::REANIM_NIGHT_BUSHES4,
 };
 
-void Board::InitBushes() {
+void Board::InitBushes() 
+{
 	for (int i = 0; i < 6; i++) 
 	{
 		float posX = 0, posY = 0;
@@ -7452,6 +7453,21 @@ void Board::DrawGameObjects(Graphics* g)
 		case RenderObjectType::RENDER_ITEM_REANIMATION:
 		{
 			Reanimation* aReanimation = aRenderItem.mReanimation;
+
+			if (!mApp->Is3DAccelerated() && aReanimation->mReanimationType >= ReanimationType::REANIM_BUSHES3 && aReanimation->mReanimationType <= ReanimationType::REANIM_NIGHT_BUSHES5 && FloatApproxEqual(aReanimation->mAnimTime, 1.0f))
+			{
+				const int _i = aReanimation->mReanimationType - ReanimationType::REANIM_BUSHES3;
+				if (mApp->mDirtyBushes[_i])
+				{
+					const bool isEven = _i % 2 == 0;
+					const float aPosX = isEven ? -7.3f : 1.2f;
+					const float aPosY = isEven ? 26.6f : 39.8f;
+
+					g->DrawImage(mApp->mDirtyBushes[_i], (int)aReanimation->mOverlayMatrix.m02 - aPosX, (int)aReanimation->mOverlayMatrix.m12 - aPosY);
+					break; // Optimize draw if it exists...
+				}
+			}
+
 			aReanimation->Draw(g);
 			break;
 		}
