@@ -1155,8 +1155,9 @@ void GameSelector::Update()
 			mApp->PlaySample(Sexy::SOUND_EVILLAUGH);
 	}
 
-	Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
+	Reanimation* aSelectorReanim = mApp->ReanimationTryToGet(mSelectorReanimID);
 
+	if (aSelectorReanim)
 	{
 		int aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Right");
 		ReanimatorTransform aTransform;
