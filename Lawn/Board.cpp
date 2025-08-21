@@ -1384,8 +1384,8 @@ void Board::InitBushes()
 
 		int aRenderOrder;
 
-		if (i == 0)	aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 0);
-		else aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, i, 9);
+		/*if (i == 0)	aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_BOTTOM, 0, 0);
+		else*/ aRenderOrder = MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, i, 9);
 
 		Reanimation* aBushReanim = mApp->AddReanimation(posX, posY, aRenderOrder, aReanimType);
 		aBushReanim->SetFramesForLayer("anim_rustle");
@@ -8485,7 +8485,7 @@ void Board::DrawTopRightUI(Graphics* g)
 		g->SetColorizeImages(true);
 		g->SetColor(GetFlashingColor(mMainCounter, 75));
 	}
-	mMenuButton->Draw(g);
+	/*mMenuButton->Draw(g);*/
 	g->SetColorizeImages(false);
 
 	if (mStoreButton && !mApp->IsLastStand())
@@ -9125,6 +9125,8 @@ void Board::DrawUITop(Graphics* g)
 	}*/
 
 	//DrawUIBottom(g);
+
+	mMenuButton->Draw(g);
 
 	if (!mApp->IsScreenSaver() && StageHasFog())
 	{
