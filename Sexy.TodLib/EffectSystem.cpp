@@ -404,7 +404,7 @@ void TodTriangleGroup::DrawGroup(Graphics* g)
 		}
 		else
 		{
-			g->mDestImage->BltTrianglesTex(mImage, mVertArray, mTriangleCount, Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT), Color::White, mDrawMode, 0, 0, g->mLinearBlend);
+			g->mDestImage->BltTrianglesTex(mImage, mVertArray, mTriangleCount, Rect(0, 0, g->mDestImage->GetWidth(), g->mDestImage->GetHeight()), Color::White, mDrawMode, 0, 0, g->mLinearBlend);
 		}
 
 		mTriangleCount = 0;

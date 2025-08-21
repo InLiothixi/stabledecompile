@@ -653,41 +653,44 @@ void Reanimation::ReanimBltMatrix(Graphics* g, Image* theImage, SexyMatrix3& the
 		&& abs(theTransform.m00) > 0.0f && abs(theTransform.m11) > 0.0f  // 横向和纵向的拉伸值均大于 0
 		&& theColor == Color::White)
 	{
-		float aScaleX = theTransform.m00;
-		float aScaleY = theTransform.m11;
-		int aPosX = FloatRoundToInt(theTransform.m02 - abs(aScaleX) * theSrcRect.mWidth * 0.5f);
-		int aPosY = FloatRoundToInt(theTransform.m12 - abs(aScaleY) * theSrcRect.mHeight * 0.5f);
+		const float aScaleX = theTransform.m00;
+		const float aScaleY = theTransform.m11;
+		const int aPosX = FloatRoundToInt(theTransform.m02 - abs(aScaleX) * theSrcRect.mWidth * 0.5f);
+		const int aPosY = FloatRoundToInt(theTransform.m12 - abs(aScaleY) * theSrcRect.mHeight * 0.5f);
+		const bool isMirrored = aScaleX < 0.0f;
 
-		Graphics altG(*g);
-		altG.mTransX = 0;
-		altG.mTransY = 0;
-		altG.SetDrawMode(theDrawMode);
-		altG.SetLinearBlend(false);
-		altG.SetFastStretch(true);
-		bool isMirrored = aScaleX < 0;
-
-
-		altG.ClearClipRect();
-		altG.mClipRect.mWidth = BOARD_WIDTH + gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
-		altG.mClipRect.mHeight = BOARD_HEIGHT + gSexyAppBase->mDDInterface->mWideScreenExtraHeight;
+		g->PushState();
+		g->mClipRect = theClipRect;
+		g->mTransX = 0;
+		g->mTransY = 0;
 		
 		if (FloatApproxEqual(abs(aScaleX), 1.0f) && FloatApproxEqual(abs(aScaleY), 1.0f))  // 如果无拉伸
 		{
 			if (isMirrored)
-				altG.DrawImageMirror(theImage, aPosX, aPosY, theSrcRect);
+			{
+				g->DrawImageMirror(theImage, aPosX, aPosY, theSrcRect);
+			}
 			else
-				altG.DrawImage(theImage, aPosX, aPosY, theSrcRect);
+			{
+				g->DrawImage(theImage, aPosX, aPosY, theSrcRect);
+			}
 		}
 		else
 		{
-			int aWidth = FloatRoundToInt(abs(aScaleX) * theSrcRect.mWidth);
-			int aHeight = FloatRoundToInt(abs(aScaleY) * theSrcRect.mHeight);
-			Rect aDestRect(aPosX, aPosY, aWidth, aHeight);
+			const int aWidth = FloatRoundToInt(abs(aScaleX) * theSrcRect.mWidth);
+			const int aHeight = FloatRoundToInt(abs(aScaleY) * theSrcRect.mHeight);
+			const Rect aDestRect(aPosX, aPosY, aWidth, aHeight);
+
 			if (isMirrored)
-				altG.DrawImageMirror(theImage, aDestRect, theSrcRect);
+			{
+				g->DrawImageMirror(theImage, aDestRect, theSrcRect);
+			}
 			else
-				altG.DrawImage(theImage, aDestRect, theSrcRect);
+			{
+				g->DrawImage(theImage, aDestRect, theSrcRect);
+			}
 		}
+		g->PopState();
 	}
 	else
 	{
@@ -744,7 +747,7 @@ bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, int theRenderGroup, 
 	Rect aClipRect = g->mClipRect;
 	if (aTrackInstance->mIgnoreClipRect)  // 如果轨道无视裁剪矩形
 	{
-		aClipRect = Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);  // 裁剪矩形重置为屏幕矩形
+		aClipRect = Rect(0, 0, g->mDestImage->GetWidth(), g->mDestImage->GetHeight());  // 裁剪矩形重置为屏幕矩形
 	}
 
 	Image* aImage = aTransform.mImage;

@@ -674,6 +674,8 @@ void GameSelector::Draw(Graphics* g)
 	if (mApp->GetDialog(Dialogs::DIALOG_STORE) || mApp->GetDialog(Dialogs::DIALOG_ALMANAC))
 		return;
 
+	g->PushState();
+	g->ClearClipRect();
 	g->SetLinearBlend(true);
 	Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
 
@@ -754,6 +756,7 @@ void GameSelector::Draw(Graphics* g)
 		aOffsetMatrix.Translate(170.5f - (int)(aStringWidth * 0.5f) + mX + mApp->mDDInterface->mWideScreenOffsetX, 102.5f + mY + mApp->mDDInterface->mWideScreenOffsetY);
 		TodDrawStringMatrix(g, Sexy::FONT_BRIANNETOD16, aOverlayMatrix * aOffsetMatrix, aWelcomeStr, Color(255, 245, 200));
 	}
+	g->PopState();
 }
 
 //0x44AB50
@@ -953,9 +956,10 @@ void GameSelector::DrawOverlay(Graphics* g)
 	Reanimation* aHandReanim = mApp->ReanimationTryToGet(mHandReanimID);
 	if (aHandReanim)
 	{
+		g->PushState();
 		g->SetClipRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT - 40);
 		aHandReanim->Draw(g);
-		g->ClearClipRect();
+		g->PopState();
 	}
 
 	mApp->ReanimationGet(mLeafReanimID)->Draw(g);
@@ -965,9 +969,10 @@ void GameSelector::DrawOverlay(Graphics* g)
 	{
 		if (aSpotLightReanim->mLoopCount == 0)
 		{
+			g->PushState();
 			g->SetClipRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 			aSpotLightReanim->Draw(g);
-			g->ClearClipRect();
+			g->PopState();
 		}
 		else
 		{
@@ -1160,6 +1165,7 @@ void GameSelector::Update()
 		aTransform.mTransY -= 41.0f;
 		mZombatarWidget->mY = aTransform.mTransY;
 		mLevelSelectorWidget->mY = aTransform.mTransY;
+		mAchievementsWidget->mY = aTransform.mTransY + BOARD_HEIGHT;
 		
 		aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Left");
 		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
