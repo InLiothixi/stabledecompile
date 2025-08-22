@@ -9564,7 +9564,7 @@ void Zombie::TakeBodyDamage(int theDamage, unsigned int theDamageFlags)
 //0x5317C0
 void Zombie::TakeDamage(int theDamage, unsigned int theDamageFlags)
 {
-    if (mZombiePhase == ZombiePhase::PHASE_JACK_IN_THE_BOX_POPPING || IsDeadOrDying())
+    if (mZombiePhase == ZombiePhase::PHASE_JACK_IN_THE_BOX_POPPING && !TestBit(theDamageFlags, 18)  || IsDeadOrDying())
         return;
 
     int aDamageRemaining = theDamage;
