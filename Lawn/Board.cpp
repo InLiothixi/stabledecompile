@@ -7719,7 +7719,8 @@ void Board::DrawLevel(Graphics* g)
 				}
 				else 
 				{
-					aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str());
+					aLevelStr = StrFormat(_S("%s\n "), TodStringTranslate(aLevelStr).c_str());
+					aLevelStr = StrFormat(_S("%s%s"), TodStringTranslate(aLevelStr).c_str(), aCompletedStr.c_str());
 					//aPosY -= fontHeight / 1.5f;
 				}
 			}
@@ -7740,7 +7741,8 @@ void Board::DrawLevel(Graphics* g)
 				}
 				else
 				{
-					aLevelStr = StrFormat(_S("%s   %s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
+					aLevelStr = StrFormat(_S("%s\n "), TodStringTranslate(aLevelStr).c_str());
+					aLevelStr = StrFormat(_S("%s%s"), TodStringTranslate(aLevelStr).c_str(), aStreakStr.c_str());
 					//aPosY -= fontHeight / 1.5f;
 				}
 			}
@@ -7772,7 +7774,7 @@ void Board::DrawLevel(Graphics* g)
 	}
 	else
 	{
-		SexyString translatedtext = TodStringTranslate(aLevelStr);
+		SexyString translatedtext = TodStringTranslate(aLevelStr) + _S(" ");
 		int strWidth = Sexy::FONT_HOUSEOFTERROR16->StringWidth(translatedtext);
 		int strHeight = max(TodDrawStringWrappedHelper(g, translatedtext, Rect(aPosX + 6 - strWidth / 2, aPosY + 76, containerWidth, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER, false, true) - 30, 0);
 		TodDrawStringWrapped(g, aLevelStr, Rect(aPosX - (containerWidth - 8), aPosY - fontHeight / 1.5f - strHeight / 2, containerWidth, fontHeight), Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_CENTER);
