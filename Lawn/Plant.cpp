@@ -4927,8 +4927,16 @@ void Plant::Draw(Graphics* g)
             }
         }
 
-
+        g->PushState();
         g->SetScale(1.0f, 0.25f, 0.0f, 0.0f);
+
+        int anAlpha = 255;
+        if (mDisappearCountdown >= 0)
+        {
+            anAlpha = ClampInt(255 * mDisappearCountdown / 10, 0, 255);
+            g->SetColorizeImages(true);
+            g->SetColor(Color(255, 255, 255, anAlpha));
+        }
 
         if (aDrawPumpkinBack)
         {
@@ -4959,7 +4967,7 @@ void Plant::Draw(Graphics* g)
         }
 
         DrawSeedType(g, jSeedType, jImitaterType, drawVar, aOffsetX, 60.0f + aOffsetY, aBitVar);
-        g->SetScale(1.0f, 1.0f, 0.0f, 0.0f);
+        g->PopState();
     }
     else
     {
