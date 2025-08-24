@@ -252,10 +252,10 @@ void D3DInterface::UpdateViewport()
 static HRESULT WINAPI EnumZBufferCallback( DDPIXELFORMAT* pddpf, VOID* pddpfDesired )
 {
     if( pddpf->dwFlags == DDPF_ZBUFFER )
-    {
+	{
         memcpy( pddpfDesired, pddpf, sizeof(DDPIXELFORMAT) );
 		return D3DENUMRET_CANCEL;
-    }
+	}
 
     return D3DENUMRET_OK;
 }
@@ -409,7 +409,6 @@ bool D3DInterface::PreDraw()
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_SRCBLEND,  D3DBLEND_SRCALPHA); 
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA); 
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_LIGHTING , FALSE);
-		mD3DDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, TRUE);
 
 		// filter states 
 		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFN_POINT);
@@ -427,9 +426,9 @@ bool D3DInterface::PreDraw()
 		// Setup non-texture render states 				
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_DITHERENABLE, FALSE); 
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_SPECULARENABLE, FALSE); 
-		mD3DDevice->SetRenderState(D3DRENDERSTATE_ZWRITEENABLE, FALSE); 
-		mD3DDevice->SetRenderState(D3DRENDERSTATE_ZENABLE, FALSE); 
-		hr = mD3DDevice->SetRenderState(D3DRENDERSTATE_CULLMODE, D3DCULL_NONE); 				
+		mD3DDevice->SetRenderState(D3DRENDERSTATE_ZWRITEENABLE, FALSE);
+		mD3DDevice->SetRenderState(D3DRENDERSTATE_ZENABLE, FALSE);
+		hr = mD3DDevice->SetRenderState(D3DRENDERSTATE_CULLMODE, D3DCULL_NONE); 	
 
 		mSceneBegun = true;
 		gLinearFilter = false;
@@ -1888,11 +1887,10 @@ void D3DInterface::SetupDrawMode(int theDrawMode, const Color &theColor, Image *
 		else
 			mD3DDevice->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, theColor.mAlpha<255?TRUE:FALSE);
 */
-
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_SRCBLEND,  D3DBLEND_SRCALPHA); 
 		mD3DDevice->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA); 
 	}
-	else // Additive
+	else if (theDrawMode == Graphics::DRAWMODE_ADDITIVE) // Additive
 	{
 //		mD3DDevice->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, TRUE);
 //		theColor.mRed = theColor.mRed * theColor.mAlpha / 255;
