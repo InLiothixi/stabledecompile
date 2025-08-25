@@ -234,7 +234,7 @@ bool DDInterface::Do3DTest(HWND theHWND)
 }
 
 static const int mWidths[] = { 800, 1066, 1280 };
-static const int mHeights[] = { 600, 720};
+static const int mHeights[] = { 600, 720, 800};
 static const int mNumWidths = sizeof(mWidths) / sizeof(int);
 static const int mNumHeights = sizeof(mHeights) / sizeof(int);
 

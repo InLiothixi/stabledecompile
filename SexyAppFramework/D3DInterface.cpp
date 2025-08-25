@@ -213,7 +213,7 @@ HRESULT CALLBACK D3DInterface::PixelFormatsCallback(LPDDPIXELFORMAT theFormat, L
 ///////////////////////////////////////////////////////////////////////////////
 
 static const int mWidthss[] = { 800, 1066, 1280 };
-static const int mHeightss[] = { 600, 720 };
+static const int mHeightss[] = { 600, 720, 800};
 static const int mNumWidthss = sizeof(mWidths) / sizeof(int);
 static const int mNumHeightss = sizeof(mHeights) / sizeof(int);
 
