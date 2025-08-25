@@ -121,6 +121,16 @@ SexyString GetSavedGameName(GameMode theGameMode, int theProfileId)
     return GetAppDataFolder() + StrFormat(_S("userdata\\game%d_%d.dat"), theProfileId, (int)theGameMode);
 }
 
+SexyString GetSavedGameName(GameMode theGameMode, int theProfileId, int theLevel)
+{
+    SexyString aName = GetAppDataFolder();
+    if (theGameMode == GameMode::GAMEMODE_ADVENTURE && theLevel != 0 && gLawnApp->mPlayerInfo->mLevel != theLevel)
+        aName += StrFormat(_S("userdata\\game%d_%d_replay_%d.dat"), theProfileId, (int)theGameMode, theLevel);
+    else
+        aName += StrFormat(_S("userdata\\game%d_%d.dat"), theProfileId, (int)theGameMode);
+    return aName;
+}
+
 //0x456980
 int GetCurrentDaysSince2000()
 {

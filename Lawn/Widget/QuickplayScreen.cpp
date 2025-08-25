@@ -141,7 +141,7 @@ QuickplayWidget::QuickplayWidget(LawnApp* theApp) {
 	}
 	else
 	{
-		mMaxScrollPosition = 20 + 186 * min(aPlayerLevel, 9) + 175 - BOARD_WIDTH;
+		mMaxScrollPosition = 20 + 186 * min(aPlayerLevel - 1, 9) + 175 - BOARD_WIDTH;
 	}
 
 	if (mApp->HasFinishedAdventure() && !mApp->mRIPMode)

@@ -397,7 +397,7 @@ int Board::CountUntriggerLawnMowers()
 //0x408C30
 void Board::TryToSaveGame()
 {
-	SexyString aFileName = GetSavedGameName(mApp->mGameMode, mApp->mPlayerInfo->mId);
+	SexyString aFileName = GetSavedGameName(mApp->mGameMode, mApp->mPlayerInfo->mId, mLevel);
 
 	if (NeedSaveGame())
 	{
@@ -1566,7 +1566,7 @@ Rect Board::GetShovelButtonRect()
 	if (mApp->IsSlotMachineLevel() || mApp->IsSquirrelLevel())
 		aRect.mX = 600;
 	
-	if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerInfo->GetLevel() == 5 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO ||
+	if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mLevel == 5 && mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO ||
 		mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS)
 		aRect.mY = 0;
 	

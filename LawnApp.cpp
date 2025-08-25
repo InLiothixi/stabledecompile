@@ -484,7 +484,7 @@ void LawnApp::PreNewGame(GameMode theGameMode, bool theLookForSavedGame, int the
 	if (theLookForSavedGame && TryLoadGame(theLevel))
 		return;
 
-	SexyString aFileName = GetSavedGameName(mGameMode, mPlayerInfo->mId);
+	SexyString aFileName = GetSavedGameName(mGameMode, mPlayerInfo->mId, theLevel);
 	EraseFile(aFileName);
 	int thePlayerLevel = mPlayerInfo->mLevel;
 	mPlayerInfo->mLevel = theLevel;
@@ -536,7 +536,7 @@ bool LawnApp::TryLoadGame()
 
 bool LawnApp::TryLoadGame(int theLevel)
 {
-	SexyString aSaveName = GetSavedGameName(mGameMode, mPlayerInfo->mId);
+	SexyString aSaveName = GetSavedGameName(mGameMode, mPlayerInfo->mId, theLevel);
 	mMusic->StopAllMusic();
 
 	if (this->FileExists(aSaveName))
@@ -2454,7 +2454,7 @@ bool LawnApp::IsWallnutBowlingLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING_2)
 		return true;
 
-	return IsAdventureMode() && mPlayerInfo->mLevel == 5;
+	return IsAdventureMode() && mBoard->mLevel == 5;
 }
 
 //0x453870
@@ -2472,13 +2472,16 @@ bool LawnApp::IsWhackAZombieLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WHACK_A_ZOMBIE)
 		return true;
 
-	return IsAdventureMode() && mPlayerInfo->mLevel == 15;
+	return IsAdventureMode() && mBoard->mLevel == 15;
 }
 
 //0x4538C0
 bool LawnApp::IsLittleTroubleLevel()
 {
-	return (mBoard && (mGameMode == GameMode::GAMEMODE_CHALLENGE_LITTLE_TROUBLE || (mGameMode == GameMode::GAMEMODE_ADVENTURE && mPlayerInfo->mLevel == 25)));
+	if (mBoard == nullptr)
+		return false;
+
+	return mGameMode == GameMode::GAMEMODE_CHALLENGE_LITTLE_TROUBLE || (mGameMode == GameMode::GAMEMODE_ADVENTURE && mBoard->mLevel == 25);
 }
 
 //0x4538F0
@@ -2490,7 +2493,10 @@ bool LawnApp::IsScaryPotterLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
 		return true;
 
-	return IsAdventureMode() && mPlayerInfo->mLevel == 35;
+	if (mBoard == nullptr)
+		return false;
+
+	return IsAdventureMode() && mBoard->mLevel == 35;
 }
 
 //0x453920
@@ -2502,7 +2508,7 @@ bool LawnApp::IsStormyNightLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_STORMY_NIGHT)
 		return true;
 
-	return IsAdventureMode() && mPlayerInfo->mLevel == 40;
+	return IsAdventureMode() && mBoard->mLevel == 40;
 }
 
 //0x453950
@@ -2514,7 +2520,7 @@ bool LawnApp::IsBungeeBlitzLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_BUNGEE_BLITZ)
 		return true;
 
-	return IsAdventureMode() && mPlayerInfo->mLevel == 45;
+	return IsAdventureMode() && mBoard->mLevel == 45;
 }
 
 //0x453980
@@ -2524,10 +2530,10 @@ bool LawnApp::IsMiniBossLevel()
 		return false;
 
 	return
-		(IsAdventureMode() && mPlayerInfo->mLevel == 10) ||
-		(IsAdventureMode() && mPlayerInfo->mLevel == 20) ||
-		(IsAdventureMode() && mPlayerInfo->mLevel == 30) ||
-		(IsAdventureMode() && mPlayerInfo->mLevel == 40);
+		(IsAdventureMode() && mBoard->mLevel == 10) ||
+		(IsAdventureMode() && mBoard->mLevel == 20) ||
+		(IsAdventureMode() && mBoard->mLevel == 30) ||
+		(IsAdventureMode() && mBoard->mLevel == 40);
 }
 
 //0x4539D0
@@ -2539,7 +2545,7 @@ bool LawnApp::IsFinalBossLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_FINAL_BOSS)
 		return true;
 
-	return IsAdventureMode() && mPlayerInfo->mLevel == 50;
+	return IsAdventureMode() && mBoard->mLevel == 50;
 }
 
 //0x453A00
@@ -2560,8 +2566,11 @@ bool LawnApp::IsChallengeWithoutSeedBank()
 
 bool LawnApp::IsNight()
 {
-	if (IsIceDemo() || mPlayerInfo == nullptr)
+	if (IsIceDemo() || mPlayerInfo == nullptr && mBoard == nullptr)
 		return false;
+
+	if (mBoard)
+		return (mBoard->mLevel >= 11 && mBoard->mLevel <= 20) || (mBoard->mLevel >= 31 && mBoard->mLevel <= 40) || mBoard->mLevel == 50;
 
 	return (mPlayerInfo->mLevel >= 11 && mPlayerInfo->mLevel <= 20) || (mPlayerInfo->mLevel >= 31 && mPlayerInfo->mLevel <= 40) || mPlayerInfo->mLevel == 50;
 }

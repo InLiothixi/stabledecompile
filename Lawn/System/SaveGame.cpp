@@ -14,6 +14,7 @@
 #include "../../Sexy.TodLib/Reanimator.h"
 #include "../../Sexy.TodLib/TodParticle.h"
 #include "../../Sexy.TodLib/EffectSystem.h"
+#include "../../GameConstants.h"
 
 #include <memory>
 
