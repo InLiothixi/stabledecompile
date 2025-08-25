@@ -1141,12 +1141,18 @@ void LawnApp::FinishNameError(int theId)
 void LawnApp::FinishRestartConfirmDialog()
 {
 	mSawYeti = mBoard->mKilledYeti;
+	int theLevel = -1;
 
 	KillDialog(Dialogs::DIALOG_CONTINUE);
 	KillDialog(Dialogs::DIALOG_RESTARTCONFIRM);
+	if (mBoard && mGameMode == GameMode::GAMEMODE_ADVENTURE)
+		theLevel = mBoard->mLevel;
 	KillBoard();
 
-	PreNewGame(mGameMode, false);
+	if (theLevel > 0)
+		PreNewGame(mGameMode, false, theLevel);
+	else
+		PreNewGame(mGameMode, false);
 }
 
 void LawnApp::DoCheatDialog()

@@ -794,9 +794,9 @@ void Music::StartGameMusic()
 		mTune = MusicTune::MUSIC_TUNE_MINIGAME_LOONBOON;
 	}
 	else if ((mApp->IsAdventureMode() &&
-		(mApp->mPlayerInfo->GetLevel() == 10	||
-		mApp->mPlayerInfo->GetLevel() == 20		||
-		mApp->mPlayerInfo->GetLevel() == 30))	||
+		(mApp->mBoard->mLevel == 10	||
+		mApp->mBoard->mLevel == 20	||
+		mApp->mBoard->mLevel == 30))	||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN)
 	{
 		mTune = MusicTune::MUSIC_TUNE_CONVEYER;
