@@ -276,6 +276,9 @@ void SeedPacketDrawSeed(Graphics* g, float x, float y, SeedType theSeedType, See
 void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, bool theDrawCost, bool theUseCurrentCost)
 {
 	g->PushState();
+	g->SetLinearBlend(true);
+	g->SetFastStretch(false);
+
 	SeedType aSeedType = theSeedType;
 	if (aSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE)
 	{
@@ -583,6 +586,8 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 			aCostStr = StrFormat(_S("%d"), Plant::GetCost(theSeedType, theImitaterType));
 		}
 
+		g->SetLinearBlend(false);
+
 		Font* aTextFont = Sexy::FONT_PICO129;
 		int aTextOffsetX = 32 - aTextFont->StringWidth(aCostStr);
 		int aTextOffsetY = aTextFont->GetAscent() + 54;
@@ -594,12 +599,11 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		{
 			SexyMatrix3 aMatrix;
 			TodScaleTransformMatrix(aMatrix, aTextOffsetX * g->mScaleX + x + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aTextOffsetY * g->mScaleY + y + gSexyAppBase->mDDInterface->mWideScreenOffsetY, g->mScaleX, g->mScaleY);
-			//if (g->mScaleX > 1.8f)
-			{
-				g->SetLinearBlend(false);
-			}
+			// if (g->mScaleX > 1.8f)
+			// {
+			//      g->SetLinearBlend(false);
+			// }
 			TodDrawStringMatrix(g, aTextFont, aMatrix, aCostStr, Color::Black);
-			g->SetLinearBlend(true);
 		}
 	}
 	g->PopState();
