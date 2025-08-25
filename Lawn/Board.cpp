@@ -337,7 +337,11 @@ bool Board::AreEnemyZombiesOnScreen()
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (/*aZombie->mHasHead && !aZombie->IsDeadOrDying() &&*/ !aZombie->mMindControlled && !aZombie->mDead)
+		if (aZombie->IsDeadOrDying())
+		{
+			return true;
+		}
+		else if (/*aZombie->mHasHead && !aZombie->IsDeadOrDying() &&*/ !aZombie->mMindControlled && !aZombie->mDead)
 		{
 			return true;
 		}
@@ -5607,7 +5611,11 @@ int Board::TotalZombiesHealthInWave(int theWaveIndex)
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->mFromWave == theWaveIndex && !aZombie->mMindControlled /*&& !aZombie->IsDeadOrDying()*/ &&
+		if (aZombie->IsDeadOrDying())
+		{
+			aTotalHealth += 1;
+		}
+		else if (aZombie->mFromWave == theWaveIndex && !aZombie->mMindControlled /*&& !aZombie->IsDeadOrDying()*/ &&
 			aZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && aZombie->mRelatedZombieID == ZombieID::ZOMBIEID_NULL)
 		{
 			aTotalHealth += aZombie->mBodyHealth + aZombie->mHelmHealth + aZombie->mShieldHealth * 0.2f + aZombie->mFlyingHealth;
