@@ -1556,7 +1556,8 @@ bool LawnApp::UpdatePlayerProfileForFinishingLevel()
 		}
 		else
 		{
-			mPlayerInfo->SetLevel(mBoard->mLevel + 1);  // 存档进入下一关
+			if (mBoard->mLevel + 1 > mPlayerInfo->GetLevel())
+				mPlayerInfo->SetLevel(mBoard->mLevel + 1);  // 存档进入下一关
 		}
 
 		if (!HasFinishedAdventure() && abs(mBoard->mLevel) == 34)
@@ -1693,7 +1694,10 @@ void LawnApp::CheckForGameEnd()
 		}
 		else
 		{
-			PreNewGame(mGameMode, false);
+			if (mPlayerInfo->GetLevel() > aLevel)
+				DoBackToMain();
+			else
+				PreNewGame(mGameMode, false);
 		}
 		
 	}
