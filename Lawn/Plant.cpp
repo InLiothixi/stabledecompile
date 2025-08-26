@@ -163,10 +163,12 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     {
         float aOffsetY = PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow);
         ReanimationType aReanimType = aPlantDef.mReanimationType;
+#ifdef _CONSOLE_MINIGAMES
         if (aReanimType == ReanimationType::REANIM_PEASHOOTER && mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
         {
             aReanimType = ReanimationType::REANIM_HEATWAVE_SHOOTER;
         }
+#endif
         aBodyReanim = mApp->AddReanimation(0.0f, aOffsetY, mRenderOrder + 1, aReanimType);
         aBodyReanim->mLoopType = ReanimLoopType::REANIM_LOOP;
         aBodyReanim->mAnimRate = RandRangeFloat(10.0f, 15.0f);
@@ -317,8 +319,10 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
         {
             aBodyReanim->mAnimRate = RandRangeFloat(15.0f, 20.0f);
             ReanimationType aReanimType = aPlantDef.mReanimationType;
+#ifdef _CONSOLE_MINIGAMES
             if (mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
                 aReanimType = ReanimationType::REANIM_HEATWAVE_SHOOTER;
+#endif
             Reanimation* aHeadReanim = mApp->AddReanimation(0.0f, 0.0f, mRenderOrder + 2, aReanimType);
             aHeadReanim->mLoopType = ReanimLoopType::REANIM_LOOP;
             aHeadReanim->mAnimRate = aBodyReanim->mAnimRate;
@@ -1054,6 +1058,7 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
     {
         char* aTrackToPlay = "anim_shooting";
 
+#ifdef _CONSOLE_MINIGAMES
         if (mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
         {
             if (mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED)
@@ -1061,7 +1066,7 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
             else if (mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED_2)
                 aTrackToPlay = "anim_shooting_exhausted2";
         }
-
+#endif
         aHeadReanim->StartBlend(20);
         aHeadReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
         aHeadReanim->mAnimRate = 35.0f;
@@ -1085,9 +1090,10 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
         {
             mShootingCounter = 33;
         }
-
+#ifdef _CONSOLE_MINIGAMES
         if (mState == PlantState::STATE_HEAT_WAVE_POWERED)
             mShootingCounter = 26;
+#endif
     }
     else if (mState == PlantState::STATE_CACTUS_HIGH)
     {
@@ -1290,9 +1296,10 @@ void Plant::UpdateShooter()
     if (mLaunchCounter <= 0)
     {
         mLaunchCounter = mLaunchRate - Sexy::Rand(15);
-
+#ifdef _CONSOLE_MINIGAMES
         if (mState == PlantState::STATE_HEAT_WAVE_POWERED)
             mLaunchCounter = 26;
+#endif
 
         if (mSeedType == SeedType::SEED_THREEPEATER)
         {
@@ -3176,6 +3183,7 @@ void Plant::UpdateAbilities()
 
     if (mSubclass == PlantSubClass::SUBCLASS_SHOOTER)
     {
+#ifdef _CONSOLE_MINIGAMES
         if (mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
         {
             if (mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED_2)
@@ -3185,6 +3193,7 @@ void Plant::UpdateAbilities()
                 mBoard->mMainCounter % 2 == 1 && mBoard->mMainCounter != 0)
                 return;
         }
+#endif
 
         UpdateShooter();
     }
@@ -3267,8 +3276,11 @@ void Plant::UpdateReanimColor()
         Plant* aPlant = mBoard->mPlants.DataArrayTryToGet((unsigned int)mBoard->mCursorObject->mGlovePlantID);
         if (aPlant)
         {
-            if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && aPlant->mPlantCol == mPlantCol && aPlant->mRow == mRow ||
-                mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && aPlant == this)
+            if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && aPlant->mPlantCol == mPlantCol && aPlant->mRow == mRow
+#ifdef _CONSOLE_MINIGAMES
+                || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && aPlant == this
+#endif
+                )
                 isOnGlove = true;
         }
     }
@@ -3660,6 +3672,7 @@ Reanimation* Plant::AttachBlinkAnim(Reanimation* theReanimBody)
     
     ReanimationType aReanimationType = aPlantDef.mReanimationType;
 
+#ifdef _CONSOLE_MINIGAMES
     bool isHeatWave = mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE;
 
     if (isHeatWave)
@@ -3673,7 +3686,7 @@ Reanimation* Plant::AttachBlinkAnim(Reanimation* theReanimBody)
         else if (mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED_2)
             aTrackToPlay = "anim_blink_exhausted2";
     }
-
+#endif
     Reanimation* aBlinkReanim = aApp->mEffectSystem->mReanimationHolder->AllocReanimation(0.0f, 0.0f, 0, aReanimationType);
     aBlinkReanim->SetFramesForLayer(aTrackToPlay);
     aBlinkReanim->mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_FULL_LAST_FRAME_AND_HOLD;
@@ -4147,6 +4160,7 @@ void Plant::UpdateShooting()
         {
             char* animTrack = "anim_head_idle";
 
+#ifdef _CONSOLE_MINIGAMES
             if (mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
             {
                 bool isExhausted = mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED || mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED_2;
@@ -4167,7 +4181,7 @@ void Plant::UpdateShooting()
                     aBodyReanim->SetFramesForLayer("anim_idle");
                 }
             }
-   
+#endif
             aHeadReanim->StartBlend(20);
             aHeadReanim->mLoopType = ReanimLoopType::REANIM_LOOP;
             aHeadReanim->SetFramesForLayer(animTrack);
@@ -6274,7 +6288,7 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
         if (aZombie->EffectedByDamage(aDamageRangeFlags) 
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
             || aZombie->mZombieType == ZombieType::ZOMBIE_DOG  && (mSeedType == SeedType::SEED_YAMPOLINE || IsSpiky()) && aZombie->EffectedByDamage(13) ||
-            aZombie->mZombiePhase == ZombiePhase::PHASE_PROPELLER_FLYING && mSeedType == SeedType::SEED_CACTUS && thePlantWeapon == PlantWeapon::WEAPON_PRIMARY)
+            aZombie->mZombiePhase == ZombiePhase::PHASE_PROPELLER_FLYING && mSeedType == SeedType::SEED_CACTUS && thePlantWeapon == PlantWeapon::WEAPON_PRIMARY
 #endif 
            )
         {
@@ -6721,10 +6735,12 @@ bool Plant::PreloadPlantResources(SeedType theSeedType)
         ReanimatorEnsureDefinitionLoaded(aPlantDef.mReanimationType, true);
     }
 
+#ifdef _CONSOLE_MINIGAMES
     if (theSeedType == SeedType::SEED_PEASHOOTER && gLawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
     {
         ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_HEATWAVE_SHOOTER, true);
     }
+#endif
 
     if (theSeedType == SeedType::SEED_CHERRYBOMB || theSeedType == SeedType::SEED_EXPLODE_O_NUT 
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
@@ -6771,10 +6787,12 @@ void Plant::PlayIdleAnim(float theRate)
     {
         char* aTrackAnim = "anim_idle";
 
+#ifdef _CONSOLE_MINIGAMES
         if (mSeedType == SeedType::SEED_PEASHOOTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE) {
             if (mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED || mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED_2)
                 aTrackAnim = "anim_exhausted";
         }
+#endif
         
         PlayBodyReanim(aTrackAnim, ReanimLoopType::REANIM_LOOP, 20, theRate);
         if (mApp->IsIZombieLevel())

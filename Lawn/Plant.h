@@ -3,6 +3,7 @@
 #include <string>
 #include "GameObject.h"
 #include "../SexyAppFramework/Common.h"
+#include "../GameConstants.h"
 #define MAX_MAGNET_ITEMS 5
 
 enum PlantSubClass
@@ -75,9 +76,11 @@ enum PlantState
     STATE_MARIGOLD_ENDING,
     STATE_FLOWERPOT_INVULNERABLE,
     STATE_LILYPAD_INVULNERABLE,
+#ifdef _CONSOLE_MINIGAMES
     STATE_HEAT_WAVE_EXHAUSTED,
     STATE_HEAT_WAVE_EXHAUSTED_2,
     STATE_HEAT_WAVE_POWERED
+#endif
 };
 
 enum PLANT_LAYER

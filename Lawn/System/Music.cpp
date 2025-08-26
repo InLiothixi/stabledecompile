@@ -788,8 +788,11 @@ void Music::StartGameMusic()
 	}
 	else if (mApp->IsWallnutBowlingLevel() || mApp->IsWhackAZombieLevel() ||
 		mApp->IsLittleTroubleLevel() || mApp->IsBungeeBlitzLevel() ||
-		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_SPEED ||
-		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_SPEED 
+#ifdef _CONSOLE_MINIGAMES
+		|| mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+		)
 	{
 		mTune = MusicTune::MUSIC_TUNE_MINIGAME_LOONBOON;
 	}

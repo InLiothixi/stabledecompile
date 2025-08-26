@@ -1,7 +1,6 @@
 #pragma once
 
 #include <wtypes.h>
-#include "ConstEnums.h"
 constexpr const double PI = 3.141592653589793;
 
 // ============================================================
@@ -94,11 +93,15 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 #define _ALLOW_RESOURCE_PACKS
 
 // Unused or Restored
-//#define _HAS_SCORE_SYSTEM
 //#define _HAS_BLOOM_AND_DOOM_CONTENTS
-#define _HAS_EXTENDED_MINIGAMES
+//#define _HAS_EXTENDED_MINIGAMES
 //#define _HAS_UNUSED_ACHIEVEMENTS
-#define _HAS_NEW_GIGA_ZOMBIES
+
+//Ported from other editions
+//#define _CONSOLE_MINIGAMES
+//#define _REPLANTED_SPEED_CONTROL
+//#define _HAS_NEW_GIGA_ZOMBIES
+//#define _HAS_SCORE_SYSTEM
 
 // Quality Of Life
 #define _HAS_HEALTHBAR_TOGGLE
@@ -113,3 +116,5 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 // Rebalancing
 #define _PIERCING_CACTUS
 #define _SPLASH_SNOWPEA
+
+#include "ConstEnums.h" // Include the enums at the end to properly setup the entries related to the defines

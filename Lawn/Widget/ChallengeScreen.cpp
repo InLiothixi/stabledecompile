@@ -1,3 +1,4 @@
+#include "../../GameConstants.h"
 #include "GameButton.h"
 #include "../../LawnApp.h"
 #include "../System/Music.h"
@@ -11,7 +12,6 @@
 #include "../../SexyAppFramework/Debug.h"
 #include "../../Sexy.TodLib/TodStringFile.h"
 #include "../../SexyAppFramework/WidgetManager.h"
-#include "../../GameConstants.h"
 #include "ImageScrollbar.h"
 
 ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
@@ -65,14 +65,16 @@ ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_CHALLENGE_BUNGEE_BLITZ,               9,   ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  2,  _S("[BUNGEE_BLITZ]") },
 	{ GameMode::GAMEMODE_CHALLENGE_SQUIRREL,                   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  3,  _S("Squirrel") },
 	{ GameMode::GAMEMODE_TREE_OF_WISDOM,                       10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  4,  _S("Tree Of Wisdom") },
-	{ GameMode::GAMEMODE_CHALLENGE_FOG_OF_WAR,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  4,  _S("[FOG_OF_WAR]") },
-	{ GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  0,  _S("[HEAT_WAVE]") },
-	{ GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  1,  _S("[BOMB_ALL_TOGETHER]") },
-	{ GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  1,  _S("[BUTTERED_POPCORN]") },
-	{ GameMode::GAMEMODE_CHALLENGE_VASEBREAKER,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  2,  _S("[VASE_BREAKER]") },
-	{ GameMode::GAMEMODE_CHALLENGE_HOMERUN_DERBY,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  3,  _S("[HOMERUN_DERBY]") },
-	{ GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  4,  _S("[HEAVY_WEAPON]") },
-	{ GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  0,  _S("[ZOMBIE_TRAP]") },
+	{ GameMode::GAMEMODE_CHALLENGE_VASEBREAKER,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  0,  _S("[VASE_BREAKER]") },
+	{ GameMode::GAMEMODE_CHALLENGE_FOG_OF_WAR,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  1,  _S("[FOG_OF_WAR]") },
+#ifdef _CONSOLE_MINIGAMES
+	{ GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  2,  _S("[HEAT_WAVE]") },
+	{ GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  3,  _S("[BUTTERED_POPCORN]") },
+	{ GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  4,  _S("[BOMB_ALL_TOGETHER]") },
+	{ GameMode::GAMEMODE_CHALLENGE_HOMERUN_DERBY,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  0,  _S("[HOMERUN_DERBY]") },
+	{ GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  1,  _S("[HEAVY_WEAPON]") },
+	{ GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  2,  _S("[ZOMBIE_TRAP]") },
+#endif
 	{ GameMode::GAMEMODE_SCARY_POTTER_1,                       10,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      0,  0,  _S("[SCARY_POTTER_1]") },
 	{ GameMode::GAMEMODE_SCARY_POTTER_2,                       10,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      0,  1,  _S("[SCARY_POTTER_2]") },
 	{ GameMode::GAMEMODE_SCARY_POTTER_3,                       10,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      0,  2,  _S("[SCARY_POTTER_3]") },
@@ -395,10 +397,15 @@ int ChallengeScreen::MoreTrophiesNeeded(int theChallengeIndex)
 			int aNumTrophies = mApp->GetNumTrophies(aDef.mPage);
 			if (aDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LIMBO_SURVIVAL)
 			{
-				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_VASEBREAKER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+#ifdef _CONSOLE_MINIGAMES
+				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER ||
+					aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_HOMERUN_DERBY ||
+					aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON ||
+					aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
 				{
 					return 1;
 				}
+#endif
 
 				return 0;
 			}
@@ -466,7 +473,7 @@ void ChallengeScreen::UpdateButtons()
 			else
 				aButton->Resize(38 + aColumn * 155, 125 + aRow * 145 - mScrollbar->mScrollValue, 104, 115);
 
-			aButton->mDisabled = aButton->mY + aButton->mHeight <= mScrollbar->mY || aButton->mY >= mScrollbar->mY + mScrollbar->mHeight;
+			aButton->mDisabled = (MoreTrophiesNeeded(aChallengeMode) > 0) || (aButton->mY + aButton->mHeight <= mScrollbar->mY || aButton->mY >= mScrollbar->mY + mScrollbar->mHeight);
 			aButton->mDoFinger = !aButton->mDisabled;
 		}
 	}
@@ -574,8 +581,10 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 
 			if (aChallengeButton->mDisabled || (theChallengeIndex == mUnlockChallengeIndex && mUnlockState == UNLOCK_SHAKING))
 			{
+#ifdef _CONSOLE_MINIGAMES
 				if (!(aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP))
 					aName = _S("?");
+#endif
 			}
 
 			int aNameLen = aName.size();
@@ -684,8 +693,11 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 			}
 			else if (aRecord > 0)
 			{
-				if (mApp->HasBeatenChallenge(aDef.mChallengeMode) &&
-					aDef.mChallengeMode != GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && !(aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_VASEBREAKER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP))
+				if (mApp->HasBeatenChallenge(aDef.mChallengeMode) 
+#ifdef _CONSOLE_MINIGAMES
+					&& !(aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+#endif
+					)
 				{
 					g->DrawImage(Sexy::IMAGE_MINIGAME_TROPHY, aPosX - 6, aPosY - 2);
 				}
@@ -951,10 +963,12 @@ void ChallengeScreen::UpdateToolTip()
 				{
 					aLabel = _S("[ONE_MORE_LAST_STAND_TOOLTIP]");
 				}
-				else if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER || aDef.mChallengeMode > GameMode::GAMEMODE_CHALLENGE_VASEBREAKER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+#ifdef _CONSOLE_MINIGAMES
+				else if (aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
 				{
 					aLabel = _S("[COMING_SOON]");
 				}
+#endif
 				else continue;
 
 				mToolTip->SetLabel(aLabel);

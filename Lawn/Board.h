@@ -132,9 +132,11 @@ public:
 	MessageWidget*					mAdvice;												//+0x140
 	SeedBank*						mSeedBank;												//+0x144
 	GameButton*						mMenuButton;											//+0x148
+#ifdef _REPLANTED_SPEED_CONTROL
 	NewLawnButton*					mSlowdownButton;
 	NewLawnButton*					mPauseButton;
 	NewLawnButton*					mSpeedupButton;
+#endif
 	GameButton*						mStoreButton;											//+0x14C
 	bool							mIgnoreMouseUp;											//+0x150
 	ToolTipWidget*					mToolTip;												//+0x154
@@ -264,11 +266,13 @@ public:
 	bool							mHeld;
 	int								mHeldStartX;
 	int								mHeldStartY;
+#ifdef _REPLANTED_SPEED_CONTROL
 	bool							mAllowSpeedMod;
 	SpeedMod						mPrevSpeedMod;
 	SpeedMod						mSpeedMod;
 	int								mSlowMoCounter;
 	int								mQECounter;
+#endif
 	//std::vector<std::pair<int, Rect>>	mLightSourceV; // int -> duration, Rect -> lightRect
 
 public:
@@ -537,13 +541,12 @@ public:
 	void							MovePlant(Plant* thePlant, int theGridX, int theGridY);
 	void							DrawCover(Graphics* g);
 	void							DrawForeGround(Graphics* g);
+
+#ifdef _REPLANTED_SPEED_CONTROL
 	float							GetSpeedValue(SpeedMod theMod);
 	SexyString						GetSpeedString();
 	void							DrawSpeed(Graphics* g);
-
-	virtual void					AddedToManager(WidgetManager* theWidgetManager);
-	virtual void					RemovedFromManager(WidgetManager* theWidgetManager);
-	virtual void					ButtonDepress(int theId);
+#endif
 };
 extern bool gShownMoreSunTutorial;
 

@@ -6872,7 +6872,7 @@ void SexyAppBase::Init()
 		sexychdir(mChangeDirTo.c_str());
 
 	WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-#ifdef _ALLOW_RESOURCEPACKS
+#ifdef _ALLOW_RESOURCE_PACKS
 	if (GetFileAttributesExA("resourcepack.pak", GetFileExInfoStandard, &fileInfo) != 0)
 		gPakInterface->AddPakFile(_S("resourcepack.pak"));
 #endif

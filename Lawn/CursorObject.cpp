@@ -159,6 +159,7 @@ void CursorObject::Draw(Graphics* g)
                 mApp->mZenGarden->DrawPottedPlant(g, -22.0f, -38.0f, aPottedPlant, 1.0f, true);
             }
         }
+#ifdef _CONSOLE_MINIGAMES
         else if (mApp->mGameMode == GAMEMODE_CHALLENGE_HEAT_WAVE) {
             if (mGlovePlantID != PLANTID_NULL)
             {
@@ -167,6 +168,7 @@ void CursorObject::Draw(Graphics* g)
                     Plant::DrawSeedType(g, aPlant->mSeedType, SeedType::SEED_NONE, DrawVariation::VARIATION_NORMAL, -22.0f, 0);
             }
         }
+#endif
 
         break;
     }

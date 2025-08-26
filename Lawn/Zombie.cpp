@@ -5166,8 +5166,9 @@ void Zombie::UpdateActions()
 #endif
 }
 
-void Zombie::UpdateZombieDogWalker() {
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+void Zombie::UpdateZombieDogWalker() {
+
     if (mZombiePhase == ZombiePhase::PHASE_WALKING_DOG) {
         Zombie* aDog = mBoard->ZombieTryToGet(mRelatedZombieID);
 
@@ -5183,11 +5184,12 @@ void Zombie::UpdateZombieDogWalker() {
             }
         }
     }
-#endif
-}
 
-void Zombie::UpdateZombieDog() {
+}
+#endif
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
+void Zombie::UpdateZombieDog() {
+
     if (mZombiePhase == ZombiePhase::PHASE_DOG_LEASHED) {
         Zombie* aZombie = mBoard->ZombieTryToGet(mRelatedZombieID);
 
@@ -5205,8 +5207,8 @@ void Zombie::UpdateZombieDog() {
             }
         }
     }
-#endif
 }
+#endif
 
 //0x52B280
 void Zombie::CheckForBoardEdge()

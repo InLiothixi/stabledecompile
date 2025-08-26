@@ -169,7 +169,7 @@ void AchievementsWidget::Draw(Graphics* g) {
 		int aTextYPos = aImageYPos + 16;
 
 		// Achievement images
-		#//@inliothixi whoever spaced this unevenly  + (i >= 1 || i / 7 > 2 ? 2 : 0)
+		//@inliothixi whoever spaced this unevenly  + (i >= 1 || i / 7 > 2 ? 2 : 0)
 #ifdef _HAS_UNUSED_ACHIEVEMENTS
 		if (i < (int)AchievementId::SultanOfSpin)
 #endif
