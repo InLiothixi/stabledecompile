@@ -102,7 +102,9 @@ void PlayerInfo::SyncDetails(DataSync& theSync)
 	{
 		SafeSync(theSync.SyncBool(mPlantedPlants[i]));
 	}
+#ifdef _HAS_ZOMBATAR
 	SafeSync(theSync.SyncBool(mAckZombatarTOS));
+#endif
 	SafeSync(theSync.SyncBool(mDidRIPMode));
 	SafeSync(theSync.SyncLong(mRIPLevel));
 }
@@ -191,7 +193,9 @@ void PlayerInfo::Reset()
 	memset(mEarnedAchievements, 0, sizeof(mEarnedAchievements));
 	memset(mShownAchievements, 0, sizeof(mShownAchievements));
 	memset(mPlantedPlants, 0, sizeof(mPlantedPlants));
+#ifdef _HAS_ZOMBATAR
 	mAckZombatarTOS = false;
+#endif
 	mDidRIPMode = false;
 	mRIPLevel = 1;
 }

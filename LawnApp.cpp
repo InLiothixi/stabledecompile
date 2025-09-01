@@ -3902,6 +3902,7 @@ void LawnApp::UpdateRegisterInfo()
 
 }
 
+#ifdef _HAS_ZOMBATAR
 void LawnApp::ShowZombatarTOS()
 {
 	KillDialog(Dialogs::DIALOG_ZOMBATARTOS);
@@ -3913,7 +3914,7 @@ void LawnApp::ShowZombatarTOS()
 	AddDialog(Dialogs::DIALOG_ZOMBATARTOS, aDialog);
 	mWidgetManager->SetFocus(aDialog);
 }
-
+#endif
 
 void LawnApp::ShowLanagugeScreen()
 {

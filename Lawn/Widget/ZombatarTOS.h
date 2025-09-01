@@ -4,6 +4,8 @@
 #include "LawnDialog.h"
 #include "../../SexyAppFramework/CheckboxListener.h"
 
+#ifdef _HAS_ZOMBATAR
+
 class ZombatarTOS : public LawnDialog, public ButtonListener, public CheckboxListener
 {
 private:
@@ -51,3 +53,4 @@ public:
 };
 #endif
 
+#endif

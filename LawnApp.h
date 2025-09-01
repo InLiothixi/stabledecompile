@@ -342,7 +342,9 @@ public:
 	/*inline*/ bool					CanDoDaisyMode();
 	virtual void					SwitchScreenMode(bool wantWindowed, bool is3d, bool force = false);
 	static /*inline*/ void			CenterDialog(Dialog* theDialog, int theWidth, int theHeight);
+#ifdef _HAS_ZOMBATAR
 	void							ShowZombatarTOS();
+#endif
 	void							ShowLanagugeScreen();
 	void							KillLanguageScreen();
 	static bool						ChallengeUsesMicrophone(GameMode theGameMode);

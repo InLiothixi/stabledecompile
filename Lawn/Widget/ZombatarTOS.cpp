@@ -10,6 +10,8 @@
 #include "GameSelector.h"
 #include "GameButton.h"
 
+#ifdef _HAS_ZOMBATAR
+
 Rect mScrollArea(-1, -1, -1, -1);
 Rect mSwipeArea(-1, -1, -1, -1);
 //0x45D610
@@ -549,3 +551,5 @@ void ZombatarTOS::MouseMove(int theX, int theY)
 
     Widget::MouseMove(theX, theY);
 }
+
+#endif
