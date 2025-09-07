@@ -152,6 +152,8 @@ public:
 
 	bool							mRIPMode;
 
+	int								mPlayerLevelRef;
+
 public:
 	LawnApp();
 	virtual ~LawnApp();

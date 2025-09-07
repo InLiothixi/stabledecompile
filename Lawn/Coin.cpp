@@ -1228,6 +1228,14 @@ void Coin::Collect()
                 StartFade();
             }
         }
+        else if (mApp->IsAdventureMode() && mBoard->mLevel < mApp->mPlayerInfo->GetLevel())
+        {
+            if (mType == CoinType::COIN_AWARD_MONEY_BAG)
+            {
+                mApp->PlayFoley(FoleyType::FOLEY_COIN);
+                FanOutCoins(CoinType::COIN_GOLD, 5);
+            }
+        }
         else if (mApp->IsScaryPotterLevel() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
         {
             if (mType == CoinType::COIN_TROPHY || mType == CoinType::COIN_AWARD_MONEY_BAG)
@@ -1448,7 +1456,7 @@ void Coin::MouseDown(int x, int y, int theClickCount)
         PlayCollectSound();
         Collect();
 
-        if (mApp->IsFirstTimeAdventureMode() && mBoard->mLevel == 1)
+        if (mApp->IsFirstTimeAdventureMode() && mBoard->mLevel == 1 && mApp->mPlayerLevelRef <= 4)
         {
             mBoard->DisplayAdvice(_S("[ADVICE_CLICKED_ON_SUN]"), MessageStyle::MESSAGE_STYLE_TUTORIAL_LEVEL1_STAY, AdviceType::ADVICE_CLICKED_ON_SUN);
         }

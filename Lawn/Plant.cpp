@@ -3373,7 +3373,7 @@ void Plant::UpdateReanim()
     UpdateReanimColor();
 
     float aOffsetX = mShakeOffsetX;
-    float aOffsetY = PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow);
+    float aOffsetY = PlantDrawHeightOffset(mBoard, this, mSeedType, mPlantCol, mRow) + mShakeOffsetY;
     float aScaleX = 1.0f, aScaleY = 1.0f;
     if (
 #ifdef DO_FIX_BUGS
@@ -4928,6 +4928,8 @@ void Plant::Draw(Graphics* g)
         }
 
         g->PushState();
+        g->SetLinearBlend(true);
+        g->SetFastStretch(false);
         g->SetScale(1.0f, 0.25f, 0.0f, 0.0f);
 
         int anAlpha = 255;
@@ -5240,6 +5242,10 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
         aDrawVariation = DrawVariation::VARIATION_AQUARIUM;
     }
 
+    g->PushState();
+    g->SetLinearBlend(true);
+    g->SetFastStretch(false);
+
     if (Challenge::IsZombieSeedType(aSeedType))
     {
         ZombieType aZombieType = Challenge::IZombieSeedTypeToZombieType(aSeedType);
@@ -5289,6 +5295,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
             TodDrawImageCelScaledF(g, aPlantImage, thePosX + aOffsetX, thePosY + aOffsetY, aCelCol, aCelRow, g->mScaleX, g->mScaleY);
         }
     }
+    g->PopState();
     g->PopState();
 }
 

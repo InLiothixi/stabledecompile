@@ -788,7 +788,7 @@ void CutScene::StartLevelIntro()
 	mApp->mWidgetManager->SetFocus(mBoard);
 
 	int aLevel = mBoard->mLevel;
-	if (mApp->IsFirstTimeAdventureMode() && (aLevel == 1 || aLevel == 2 || aLevel == 4))
+	if (mApp->IsFirstTimeAdventureMode() && (aLevel == 1 || aLevel == 2 || aLevel == 4) && mApp->mPlayerLevelRef <= 4)
 	{
 		mSodTime = TimeRollSodEnd - TimeRollSodStart;
 		mBoard->mSodPosition = 0;
@@ -1357,22 +1357,22 @@ void CutScene::AnimateBoard()
 			mApp->PlayFoley(FoleyType::FOLEY_DIGGER);
 			if (mBoard->mLevel == 1)
 			{
-				mApp->AddReanimation(0, 0, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 0), ReanimationType::REANIM_SODROLL);
-				mApp->AddTodParticle(35, 348, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 1), ParticleEffect::PARTICLE_SOD_ROLL);
+				mApp->AddReanimation(0, 0, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 2, 0), ReanimationType::REANIM_SODROLL);
+				mApp->AddTodParticle(35, 348, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 2, 1), ParticleEffect::PARTICLE_SOD_ROLL);
 			}
 			else if (mBoard->mLevel == 2)
 			{
-				mApp->AddReanimation(0, -102, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 0), ReanimationType::REANIM_SODROLL);
-				mApp->AddReanimation(0, 111, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 0), ReanimationType::REANIM_SODROLL);
-				mApp->AddTodParticle(35, 246, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 1), ParticleEffect::PARTICLE_SOD_ROLL);
-				mApp->AddTodParticle(35, 459, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 1), ParticleEffect::PARTICLE_SOD_ROLL);
+				mApp->AddReanimation(0, -102, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 1, 0), ReanimationType::REANIM_SODROLL);
+				mApp->AddReanimation(0, 111, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 1, 0), ReanimationType::REANIM_SODROLL);
+				mApp->AddTodParticle(35, 246, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 3, 1), ParticleEffect::PARTICLE_SOD_ROLL);
+				mApp->AddTodParticle(35, 459, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 3, 1), ParticleEffect::PARTICLE_SOD_ROLL);
 			}
 			else if (mBoard->mLevel == 4)
 			{
-				mApp->AddReanimation(-3, -198, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 0), ReanimationType::REANIM_SODROLL);
-				mApp->AddReanimation(-3, 203, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 0), ReanimationType::REANIM_SODROLL);
-				mApp->AddTodParticle(32, 150, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 1), ParticleEffect::PARTICLE_SOD_ROLL);
-				mApp->AddTodParticle(32, 511, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 1), ParticleEffect::PARTICLE_SOD_ROLL);
+				mApp->AddReanimation(-3, -198, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 0, 0), ReanimationType::REANIM_SODROLL);
+				mApp->AddReanimation(-3, 203, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 0, 0), ReanimationType::REANIM_SODROLL);
+				mApp->AddTodParticle(32, 150, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 4, 1), ParticleEffect::PARTICLE_SOD_ROLL);
+				mApp->AddTodParticle(32, 511, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, 4, 1), ParticleEffect::PARTICLE_SOD_ROLL);
 			}
 		}
 
@@ -1513,7 +1513,7 @@ void CutScene::ShowShovel()
 		mApp->IsIZombieLevel())
 		return;
 
-	if (!mApp->IsFirstTimeAdventureMode() || mBoard->mLevel > 4)
+	if (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4)
 	{
 		mBoard->mShowShovel = true;
 	}
@@ -2492,7 +2492,7 @@ void CutScene::UpdateIntro()
 	}
 	if (mCutsceneTime == TimeIntro_End)
 	{
-		mApp->PreNewGame(GameMode::GAMEMODE_ADVENTURE, false);
+		mApp->PreNewGame(GameMode::GAMEMODE_ADVENTURE, false, 1);
 	}
 }
 

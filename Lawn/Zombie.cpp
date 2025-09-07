@@ -8444,7 +8444,11 @@ bool Zombie::TrySpawnLevelAward()
     }
     else if (mApp->IsAdventureMode() && mBoard->mLevel <= 50)
     {
-        if (mBoard->mLevel == 9 || mBoard->mLevel == 19 || mBoard->mLevel == 29 || mBoard->mLevel == 39 || mBoard->mLevel == 49)
+        if (mBoard->mLevel < mApp->mPlayerInfo->GetLevel())
+        {
+            aCoinType = CoinType::COIN_AWARD_MONEY_BAG;
+        }
+        else if (mBoard->mLevel == 9 || mBoard->mLevel == 19 || mBoard->mLevel == 29 || mBoard->mLevel == 39 || mBoard->mLevel == 49)
         {
             aCoinType = CoinType::COIN_NOTE;
         }

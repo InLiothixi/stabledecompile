@@ -269,6 +269,7 @@ public:
 	SpeedMod						mSpeedMod;
 	int								mSlowMoCounter;
 	int								mQECounter;
+	bool							mIsReplay;
 	//std::vector<std::pair<int, Rect>>	mLightSourceV; // int -> duration, Rect -> lightRect
 
 public:

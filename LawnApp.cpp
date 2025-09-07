@@ -170,6 +170,7 @@ LawnApp::LawnApp()
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
 	mRIPMode = false;
 	memset(&mDirtyBushes, 0, sizeof(mDirtyBushes));
+	mPlayerLevelRef = -1;
 }
 
 //0x44EDD0、0x44EDF0
@@ -487,8 +488,11 @@ void LawnApp::PreNewGame(GameMode theGameMode, bool theLookForSavedGame, int the
 	SexyString aFileName = GetSavedGameName(mGameMode, mPlayerInfo->mId, theLevel);
 	EraseFile(aFileName);
 	int thePlayerLevel = mPlayerInfo->mLevel;
+	bool isReplaying = mPlayerLevelRef > theLevel;
+	mPlayerLevelRef = thePlayerLevel;
 	mPlayerInfo->mLevel = theLevel;
 	NewGame();
+	mBoard->mIsReplay = isReplaying;
 	mPlayerInfo->mLevel = thePlayerLevel;
 }
 
@@ -904,6 +908,7 @@ void LawnApp::FinishUserDialog(bool isYes)
 					mGameSelector->SyncProfile(true);
 				}
 			}
+			mPlayerLevelRef = mPlayerInfo->GetLevel();
 		}
 
 		KillDialog(Dialogs::DIALOG_USERDIALOG);
@@ -1053,6 +1058,7 @@ void LawnApp::FinishConfirmDeleteUserDialog(bool isYes)
 		{
 			mPlayerInfo = mProfileMgr->GetAnyProfile();
 		}
+		mPlayerLevelRef = mPlayerInfo->GetLevel();
 	}
 
 	mProfileMgr->Save();
@@ -1118,6 +1124,7 @@ void LawnApp::FinishRenameUserDialog(bool isYes)
 	{
 		mPlayerInfo = mProfileMgr->GetProfile(aNewName);
 	}
+	mPlayerLevelRef = mPlayerInfo->GetLevel();
 
 	aUserDialog->FinishRenameUser(aNewName);
 	mWidgetManager->MarkAllDirty();
@@ -1398,6 +1405,8 @@ void LawnApp::Init()
 	{
 		aCurUser = StringToSexyString(theUser);
 		mPlayerInfo = mProfileMgr->GetProfile(aCurUser);
+		if (mPlayerInfo)
+			mPlayerLevelRef = mPlayerInfo->GetLevel();
 	}
 	if (mPlayerInfo == nullptr)
 	{
@@ -1556,7 +1565,7 @@ bool LawnApp::UpdatePlayerProfileForFinishingLevel()
 		}
 		else
 		{
-			if (mBoard->mLevel + 1 > mPlayerInfo->GetLevel())
+			if (!mBoard->mIsReplay)
 				mPlayerInfo->SetLevel(mBoard->mLevel + 1);  // 存档进入下一关
 		}
 
@@ -1671,35 +1680,39 @@ void LawnApp::CheckForGameEnd()
 	if (IsAdventureMode())
 	{
 		int aLevel = mBoard->mLevel;
+		bool isReplaying = mBoard->mIsReplay;
 		KillBoard();
 
-		if (IsFirstTimeAdventureMode() && aLevel < 50)
+		if (!isReplaying)
 		{
-			ShowAwardScreen(AwardType::AWARD_FORLEVEL, true);
-		}
-		else if (aLevel == FINAL_LEVEL && mPlayerInfo->mFinishedAdventure == 1)
-		{
-			if (mPlayerInfo->mFinishedAdventure > 1)
+			if (IsFirstTimeAdventureMode() && aLevel < 50)
+			{
+				ShowAwardScreen(AwardType::AWARD_FORLEVEL, true);
+			}
+			else if (aLevel == FINAL_LEVEL && mPlayerInfo->mFinishedAdventure == 1)
+			{
+				if (mPlayerInfo->mFinishedAdventure > 1)
+				{
+					ShowAwardScreen(AwardType::AWARD_FORLEVEL, true);
+				}
+				else
+				{
+					ShowAwardScreen(AwardType::AWARD_CREDITS_ZOMBIENOTE, true);
+				}
+			}
+			else if (aLevel == 9 || aLevel == 19 || aLevel == 29 || aLevel == 39 || aLevel == 49)
 			{
 				ShowAwardScreen(AwardType::AWARD_FORLEVEL, true);
 			}
 			else
 			{
-				ShowAwardScreen(AwardType::AWARD_CREDITS_ZOMBIENOTE, true);
+				PreNewGame(mGameMode, false);
 			}
-		}
-		else if (aLevel == 9 || aLevel == 19 || aLevel == 29 || aLevel == 39 || aLevel == 49)
-		{
-			ShowAwardScreen(AwardType::AWARD_FORLEVEL, true);
 		}
 		else
 		{
-			if (mPlayerInfo->GetLevel() > aLevel)
-				DoBackToMain();
-			else
-				PreNewGame(mGameMode, false);
+			DoBackToMain();
 		}
-		
 	}
 	else if (IsLastStandEndless(mGameMode))
 	{
@@ -2658,7 +2671,7 @@ SeedType LawnApp::GetAwardSeedForLevel(int theLevel)
 //0x453AC0
 int LawnApp::GetSeedsAvailable()
 {
-	int aLevel = mPlayerInfo->GetLevel();
+	int aLevel = mBoard && mBoard->mIsReplay && mPlayerLevelRef > 4 ? mPlayerLevelRef : mPlayerInfo->GetLevel();
 	int maxPlants = 49;
 
 	if (HasFinishedAdventure() || aLevel > 50)
@@ -3605,7 +3618,7 @@ void LawnApp::EnforceCursor()
 	switch (mCursorNum)
 	{
 	case CURSOR_POINTER:
-		::SetCursor(LoadCursor(GetModuleHandle(NULL), MAKEINTRESOURCE(IDC_CURSOR1)));
+		::SetCursor(mBigArrowCursor);
 		//::SetCursor(LoadCursor(NULL, IDC_ARROW));
 		return;
 
@@ -3660,7 +3673,7 @@ void LawnApp::EnforceCursor()
 		return;
 
 	default:
-		::SetCursor(LoadCursor(NULL, IDC_ARROW));
+		::SetCursor(mBigArrowCursor);
 		return;
 	}
 }

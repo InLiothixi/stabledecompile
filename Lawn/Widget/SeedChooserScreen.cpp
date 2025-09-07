@@ -248,7 +248,7 @@ SeedChooserScreen::SeedChooserScreen()
 		aWallnut.mSeedIndexInBank = 0;
 		mSeedsInBank++;
 	}
-	if (mApp->IsAdventureMode() && !mApp->IsFirstTimeAdventureMode())
+	if (mApp->IsAdventureMode() && (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4 && mBoard->mLevel < mApp->mPlayerLevelRef))
 		CrazyDavePickSeeds();
 	UpdateImitaterButton();
 }
@@ -281,7 +281,7 @@ void SeedChooserScreen::CrazyDavePickSeeds()
 		uint aRecFlags = SeedNotRecommendedToPick(aSeedType);
 		if ((aSeedType == SEED_GATLINGPEA && !mApp->mPlayerInfo->mPurchases[STORE_ITEM_PLANT_GATLINGPEA]) || !mApp->SeedTypeAvailable(aSeedType) ||
 			SeedNotAllowedToPick(aSeedType) || Plant::IsUpgrade(aSeedType) || aSeedType == SEED_IMITATER || aSeedType == SEED_UMBRELLA || aSeedType == SEED_BLOVER ||
-			TestBit(aRecFlags, NOT_RECOMMENDED_NEEDS_POOL))
+			TestBit(aRecFlags, NOT_RECOMMENDED_NEEDS_POOL) || Plant::IsNocturnal(aSeedType) && TestBit(aRecFlags, NOT_RECOMMENDED_NOCTURNAL))
 		{
 			aSeedArray[aSeedType].mWeight = 0;
 		}
@@ -578,18 +578,18 @@ void SeedChooserScreen::UpdateViewLawn()
 	if (mViewLawnTime <= 100)
 	{
 		mBoard->Move(-TodAnimateCurve(0, 100, mViewLawnTime, aBoardX, 0, CURVE_EASE_IN_OUT), 0);
-		Move(0, TodAnimateCurve(0, 40, mViewLawnTime, aSeedChooserY, SEED_CHOOSER_OFFSET_Y, CURVE_EASE_IN_OUT));
+		Move(0, TodAnimateCurve(0, 40, mViewLawnTime, aSeedChooserY, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY, CURVE_EASE_IN_OUT));
 	}
 	else if (mViewLawnTime <= 250)
 	{
 		mBoard->Move(0, 0);
-		Move(0, SEED_CHOOSER_OFFSET_Y);
+		Move(0, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY);
 	}
 	else if (mViewLawnTime <= 350)
 	{
 		mBoard->ClearAdvice(ADVICE_CLICK_TO_CONTINUE);
 		mBoard->Move(-TodAnimateCurve(250, 350, mViewLawnTime, 0, aBoardX, CURVE_EASE_IN_OUT), 0);
-		Move(0, TodAnimateCurve(310, 350, mViewLawnTime, SEED_CHOOSER_OFFSET_Y, aSeedChooserY, CURVE_EASE_IN_OUT));
+		Move(0, TodAnimateCurve(310, 350, mViewLawnTime, SEED_CHOOSER_OFFSET_Y - WIDESCREEN_OFFSETY, aSeedChooserY, CURVE_EASE_IN_OUT));
 	}
 	else
 	{
