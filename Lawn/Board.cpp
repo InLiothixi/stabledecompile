@@ -6864,6 +6864,8 @@ void Board::DrawIce(Graphics* g, int theGridY)
 //0x416290
 void Board::DrawBackdrop(Graphics* g)
 {
+	g->PushState();
+	g->SetLinearBlend(true);
 	Image* aBgImage = nullptr;
 	switch (mBackground)
 	{
@@ -6883,40 +6885,40 @@ void Board::DrawBackdrop(Graphics* g)
 
 	if (mLevel == 1 && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerLevelRef <= 4)
 	{
-		g->DrawImage(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+		g->DrawImageF(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, 0, Sexy::IMAGE_SOD1ROW->GetWidth(), TodCurves::CURVE_LINEAR);
 		Rect aSrcRect(0, 0, aWidth, Sexy::IMAGE_SOD1ROW->GetHeight());
-		g->DrawImage(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265, aSrcRect);
+		g->DrawImageF(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265, aSrcRect);
 	}
 	else if ((((mLevel == 2 || mLevel == 3) && mApp->IsFirstTimeAdventureMode()) || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_RESODDED) && mApp->mPlayerLevelRef <= 4)
 	{
-		g->DrawImage(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
-		g->DrawImage(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
+		g->DrawImageF(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+		g->DrawImageF(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
 		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, 0, Sexy::IMAGE_SOD3ROW->GetWidth(), TodCurves::CURVE_LINEAR);
 		Rect aSrcRect(0, 0, aWidth, Sexy::IMAGE_SOD3ROW->GetHeight());
-		g->DrawImage(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149, aSrcRect);
+		g->DrawImageF(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149, aSrcRect);
 	}
 	else if (mLevel == 4 && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerLevelRef <= 4)
 	{
-		g->DrawImage(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
-		g->DrawImage(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149);
+		g->DrawImageF(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+		g->DrawImageF(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149);
 		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, -WIDESCREEN_OFFSETX, 773 - WIDESCREEN_OFFSETX, TodCurves::CURVE_LINEAR);
 		Rect aSrcRect(232, 0, aWidth, Sexy::IMAGE_BACKGROUND1->GetHeight());
-		g->DrawImage(Sexy::IMAGE_BACKGROUND1, 232 - BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, aSrcRect);
+		g->DrawImageF(Sexy::IMAGE_BACKGROUND1, 232 - BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, aSrcRect);
 	}
 	else if (aBgImage)
 	{
 		if (aBgImage == Sexy::IMAGE_BACKGROUND_MUSHROOMGARDEN || aBgImage == Sexy::IMAGE_BACKGROUND_GREENHOUSE || aBgImage == Sexy::IMAGE_AQUARIUM1)
 		{
-			g->DrawImage(aBgImage, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+			g->DrawImageF(aBgImage, WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		}
 		else if (aBgImage == Sexy::IMAGE_BACKGROUND6)
 		{
-			g->DrawImage(aBgImage, -BOARD_OFFSET, 0);
+			g->DrawImageF(aBgImage, -BOARD_OFFSET, 0);
 		}
 		else
 		{
-			g->DrawImage(aBgImage, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
+			g->DrawImageF(aBgImage, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		}
 	}
 
@@ -6934,14 +6936,15 @@ void Board::DrawBackdrop(Graphics* g)
 		g->PushState();
 		g->SetColorizeImages(true);
 		g->SetColor(GetFlashingColor(mMainCounter, 75));
-		g->DrawImage(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
+		g->DrawImageF(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
 		g->PopState();
 	}
 	mChallenge->DrawBackdrop(g);
 	if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO && StageHasGraveStones())
 	{
-		g->DrawImage(Sexy::IMAGE_NIGHT_GRAVE_GRAPHIC, 1092, 30); // Y: 40
+		g->DrawImageF(Sexy::IMAGE_NIGHT_GRAVE_GRAPHIC, 1092, 30); // Y: 40
 	}
+	g->PopState();
 }
 
 //0x416690
@@ -8830,18 +8833,19 @@ void Board::DrawCover(Graphics* g)
 void Board::DrawForeGround(Graphics* g)
 {
 	g->PushState();
+	g->SetLinearBlend(true);
 	g->ClearClipRect();
 	g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth;
 	g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight;
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_5_ROOF:
-			g->DrawImage(Sexy::IMAGE_TREES, mTreeX, WIDESCREEN_OFFSETY);
-			g->DrawImage(Sexy::IMAGE_POLE, mPoleX, WIDESCREEN_OFFSETY);
+			g->DrawImageF(Sexy::IMAGE_TREES, mTreeX, WIDESCREEN_OFFSETY);
+			g->DrawImageF(Sexy::IMAGE_POLE, mPoleX, WIDESCREEN_OFFSETY);
 			break;
 		case BackgroundType::BACKGROUND_6_BOSS:
-			g->DrawImage(Sexy::IMAGE_NIGHT_TREES, mTreeX, WIDESCREEN_OFFSETY);
-			g->DrawImage(Sexy::IMAGE_NIGHT_POLE, mPoleX, WIDESCREEN_OFFSETY);
+			g->DrawImageF(Sexy::IMAGE_NIGHT_TREES, mTreeX, WIDESCREEN_OFFSETY);
+			g->DrawImageF(Sexy::IMAGE_NIGHT_POLE, mPoleX, WIDESCREEN_OFFSETY);
 			break;
 	}
 	g->PopState();

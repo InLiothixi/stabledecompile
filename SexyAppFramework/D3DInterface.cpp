@@ -413,7 +413,8 @@ bool D3DInterface::PreDraw()
 		// filter states 
 		mD3DDevice->SetTextureStageState(0,D3DTSS_MINFILTER, D3DTFN_POINT);
 		mD3DDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, D3DTFG_POINT);
-		mD3DDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, D3DTFP_NONE);
+		mD3DDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, D3DTFP_POINT);
+
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_COLORARG2, D3DTA_CURRENT );
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG2, D3DTA_CURRENT );
 //		mD3DDevice->SetTextureStageState(0,D3DTSS_COLORARG1, D3DTA_TEXTURE );
@@ -441,34 +442,30 @@ bool D3DInterface::PreDraw()
 ///////////////////////////////////////////////////////////////////////////////
 static LPDIRECTDRAWSURFACE7 CreateTextureSurface(LPDIRECT3DDEVICE7 theDevice, LPDIRECTDRAW7 theDraw, int theWidth, int theHeight, PixelFormat theFormat)
 {
-	if (D3DInterface::CheckDXError(theDevice->SetTexture(0, NULL),"SetTexture NULL"))
+	if (D3DInterface::CheckDXError(theDevice->SetTexture(0, NULL), "SetTexture NULL"))
 		return NULL;
 
 	DDSURFACEDESC2 aDesc;
-	LPDIRECTDRAWSURFACE7 aSurface;
-
 	ZeroMemory(&aDesc, sizeof(aDesc));
 	aDesc.dwSize = sizeof(aDesc);
-	
-	aDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-	
-	aDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE;
-//	aDesc.ddsCaps.dwCaps2 = DDSCAPS2_TEXTUREMANAGE;
-	aDesc.ddsCaps.dwCaps2 = DDSCAPS2_D3DTEXTUREMANAGE;
 
+	aDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT | DDSD_MIPMAPCOUNT;
+	aDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_MIPMAP | DDSCAPS_COMPLEX;
+	aDesc.ddsCaps.dwCaps2 = DDSCAPS2_D3DTEXTUREMANAGE;
+	aDesc.dwMipMapCount = (int)floor(log2(theWidth + theHeight));
 	aDesc.dwWidth = theWidth;
-	aDesc.dwHeight = theHeight;	
+	aDesc.dwHeight = theHeight;
 
 	aDesc.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
 	D3DInterface::MakeDDPixelFormat(theFormat, &aDesc.ddpfPixelFormat);
-//	D3DXMakeDDPixelFormat(theFormat, &aDesc.ddpfPixelFormat);
 
+	LPDIRECTDRAWSURFACE7 aSurface = nullptr;
 	HRESULT hr = theDraw->CreateSurface(&aDesc, &aSurface, NULL);
 
 	if (FAILED(hr))
 	{
 		std::string anError = GetDirectXErrorString(hr);
-		return NULL;	
+		return NULL;
 	}
 
 	return aSurface;
@@ -1011,6 +1008,127 @@ void TextureData::CreateTextureDimensions(MemoryImage *theImage)
 	mMaxTotalV = aHeight/(float)mTexPieceHeight;
 }
 
+static void FixMipAlphaEdge(DWORD* dst, int dstPitchBytes, int width, int height)
+{
+	for (int y = 0; y < height; ++y)
+	{
+		BYTE* rowBytes = (BYTE*)dst + y * dstPitchBytes;
+		DWORD* dstRow = (DWORD*)rowBytes;
+
+		for (int x = 0; x < width; ++x)
+		{
+			DWORD px = dstRow[x];
+			unsigned a = (px >> 24) & 0xFF;
+			if (a == 0)
+			{
+				unsigned sumR = 0, sumG = 0, sumB = 0, count = 0;
+
+				for (int iy = -1; iy <= 1; ++iy)
+				{
+					int ny = y + iy;
+					if (ny < 0 || ny >= height) continue;
+
+					BYTE* nRowBytes = (BYTE*)dst + ny * dstPitchBytes;
+					DWORD* nRow = (DWORD*)nRowBytes;
+
+					for (int ix = -1; ix <= 1; ++ix)
+					{
+						int nx = x + ix;
+						if (nx < 0 || nx >= width) continue;
+						if (ix == 0 && iy == 0) continue;
+
+						DWORD npx = nRow[nx];
+						unsigned na = (npx >> 24) & 0xFF;
+						if (na > 0)
+						{
+							sumR += (npx >> 16) & 0xFF;
+							sumG += (npx >> 8) & 0xFF;
+							sumB += (npx >> 0) & 0xFF;
+							++count;
+						}
+					}
+				}
+
+				if (count > 0)
+				{
+					unsigned r = (sumR + (count / 2)) / count;
+					unsigned g = (sumG + (count / 2)) / count;
+					unsigned b = (sumB + (count / 2)) / count;
+
+					dstRow[x] = (0u << 24) | (r << 16) | (g << 8) | b;
+				}
+			}
+		}
+	}
+}
+
+static inline unsigned DIV_ROUND(unsigned a, unsigned b) {
+	return (a + (b / 2)) / b;
+}
+
+static void Downscale8888_Premultiplied(DWORD* src, int srcPitchBytes, DWORD* dst, int dstPitchBytes, int width, int height) 
+{
+	for (int y = 0; y < height; ++y)
+	{
+		BYTE* srcRow0Bytes = (BYTE*)src + (y * 2) * srcPitchBytes;
+		BYTE* srcRow1Bytes = (BYTE*)src + (y * 2 + 1) * srcPitchBytes;
+		DWORD* dstRow = (DWORD*)((BYTE*)dst + y * dstPitchBytes);
+
+		DWORD* srcRow0 = (DWORD*)srcRow0Bytes;
+		DWORD* srcRow1 = (DWORD*)srcRow1Bytes;
+
+		for (int x = 0; x < width; ++x)
+		{
+			DWORD c00 = srcRow0[x * 2];
+			DWORD c01 = srcRow0[x * 2 + 1];
+			DWORD c10 = srcRow1[x * 2];
+			DWORD c11 = srcRow1[x * 2 + 1];
+
+			unsigned a0 = (c00 >> 24) & 0xFF;
+			unsigned a1 = (c01 >> 24) & 0xFF;
+			unsigned a2 = (c10 >> 24) & 0xFF;
+			unsigned a3 = (c11 >> 24) & 0xFF;
+
+			unsigned r0 = (c00 >> 16) & 0xFF;
+			unsigned r1 = (c01 >> 16) & 0xFF;
+			unsigned r2 = (c10 >> 16) & 0xFF;
+			unsigned r3 = (c11 >> 16) & 0xFF;
+
+			unsigned g0 = (c00 >> 8) & 0xFF;
+			unsigned g1 = (c01 >> 8) & 0xFF;
+			unsigned g2 = (c10 >> 8) & 0xFF;
+			unsigned g3 = (c11 >> 8) & 0xFF;
+
+			unsigned b0 = (c00 >> 0) & 0xFF;
+			unsigned b1 = (c01 >> 0) & 0xFF;
+			unsigned b2 = (c10 >> 0) & 0xFF;
+			unsigned b3 = (c11 >> 0) & 0xFF;
+
+			unsigned alphaSum = a0 + a1 + a2 + a3; 
+
+			unsigned prSum = r0 * a0 + r1 * a1 + r2 * a2 + r3 * a3;
+			unsigned pgSum = g0 * a0 + g1 * a1 + g2 * a2 + g3 * a3;
+			unsigned pbSum = b0 * a0 + b1 * a1 + b2 * a2 + b3 * a3;
+
+			unsigned outA = (alphaSum + 2) / 4; 
+
+			unsigned outR, outG, outB;
+			if (alphaSum > 0)
+			{
+				outR = DIV_ROUND(prSum, alphaSum);
+				outG = DIV_ROUND(pgSum, alphaSum);
+				outB = DIV_ROUND(pbSum, alphaSum);
+			}
+			else
+			{
+				outR = outG = outB = 0;
+			}
+
+			dstRow[x] = (outA << 24) | (outR << 16) | (outG << 8) | outB;
+		}
+	}
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 void TextureData::CreateTextures(MemoryImage *theImage, LPDIRECT3DDEVICE7 theDevice, LPDIRECTDRAW7 theDraw)
@@ -1106,6 +1224,54 @@ void TextureData::CreateTextures(MemoryImage *theImage, LPDIRECT3DDEVICE7 theDev
 			}
 
 			CopyImageToTexture(aPiece.mTexture,theImage,x,y,aPiece.mWidth,aPiece.mHeight,aFormat);
+
+			if (aFormat == PixelFormat_A8R8G8B8)
+			{
+				LPDIRECTDRAWSURFACE7 pCurrent = aPiece.mTexture;
+				DDSURFACEDESC2 descCur, descNext;
+				ZeroMemory(&descCur, sizeof(descCur));
+				descCur.dwSize = sizeof(descCur);
+
+				int mipCount = 0;
+
+				while (true)
+				{
+					DDSCAPS2 caps;
+					ZeroMemory(&caps, sizeof(caps));
+					caps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_MIPMAP;
+
+					LPDIRECTDRAWSURFACE7 pNext = nullptr;
+					if (FAILED(pCurrent->GetAttachedSurface(&caps, &pNext)))
+						break; // no more mip levels
+
+					if (FAILED(pCurrent->Lock(NULL, &descCur, DDLOCK_WAIT, NULL)))
+						break;
+
+					ZeroMemory(&descNext, sizeof(descNext));
+					descNext.dwSize = sizeof(descNext);
+					if (FAILED(pNext->Lock(NULL, &descNext, DDLOCK_READONLY | DDLOCK_WAIT, NULL)))
+					{
+						pCurrent->Unlock(NULL);
+						break;
+					}
+
+					int newWidth = max(1, (int)descCur.dwWidth / 2);
+					int newHeight = max(1, (int)descCur.dwHeight / 2);
+
+					Downscale8888_Premultiplied((DWORD*)descCur.lpSurface, descCur.lPitch, (DWORD*)descNext.lpSurface, descNext.lPitch, newWidth, newHeight);
+
+					if (mipCount == 0)
+					{
+						FixMipAlphaEdge((DWORD*)descNext.lpSurface, descNext.lPitch, newWidth, newHeight);
+					}
+
+					pCurrent->Unlock(NULL);
+					pNext->Unlock(NULL);
+
+					pCurrent = pNext;
+					mipCount++;
+				}
+			}
 		}
 	}
 
@@ -1199,6 +1365,7 @@ static void SetLinearFilter(LPDIRECT3DDEVICE7 theDevice, bool linear)
 
 		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MINFILTER, linear ? D3DTFN_LINEAR : D3DTFN_POINT), aDebugContext);
 		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MAGFILTER, linear ? D3DTFG_LINEAR : D3DTFG_POINT),aDebugContext);
+		D3DInterface::CheckDXError(theDevice->SetTextureStageState(0,D3DTSS_MIPFILTER, linear ? D3DTFP_LINEAR : D3DTFP_POINT), aDebugContext);
 		gLinearFilter = linear;
 	}
 }

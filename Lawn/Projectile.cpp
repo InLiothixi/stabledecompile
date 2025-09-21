@@ -1227,6 +1227,11 @@ void Projectile::DoImpact(Zombie* theZombie)
 	{
 		if (IsSplashDamage(theZombie))
 		{
+			if (mPosX + 38.0f > 710 - mWidth)
+			{
+				mRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_ZOMBIE, mRow, 7);
+			}
+
 			Reanimation* aFireReanim = mApp->AddReanimation(mPosX + 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
 			aFireReanim->mAnimTime = 0.25f;
 			aFireReanim->mAnimRate = 24.0f;
