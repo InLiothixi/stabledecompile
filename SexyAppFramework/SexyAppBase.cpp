@@ -46,6 +46,7 @@
 #include "../GameConstants.h"
 #include <windowsx.h>
 
+#include "../LawnApp.h"
 
 //Touch
 #include <WinUser.h>
@@ -6336,6 +6337,7 @@ int SexyAppBase::InitDDInterface()
 		mWidgetManager->Resize(mScreenBounds, mDDInterface->mPresentationRect);
 		PostDDInterfaceInitHook();
 	}
+	gLawnApp->gBoardBounds = Rect{0, 0, mDDInterface->mWidth, mDDInterface->mHeight};
 	return aResult;
 }
 

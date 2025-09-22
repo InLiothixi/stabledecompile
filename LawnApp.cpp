@@ -68,8 +68,6 @@ bool gFastMo = false;  //0x6A9EAB
 LawnApp* gLawnApp = nullptr;  //0x6A9EC0
 int gSlowMoCounter = 0;  //0x6A9EC4
 
-Rect LawnApp::gBoardBounds(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-
 //0x44E8A0
 bool LawnGetCloseRequest()
 {
@@ -2024,7 +2022,7 @@ void LawnApp::LoadingThreadProc()
 		mBoardCamera = new MemoryImage();
 		mBoardCamera->mWidth = BOARD_WIDTH;
 		mBoardCamera->mHeight = BOARD_HEIGHT;
-		int aNumBits = BOARD_WIDTH * BOARD_HEIGHT;
+		int aNumBits = mBoardCamera->mWidth * mBoardCamera->mHeight;
 		mBoardCamera->mBits = new unsigned long[aNumBits + 1];
 		mBoardCamera->mHasTrans = true;
 		mBoardCamera->mHasAlpha = true;
@@ -3969,7 +3967,7 @@ bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 
 bool LawnApp::ChallengeHasScores(GameMode theGameMode)
 {
-#ifndef _HAS_SCORESYSTEM
+#ifndef _HAS_SCORE_SYSTEM
 	return false;
 #endif
 	return IsEndlessIZombie(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsSurvivalEndless(theGameMode) || IsLastStandEndless(theGameMode);
@@ -4141,15 +4139,22 @@ bool LawnApp::IsLastStandEndless(GameMode theGameMode)
 	return aLevel >= 0 && aLevel <= 4;
 }
 
-void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera) 
+void LawnApp::DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera)
 {
 	DDImage* screen = mDDInterface->GetScreenImage();
 
 	LPDIRECTDRAWSURFACE oldDrawSurface = mDDInterface->mDrawSurface;
 	mDDInterface->mDrawSurface = NULL;
+	DDImage* anImage = new DDImage(mDDInterface);
+	anImage->SetSurface(oldDrawSurface);
+	anImage->GetBits();
 
-	screen->CopySurfaceToMemoryImage(mBoardCamera);
+	mBoardCamera->mBits = anImage->mBits;
+	mBoardCamera->mWidth = anImage->mWidth;
+	mBoardCamera->mHeight = anImage->mHeight;
 
+
+	anImage->DeleteDDSurface();
 	mDDInterface->mDrawSurface = oldDrawSurface;
 
 	Image* theImage = mBoardCamera;

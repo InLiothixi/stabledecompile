@@ -11,6 +11,7 @@
 #include "Debug.h"
 #include "DirectXErrorString.h"
 #include "MemoryImage.h"
+#include "../LawnApp.h"
 
 using namespace Sexy;
 
@@ -449,6 +450,8 @@ int DDInterface::Init(HWND theWindow, bool IsWindowed)
 			mDisplayHeight = mDesktopHeight;
 			mDisplayAspect = mDesktopAspect;
 		}
+
+		gLawnApp->gBoardBounds = Rect{ 0, 0, mWidth, mHeight };
 
 		OutputDebug(_S("Display is           %4lu x %4lu [%2d:%2d]\n"), mDisplayWidth, mDisplayHeight, mDisplayAspect.mNumerator, mDisplayAspect.mDenominator);
 

@@ -105,7 +105,7 @@ Board::Board(LawnApp* theApp)
 	mShakeAmountX = 0;
 	mShakeAmountY = 0;
 	mCameraTranform.LoadIdentity();
-	mCameraClipRect = LawnApp::gBoardBounds;
+	mCameraClipRect = mApp->gBoardBounds;
 	mCameraColor = Color::White;
 	mCameraFilter = FilterEffect::FILTER_EFFECT_NONE;
 	mDrawOnlyCamera = true;
@@ -8602,12 +8602,6 @@ void Board::DrawUIBottom(Graphics* g)
 			if (shoutAllowed) TodDrawString(g, _S("[SHOUT_LABEL]"), posX + 5, posY - 3, Sexy::FONT_HOUSEOFTERROR20, Color(0xFF0000), DS_ALIGN_LEFT);
 		}
 
-		if (mApp->ChallengeHasScores(mApp->mGameMode) && mApp->mGameScene == GameScenes::SCENE_PLAYING) {
-			g->DrawImageMirror(Sexy::IMAGE_SEEDBANK, Rect(681, 42, 223, 54), Rect(0, 0, 446, 87), true);
-			TodDrawString(g, _S("[SCORE_LABEL]"), 691, 66, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_LEFT);
-			TodDrawString(g, StrFormat(_S("%d"), mChallenge->mChallengePoints).c_str(), 725, 85, Sexy::FONT_HOUSEOFTERROR16, Color::White, DrawStringJustification::DS_ALIGN_LEFT);
-		}
-
 		if (mAdvice->mMessageStyle == MessageStyle::MESSAGE_STYLE_SLOT_MACHINE)
 		{
 			mAdvice->Draw(g);
@@ -9323,6 +9317,12 @@ void Board::DrawUITop(Graphics* g)
 		g->PopState();
 	}
 
+	if (mApp->ChallengeHasScores(mApp->mGameMode) && mApp->mGameScene == GameScenes::SCENE_PLAYING) {
+		g->DrawImageMirror(Sexy::IMAGE_SEEDBANK, Rect(681, 42, 223, 54), Rect(0, 0, 446, 87), true);
+		TodDrawString(g, _S("[SCORE_LABEL]"), 691, 66, Sexy::FONT_HOUSEOFTERROR16, Color(224, 187, 98), DrawStringJustification::DS_ALIGN_LEFT);
+		TodDrawString(g, StrFormat(_S("%d"), mChallenge->mChallengePoints).c_str(), 725, 85, Sexy::FONT_HOUSEOFTERROR16, Color::White, DrawStringJustification::DS_ALIGN_LEFT);
+	}
+
 	if (mAdvice->mMessageStyle != MessageStyle::MESSAGE_STYLE_SLOT_MACHINE)
 	{
 		mAdvice->Draw(g);
@@ -9372,10 +9372,10 @@ void Board::Draw(Graphics* g)
 	DrawGameObjects(g);
 
 	if (mCameraTranform.m01 != 0 || mCameraTranform.m02 != 0 || mCameraTranform.m10 != 0 || mCameraTranform.m12 != 0 || mCameraTranform.m20 != 0 || mCameraTranform.m21 != 0 ||
-		mCameraTranform.m00 != 1 || mCameraTranform.m11 != 1 || mCameraTranform.m22 != 1 || mCameraColor != Color::White || !(mCameraClipRect == LawnApp::gBoardBounds) || mCameraFilter != FilterEffect::FILTER_EFFECT_NONE) // if no transform then do not render camera
+		mCameraTranform.m00 != 1 || mCameraTranform.m11 != 1 || mCameraTranform.m22 != 1 || mCameraColor != Color::White || !(mCameraClipRect == mApp->gBoardBounds) || mCameraFilter != FilterEffect::FILTER_EFFECT_NONE) // if no transform then do not render camera
 	{
 		SexyTransform2D aTransform;
-		TodScaleRotateTransformMatrix(aTransform, mCameraTranform.m02 + 400, mCameraTranform.m12 + 300, 0, mCameraTranform.m00, mCameraTranform.m11);
+		TodScaleRotateTransformMatrix(aTransform, mCameraTranform.m02 + mApp->gBoardBounds.mWidth / 2, mCameraTranform.m12 + mApp->gBoardBounds.mHeight / 2, 0, mCameraTranform.m00, mCameraTranform.m11);
 		mApp->DrawBoardCamera(g, aTransform, mCameraColor, Graphics::DRAWMODE_NORMAL, mCameraClipRect, mCameraFilter, mDrawOnlyCamera);
 	}
 }

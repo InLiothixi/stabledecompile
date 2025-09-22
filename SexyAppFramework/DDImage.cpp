@@ -2151,56 +2151,6 @@ void DDImage::BitsChanged()
 	mSurface = NULL;
 }
 
-bool DDImage::CopySurfaceToMemoryImage(MemoryImage* destImage)
-{
-	if (!mSurface || !LockSurface())
-		return false;
-
-	ulong* dstBits = destImage->mBits;
-
-	if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 16)
-	{
-		ushort* srcRow = (ushort*)mLockedSurfaceDesc.lpSurface;
-		for (int y = 0; y < mHeight; y++)
-		{
-			ushort* src = srcRow;
-			for (int x = 0; x < mWidth; x++)
-			{
-				ushort pix = *src++;
-				int r = ((pix >> mDDInterface->mRedShift) << (8 - mDDInterface->mRedBits)) & 0xFF;
-				int g = ((pix >> mDDInterface->mGreenShift) << (8 - mDDInterface->mGreenBits)) & 0xFF;
-				int b = ((pix >> mDDInterface->mBlueShift) << (8 - mDDInterface->mBlueBits)) & 0xFF;
-
-				*dstBits++ = 0xFF000000 | (r << 16) | (g << 8) | b;
-			}
-			srcRow += mLockedSurfaceDesc.lPitch / 2;
-		}
-	}
-	else if (mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
-	{
-		ulong* srcRow = (ulong*)mLockedSurfaceDesc.lpSurface;
-		for (int y = 0; y < mHeight; y++)
-		{
-			ulong* src = srcRow;
-			for (int x = 0; x < mWidth; x++)
-			{
-				ulong pix = *src++;
-				int r = ((pix >> mDDInterface->mRedShift) << (8 - mDDInterface->mRedBits)) & 0xFF;
-				int g = ((pix >> mDDInterface->mGreenShift) << (8 - mDDInterface->mGreenBits)) & 0xFF;
-				int b = ((pix >> mDDInterface->mBlueShift) << (8 - mDDInterface->mBlueBits)) & 0xFF;
-
-				*dstBits++ = 0xFF000000 | (r << 16) | (g << 8) | b;
-			}
-			srcRow += mLockedSurfaceDesc.lPitch / 4;
-		}
-	}
-
-	UnlockSurface();
-	destImage->BitsChanged();
-	return true;
-}
-
-
 ulong* DDImage::GetBits()
 {
 	if (mBits == NULL)

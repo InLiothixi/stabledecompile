@@ -94,7 +94,7 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 #define _ALLOW_RESOURCE_PACKS
 
 // Unused or Restored
-//#define _HAS_SCORE_SYSTEM
+#define _HAS_SCORE_SYSTEM
 //#define _HAS_BLOOM_AND_DOOM_CONTENTS
 #define _HAS_EXTENDED_MINIGAMES
 //#define _HAS_UNUSED_ACHIEVEMENTS
