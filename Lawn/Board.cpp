@@ -1696,12 +1696,15 @@ void Board::InitLevel()
 	}
 	// 初始化阳光掉落
 	mNumSunsFallen = 0;
+
+	if (!StageIsNight() 
 #ifdef _CONSOLE_MINIGAMES
-	if (!StageIsNight() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+		&& mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+		)
 	{
 		mSunCountDown = RandRangeInt(425, 700);
 	}
-#endif
 	// 初始化字幕播放记录
 	memset(mHelpDisplayed, 0, sizeof(mHelpDisplayed));
 	// 初始化卡槽及卡牌
@@ -8704,6 +8707,7 @@ void Board::DrawUIBottom(Graphics* g)
 			}
 			if (shoutAllowed) TodDrawString(g, _S("[SHOUT_LABEL]"), posX + 5, posY - 3, Sexy::FONT_HOUSEOFTERROR20, Color(0xFF0000), DS_ALIGN_LEFT);
 		}
+#endif
 
 		if (mAdvice->mMessageStyle == MessageStyle::MESSAGE_STYLE_SLOT_MACHINE)
 		{

@@ -1996,7 +1996,9 @@ void GameSelector::ShowZombatarScreen() {
 	mZombatarWidget->mBackButton->mButtonImage = Sexy::IMAGE_BLANK;
 	mZombatarWidget->mBackButton->mDownImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
 	mZombatarWidget->mBackButton->mOverImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
+#ifdef _HAS_MORESCREEN
 	mMoreWidget->DisableButtons(true);
+#endif
 	DisableButtons(true);
 }
 #endif
@@ -2016,6 +2018,7 @@ void GameSelector::ShowQuickplayScreen() {
 	mWidgetManager->PutBehind(mZombatarWidget, mLevelSelectorWidget);
 #endif
 
+#ifdef _HAS_LEVELSELECTOR
 	//int currentStage = min((int)(mApp->mPlayerInfo->mLevel / 10.0f), 4) + 1;
 	//currentStage = 1;
 	//mLevelSelectorWidget->theCurrentId = currentStage;
