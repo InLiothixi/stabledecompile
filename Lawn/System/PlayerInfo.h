@@ -79,7 +79,9 @@ public:
     bool                mEarnedAchievements[(int)AchievementId::MAX_ACHIEVEMENTS];            //+GOTY @Patoke: 0x24
     bool                mShownAchievements[(int)AchievementId::MAX_ACHIEVEMENTS];             //+GOTY @Patoke: 0x38    
     bool                mPlantedPlants[(int)SeedType::SEED_LEFTPEATER]; //+GOTY @InLiothixie
+#ifdef _HAS_ZOMBATAR
     bool                mAckZombatarTOS;
+#endif
     bool                mDidRIPMode;
     int                 mRIPLevel;
 

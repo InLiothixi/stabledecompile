@@ -1376,7 +1376,7 @@ void LawnApp::Init()
 	if (GetFileAttributesExA("extension\\properties\\resources.xml", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("extension\\properties\\resources.xml"))
 		IsXMLPackLoaded &= mResourceManager->ParseResourcesFile(_S("extension\\properties\\resources.xml"));
 
-#ifdef _ALLOW_RESOURCEPACKS
+#ifdef _ALLOW_RESOURCE_PACKS
 	if (GetFileAttributesExA("resourcepack\\properties\\resources.xml", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("resourcepack\\properties\\resources.xml"))
 		IsXMLPackLoaded &= mResourceManager->ParseResourcesFile(_S("resourcepack\\properties\\resources.xml"));
 #endif
@@ -1959,7 +1959,7 @@ void LawnApp::LoadingThreadProc()
 	if (GetFileAttributesExA("extension\\properties\\LawnStrings.txt", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("extension\\properties\\LawnStrings.txt"))
 		TodStringListLoad(_S("extension\\properties\\LawnStrings.txt"));
 
-#ifdef _ALLOW_RESOURCEPACKS
+#ifdef _ALLOW_RESOURCE_PACKS
 	if (GetFileAttributesExA("resourcepack\\properties\\LawnStrings.txt", GetFileExInfoStandard, &fileInfo) != 0 || IsFileInPakFile("resourcepack\\properties\\LawnStrings.txt"))
 		TodStringListLoad(_S("resourcepack\\properties\\LawnStrings.txt"));
 #endif
@@ -2580,9 +2580,12 @@ bool LawnApp::IsChallengeWithoutSeedBank()
 		IsSquirrelLevel() || 
 		IsScaryPotterLevel() || 
 		mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || 
-		mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
-		mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
-		mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN;
+		mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM 
+#ifdef _CONSOLE_MINIGAMES
+		|| mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN
+#endif
+		;
 }
 
 bool LawnApp::IsNight()
@@ -3929,6 +3932,7 @@ void LawnApp::UpdateRegisterInfo()
 
 }
 
+#ifdef _HAS_ZOMBATAR
 void LawnApp::ShowZombatarTOS()
 {
 	KillDialog(Dialogs::DIALOG_ZOMBATARTOS);
@@ -3940,7 +3944,7 @@ void LawnApp::ShowZombatarTOS()
 	AddDialog(Dialogs::DIALOG_ZOMBATARTOS, aDialog);
 	mWidgetManager->SetFocus(aDialog);
 }
-
+#endif
 
 void LawnApp::ShowLanagugeScreen()
 {
@@ -3962,7 +3966,11 @@ void LawnApp::KillLanguageScreen()
 
 bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 {
-	return theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE || theGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && gLawnApp->IsScreenSaver();
+	return 
+#ifdef _CONSOLE_MINIGAMES
+		theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+#endif
+		theGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && gLawnApp->IsScreenSaver();
 }
 
 bool LawnApp::ChallengeHasScores(GameMode theGameMode)

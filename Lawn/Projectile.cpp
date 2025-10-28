@@ -30,9 +30,11 @@ ProjectileDefinition gProjectileDefinition[] = {  //0x69F1C0
 	{ ProjectileType::PROJECTILE_COBBIG,        0,  300 },
 	{ ProjectileType::PROJECTILE_BUTTER,        0,  40  },
 	{ ProjectileType::PROJECTILE_ZOMBIE_PEA,    0,  20  },
+#ifdef _PIERCING_CACTUS
 	{ ProjectileType::PROJECTILE_PIERCE_SPIKE,  0,  20  },
+#endif
 #ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
-	,{ ProjectileType::PROJECTILE_LETTUCE,       10, 40  },
+	{ ProjectileType::PROJECTILE_LETTUCE,       10, 40  },
 	{ ProjectileType::PROJECTILE_BEE,			3,  20  }
 #endif
 };
@@ -352,7 +354,7 @@ Zombie* Projectile::FindCollisionTarget()
 			isEffected = aZombie->EffectedByDamage(129);
 		}
 
-
+#ifdef _PIERCING_CACTUS
 		if (mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE && mNumPierced > 0)
 		{
 			unsigned int theZombieID = mBoard->mZombies.DataArrayGetID(aZombie);
@@ -369,6 +371,7 @@ Zombie* Projectile::FindCollisionTarget()
 
 			if (isAlreadyPierced)	continue;
 		}
+#endif
 
 		if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == mRow) && isEffected)
 		{
@@ -518,7 +521,9 @@ void Projectile::CheckForHighGround()
 		mProjectileType == ProjectileType::PROJECTILE_SNOWPEA ||
 		mProjectileType == ProjectileType::PROJECTILE_FIREBALL ||
 		mProjectileType == ProjectileType::PROJECTILE_SPIKE ||
+#ifdef _PIERCING_CACTUS
 		mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE ||
+#endif
 		mProjectileType == ProjectileType::PROJECTILE_COBBIG )
 	{
 		if (aShadowDelta < 28.0f)
@@ -1121,7 +1126,7 @@ void Projectile::PlayImpactSound(Zombie* theZombie)
 void Projectile::DoImpact(Zombie* theZombie)
 {
 	ProjectileDefinition aProjDef = GetProjectileDef();
-
+#ifdef _PIERCING_CACTUS
 	if (theZombie && mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
 	{
 		unsigned int theZombieID = mBoard->mZombies.DataArrayGetID(theZombie);
@@ -1161,7 +1166,7 @@ void Projectile::DoImpact(Zombie* theZombie)
 			}
 		}
 	}
-
+#endif
 	PlayImpactSound(theZombie);
 
 	/*if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
@@ -1275,11 +1280,16 @@ void Projectile::DoImpact(Zombie* theZombie)
 				theZombie->mButterFilterEffect = mFilterEffect;
 		}
 	}
-	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
+
+	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE 
+	#ifdef _PIERCING_CACTUS || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE
+	#endif
+	)
 	{
 		aSplatPosX -= 15.0f;
 		aEffect = ParticleEffect::PARTICLE_SPIKE_SPLAT;
 	}
+
 
 	if (aEffect != ParticleEffect::PARTICLE_NONE)
 	{
@@ -1364,8 +1374,10 @@ void Projectile::DoImpact(Zombie* theZombie)
 	}
 	else 
 	{
+#ifdef _PIERCING_CACTUS
 		if (mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE && mNumPierced < 2)
 			return;
+#endif
 
 		Die();
 	}
@@ -1461,7 +1473,11 @@ void Projectile::Draw(Graphics* g)
 	{
 		aImage = nullptr;
 	}
-	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
+	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE
+#ifdef _PIERCING_CACTUS
+		|| mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE
+#endif
+		)
 	{
 		aImage = IMAGE_PROJECTILECACTUS;
 	}
@@ -1750,7 +1766,11 @@ Rect Projectile::GetProjectileRect()
 	{
 		return Rect(mX, mY, mWidth - 10, mHeight);
 	}
-	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE || mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE)
+	else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE
+#ifdef _PIERCING_CACTUS
+		|| mProjectileType == ProjectileType::PROJECTILE_PIERCE_SPIKE
+#endif
+		)
 	{
 		return Rect(mX - 25, mY, mWidth + 25, mHeight);
 	}

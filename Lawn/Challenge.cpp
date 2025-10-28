@@ -430,10 +430,12 @@ void Challenge::StartLevel()
 		mBoard->mZombieCountDown = 200;
 		mBoard->mZombieCountDownStart = mBoard->mZombieCountDown;
 	}
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_GLOVE;
 	}
+#endif
 	if (mApp->IsStormyNightLevel())
 	{
 		mChallengeState = STATECHALLENGE_STORM_FLASH_1;
@@ -556,6 +558,7 @@ void Challenge::StartLevel()
 		SquirrelStart();
 	}
 
+#ifdef _CONSOLE_MINIGAMES
 	if (aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->DisplayAdvice(_S("[ADVICE_HEAT_WAVE]"), MESSAGE_STYLE_HINT_FAST, ADVICE_NONE);
@@ -566,6 +569,7 @@ void Challenge::StartLevel()
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_BUTTER;
 	}
+#endif
 }
 
 //0x420150
@@ -1358,13 +1362,14 @@ bool Challenge::MouseDown(int x, int y, int theClickCount, HitResult* theHitResu
 		ScaryPotterMalletPot((GridItem*)theHitResult->mObject);
 		return true;
 	}
-
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && theHitResult->mObjectType == OBJECT_TYPE_NONE &&
 		mBoard->mCursorObject->mCursorType == CURSOR_TYPE_BUTTER && theClickCount >= 0)
 	{
 		MouseDownButterAZombie(x, y);
 		return true;
 	}
+#endif
 
 	return false;
 }
@@ -1404,6 +1409,7 @@ void Challenge::ClearCursor()
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_HAMMER;
 	}
 
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_GLOVE;
@@ -1413,6 +1419,7 @@ void Challenge::ClearCursor()
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_BUTTER;
 	}
+#endif
 }
 
 //0x4222F0
@@ -2286,10 +2293,12 @@ void Challenge::Update()
 	{
 		LastStandUpdate();
 	}
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		HeatWaveUpdate();
 	}
+#endif
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
 	{
@@ -2843,6 +2852,7 @@ void Challenge::InitZombieWaves()
 		aList[ZOMBIE_FOOTBALL] = true;
 		aList[ZOMBIE_SNORKEL] = true;
 	}
+#ifdef _CONSOLE_MINIGAMES
 	else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		//
@@ -2861,6 +2871,7 @@ void Challenge::InitZombieWaves()
 		aList[ZOMBIE_JACK_IN_THE_BOX] = true;
 		aList[ZOMBIE_GARGANTUAR] = true;
 	}
+#endif
 	else if (mApp->mGameMode == GameMode::GAMEMODE_LAST_STAND_STAGE_1)
 	{
 		aList[ZOMBIE_NORMAL] = true;
@@ -2953,7 +2964,11 @@ void Challenge::InitZombieWaves()
 	}
 	
 	if (mApp->CanSpawnYetis() && !mApp->IsWhackAZombieLevel() && !mApp->IsLittleTroubleLevel() && 
-		aGameMode != GameMode::GAMEMODE_CHALLENGE_POGO_PARTY && aGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE &&
+		aGameMode != GameMode::GAMEMODE_CHALLENGE_POGO_PARTY
+#ifdef _CONSOLE_MINIGAMES
+		&& aGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+		&&
 		aGameMode != GameMode::GAMEMODE_CHALLENGE_AIR_RAID)
 		aList[ZOMBIE_YETI] = true;
 }
@@ -6047,7 +6062,7 @@ bool Challenge::TreeOfWisdomCanFeed()
 
 	return true;
 }
-
+#ifdef _CONSOLE_MINIGAMES
 void Challenge::HeatWaveUpdate()
 {
 	if (mBoard->mMainCounter % 750 == 0 && mBoard->mMainCounter > 1500)
@@ -6271,7 +6286,7 @@ void Challenge::HeatWaveUpdate()
 			mChallengeStateCounter++;
 	}
 }
-
+#endif
 void Challenge::MouseDownButterAZombie(int theX, int theY)
 {
 	Zombie* aZombie = nullptr;

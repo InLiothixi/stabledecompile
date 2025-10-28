@@ -189,7 +189,7 @@ Board::Board(LawnApp* theApp)
 	mDebugTextMode = DebugTextMode::DEBUG_TEXT_NONE;
 	mMenuButton = new GameButton(0);
 	mMenuButton->mDrawStoneButton = true;
-	{
+#ifdef _REPLANTED_SPEED_CONTROL
 		mSlowdownButton = MakeNewButton(Board::SLOWDOWN, this, "", nullptr, Sexy::IMAGE_SLOWDOWN_BUTTON, Sexy::IMAGE_SLOWDOWN_BUTTON_PRESSED, Sexy::IMAGE_SLOWDOWN_BUTTON_PRESSED);
 		mSlowdownButton->Resize(0, 0, Sexy::IMAGE_SLOWDOWN_BUTTON->GetWidth(), Sexy::IMAGE_SLOWDOWN_BUTTON->GetHeight());
 		mSlowdownButton->mBtnNoDraw = true;
@@ -210,7 +210,7 @@ Board::Board(LawnApp* theApp)
 		mSpeedupButton->mDoFinger = true;
 		mSpeedupButton->mTranslateX = 0;
 		mSpeedupButton->mTranslateY = 0;
-	}
+#endif
 	mStoreButton = nullptr;
 	mIgnoreMouseUp = false;
 	mNukeCounter = 0;
@@ -222,12 +222,14 @@ Board::Board(LawnApp* theApp)
 	mHeldCounter = -1;
 	mHeldStartX = -1;
 	mHeldStartY = -1;
+#ifdef _REPLANTED_SPEED_CONTROL
 	mAllowSpeedMod = false;
 	mPrevSpeedMod = SpeedMod::SPEED_NORMAL;
 	mSpeedMod = SpeedMod::SPEED_NORMAL;
 	mSlowMoCounter = 0;
 	mQECounter = 0;
 	mIsReplay = false;
+#endif
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
 	{
@@ -278,6 +280,7 @@ Board::~Board()
 	{
 		delete mMenuButton;
 	}
+#ifdef _REPLANTED_SPEED_CONTROL
 	if (mSlowdownButton)
 	{
 		delete mSlowdownButton;
@@ -290,6 +293,7 @@ Board::~Board()
 	{
 		delete mSpeedupButton;
 	}
+#endif
 	if (mStoreButton)
 	{
 		delete mStoreButton;
@@ -626,8 +630,10 @@ bool Board::IsFlagWave(int theWaveNumber)
 	if (mApp->IsFirstTimeAdventureMode() && mLevel == 1 && mApp->mPlayerLevelRef <= 4)
 		return false;
 
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 		return false;
+#endif
 
 	int aWavesPerFlag = GetNumWavesPerFlag();
 	return theWaveNumber % aWavesPerFlag == aWavesPerFlag - 1;
@@ -707,8 +713,12 @@ void Board::PickZombieWaves()
 		else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || aGameMode == GameMode::GAMEMODE_CHALLENGE_AIR_RAID ||
 				 aGameMode == GameMode::GAMEMODE_CHALLENGE_GRAVE_DANGER || aGameMode == GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY ||
 				 aGameMode == GameMode::GAMEMODE_CHALLENGE_PORTAL_COMBAT || aGameMode == GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS ||
-				 aGameMode == GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL || aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
-				 aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+				 aGameMode == GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL 
+#ifdef _CONSOLE_MINIGAMES
+			|| aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+				 aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN
+#endif
+			)
 			mNumWaves = 20;
 		else if (mApp->IsStormyNightLevel() || mApp->IsLittleTroubleLevel() || mApp->IsBungeeBlitzLevel() ||
 				 aGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->IsShovelLevel() || aGameMode == GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS_2 ||
@@ -796,10 +806,12 @@ void Board::PickZombieWaves()
 		{
 			aZombiePoints *= 6;
 		}
+#ifdef _CONSOLE_MINIGAMES
 		else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
 		{
 			aZombiePoints *= 5;
 		}
+#endif
 		else if (mApp->IsLittleTroubleLevel() || mApp->IsWallnutBowlingLevel())
 		{
 			aZombiePoints *= 4;
@@ -896,7 +908,7 @@ void Board::PickZombieWaves()
 				}
 			}
 		}
-
+#ifdef _CONSOLE_MINIGAMES
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE) {
 			if (aWave == 0 || aWave == 1 || aWave >= 5 && aWave <= 7 || aWave >= 9 && aWave <= 11 ||
 				aWave >= 13 && aWave <= 17)
@@ -917,7 +929,7 @@ void Board::PickZombieWaves()
 			if (aWave == 18)
 				PutZombieInWave(ZOMBIE_GARGANTUAR, aWave, &aZombiePicker);
 		}
-		
+#endif
 		// ------------------------------------------------------------------------------------------------
 		// △ 剩余的僵尸点数用于向列表中补充随机僵尸
 		// ------------------------------------------------------------------------------------------------
@@ -1108,8 +1120,10 @@ void Board::PickBackground()
 	case GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS_2:
 	case GameMode::GAMEMODE_UPSELL:
 	case GameMode::GAMEMODE_INTRO:
+#ifdef _CONSOLE_MINIGAMES
 	case GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE:
 	case GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN:
+#endif
 	case GameMode::GAMEMODE_LAST_STAND_STAGE_3:
 	case GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_3:
 		mBackground = BackgroundType::BACKGROUND_3_POOL;
@@ -1480,10 +1494,12 @@ void Board::InitZombieWaves()
 	{
 		mZombieCountDown = ZOMBIE_COUNTDOWN_RANGE;
 	}
+#ifdef _CONSOLE_MINIGAMES
 	else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mZombieCountDown = 100;
 	}
+#endif
 	else
 	{
 		mZombieCountDown = ZOMBIE_COUNTDOWN_FIRST_WAVE;
@@ -1680,10 +1696,12 @@ void Board::InitLevel()
 	}
 	// 初始化阳光掉落
 	mNumSunsFallen = 0;
+#ifdef _CONSOLE_MINIGAMES
 	if (!StageIsNight() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mSunCountDown = RandRangeInt(425, 700);
 	}
+#endif
 	// 初始化字幕播放记录
 	memset(mHelpDisplayed, 0, sizeof(mHelpDisplayed));
 	// 初始化卡槽及卡牌
@@ -1975,7 +1993,9 @@ void Board::InitLawnMowers()
 	if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||
 		aGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
 		mApp->IsLastStand() || aGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
+#ifdef _CONSOLE_MINIGAMES
 		aGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
+#endif
 		mApp->IsSquirrelLevel() || mApp->IsIZombieLevel() || (StageHasRoof() && !mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_ROOF_CLEANER]))
 		return;
 
@@ -2862,7 +2882,11 @@ ZombieType Board::PickGraveRisingZombieType(int theZombiePoints)
 	{
 		ZombieType aZombieType = (ZombieType)aZombieWeightArray[i].mItem;
 		const ZombieDefinition& aZombieDef = GetZombieDefinition(aZombieType);
-		if ((mApp->IsFirstTimeAdventureMode() && mLevel < aZombieDef.mStartingLevel) || ((!mZombieAllowed[aZombieType] && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE) && aZombieType != ZombieType::ZOMBIE_NORMAL))
+		if ((mApp->IsFirstTimeAdventureMode() && mLevel < aZombieDef.mStartingLevel)
+#ifdef _CONSOLE_MINIGAMES
+			|| ((!mZombieAllowed[aZombieType] && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE) && aZombieType != ZombieType::ZOMBIE_NORMAL)
+#endif
+			)
 		{
 			aZombieWeightArray[i].mWeight = 0;
 		}
@@ -3348,7 +3372,11 @@ PlantingReason Board::CanPlantAt(int theGridX, int theGridY, SeedType theSeedTyp
 		return PlantingReason::PLANTING_NEEDS_POT;
 	}
 	// 南瓜头的种植条件
-	bool aAidPurchased = mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FIRSTAID] > 0 && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE;
+	bool aAidPurchased = mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FIRSTAID] > 0
+#ifdef _CONSOLE_MINIGAMES
+		&& mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+		;
 	if (theSeedType == SeedType::SEED_PUMPKINSHELL)
 	{
 		// 不可种植在玉米加农炮上
@@ -3450,7 +3478,11 @@ PlantingReason Board::CanPlantAt(int theGridX, int theGridY, SeedType theSeedTyp
 //0x40E520
 void Board::UpdateCursor()
 {
-	if (mApp->IsScreenSaver() || mWidgetManager == NULL|| mWidgetManager->mOverWidget == NULL || mSlowdownButton->mIsOver || mPauseButton->mIsOver || mSpeedupButton->mIsOver) return;
+	if (mApp->IsScreenSaver() || mWidgetManager == NULL|| mWidgetManager->mOverWidget == NULL
+#ifdef _REPLANTED_SPEED_CONTROL
+		|| mSlowdownButton->mIsOver || mPauseButton->mIsOver || mSpeedupButton->mIsOver
+#endif
+		)return;
 
 	int aMouseX = mApp->mWidgetManager->mLastMouseX - mX;
 	int aMouseY = mApp->mWidgetManager->mLastMouseY - mY;
@@ -3494,7 +3526,11 @@ void Board::UpdateCursor()
 	case GameObjectType::OBJECT_TYPE_COIN:
 	case GameObjectType::OBJECT_TYPE_PROJECTILE:
 	{
-		if (aHitResult.mObjectType == GameObjectType::OBJECT_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+		if (aHitResult.mObjectType == GameObjectType::OBJECT_TYPE_GLOVE 
+#ifdef _CONSOLE_MINIGAMES
+			&& mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+			)
 			aShowFinger = false;
 		else
 			aShowFinger = true;
@@ -3526,10 +3562,12 @@ void Board::UpdateCursor()
 		{
 			aShowFinger = true;
 		}
+#ifdef _CONSOLE_MINIGAMES
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 		{
 			aHideCursor = true;
 		}
+#endif
 		break;
 
 	default:
@@ -3537,6 +3575,7 @@ void Board::UpdateCursor()
 		{
 			aHideCursor = true;
 		}
+#ifdef _CONSOLE_MINIGAMES
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE)
 		{
 			aHideCursor = true;
@@ -3545,6 +3584,7 @@ void Board::UpdateCursor()
 		{
 			aHideCursor = true;
 		}
+#endif
 		break;
 	}
 
@@ -3651,12 +3691,14 @@ void Board::HighlightPlantsForMouse(int theMouseX, int theMouseY)
 			}
 		}
 	}
+#ifdef _CONSOLE_MINIGAMES
 	else if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		Plant* aPlant = SpecialPlantHitTest(theMouseX, theMouseY);
 		if (aPlant)
 			aPlant->mHighlighted = true;
 	}
+#endif
 	else
 	{
 		Plant* aPlant = ToolHitTest(theMouseX, theMouseY);
@@ -4444,11 +4486,13 @@ void Board::MouseDownWithPlant(int x, int y, int theClickCount)
 
 	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_PLANT_FROM_GLOVE)
 	{
+#ifdef _CONSOLE_MINIGAMES
 		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 		{
 			MovePlant(mPlants.DataArrayTryToGet(mCursorObject->mGlovePlantID), aGridX, aGridY);
 		}
 		else
+#endif
 		{
 			mApp->mZenGarden->MovePlant(mPlants.DataArrayTryToGet(mCursorObject->mGlovePlantID), aGridX, aGridY);
 		}
@@ -4631,6 +4675,7 @@ void Board::MouseDownWithTool(int x, int y, int theClickCount, CursorType theCur
 		return;
 	}
 	
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 
@@ -4651,6 +4696,8 @@ void Board::MouseDownWithTool(int x, int y, int theClickCount, CursorType theCur
 		}
 		return;
 	}
+#endif
+
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
 	{
 		mApp->mZenGarden->MouseDownWithTool(x, y, theCursorType);
@@ -4829,9 +4876,12 @@ bool Board::MouseHitTest(int x, int y, HitResult* theHitResult)
 		return true;
 	}
 
-	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_NORMAL || mCursorObject->mCursorType == CursorType::CURSOR_TYPE_HAMMER || 
-		mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
-		mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER)
+	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_NORMAL || mCursorObject->mCursorType == CursorType::CURSOR_TYPE_HAMMER 
+#ifdef _CONSOLE_MINIGAMES
+		|| 
+		mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE 
+#endif
+		|| mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER)
 	{
 		Coin* aCoin = nullptr;
 		Coin* aTopCoin = nullptr;
@@ -5272,10 +5322,18 @@ bool Board::CanInteractWithBoardButtons()
 	if (mPaused || mApp->GetDialogCount() > 0)
 		return false;
 
-	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_GLOVE
+#ifdef _CONSOLE_MINIGAMES
+		&& mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+		)
 		return true;
 
-	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER && mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+	if (mCursorObject->mCursorType == CursorType::CURSOR_TYPE_BUTTER 
+#ifdef _CONSOLE_MINIGAMES
+		&& mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN
+#endif
+		)
 		return true;
 
 	if (mCursorObject->mCursorType != CursorType::CURSOR_TYPE_NORMAL && 
@@ -5355,6 +5413,38 @@ void Board::MouseUp(int x, int y, int theClickCount)
 				mApp->DoBackToMain();
 			}
 		}
+#ifdef _REPLANTED_SPEED_CONTROL
+		else if (mSlowdownButton->mIsOver && !mSlowdownButton->mDisabled && !mSlowdownButton->mBtnNoDraw && !mApp->GetDialog(Dialogs::DIALOG_GAME_OVER) && !mApp->GetDialog(Dialogs::DIALOG_LEVEL_COMPLETE))
+		{
+			mPrevSpeedMod = mSpeedMod;
+			if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
+				mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
+
+			if (mPrevSpeedMod != mSpeedMod)
+			{
+				mApp->PlayFoley(FoleyType::FOLEY_REVERSE_WAKEUP);
+				mQECounter = 35;
+			}
+		}
+		else if (mPauseButton->mIsOver && !mPauseButton->mDisabled && !mPauseButton->mBtnNoDraw && !mApp->GetDialog(Dialogs::DIALOG_GAME_OVER) && !mApp->GetDialog(Dialogs::DIALOG_LEVEL_COMPLETE))
+		{
+			mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON_PRESSED;
+			mApp->PlaySample(Sexy::SOUND_PAUSE);
+			mApp->DoPauseDialog();
+		}
+		else if (mSpeedupButton->mIsOver && !mSpeedupButton->mDisabled && !mSpeedupButton->mBtnNoDraw && !mApp->GetDialog(Dialogs::DIALOG_GAME_OVER) && !mApp->GetDialog(Dialogs::DIALOG_LEVEL_COMPLETE))
+		{
+			mPrevSpeedMod = mSpeedMod;
+			if (mSpeedMod < SpeedMod::SPEED_SONIC)
+				mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
+
+			if (mPrevSpeedMod != mSpeedMod)
+			{
+				mApp->PlayFoley(FoleyType::FOLEY_WAKEUP);
+				mQECounter = 35;
+			}
+		}
+#endif
 	}
 }
 
@@ -5382,10 +5472,12 @@ void Board::Pause(bool thePause)
 			mApp->mMusic->mMusicInterface = gSexyAppBase->mMusicInterface;
 		mApp->mMusic->GameMusicPause(thePause);
 
+#ifdef _REPLANTED_SPEED_CONTROL
 		if (!thePause)
 		{
 			mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON;
 		}
+#endif
 	}
 }
 
@@ -5960,8 +6052,10 @@ void Board::UpdateSunSpawning()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || 
 		mApp->IsLastStand() || 
+#ifdef _CONSOLE_MINIGAMES
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
+#endif
 		mApp->IsIZombieLevel() ||
 		mApp->IsScaryPotterLevel() || 
 		mApp->IsSquirrelLevel() || 
@@ -6153,8 +6247,12 @@ void Board::UpdateZombieSpawning()
 		else
 		{
 			mZombieHealthToNextWave = RandRangeFloat(0.5f, 0.65f) * mZombieHealthWaveStart;
-			if (mApp->IsLittleTroubleLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->IsLastStand() ||
-				mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN)
+			if (mApp->IsLittleTroubleLevel() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN || mApp->IsLastStand() 
+#ifdef _CONSOLE_MINIGAMES
+				||
+				mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN
+#endif
+				)
 			{
 				mZombieCountDown = 750;
 			}
@@ -6710,10 +6808,11 @@ void Board::Update()
 
 	UpdateLayers();
 	
+	int aUpdateCount = 1;
+
+#ifdef _REPLANTED_SPEED_CONTROL
 	if (mQECounter > 0)
 		mQECounter--;
-
-	int aUpdateCount = 1;
 
 	if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 	{
@@ -6752,7 +6851,7 @@ void Board::Update()
 			break;
 		}
 	}
-
+#endif
 	for (int i = 0; i < aUpdateCount; i++)
 	{
 		mApp->mEffectSystem->Update();
@@ -7568,7 +7667,9 @@ bool Board::ProgressMeterHasFlags()
 		mApp->IsFinalBossLevel() ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||
+#ifdef _CONSOLE_MINIGAMES
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+#endif
 		mApp->IsSlotMachineLevel() ||
 		mApp->IsSquirrelLevel() ||
 		mApp->IsIZombieLevel())
@@ -7774,10 +7875,13 @@ void Board::DrawLevel(Graphics* g)
 	{
 		aPosX = 593;
 	}
+#ifdef _REPLANTED_SPEED_CONTROL
 	else if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 	{
 		aPosX -= Sexy::FONT_HOUSEOFTERROR16->StringWidth("1.0x") + 8 + 101;
 	}
+#endif
+
 	if (mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_ZEN_FADING)
 	{
 		aPosY += TodAnimateCurve(50, 0, mChallenge->mChallengeStateCounter, 0, 50, TodCurves::CURVE_EASE_IN_OUT);
@@ -7801,7 +7905,7 @@ void Board::DrawLevel(Graphics* g)
 			g->DrawCircle(touch.x, touch.y, 20, 10 * PI);
 	}
 }
-
+#ifdef _REPLANTED_SPEED_CONTROL
 float Board::GetSpeedValue(SpeedMod theMod)
 {
 	switch (theMod)
@@ -7906,7 +8010,9 @@ void Board::DrawSpeed(Graphics* g)
 		TodScaleTransformMatrix(aMatrix, aPosX - curStrWidth + mApp->mDDInterface->mWideScreenOffsetX, aPosY + mApp->mDDInterface->mWideScreenOffsetY, aScale, aScale);
 		TodDrawStringMatrix(g, Sexy::FONT_HOUSEOFTERROR16, aMatrix, aSpeedStr, Color(237, 241, 170));
 	}
+
 }
+#endif
 
 //0x4182D0
 void Board::DrawZenWheelBarrowButton(Graphics* g, int theOffsetY)
@@ -8558,7 +8664,8 @@ void Board::DrawUIBottom(Graphics* g)
 			mSeedBank->EndDraw(g);
 		}
 
-		if ((mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE) && mApp->mGameScene == SCENE_PLAYING) {
+#ifdef _CONSOLE_MINIGAMES
+		if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && mApp->mGameScene == SCENE_PLAYING) {
 			int aCelWidth = Sexy::IMAGE_FLAGMETER->GetCelWidth();
 			int aCelHeight = Sexy::IMAGE_FLAGMETER->GetCelHeight();
 			int posX = 340 - aCelWidth / 2, posY = 41;
@@ -9166,8 +9273,10 @@ void Board::DrawUITop(Graphics* g)
 
 	if (!mApp->IsScreenSaver() && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM))
 	{
+#ifdef _REPLANTED_SPEED_CONTROL
 		if (mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 			DrawSpeed(g);
+#endif
 		DrawProgressMeter(g);
 		DrawLevel(g);
 	}
@@ -9237,6 +9346,7 @@ void Board::DrawUITop(Graphics* g)
 		g->PopState();
 	}
 	
+#ifdef _CONSOLE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		g->PushState();
@@ -9281,6 +9391,7 @@ void Board::DrawUITop(Graphics* g)
 		TodDrawImageScaledF(g, Sexy::IMAGE_AWARDPICKUPGLOW, 727 - offsetX, -86 - offsetY, scaleXY, scaleXY);
 		g->PopState();
 	}
+#endif
 
 	if ((mApp->mGameMode == GameMode::GAMEMODE_UPSELL || mApp->mGameMode == GameMode::GAMEMODE_INTRO) && mCutScene->mUpsellHideBoard)
 	{
@@ -9599,7 +9710,7 @@ void Board::KeyChar(SexyChar theChar)
 		mApp->mShowHealthBar = !mApp->mShowHealthBar;
 	}
 #endif
-
+#ifdef _REPLANTED_SPEED_CONTROL
 	if (!mApp->mDebugKeysEnabled && mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 	{
 		if (theChar == 'q')
@@ -9627,6 +9738,7 @@ void Board::KeyChar(SexyChar theChar)
 			}
 		}
 	}
+#endif
 
 #ifdef _DEBUG 
 	if(!mApp->mDebugKeysEnabled)
@@ -11913,54 +12025,4 @@ void Board::MovePlant(Plant* thePlant, int theGridX, int theGridY)
 	}
 
 	DoPlantingEffects(theGridX, theGridY, thePlant);
-}
-
-void Board::AddedToManager(WidgetManager* theWidgetManager)
-{
-	Widget::AddedToManager(theWidgetManager);
-	theWidgetManager->AddWidget(mSlowdownButton);
-	theWidgetManager->AddWidget(mPauseButton);
-	theWidgetManager->AddWidget(mSpeedupButton);
-}
-
-void Board::RemovedFromManager(WidgetManager* theWidgetManager)
-{
-	Widget::RemovedFromManager(theWidgetManager);
-	theWidgetManager->RemoveWidget(mSlowdownButton);
-	theWidgetManager->RemoveWidget(mPauseButton);
-	theWidgetManager->RemoveWidget(mSpeedupButton);
-}
-
-void Board::ButtonDepress(int theId)
-{	
-	if (theId == Board::SLOWDOWN)
-	{
-		mPrevSpeedMod = mSpeedMod;
-		if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
-			mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
-
-		if (mPrevSpeedMod != mSpeedMod)
-		{
-			mApp->PlayFoley(FoleyType::FOLEY_REVERSE_WAKEUP);
-			mQECounter = 35;
-		}
-	}
-	else if (theId == Board::PAUSE)
-	{
-		mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON_PRESSED;
-		mApp->PlaySample(Sexy::SOUND_PAUSE);
-		mApp->DoPauseDialog();
-	}
-	else if (theId == Board::SPEEDUP)
-	{
-		mPrevSpeedMod = mSpeedMod;
-		if (mSpeedMod < SpeedMod::SPEED_SONIC)
-			mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
-
-		if (mPrevSpeedMod != mSpeedMod)
-		{
-			mApp->PlayFoley(FoleyType::FOLEY_WAKEUP);
-			mQECounter = 35;
-		}
-	}
 }

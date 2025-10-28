@@ -411,8 +411,10 @@ public:
     bool                            IsSquashTarget(Plant* theExcept);
     static /*inline*/ bool			IsZombotany(ZombieType theZombieType);
     void                            AttachHelmet();
+#ifdef _HAS_BLOOM_AND_DOOM_CONTENTS
     void                            UpdateZombieDogWalker();
     void                            UpdateZombieDog();
+#endif
     void                            DropZombiePole();
     void                            DropNewsPaperGlasses();
     void                            DropBalloonPropeller();

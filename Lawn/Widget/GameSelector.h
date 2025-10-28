@@ -42,7 +42,9 @@ private:
         GameSelector_Almanac = 108,
         GameSelector_ZenGarden = 109,
         GameSelector_Survival = 110,
+#ifdef _HAS_ZOMBATAR
         GameSelector_Zombatar = 111, // @Patoke: add stuff after 110
+#endif
         GameSelector_AchievementsBack = 112,
         GameSelector_Achievements = 113,
         GameSelector_QuickPlay = 114
@@ -61,7 +63,9 @@ public:
     NewLawnButton*              mZenGardenButton;           //+0xB0
     NewLawnButton*              mSurvivalButton;            //+0xB4
     NewLawnButton*              mChangeUserButton;          //+0xB8
+#ifdef _HAS_ZOMBATAR
     NewLawnButton*              mZombatarButton;             //+GOTY @Patoke: 0xC0
+#endif
     NewLawnButton*              mAchievementsButton;        //+GOTY @Patoke: 0xC4
     NewLawnButton*              mTrophyButton;
     NewLawnButton*              mQuickPlayButton;           //+GOTY @Patoke: 0xC8
@@ -91,10 +95,18 @@ public:
     int                         mStartY;                    //+GOTY @Patoke: 0x15C
     int                         mDestX;                     //+GOTY @Patoke: 0x160
     int                         mDestY;                     //+GOTY @Patoke: 0x164
+#ifdef _HAS_ZOMBATAR
     ZombatarWidget*             mZombatarWidget;            //+GOTY @Patoke: 0x168
+#endif
+#ifdef _HAS_ACHIEVEMENTS
     AchievementsWidget*         mAchievementsWidget;        //+GOTY @Patoke: 0x16C
+#endif
+#ifdef _HAS_MORESCREEN
     MoreWidget*                 mMoreWidget;
+#endif
+#ifdef _HAS_LEVELSELECTOR
     QuickplayWidget*            mLevelSelectorWidget;
+#endif
     ReanimationID               mWoodSignID;            
     ReanimationID               mSpotLightID;
 
@@ -125,7 +137,9 @@ public:
     // @Patoke: implement functions
     /*inline*/ void             SlideTo(int theX, int theY);
     void                        ShowAchievementsScreen(); // @Patoke: unofficial name
+#ifdef _HAS_ZOMBATAR
     void                        ShowZombatarScreen();
+#endif
     void                        ShowMoreScreen();
     void                        ShowQuickplayScreen();
     void                        ShowGameSelectorScreen();

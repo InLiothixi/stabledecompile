@@ -233,7 +233,9 @@ public:
     void                    TreeOfWisdomGiveWisdom();
     void                    TreeOfWisdomSayRepeat();
     bool                    TreeOfWisdomCanFeed();
+#ifdef _CONSOLE_MINIGAMES
     void                    HeatWaveUpdate();
+#endif
 
     GridItem*               GetPortalLeftRight(int theGridX, int theGridY, bool theToLeft = true);
 

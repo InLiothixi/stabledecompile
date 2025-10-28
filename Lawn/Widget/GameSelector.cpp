@@ -381,6 +381,9 @@ GameSelector::GameSelector(LawnApp* theApp)
 	aWoodSignReanim->AssignRenderGroupToPrefix("woodsign1", RENDER_GROUP_NORMAL);
 	mWoodSignID = mApp->ReanimationGetID(aWoodSignReanim);
 	aWoodSignReanim->mFrameBasePose = aSelectorReanim->mFrameBasePose;
+#ifndef _HAS_ZOMBATAR
+	//TODO: replace "woodsign3" with the original 2009 sprite when Zombatar is disabled
+#endif
 
 	SyncProfile(false);
 
@@ -455,8 +458,8 @@ GameSelector::~GameSelector()
 		delete mSurvivalButton;
 	if (mChangeUserButton)
 		delete mChangeUserButton;
-	if (mZombatarButton)
 #ifdef _HAS_ZOMBATAR
+	if (mZombatarButton)
 		delete mZombatarButton;
 	if (mZombatarWidget)
 		delete mZombatarWidget;
@@ -1165,11 +1168,13 @@ void GameSelector::Update()
 		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
 		aTransform.mTransY += mOverlayWidget->mY;
 		aTransform.mTransY -= 41.0f;
+#ifdef _HAS_ZOMBATAR
 		mZombatarWidget->mY = aTransform.mTransY;
+#endif
 #ifdef _HAS_LEVELSELECTOR
 		mLevelSelectorWidget->mY = aTransform.mTransY;
-#endif
 		mAchievementsWidget->mY = aTransform.mTransY + BOARD_HEIGHT;
+#endif
 		
 		aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Left");
 		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
@@ -1680,8 +1685,11 @@ void GameSelector::ButtonPress(int theId, int theClickCount)
 		return;
 
 	if (theId == GameSelector::GameSelector_Adventure || theId == GameSelector::GameSelector_Minigame ||
-		theId == GameSelector::GameSelector_Puzzle || theId == GameSelector::GameSelector_Survival  ||
-		theId == GameSelector::GameSelector_Zombatar)
+		theId == GameSelector::GameSelector_Puzzle || theId == GameSelector::GameSelector_Survival  
+#ifdef _HAS_ZOMBATAR
+		|| theId == GameSelector::GameSelector_Zombatar
+#endif
+		)
 		mApp->PlaySample(Sexy::SOUND_GRAVEBUTTON);
 	else
 		mApp->PlaySample(Sexy::SOUND_TAP);
@@ -1815,6 +1823,7 @@ void GameSelector::ButtonDepress(int theId)
 		if (ShouldDoZenTuturialBeforeAdventure())
 			mApp->mZenGarden->SetupForZenTutorial();
 		break;
+#ifdef _HAS_ZOMBATAR
 	case GameSelector::GameSelector_Zombatar:
 	{
 		if (mApp->mPlayerInfo->mAckZombatarTOS)
@@ -1827,6 +1836,7 @@ void GameSelector::ButtonDepress(int theId)
 		}
 		break;
 	}
+#endif
 	case GameSelector::GameSelector_AchievementsBack: // @Patoke: seems to be unused
 		//SlideTo(0, 0);
 		break;
@@ -1968,11 +1978,15 @@ void GameSelector::SlideTo(int theX, int theY) {
 // GOTY @Patoke: 0x450200
 void GameSelector::ShowAchievementsScreen() {
 	SlideTo(0, -mApp->mHeight);
+#ifdef _HAS_ACHIEVEMENTS
 	mWidgetManager->SetFocus(mAchievementsWidget);
+#endif
+#ifdef _HAS_MORESCREEN
 	mMoreWidget->SetDisabled(true);
+#endif
 	DisableButtons(true);
 }
-
+#ifdef _HAS_ZOMBATAR
 void GameSelector::ShowZombatarScreen() {
 	SlideTo(-mApp->mWidth, 0);
 	mWidgetManager->SetFocus(mZombatarWidget);
@@ -1985,11 +1999,13 @@ void GameSelector::ShowZombatarScreen() {
 	mMoreWidget->DisableButtons(true);
 	DisableButtons(true);
 }
-
+#endif
 void GameSelector::ShowMoreScreen() {
 	SlideTo(mApp->mWidth, 0);
+#ifdef _HAS_MORESCREEN
 	mWidgetManager->SetFocus(mMoreWidget);
 	mMoreWidget->DisableButtons(false);
+#endif
 	DisableButtons(true);
 }
 
@@ -1997,18 +2013,15 @@ void GameSelector::ShowQuickplayScreen() {
 	SlideTo(-mApp->mWidth, 0);
 #ifdef _HAS_LEVELSELECTOR
 	mWidgetManager->SetFocus(mLevelSelectorWidget);
-	mLevelSelectorWidget->SelectStage(1, false);
-	mLevelSelectorWidget->mHasFinishedSliding = false;
-	mLevelSelectorWidget->mIsSlidingOut = false;
-#endif
-#if defined(_HAS_LEVELSELECTOR) && defined(_HAS_ZOMBATAR)
 	mWidgetManager->PutBehind(mZombatarWidget, mLevelSelectorWidget);
 #endif
 
 	//int currentStage = min((int)(mApp->mPlayerInfo->mLevel / 10.0f), 4) + 1;
 	//currentStage = 1;
 	//mLevelSelectorWidget->theCurrentId = currentStage;
-#ifdef _HAS_MORESCREEN
+	mLevelSelectorWidget->SelectStage(1, false);
+	mLevelSelectorWidget->mHasFinishedSliding = false;
+	mLevelSelectorWidget->mIsSlidingOut = false;
 	mMoreWidget->DisableButtons(true);
 #endif
 	DisableButtons(true);
