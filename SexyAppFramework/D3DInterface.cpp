@@ -449,10 +449,10 @@ static LPDIRECTDRAWSURFACE7 CreateTextureSurface(LPDIRECT3DDEVICE7 theDevice, LP
 	ZeroMemory(&aDesc, sizeof(aDesc));
 	aDesc.dwSize = sizeof(aDesc);
 
-	aDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT | DDSD_MIPMAPCOUNT;
-	aDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_MIPMAP | DDSCAPS_COMPLEX;
+	aDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT /* | DDSD_MIPMAPCOUNT*/;
+	aDesc.ddsCaps.dwCaps = DDSCAPS_TEXTURE;// | DDSCAPS_MIPMAP | DDSCAPS_COMPLEX;
 	aDesc.ddsCaps.dwCaps2 = DDSCAPS2_D3DTEXTUREMANAGE;
-	aDesc.dwMipMapCount = (int)floor(log2(theWidth + theHeight));
+	//aDesc.dwMipMapCount = (int)floor(log2(theWidth + theHeight));
 	aDesc.dwWidth = theWidth;
 	aDesc.dwHeight = theHeight;
 
@@ -1225,53 +1225,53 @@ void TextureData::CreateTextures(MemoryImage *theImage, LPDIRECT3DDEVICE7 theDev
 
 			CopyImageToTexture(aPiece.mTexture,theImage,x,y,aPiece.mWidth,aPiece.mHeight,aFormat);
 
-			if (aFormat == PixelFormat_A8R8G8B8)
-			{
-				LPDIRECTDRAWSURFACE7 pCurrent = aPiece.mTexture;
-				DDSURFACEDESC2 descCur, descNext;
-				ZeroMemory(&descCur, sizeof(descCur));
-				descCur.dwSize = sizeof(descCur);
+			//if (aFormat == PixelFormat_A8R8G8B8)
+			//{
+			//	LPDIRECTDRAWSURFACE7 pCurrent = aPiece.mTexture;
+			//	DDSURFACEDESC2 descCur, descNext;
+			//	ZeroMemory(&descCur, sizeof(descCur));
+			//	descCur.dwSize = sizeof(descCur);
 
-				int mipCount = 0;
+			//	int mipCount = 0;
 
-				while (true)
-				{
-					DDSCAPS2 caps;
-					ZeroMemory(&caps, sizeof(caps));
-					caps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_MIPMAP;
+			//	while (true)
+			//	{
+			//		DDSCAPS2 caps;
+			//		ZeroMemory(&caps, sizeof(caps));
+			//		caps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_MIPMAP;
 
-					LPDIRECTDRAWSURFACE7 pNext = nullptr;
-					if (FAILED(pCurrent->GetAttachedSurface(&caps, &pNext)))
-						break; // no more mip levels
+			//		LPDIRECTDRAWSURFACE7 pNext = nullptr;
+			//		if (FAILED(pCurrent->GetAttachedSurface(&caps, &pNext)))
+			//			break; // no more mip levels
 
-					if (FAILED(pCurrent->Lock(NULL, &descCur, DDLOCK_WAIT, NULL)))
-						break;
+			//		if (FAILED(pCurrent->Lock(NULL, &descCur, DDLOCK_WAIT, NULL)))
+			//			break;
 
-					ZeroMemory(&descNext, sizeof(descNext));
-					descNext.dwSize = sizeof(descNext);
-					if (FAILED(pNext->Lock(NULL, &descNext, DDLOCK_READONLY | DDLOCK_WAIT, NULL)))
-					{
-						pCurrent->Unlock(NULL);
-						break;
-					}
+			//		ZeroMemory(&descNext, sizeof(descNext));
+			//		descNext.dwSize = sizeof(descNext);
+			//		if (FAILED(pNext->Lock(NULL, &descNext, DDLOCK_READONLY | DDLOCK_WAIT, NULL)))
+			//		{
+			//			pCurrent->Unlock(NULL);
+			//			break;
+			//		}
 
-					int newWidth = max(1, (int)descCur.dwWidth / 2);
-					int newHeight = max(1, (int)descCur.dwHeight / 2);
+			//		int newWidth = max(1, (int)descCur.dwWidth / 2);
+			//		int newHeight = max(1, (int)descCur.dwHeight / 2);
 
-					Downscale8888_Premultiplied((DWORD*)descCur.lpSurface, descCur.lPitch, (DWORD*)descNext.lpSurface, descNext.lPitch, newWidth, newHeight);
+			//		Downscale8888_Premultiplied((DWORD*)descCur.lpSurface, descCur.lPitch, (DWORD*)descNext.lpSurface, descNext.lPitch, newWidth, newHeight);
 
-					if (mipCount == 0)
-					{
-						FixMipAlphaEdge((DWORD*)descNext.lpSurface, descNext.lPitch, newWidth, newHeight);
-					}
+			//		if (mipCount == 0)
+			//		{
+			//			FixMipAlphaEdge((DWORD*)descNext.lpSurface, descNext.lPitch, newWidth, newHeight);
+			//		}
 
-					pCurrent->Unlock(NULL);
-					pNext->Unlock(NULL);
+			//		pCurrent->Unlock(NULL);
+			//		pNext->Unlock(NULL);
 
-					pCurrent = pNext;
-					mipCount++;
-				}
-			}
+			//		pCurrent = pNext;
+			//		mipCount++;
+			//	}
+			// }
 		}
 	}
 

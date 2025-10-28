@@ -58,12 +58,12 @@ BassMusicInterface::BassMusicInterface(HWND theHWnd)
 
 	if (gBass->mVersion2)
 	{
-		success = gBass->BASS_Init2(1, 44100, 0, theHWnd, NULL);
+		success = gBass->BASS_Init2(1, 48000, 0, theHWnd, NULL); // 44100
 		gBass->BASS_SetConfig(BASS_CONFIG_BUFFER, 2000);
 	}
 	else
 	{
-		success = gBass->BASS_Init(-1, 44100, 0, theHWnd);
+		success = gBass->BASS_Init(-1, 48000, 0, theHWnd);
 	}
 
 	mixerSetControlDetails(phmx, &mcd, 0L);
@@ -74,7 +74,7 @@ BassMusicInterface::BassMusicInterface(HWND theHWnd)
 
 	mMaxMusicVolume = 40;
 
-	mMusicLoadFlags = gBass->mVersion2 ? BASS_MUSIC_LOOP | BASS2_MUSIC_RAMP : BASS_MUSIC_LOOP;
+	mMusicLoadFlags = gBass->mVersion2 ? BASS_MUSIC_LOOP /*| BASS2_MUSIC_RAMP */ : BASS_MUSIC_LOOP;
 }
 
 BassMusicInterface::~BassMusicInterface()
@@ -112,7 +112,7 @@ bool BassMusicInterface::LoadMusic(int theSongId, const std::string& theFileName
 		p_fclose(aFP);
 
 		if (gBass->mVersion2)
-			aHMusic = gBass->BASS_MusicLoad2(FALSE, (void*) theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP | BASS2_MUSIC_RAMP, 0);
+			aHMusic = gBass->BASS_MusicLoad2(FALSE, (void*) theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP /*| BASS2_MUSIC_RAMP*/, 0);
 		else
 			aHMusic = gBass->BASS_MusicLoad(FALSE, (void*) theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP);
 
@@ -145,7 +145,7 @@ void BassMusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)
 		if (aMusicInfo->mHMusic)
 		{
 			if (gBass->mVersion2)
-				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, BASS_MUSIC_POSRESET | BASS2_MUSIC_RAMP | (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
+				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, BASS_MUSIC_POSRESET /*| BASS2_MUSIC_RAMP*/ | (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
 			else
 				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, noLoop ? 0 : BASS_MUSIC_LOOP, TRUE);
 		}
@@ -273,7 +273,7 @@ void BassMusicInterface::FadeIn(int theSongId, int theOffset, double theSpeed, b
 			else
 			{
 				if (gBass->mVersion2)
-					gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, BASS2_MUSIC_RAMP | (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
+					gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, /*BASS2_MUSIC_RAMP |*/ (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
 				else
 					gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, noLoop ? 0 : BASS_MUSIC_LOOP, TRUE);
 			}

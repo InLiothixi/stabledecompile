@@ -1069,7 +1069,7 @@ void CutScene::CancelIntro()
 
 		if (!IsNonScrollingCutscene())
 		{
-			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET, 0);
+			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET + (mBoard->StageHasRoof() ? 0 : 170), 0);
 			mBoard->mTreeX = -664;
 			mBoard->mPoleX = -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX;
 		}
@@ -1270,7 +1270,7 @@ void CutScene::AnimateBoard()
 	}
 	if (mCutsceneTime > aTimePanRightStart && mCutsceneTime <= aTimePanRightEnd)
 	{
-		int aPanOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -aBoardOffset, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth);
+		int aPanOffset = CalcPosition(aTimePanRightStart, aTimePanRightEnd, -aBoardOffset, (mBoard->StageHasRoof() ? 0 : 170) + BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth);
 		int startOffsetX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
 		mBoard->mTreeX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -664);
 		mBoard->mPoleX = CalcPosition(aTimePanRightStart, aTimePanRightEnd, startOffsetX, -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX);
@@ -1311,7 +1311,7 @@ void CutScene::AnimateBoard()
 	// ====================================================================================================
 	if (mCutsceneTime > aTimePanLeftStart)
 	{
-		int aPanOffset = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth, 0);
+		int aPanOffset = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, (mBoard->StageHasRoof() ? 0 : 170) + BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth, 0);
 		int endOffsetX = WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX + 70;
 		mBoard->mTreeX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -664, endOffsetX);
 		mBoard->mPoleX = CalcPosition(aTimePanLeftStart, aTimePanLeftEnd, -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX, endOffsetX);

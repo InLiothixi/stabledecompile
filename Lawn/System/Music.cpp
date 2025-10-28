@@ -306,7 +306,7 @@ void Music::PlayFromOffset(MusicFile theMusicFile, int theOffset, double theVolu
 		aMusicInfo->mVolume = aMusicInfo->mVolumeCap * theVolume;
 		aMusicInfo->mVolumeAdd = 0.0;
 		gBass->BASS_ChannelSetAttributes(aMusicInfo->mHMusic, -1, aMusicInfo->mVolume * 100.0, -101);  // 调整音乐音量
-		gBass->BASS_ChannelSetFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESET | BASS_MUSIC_RAMP | BASS_MUSIC_LOOP);
+		gBass->BASS_ChannelSetFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESET /*| BASS_MUSIC_RAMP*/ | BASS_MUSIC_LOOP);
 		gBass->BASS_ChannelSetPosition(aMusicInfo->mHMusic, theOffset | 0x80000000);  // 设置偏移位置
 		gBass->BASS_ChannelPlay(aMusicInfo->mHMusic, false);  // 重新开始播放
 	}
@@ -691,7 +691,7 @@ void Music::UpdateMusicBurst()
 		case MusicDrumsState::MUSIC_DRUMS_ON_QUEUED:
 			if (aOrderMain != aOrderDrum)
 			{
-				aDrumsVolume = 1.0f;
+				aDrumsVolume = 1.0f; 
 				mMusicDrumsState = MusicDrumsState::MUSIC_DRUMS_ON;
 				if (aBurstScheme == 2)
 					aDrumsJumpOrder = (aOrderMain % 2 == 0) ? 76 : 77;

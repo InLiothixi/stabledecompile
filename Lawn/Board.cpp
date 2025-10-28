@@ -342,7 +342,7 @@ bool Board::AreEnemyZombiesOnScreen()
 		{
 			return true;
 		}
-		else if (/*aZombie->mHasHead && !aZombie->IsDeadOrDying() &&*/ !aZombie->mMindControlled && !aZombie->mDead)
+		else if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled && !aZombie->mDead)
 		{
 			return true;
 		}
@@ -358,7 +358,7 @@ int Board::CountZombiesOnScreen()
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (/*aZombie->mHasHead && !aZombie->IsDeadOrDying() &&*/ !aZombie->mMindControlled && aZombie->IsOnBoard())
+		if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled && aZombie->IsOnBoard())
 		{
 			aCount++;
 		}
@@ -372,7 +372,7 @@ int Board::GetLiveGargantuarCount() {
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (!aZombie->mDead /*&& aZombie->mHasHead && !aZombie->IsDeadOrDying() */&& aZombie->IsOnBoard() && (aZombie->mZombieType == ZombieType::ZOMBIE_GARGANTUAR || aZombie->mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR))
+		if (!aZombie->mDead && aZombie->mHasHead && !aZombie->IsDeadOrDying() && aZombie->IsOnBoard() && (aZombie->mZombieType == ZombieType::ZOMBIE_GARGANTUAR || aZombie->mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR))
 		{
 			aCount++;
 		}
@@ -5618,11 +5618,7 @@ int Board::TotalZombiesHealthInWave(int theWaveIndex)
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->IsDeadOrDying())
-		{
-			aTotalHealth += 1;
-		}
-		else if (aZombie->mFromWave == theWaveIndex && !aZombie->mMindControlled /*&& !aZombie->IsDeadOrDying()*/ &&
+		if (aZombie->mFromWave == theWaveIndex && !aZombie->mMindControlled && !aZombie->IsDeadOrDying() &&
 			aZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && aZombie->mRelatedZombieID == ZombieID::ZOMBIEID_NULL)
 		{
 			aTotalHealth += aZombie->mBodyHealth + aZombie->mHelmHealth + aZombie->mShieldHealth * 0.2f + aZombie->mFlyingHealth;

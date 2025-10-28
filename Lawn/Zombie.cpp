@@ -8431,10 +8431,10 @@ bool Zombie::TrySpawnLevelAward()
     int aCenterX = aZombieRect.mX + aZombieRect.mWidth / 2;
     int aCenterY = aZombieRect.mY + aZombieRect.mHeight / 2;
 
-    /*if (!mBoard->IsSurvivalStageWithRepick() && !mBoard->IsLastStandStageWithRepick())
+    if (!mBoard->IsSurvivalStageWithRepick() && !mBoard->IsLastStandStageWithRepick())
     {
         mBoard->RemoveAllZombies();
-    }*/
+    }
 
     CoinType aCoinType;
     if (mApp->IsScaryPotterLevel() && !mBoard->IsFinalScaryPotterStage())
@@ -8587,15 +8587,12 @@ void Zombie::DropLoot()
         mBoard->mKilledYeti = true;
     }
 
-    if (mZombieType == ZombieType::ZOMBIE_BOSS)
-        TrySpawnLevelAward();
+    TrySpawnLevelAward();
 
-    if (mDroppedLoot || mBoard->HasLevelAwardDropped() || !mBoard->CanDropLoot() || mZombieType == ZombieType::ZOMBIE_BOSS || mZombieType == ZombieType::ZOMBIE_YETI && mMindControlled)
+    if (mDroppedLoot || mBoard->HasLevelAwardDropped() || !mBoard->CanDropLoot() || mZombieType == ZombieType::ZOMBIE_YETI && mMindControlled)
         return;
 
-    if (mZombieType == ZombieType::ZOMBIE_BOSS)
-        mDroppedLoot = true;
-
+    mDroppedLoot = true;
     int aZombieValue = GetZombieDefinition(mZombieType).mZombieValue;
     if (mApp->IsLittleTroubleLevel() && Rand(4) != 0)
     {

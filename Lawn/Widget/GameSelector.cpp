@@ -1166,13 +1166,17 @@ void GameSelector::Update()
 		aTransform.mTransY += mOverlayWidget->mY;
 		aTransform.mTransY -= 41.0f;
 		mZombatarWidget->mY = aTransform.mTransY;
+#ifdef _HAS_LEVELSELECTOR
 		mLevelSelectorWidget->mY = aTransform.mTransY;
+#endif
 		mAchievementsWidget->mY = aTransform.mTransY + BOARD_HEIGHT;
 		
 		aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Left");
 		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
 		aTransform.mTransY += mOverlayWidget->mY;
+#ifdef _HAS_MORESCREEN
 		mMoreWidget->mY = aTransform.mTransY + 80.0f;
+#endif
 	}
 
 	Reanimation* aWoodSignReanim = mApp->ReanimationGet(mWoodSignID);
@@ -1972,7 +1976,9 @@ void GameSelector::ShowAchievementsScreen() {
 void GameSelector::ShowZombatarScreen() {
 	SlideTo(-mApp->mWidth, 0);
 	mWidgetManager->SetFocus(mZombatarWidget);
+#if defined(_HAS_LEVELSELECTOR) && defined(_HAS_ZOMBATAR)
 	mWidgetManager->PutBehind(mLevelSelectorWidget, mZombatarWidget);
+#endif
 	mZombatarWidget->mBackButton->mButtonImage = Sexy::IMAGE_BLANK;
 	mZombatarWidget->mBackButton->mDownImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
 	mZombatarWidget->mBackButton->mOverImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
@@ -1989,23 +1995,31 @@ void GameSelector::ShowMoreScreen() {
 
 void GameSelector::ShowQuickplayScreen() {
 	SlideTo(-mApp->mWidth, 0);
+#ifdef _HAS_LEVELSELECTOR
 	mWidgetManager->SetFocus(mLevelSelectorWidget);
+	mLevelSelectorWidget->SelectStage(1, false);
+	mLevelSelectorWidget->mHasFinishedSliding = false;
+	mLevelSelectorWidget->mIsSlidingOut = false;
+#endif
+#if defined(_HAS_LEVELSELECTOR) && defined(_HAS_ZOMBATAR)
 	mWidgetManager->PutBehind(mZombatarWidget, mLevelSelectorWidget);
+#endif
 
 	//int currentStage = min((int)(mApp->mPlayerInfo->mLevel / 10.0f), 4) + 1;
 	//currentStage = 1;
 	//mLevelSelectorWidget->theCurrentId = currentStage;
-	mLevelSelectorWidget->SelectStage(1, false);
-	mLevelSelectorWidget->mHasFinishedSliding = false;
-	mLevelSelectorWidget->mIsSlidingOut = false;
+#ifdef _HAS_MORESCREEN
 	mMoreWidget->DisableButtons(true);
+#endif
 	DisableButtons(true);
 }
 
 void GameSelector::ShowGameSelectorScreen() {
 	SlideTo(0, 0);
 	mWidgetManager->SetFocus(this);
+#ifdef _HAS_MORESCREEN
 	mMoreWidget->DisableButtons(true);
+#endif
 	DisableButtons(false);
 }
 
