@@ -228,8 +228,8 @@ Board::Board(LawnApp* theApp)
 	mSpeedMod = SpeedMod::SPEED_NORMAL;
 	mSlowMoCounter = 0;
 	mQECounter = 0;
-	mIsReplay = false;
 #endif
+	mIsReplay = false;
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM)
 	{

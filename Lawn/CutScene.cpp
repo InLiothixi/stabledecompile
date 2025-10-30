@@ -1082,7 +1082,7 @@ void CutScene::CancelIntro()
 
 		if (!IsNonScrollingCutscene())
 		{
-			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET + (mBoard->StageHasRoof() ? 0 : 170), 0);
+			mBoard->Move(mApp->mWidth - BOARD_IMAGE_WIDTH_OFFSET - (mBoard->StageHasRoof() ? 0 : 170), 0);
 			mBoard->mTreeX = -664;
 			mBoard->mPoleX = -WIDE_BOARD_WIDTH + WIDESCREEN_OFFSETX;
 		}
