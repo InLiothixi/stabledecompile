@@ -342,11 +342,7 @@ bool Board::AreEnemyZombiesOnScreen()
 	Zombie* aZombie = nullptr;
 	while (IterateZombies(aZombie))
 	{
-		if (aZombie->IsDeadOrDying())
-		{
-			return true;
-		}
-		else if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled && !aZombie->mDead)
+		if (aZombie->mHasHead && !aZombie->IsDeadOrDying() && !aZombie->mMindControlled)
 		{
 			return true;
 		}
