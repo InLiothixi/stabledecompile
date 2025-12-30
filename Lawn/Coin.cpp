@@ -1236,7 +1236,11 @@ void Coin::Collect()
                 FanOutCoins(CoinType::COIN_GOLD, 5);
             }
         }
-        else if (mApp->IsScaryPotterLevel() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
+        else if (mApp->IsScaryPotterLevel() 
+#ifdef _MOBILE_MINIGAMES
+            && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_VASEBREAKER
+#endif
+            )
         {
             if (mType == CoinType::COIN_TROPHY || mType == CoinType::COIN_AWARD_MONEY_BAG)
             {

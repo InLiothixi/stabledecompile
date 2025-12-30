@@ -430,7 +430,7 @@ void Challenge::StartLevel()
 		mBoard->mZombieCountDown = 200;
 		mBoard->mZombieCountDownStart = mBoard->mZombieCountDown;
 	}
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_GLOVE;
@@ -558,7 +558,7 @@ void Challenge::StartLevel()
 		SquirrelStart();
 	}
 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	if (aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->DisplayAdvice(_S("[ADVICE_HEAT_WAVE]"), MESSAGE_STYLE_HINT_FAST, ADVICE_NONE);
@@ -1409,7 +1409,7 @@ void Challenge::ClearCursor()
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_HAMMER;
 	}
 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		mBoard->mCursorObject->mCursorType = CURSOR_TYPE_GLOVE;
@@ -2293,7 +2293,7 @@ void Challenge::Update()
 	{
 		LastStandUpdate();
 	}
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		HeatWaveUpdate();
@@ -2842,17 +2842,7 @@ void Challenge::InitZombieWaves()
 		aList[ZOMBIE_PAIL] = true;
 		//aList[ZOMBIE_DOG_WALKER] = true;
 	}
-	else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_FOG_OF_WAR)
-	{
-		aList[ZOMBIE_NORMAL] = true;
-		aList[ZOMBIE_TRAFFIC_CONE] = true;
-		aList[ZOMBIE_JACK_IN_THE_BOX] = true;
-		aList[ZOMBIE_DIGGER] = true;
-		aList[ZOMBIE_BALLOON] = true;
-		aList[ZOMBIE_FOOTBALL] = true;
-		aList[ZOMBIE_SNORKEL] = true;
-	}
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	else if (aGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		//
@@ -2965,7 +2955,7 @@ void Challenge::InitZombieWaves()
 	
 	if (mApp->CanSpawnYetis() && !mApp->IsWhackAZombieLevel() && !mApp->IsLittleTroubleLevel() && 
 		aGameMode != GameMode::GAMEMODE_CHALLENGE_POGO_PARTY
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		&& aGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
 #endif
 		&&
@@ -4142,7 +4132,11 @@ void Challenge::ScaryPotterPopulate()
 		}
 	}
 
-	if (mApp->IsAdventureMode() && mBoard->mLevel == 35 || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
+	if (mApp->IsAdventureMode() && mBoard->mLevel == 35 
+#ifdef _MOBILE_MINIGAMES
+		|| mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER
+#endif
+		)
 	{
 		switch (mSurvivalStage)
 		{
@@ -4498,7 +4492,11 @@ int Challenge::ScaryPotterCountPots()
 //0x429930
 bool Challenge::PuzzleIsAwardStage()
 {
-	if (mApp->IsAdventureMode() || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
+	if (mApp->IsAdventureMode() 
+#ifdef _MOBILE_MINIGAMES
+		|| mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER
+#endif
+		)
 		return false;
 
 	if (mApp->mGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS && mSurvivalStage < 2)

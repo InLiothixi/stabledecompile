@@ -650,7 +650,7 @@ void CutScene::PlaceLawnItems()
 		mBoard->PlaceRake();
 	}
 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
 	{
 		if (mBoard->CanPlantAt(0, 0, SeedType::SEED_PEASHOOTER) == PlantingReason::PLANTING_OK)
@@ -720,7 +720,7 @@ bool CutScene::IsNonScrollingCutscene()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 #endif
 		mApp->IsScaryPotterLevel() || 
@@ -827,7 +827,7 @@ void CutScene::StartLevelIntro()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM ||
 		mApp->IsLastStand() ||
 		mApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM ||
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 #endif
@@ -1523,7 +1523,7 @@ void CutScene::ShowShovel()
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || 
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM || 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN ||
 #endif

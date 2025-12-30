@@ -237,17 +237,6 @@ SeedChooserScreen::SeedChooserScreen()
 			mSeedsInBank++;
 		}
 	}
-	if (mApp->mGameMode == GAMEMODE_CHALLENGE_FOG_OF_WAR)
-	{
-		ChosenSeed& aWallnut = mChosenSeeds[SEED_PLANTERN];
-		int aX = mBoard->GetSeedPacketPositionX(0);
-		aWallnut.mX = aX, aWallnut.mY = 8;
-		aWallnut.mStartX = aX, aWallnut.mStartY = 8;
-		aWallnut.mEndX = aX, aWallnut.mEndY = 8;
-		aWallnut.mSeedState = SEED_IN_BANK;
-		aWallnut.mSeedIndexInBank = 0;
-		mSeedsInBank++;
-	}
 	if (mApp->IsAdventureMode() && (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4 && mBoard->mLevel < mApp->mPlayerLevelRef))
 		CrazyDavePickSeeds();
 	UpdateImitaterButton();

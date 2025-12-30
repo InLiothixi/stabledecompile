@@ -1094,7 +1094,7 @@ void Zombie::LoadPlainZombieReanim()
         EnableFuture(mBoard->mFutureMode);
     }
 
-    if ((mBoard && mBoard->mPlantRow[mRow] == PlantRowType::PLANTROW_POOL) && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_INTRO) || mZombieType == ZombieType::ZOMBIE_DUCKY_TUBE)
+    if ((mBoard && mBoard->mPlantRow[mRow] == PlantRowType::PLANTROW_POOL) && (mApp->mGameScene == GameScenes::SCENE_PLAYING || mApp->mGameMode == GameMode::GAMEMODE_INTRO || mApp->mGameMode == GameMode::GAMEMODE_UPSELL) || mZombieType == ZombieType::ZOMBIE_DUCKY_TUBE)
     {
         ReanimShowPrefix("zombie_duckytube", RENDER_GROUP_NORMAL);
         ReanimIgnoreClipRect("Zombie_duckytube", true);

@@ -2511,8 +2511,10 @@ bool LawnApp::IsScaryPotterLevel()
 	if (mGameMode >= GameMode::GAMEMODE_SCARY_POTTER_1 && mGameMode <= GameMode::GAMEMODE_SCARY_POTTER_ENDLESS)
 		return true;
 
+#ifdef _MOBILE_MINIGAMES
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_VASEBREAKER)
 		return true;
+#endif
 
 	if (mBoard == nullptr)
 		return false;
@@ -2581,7 +2583,7 @@ bool LawnApp::IsChallengeWithoutSeedBank()
 		IsScaryPotterLevel() || 
 		mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || 
 		mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		|| mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 		mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN
 #endif
@@ -3967,7 +3969,7 @@ void LawnApp::KillLanguageScreen()
 bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 {
 	return 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
 #endif
 		theGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && gLawnApp->IsScreenSaver();

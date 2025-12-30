@@ -65,16 +65,6 @@ ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_CHALLENGE_BUNGEE_BLITZ,               9,   ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  2,  _S("[BUNGEE_BLITZ]") },
 	{ GameMode::GAMEMODE_CHALLENGE_SQUIRREL,                   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  3,  _S("Squirrel") },
 	{ GameMode::GAMEMODE_TREE_OF_WISDOM,                       10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  4,  _S("Tree Of Wisdom") },
-	{ GameMode::GAMEMODE_CHALLENGE_VASEBREAKER,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  0,  _S("[VASE_BREAKER]") },
-	{ GameMode::GAMEMODE_CHALLENGE_FOG_OF_WAR,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  1,  _S("[FOG_OF_WAR]") },
-#ifdef _CONSOLE_MINIGAMES
-	{ GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  2,  _S("[HEAT_WAVE]") },
-	{ GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  3,  _S("[BUTTERED_POPCORN]") },
-	{ GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  4,  _S("[BOMB_ALL_TOGETHER]") },
-	{ GameMode::GAMEMODE_CHALLENGE_HOMERUN_DERBY,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  0,  _S("[HOMERUN_DERBY]") },
-	{ GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  1,  _S("[HEAVY_WEAPON]") },
-	{ GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  2,  _S("[ZOMBIE_TRAP]") },
-#endif
 	{ GameMode::GAMEMODE_SCARY_POTTER_1,                       10,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      0,  0,  _S("[SCARY_POTTER_1]") },
 	{ GameMode::GAMEMODE_SCARY_POTTER_2,                       10,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      0,  1,  _S("[SCARY_POTTER_2]") },
 	{ GameMode::GAMEMODE_SCARY_POTTER_3,                       10,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      0,  2,  _S("[SCARY_POTTER_3]") },
@@ -95,8 +85,8 @@ ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_8,                    11,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      3,  2,  _S("[I_ZOMBIE_8]") },
 	{ GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_9,                    11,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      3,  3,  _S("[I_ZOMBIE_9]") },
 	{ GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS,              11,  ChallengePage::CHALLENGE_PAGE_PUZZLE,      3,  4,  _S("[I_ZOMBIE_ENDLESS]") },
-	{ GameMode::GAMEMODE_UPSELL,                               10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  4,  _S("Upsell") },
-	{ GameMode::GAMEMODE_INTRO,                                10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       2,  3,  _S("Intro") },
+	{ GameMode::GAMEMODE_UPSELL,                               10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  0,  _S("Upsell") },
+	{ GameMode::GAMEMODE_INTRO,                                10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  1,  _S("Intro") },
 	{ GameMode::GAMEMODE_SURVIVAL_NORMAL_STAGE_6,				4,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 0,  0,  _S("[SURVIVAL_NIGHTROOF_NORMAL]") },
 	{ GameMode::GAMEMODE_SURVIVAL_NORMAL_STAGE_HIGHGROUND,      1,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 0,  1,  _S("[SURVIVAL_HIGHGROUND_NORMAL]") },
 	{ GameMode::GAMEMODE_SURVIVAL_HARD_STAGE_6,					9,   ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL,		 1,  0,  _S("[SURVIVAL_NIGHTROOF_HARD]") },
@@ -112,7 +102,20 @@ ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_2,           11,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  1,  _S("[LAST_STAND_NIGHT_ENDLESS]") },
 	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_3,           12,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  2,  _S("[LAST_STAND_POOL_ENDLESS]") },
 	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_4,           13,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  3,  _S("[LAST_STAND_FOG_ENDLESS]") },
-	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5,           14,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  4,  _S("[LAST_STAND_ROOF_ENDLESS]") }
+	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5,           14,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  4,  _S("[LAST_STAND_ROOF_ENDLESS]") },
+#ifdef _MOBILE_MINIGAMES
+	{ GameMode::GAMEMODE_CHALLENGE_VASEBREAKER,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  0,  _S("[VASE_BREAKER]") },
+	{ GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  1,  _S("[HEAT_WAVE]") },
+	{ GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  2,  _S("[BUTTERED_POPCORN]") },
+#endif
+#ifdef _DS_MINIGAMES
+	{ GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  3,  _S("[BOMB_ALL_TOGETHER]") },
+	{ GameMode::GAMEMODE_CHALLENGE_HOMERUN_DERBY,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  0,  _S("[HOMERUN_DERBY]") },
+	{ GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  2,  _S("[ZOMBIE_TRAP]") },
+#endif
+#ifdef _CONSOLE_MINIGAMES
+	{ GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON,			   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       4,  1,  _S("[HEAVY_WEAPON]") },
+#endif
 };
 
 //0x42DAE0
@@ -448,8 +451,8 @@ void ChallengeScreen::UpdateButtons()
 		ButtonWidget* aButton = mChallengeButtons[aChallengeMode];
 
 		aButton->mVisible = aDefinition.mPage == mPageIndex;
-		if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
-			aButton->mVisible = false;
+		/*if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
+			aButton->mVisible = false;*/
 
 		if (aButton->mVisible)
 		{
@@ -811,8 +814,8 @@ void ChallengeScreen::Update()
 		ButtonWidget* aButton = mChallengeButtons[aChallengeMode];
 
 		aButton->mVisible = aDefinition.mPage == mPageIndex;
-		if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
-			aButton->mVisible = false;
+		/*if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
+			aButton->mVisible = false;*/
 
 		if (aButton->mVisible)
 		{

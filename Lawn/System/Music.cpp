@@ -789,7 +789,7 @@ void Music::StartGameMusic()
 	else if (mApp->IsWallnutBowlingLevel() || mApp->IsWhackAZombieLevel() ||
 		mApp->IsLittleTroubleLevel() || mApp->IsBungeeBlitzLevel() ||
 		mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_SPEED 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 		|| mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
 #endif
 		)
