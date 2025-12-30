@@ -5245,7 +5245,7 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
                  ReanimationType::REANIM_MARIGOLD);
             aReanim.SetFramesForLayer("anim_idle");
            
-            if (theSeedType == SeedType::SEED_SUNFLOWER)
+            if (theSeedType == SeedType::SEED_SUNFLOWER || theImitaterType == SeedType::SEED_SUNFLOWER)
             {
                 aReanim.mAnimTime = 0.15f;
             }
