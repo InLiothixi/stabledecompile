@@ -5240,8 +5240,8 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
         {
             Reanimation aReanim;
             aReanim.ReanimationInitializeType(thePosX + aOffsetX, thePosY + aOffsetY, 
-                theSeedType == SeedType::SEED_SUNFLOWER || theImitaterType == SeedType::SEED_SUNFLOWER ? ReanimationType::REANIM_SUNFLOWER :
-                theSeedType == SeedType::SEED_WALLNUT || theImitaterType == SeedType::SEED_WALLNUT ? ReanimationType::REANIM_WALLNUT :
+                theSeedType == SeedType::SEED_SUNFLOWER ? ReanimationType::REANIM_SUNFLOWER :
+                theSeedType == SeedType::SEED_WALLNUT ? ReanimationType::REANIM_WALLNUT :
                  ReanimationType::REANIM_MARIGOLD);
             aReanim.SetFramesForLayer("anim_idle");
            
