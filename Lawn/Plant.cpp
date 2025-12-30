@@ -5234,7 +5234,50 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
         g->mScaleY *= 1.5f;
         aOffsetX = -20.0f;
         aOffsetY = -40.0f;
+        g->SetLinearBlend(true);
+        g->SetFastStretch(false);
+
+        {
+            Reanimation aReanim;
+            aReanim.ReanimationInitializeType(thePosX + aOffsetX, thePosY + aOffsetY, 
+                theSeedType == SeedType::SEED_SUNFLOWER ? ReanimationType::REANIM_SUNFLOWER :
+                theSeedType == SeedType::SEED_WALLNUT ? ReanimationType::REANIM_WALLNUT :
+                 ReanimationType::REANIM_MARIGOLD);
+            aReanim.SetFramesForLayer("anim_idle");
+           
+            if (theSeedType == SeedType::SEED_SUNFLOWER)
+            {
+                aReanim.mAnimTime = 0.15f;
+            }
+
+            /*if (g->GetColorizeImages())
+            {
+                aReanim.mColorOverride = g->GetColor();
+            }*/
+            aReanim.OverrideScale(g->mScaleX, g->mScaleY);
+
+            if (aFilterVaration != DrawFilterVariation::FILTERVARIATION_NONE)
+            {
+                switch (aFilterVaration)
+                {
+                case DrawFilterVariation::FILTERVARIATION_WASHED_OUT:
+                    aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_WASHED_OUT;
+                    break;
+                case DrawFilterVariation::FILTERVARIATION_LESS_WASHED_OUT:
+                    aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT;
+                    break;
+                case DrawFilterVariation::FILTERVARIATION_WHITE:
+                    aReanim.mFilterEffect = FilterEffect::FILTER_EFFECT_LESS_WASHED_OUT;
+                    break;
+                }
+            }
+
+            aReanim.Draw(g);           
+        }
+        g->PopState();
+        return;
     }
+
     if (aSeedType == SeedType::SEED_LEFTPEATER)
     {
         aOffsetX += g->mScaleX * 80.0f;
