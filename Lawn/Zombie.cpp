@@ -1304,7 +1304,7 @@ void Zombie::PickRandomSpeed()
 #endif
     else
     {
-        mVelX = RandRangeFloat(0.23f, 0.32f);
+        mVelX = RandRangeFloat(0.23f, 0.37f);
         if (mVelX < 0.3f)
         {
             mAnimTicksPerFrame = 12;

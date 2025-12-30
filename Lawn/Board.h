@@ -548,6 +548,9 @@ public:
 	SexyString						GetSpeedString();
 	void							DrawSpeed(Graphics* g);
 #endif
+	void							AddedToManager(WidgetManager* theManager);
+	void							RemovedFromManager(WidgetManager* theManager);
+	void							ButtonDepress(int theId);
 };
 extern bool gShownMoreSunTutorial;
 

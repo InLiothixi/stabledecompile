@@ -5412,38 +5412,6 @@ void Board::MouseUp(int x, int y, int theClickCount)
 				mApp->DoBackToMain();
 			}
 		}
-#ifdef _REPLANTED_SPEED_CONTROL
-		else if (mSlowdownButton->mIsOver && !mSlowdownButton->mDisabled && !mSlowdownButton->mBtnNoDraw && !mApp->GetDialog(Dialogs::DIALOG_GAME_OVER) && !mApp->GetDialog(Dialogs::DIALOG_LEVEL_COMPLETE))
-		{
-			mPrevSpeedMod = mSpeedMod;
-			if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
-				mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
-
-			if (mPrevSpeedMod != mSpeedMod)
-			{
-				mApp->PlayFoley(FoleyType::FOLEY_REVERSE_WAKEUP);
-				mQECounter = 35;
-			}
-		}
-		else if (mPauseButton->mIsOver && !mPauseButton->mDisabled && !mPauseButton->mBtnNoDraw && !mApp->GetDialog(Dialogs::DIALOG_GAME_OVER) && !mApp->GetDialog(Dialogs::DIALOG_LEVEL_COMPLETE))
-		{
-			mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON_PRESSED;
-			mApp->PlaySample(Sexy::SOUND_PAUSE);
-			mApp->DoPauseDialog();
-		}
-		else if (mSpeedupButton->mIsOver && !mSpeedupButton->mDisabled && !mSpeedupButton->mBtnNoDraw && !mApp->GetDialog(Dialogs::DIALOG_GAME_OVER) && !mApp->GetDialog(Dialogs::DIALOG_LEVEL_COMPLETE))
-		{
-			mPrevSpeedMod = mSpeedMod;
-			if (mSpeedMod < SpeedMod::SPEED_SONIC)
-				mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
-
-			if (mPrevSpeedMod != mSpeedMod)
-			{
-				mApp->PlayFoley(FoleyType::FOLEY_WAKEUP);
-				mQECounter = 35;
-			}
-		}
-#endif
 	}
 }
 
@@ -12025,4 +11993,60 @@ void Board::MovePlant(Plant* thePlant, int theGridX, int theGridY)
 	}
 
 	DoPlantingEffects(theGridX, theGridY, thePlant);
+}
+
+void Board::AddedToManager(WidgetManager* theWidgetManager)
+{
+	Widget::AddedToManager(theWidgetManager);
+#ifdef _REPLANTED_SPEED_CONTROL
+	theWidgetManager->AddWidget(mSlowdownButton);
+	theWidgetManager->AddWidget(mPauseButton);
+	theWidgetManager->AddWidget(mSpeedupButton);
+#endif
+}
+
+void Board::RemovedFromManager(WidgetManager* theWidgetManager)
+{
+	Widget::RemovedFromManager(theWidgetManager);
+#ifdef _REPLANTED_SPEED_CONTROL
+	theWidgetManager->RemoveWidget(mSlowdownButton);
+	theWidgetManager->RemoveWidget(mPauseButton);
+	theWidgetManager->RemoveWidget(mSpeedupButton);
+#endif
+}
+
+void Board::ButtonDepress(int theId)
+{
+#ifdef _REPLANTED_SPEED_CONTROL
+	if (theId == Board::SLOWDOWN)
+	{
+		mPrevSpeedMod = mSpeedMod;
+		if (mSpeedMod > SpeedMod::SPEED_SLOWMO)
+			mSpeedMod = static_cast<SpeedMod>(mSpeedMod - 1);
+
+		if (mPrevSpeedMod != mSpeedMod)
+		{
+			mApp->PlayFoley(FoleyType::FOLEY_REVERSE_WAKEUP);
+			mQECounter = 35;
+		}
+	}
+	else if (theId == Board::PAUSE)
+	{
+		mPauseButton->mButtonImage = Sexy::IMAGE_PAUSE_BUTTON_PRESSED;
+		mApp->PlaySample(Sexy::SOUND_PAUSE);
+		mApp->DoPauseDialog();
+	}
+	else if (theId == Board::SPEEDUP)
+	{
+		mPrevSpeedMod = mSpeedMod;
+		if (mSpeedMod < SpeedMod::SPEED_SONIC)
+			mSpeedMod = static_cast<SpeedMod>(mSpeedMod + 1);
+
+		if (mPrevSpeedMod != mSpeedMod)
+		{
+			mApp->PlayFoley(FoleyType::FOLEY_WAKEUP);
+			mQECounter = 35;
+		}
+	}
+#endif
 }

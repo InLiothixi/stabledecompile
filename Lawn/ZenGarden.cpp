@@ -1137,7 +1137,7 @@ void ZenGarden::MovePlant(Plant* thePlant, int theGridX, int theGridY)
     TOD_ASSERT(mBoard->GetTopPlantAt(theGridX, theGridY, PlantPriority::TOPPLANT_ANY) == nullptr);
 
     bool aIsSleeping = thePlant->mIsAsleep;
-    thePlant->SetSleeping(false);
+    thePlant->SetSleeping(aIsSleeping);
     Plant* aTopPlantAtGrid = mBoard->GetTopPlantAt(thePlant->mPlantCol, thePlant->mRow, PlantPriority::TOPPLANT_ONLY_UNDER_PLANT);
     if (aTopPlantAtGrid)
     {
@@ -1178,6 +1178,24 @@ void ZenGarden::MovePlant(Plant* thePlant, int theGridX, int theGridY)
     else
     {
         mBoard->DoPlantingEffects(theGridX, theGridY, thePlant);
+    }
+
+    if (thePlant->mIsAsleep) {
+        float aPosX = thePlant->mX + 50.0f;
+        float aPosY = thePlant->mY + 40.0f;
+        if (thePlant->mSeedType == SeedType::SEED_FUMESHROOM)
+            aPosX += 12.0f;
+        else if (thePlant->mSeedType == SeedType::SEED_SCAREDYSHROOM)
+            aPosY -= 20.0f;
+        else if (thePlant->mSeedType == SeedType::SEED_GLOOMSHROOM)
+            aPosY -= 12.0f;
+
+        Reanimation* aSleepReanim = mApp->ReanimationTryToGet(thePlant->mSleepingReanimID);
+        if (aSleepReanim)
+        {
+            aSleepReanim->mRenderOrder = thePlant->mRenderOrder;
+            aSleepReanim->SetPosition(aPosX, aPosY);
+        }
     }
 }
 

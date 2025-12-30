@@ -13,6 +13,7 @@ static Color gGameButtonColors[6] = { Color(0, 0, 0), Color(0, 0, 0), Color(0, 0
 //0x447B00
 void DrawStoneButton(Graphics* g, int x, int y, int theWidth, int theHeight, bool isDown, bool isHighLighted, const SexyString& theLabel)
 {
+	g->PushState();
 	Image* aLeftImage = Sexy::IMAGE_BUTTON_LEFT;
 	Image* aMiddleImage = Sexy::IMAGE_BUTTON_MIDDLE;
 	Image* aRightImage = Sexy::IMAGE_BUTTON_RIGHT;
@@ -29,22 +30,28 @@ void DrawStoneButton(Graphics* g, int x, int y, int theWidth, int theHeight, boo
 		aImageX++;
 	}
 
+	int aWidth = aLeftImage->GetWidth();
+
 	int aRepeat = (theWidth - aLeftImage->mWidth - aRightImage->mWidth) / aMiddleImage->mWidth;
 	g->DrawImage(aLeftImage, aImageX, y);
 	aImageX += aLeftImage->mWidth;
 	while (aRepeat > 0)
 	{
+		aWidth += aMiddleImage->GetWidth();
 		g->DrawImage(aMiddleImage, aImageX, y);
 		aImageX += aMiddleImage->mWidth;
 		--aRepeat;
 	}
+	aWidth += aRightImage->GetWidth() - 4;
 	g->DrawImage(aRightImage, aImageX, y);
 
+
 	g->SetFont(isHighLighted ? Sexy::FONT_DWARVENTODCRAFT18BRIGHTGREENINSET : Sexy::FONT_DWARVENTODCRAFT18GREENINSET);
-	aFontX += (theWidth - Sexy::FONT_DWARVENTODCRAFT18GREENINSET->StringWidth(theLabel)) / 2 + 1;
-	aFontY += (theHeight - Sexy::FONT_DWARVENTODCRAFT18GREENINSET->GetAscent() / 6 - 1 + Sexy::FONT_DWARVENTODCRAFT18GREENINSET->GetAscent()) / 2 - 4;
+	aFontX += (aWidth - g->GetFont()->StringWidth(theLabel)) / 2 + 1;
+	aFontY += (theHeight - g->GetFont()->GetAscent() / 6 - 1 + g->GetFont()->GetAscent()) / 2 - 4;
 	g->SetColor(Color::White);
 	g->DrawString(theLabel, aFontX, aFontY);
+	g->PopState();
 }
 
 //0x447C60

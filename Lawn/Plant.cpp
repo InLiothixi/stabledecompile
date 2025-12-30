@@ -295,6 +295,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     case SeedType::SEED_BLOVER:
     {
         mDoSpecialCountdown = 50;
+        mStateCountdown = 50;
 
         if (IsInPlay())
         {

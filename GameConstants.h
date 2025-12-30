@@ -85,7 +85,7 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 #endif
 
 #ifdef _DEBUG
-#define _SHOW_OUTPUT_CONSOLE
+//#define _SHOW_OUTPUT_CONSOLE
 #define _SHOW_LIMBO_PAGE
 #endif
 
