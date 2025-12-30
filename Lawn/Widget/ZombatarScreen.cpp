@@ -17,6 +17,7 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	mApp = theApp;
 	mWidth = BOARD_WIDTH;
 	mHeight = BOARD_HEIGHT;
+	TodLoadResources("DelayLoad_Almanac");
 
 	mBackButton = MakeNewButton(
 		ZombatarWidget::ZombatarScreen_Back,
@@ -76,12 +77,16 @@ void ZombatarWidget::Draw(Graphics* g) {
 
 	g->DrawImageF(IMAGE_ZOMBATAR_DAY_GRAVE, 8.55f, 432.05f);
 
-	g->DrawImage(IMAGE_ZOMBATAR_WIDGET_BG, 26, 25);
-	g->DrawImage(IMAGE_ZOMBATAR_BACKGROUND_BLANK, 596, 116);
-	g->DrawImage(IMAGE_ZOMBATAR_ZOMBIE_BLANK_SKIN, 630, 155);
-	g->DrawImage(IMAGE_ZOMBATAR_ZOMBIE_BLANK, 630, 155);
-	g->DrawImage(IMAGE_ZOMBATAR_WIDGET_INNER_BG, 152, 125);
-	g->DrawImage(IMAGE_ZOMBATAR_DISPLAY_WINDOW, 5, 0);
+	g->DrawImageF(IMAGE_ZOMBATAR_WIDGET_BG, 26, 25);
+	g->DrawImageF(IMAGE_ZOMBATAR_BACKGROUND_BLANK, 596, 116);
+	g->DrawImageF(IMAGE_ZOMBATAR_ZOMBIE_BLANK_SKIN, 630.5f, 155);
+	g->DrawImageF(IMAGE_ZOMBATAR_ZOMBIE_BLANK, 630.5f, 155);
+	g->DrawImageF(IMAGE_ZOMBATAR_WIDGET_INNER_BG, 152, 125);
+	g->PushState();
+	g->SetClipRect(599, 300, 176, 200);
+	g->DrawImageF(IMAGE_ALMANAC_GROUNDDAY, 599.5f, 300);
+	g->PopState();
+	g->DrawImageF(IMAGE_ZOMBATAR_DISPLAY_WINDOW, 5, 0);
 /*
 	Image* navigationImg[27] = {
 		IMAGE_ZOMBATAR_SKIN_BUTTON_HIGHLIGHT,

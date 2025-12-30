@@ -1517,7 +1517,7 @@ void Board::FreezeEffectsForCutscene(bool theFreeze)
 	TodParticleSystem* aParticle = nullptr;
 	while (IterateParticles(aParticle))
 	{
-		if (aParticle->mEffectType == ParticleEffect::PARTICLE_LANTERN_SHINE || aParticle->mEffectType == ParticleEffect::PARTICLE_GRAVE_BUSTER || aParticle->mEffectType == ParticleEffect::PARTICLE_POOL_SPARKLY && mIceTrapCounter == 0)
+		//if (aParticle->mEffectType == ParticleEffect::PARTICLE_GRAVE_BUSTER || aParticle->mEffectType == ParticleEffect::PARTICLE_POOL_SPARKLY && mIceTrapCounter == 0)
 		{
 			aParticle->mDontUpdate = theFreeze;
 		}
@@ -1526,10 +1526,8 @@ void Board::FreezeEffectsForCutscene(bool theFreeze)
 	Reanimation* aReanim = nullptr;
 	while (IterateReanimations(aReanim))
 	{
-		if (aReanim->mReanimationType == ReanimationType::REANIM_SLEEPING || 
-			aReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CHARRED || aReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CHARRED_CATAPULT || 
-			aReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CHARRED_DIGGER || aReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CHARRED_GARGANTUAR || 
-			aReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CHARRED_IMP || aReanim->mReanimationType == ReanimationType::REANIM_ZOMBIE_CHARRED_ZAMBONI)
+		//if (aReanim->mReanimationType == ReanimationType::REANIM_SLEEPING || aReanim->mReanimationType == ReanimationType::REANIM_SPLASH)
+		if (!aReanim->mIsAttachment)
 		{
 			aReanim->mAnimRate = theFreeze ? 0.0f : RandRangeFloat(6, 8);
 		}
