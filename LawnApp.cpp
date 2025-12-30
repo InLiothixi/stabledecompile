@@ -2892,6 +2892,10 @@ bool LawnApp::HasBeatenChallenge(GameMode theGameMode)
 	{
 		return false;
 	}
+
+	if (mGameMode == GameMode::GAMEMODE_UPSELL && theGameMode > GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) {
+		return false;
+	}
 	return mPlayerInfo->mChallengeRecords[aChallengeIndex] > 0;
 }
 

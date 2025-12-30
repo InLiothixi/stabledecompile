@@ -400,11 +400,18 @@ int ChallengeScreen::MoreTrophiesNeeded(int theChallengeIndex)
 			int aNumTrophies = mApp->GetNumTrophies(aDef.mPage);
 			if (aDef.mPage == CHALLENGE_PAGE_LIMBO_CHALLENGE || aDef.mPage == CHALLENGE_PAGE_LIMBO_SURVIVAL)
 			{
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _DS_MINIGAMES
 				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER ||
 					aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_HOMERUN_DERBY ||
 					aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON ||
 					aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
+				{
+					return 1;
+				}
+#endif
+#ifdef _CONSOLE_MINIGAMES
+
+				if (aDef.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON)
 				{
 					return 1;
 				}
@@ -584,10 +591,10 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 
 			if (aChallengeButton->mDisabled || (theChallengeIndex == mUnlockChallengeIndex && mUnlockState == UNLOCK_SHAKING))
 			{
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _DS_MINIGAMES
 				if (!(aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP))
-					aName = _S("?");
 #endif
+				aName = _S("?");
 			}
 
 			int aNameLen = aName.size();
@@ -697,7 +704,7 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 			else if (aRecord > 0)
 			{
 				if (mApp->HasBeatenChallenge(aDef.mChallengeMode) 
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _DS_MINIGAMES
 					&& !(aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
 #endif
 					)
@@ -966,7 +973,7 @@ void ChallengeScreen::UpdateToolTip()
 				{
 					aLabel = _S("[ONE_MORE_LAST_STAND_TOOLTIP]");
 				}
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _DS_MINIGAMES
 				else if (aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP)
 				{
 					aLabel = _S("[COMING_SOON]");
@@ -1003,8 +1010,8 @@ void ChallengeScreen::UpdateScrollRange()
 		ButtonWidget* aButton = mChallengeButtons[aChallengeMode];
 
 		aButton->mVisible = aDefinition.mPage == mPageIndex;
-		if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
-			aButton->mVisible = false;
+		/*if (aDefinition.mChallengeMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || aDefinition.mChallengeMode == GameMode::GAMEMODE_TREE_OF_WISDOM || aDefinition.mChallengeMode >= GameMode::GAMEMODE_UPSELL && aDefinition.mChallengeMode <= GameMode::GAMEMODE_INTRO)
+			aButton->mVisible = false;*/
 
 		if (aButton->mVisible)
 		{
