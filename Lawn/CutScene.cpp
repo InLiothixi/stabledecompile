@@ -2445,18 +2445,17 @@ void CutScene::UpdateUpsell()
 			mApp->AddTodParticle(592, 240, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_SCREEN_FADE, 0, 0), ParticleEffect::PARTICLE_PERSENT_PICK_UP_ARROW);
 			break;
 
+		case 3316:  // “这足够把你的脑子吹到火星，再吹回来！”
+			LoadUpsellBoardRoof();
+			mApp->PlaySample(SOUND_HUGE_WAVE);
+			mUpsellHideBoard = false;
+			break;
 
-	case 3316:  // “这足够把你的脑子吹到火星，再吹回来！”
-		LoadUpsellBoardRoof();
-		mApp->PlaySample(SOUND_HUGE_WAVE);
-		mUpsellHideBoard = false;
-		break;
-
-	case 3317:  // “呃，你还等什么呢？”
-		ClearUpsellBoard();
-		mBoard->mMenuButton->mBtnNoDraw = true;
-		mUpsellHideBoard = true;
-		break;
+		case 3317:  // “呃，你还等什么呢？”
+			ClearUpsellBoard();
+			mBoard->mMenuButton->mBtnNoDraw = true;
+			mUpsellHideBoard = true;
+			break;
 	}
 }
 

@@ -8585,7 +8585,12 @@ void Board::DrawTopRightUI(Graphics* g)
 		g->SetColorizeImages(true);
 		g->SetColor(GetFlashingColor(mMainCounter, 75));
 	}
-	/*mMenuButton->Draw(g);*/
+
+	if (mApp->mGameMode == GameMode::GAMEMODE_UPSELL)
+	{
+		mMenuButton->Draw(g);
+	}
+
 	g->SetColorizeImages(false);
 
 	if (mStoreButton && !mApp->IsLastStand())
