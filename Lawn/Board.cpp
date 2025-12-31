@@ -2180,7 +2180,7 @@ void Board::UpdateLevelEndSequence()
 
 	if (CanDropLoot() && !IsSurvivalStageWithRepick())
 	{
-		const bool aIsReplaying = mLevel < mApp->mPlayerInfo->GetLevel();
+		const bool aIsReplaying = mApp->mGameMode == GameMode::GAMEMODE_ADVENTURE && mLevel < mApp->mPlayerInfo->GetLevel();
 
 		mScoreNextMowerCounter = 40;
 		LawnMower* aLawnMower = GetBottomLawnMower();

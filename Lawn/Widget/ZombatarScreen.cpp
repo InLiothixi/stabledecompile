@@ -11,6 +11,7 @@
 #include "../../GameConstants.h"
 #include "../../Sexy.TodLib/Reanimator.h"
 #include "../Zombie.h"
+#include "../../Sexy.TodLib/Attachment.h"
 
 // GOTY @Inliothixi
 ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
@@ -56,18 +57,38 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	mZombie->PlayZombieReanim("anim_idle2", ReanimLoopType::REANIM_LOOP, 0, aRanimRate);
 	mZombie->mX = mZombie->mPosX = 641;
 	mZombie->mY = mZombie->mPosY = 351;
+
+	Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mZombie->mBodyReanimID);
+	Reanimation* aZombatar = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_ZOMBATAR);
+	aZombatar->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
+	for (int i = 0; i < aZombatar->mDefinition->mTracks.count; i++)
+	{
+		aZombatar->mTrackInstances[i].mRenderGroup =
+			stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_head1") == 0 || stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_head2") == 0  
+			|| stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_hair") == 0 ?
+			RENDER_GROUP_NORMAL : RENDER_GROUP_HIDDEN;
+	}
+	ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+	aHeadTrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+	ReanimatorTrackInstance* aHead2TrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head2");
+	aHead2TrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+	ReanimatorTrackInstance* aHairTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_hair");
+	aHairTrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+	AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
+	aBodyReanim->mFrameBasePose = 0;
+	TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
 }
 
 ZombatarWidget::~ZombatarWidget() {
 	if (mBackButton)
 		delete mBackButton;
 
-	/*if (mZombie)
+	if (mZombie)
 	{
 		mZombie->DieNoLoot();
 		delete mZombie;
 		mZombie = nullptr;
-	}*/
+	}
 
 	//if (mFinishButton)
 	//	delete mFinishButton;
