@@ -716,6 +716,11 @@ void Projectile::DoSplashDamage(Zombie* theZombie)
 			else
 			{
 				aZombie->TakeDamage(aSplashDamage, aDamageFlags);
+
+				if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL)
+				{
+					aZombie->RemoveColdEffects();
+				}
 			}
 
 			if (TestBit(aDamageFlags, (int)DamageFlags::DAMAGE_HITS_SHIELD_AND_BODY) && mMotionType == ProjectileMotion::MOTION_LOBBED)
