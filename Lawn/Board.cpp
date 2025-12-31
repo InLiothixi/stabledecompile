@@ -1899,7 +1899,7 @@ void Board::InitLevel()
 		mSeedBank->mSeedPackets[6].SetPacketType(SeedType::SEED_TALLNUT);
 		mSeedBank->mSeedPackets[7].SetPacketType(SeedType::SEED_JALAPENO);
 	}
-	else if (!ChooseSeedsOnCurrentLevel() && !HasConveyorBeltSeedBank())
+	else if (!ChooseSeedsOnCurrentLevel() && !HasConveyorBeltSeedBank() && mApp->mGameMode == GameMode::GAMEMODE_ADVENTURE)
 	{
 		mSeedBank->mNumPackets = max(GetNumSeedsInBank(), 1);
 		// 卡槽错误的关卡，依次填充所有卡牌
