@@ -4,6 +4,7 @@
 #include "../../ConstEnums.h"
 #include "../../SexyAppFramework/Widget.h"
 #include "../../SexyAppFramework/ButtonListener.h"
+#include "../Zombie.h"
 #include "GameButton.h"
 
 enum ZombatarNavigation
@@ -35,6 +36,7 @@ public:
 	NewLawnButton* mBackButton;
 	//int							mNavigationID;
 	//NewLawnButton*				mFinishButton;
+	Zombie* mZombie;
 
 public:
 	ZombatarWidget(LawnApp* theApp);

@@ -579,9 +579,23 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
         ReanimatorTrackInstance* aTrackInstance = aBodyReanim->GetTrackInstanceByName("Zombie_flaghand");
         aTrackInstance->mRenderInBack = true;
         AttachReanim(aTrackInstance->mAttachmentID, aFlagReanim, 0.0f, 0.0f);
-
+        /*Reanimation* aZombatar = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_ZOMBATAR);
+        aZombatar->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
+        for (int i = 0; i < aZombatar->mDefinition->mTracks.count; i++)
+        {
+            aZombatar->mTrackInstances[i].mRenderGroup = 
+                stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_head1") == 0 || stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_head2") == 0 ? 
+                RENDER_GROUP_NORMAL : RENDER_GROUP_HIDDEN;
+        }
+        ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+        aHeadTrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+        ReanimatorTrackInstance* aHead2TrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head2");
+        aHead2TrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+        ReanimatorTrackInstance* aHairTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_hair");
+        aHairTrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+        AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
         aBodyReanim->mFrameBasePose = 0;
-
+        TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 4.0f, 1.0f, 1.0f);*/
         mPosX = WIDE_BOARD_WIDTH;
         break;
     }

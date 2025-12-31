@@ -10,6 +10,7 @@
 #include "../../SexyAppFramework/MemoryImage.h"
 #include "../../GameConstants.h"
 #include "../../Sexy.TodLib/Reanimator.h"
+#include "../Zombie.h"
 
 // GOTY @Inliothixi
 ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
@@ -47,11 +48,26 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	);
 	mFinishButton->Resize(445, 472, IMAGE_ZOMBATAR_FINISHED_BUTTON->mWidth, IMAGE_ZOMBATAR_FINISHED_BUTTON->mHeight);
 	mFinishButton->mClip = false;*/
+
+	mZombie = new Zombie();
+	mZombie->mBoard = nullptr;
+	mZombie->ZombieInitialize(0, ZombieType::ZOMBIE_FLAG, false, nullptr, Zombie::ZOMBIE_WAVE_UI);
+	float aRanimRate = RandRangeFloat(12.0f, 24.0f);
+	mZombie->PlayZombieReanim("anim_idle2", ReanimLoopType::REANIM_LOOP, 0, aRanimRate);
+	mZombie->mX = mZombie->mPosX = 641;
+	mZombie->mY = mZombie->mPosY = 351;
 }
 
 ZombatarWidget::~ZombatarWidget() {
 	if (mBackButton)
 		delete mBackButton;
+
+	/*if (mZombie)
+	{
+		mZombie->DieNoLoot();
+		delete mZombie;
+		mZombie = nullptr;
+	}*/
 
 	//if (mFinishButton)
 	//	delete mFinishButton;
@@ -62,6 +78,7 @@ bool mOnBackBtn = false;
 
 void ZombatarWidget::Update() {
 	mBackButton->MarkDirty();
+	if (mZombie) mZombie->Update();
 	//mFinishButton->MarkDirty();
 }
 
@@ -86,6 +103,11 @@ void ZombatarWidget::Draw(Graphics* g) {
 	g->SetClipRect(599, 300, 176, 200);
 	g->DrawImageF(IMAGE_ALMANAC_GROUNDDAY, 599.5f, 300);
 	g->PopState();
+	if (mZombie->BeginDraw(g))
+	{
+		mZombie->Draw(g);
+		mZombie->EndDraw(g);
+	}
 	g->DrawImageF(IMAGE_ZOMBATAR_DISPLAY_WINDOW, 5, 0);
 /*
 	Image* navigationImg[27] = {

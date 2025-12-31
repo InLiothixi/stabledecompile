@@ -309,6 +309,12 @@ void LawnApp::Shutdown()
 			WriteCurrentUserConfig();
 		}
 
+		if (mGameSelector && mGameSelector->mZombatarWidget && mGameSelector->mZombatarWidget->mZombie) {
+			mGameSelector->mZombatarWidget->mZombie->DieNoLoot();
+			delete mGameSelector->mZombatarWidget->mZombie;
+			mGameSelector->mZombatarWidget->mZombie = nullptr;
+		}
+
 		ProcessSafeDeleteList();
 
 		if (mPoolEffect)
@@ -583,7 +589,7 @@ void LawnApp::ShowGameSelector()
 		mWidgetManager->RemoveWidget(mGameSelector);
 		SafeDeleteWidget(mGameSelector);
 	}
-
+	mGameMode = GameMode::GAMEMODE_ADVENTURE;
 	mGameScene = GameScenes::SCENE_MENU;
 	mGameSelector = new GameSelector(this);
 	mGameSelector->Resize(0, 0, mWidth, mHeight);

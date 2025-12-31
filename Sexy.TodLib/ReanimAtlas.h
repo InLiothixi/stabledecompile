@@ -4,7 +4,7 @@
 #include "../SexyAppFramework/Rect.h"
 using namespace Sexy;
 
-#define MAX_REANIM_IMAGES 64
+#define MAX_REANIM_IMAGES 256
 
 class ReanimatorDefinition;
 namespace Sexy
