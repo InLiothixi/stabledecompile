@@ -2006,6 +2006,7 @@ void GameSelector::ShowZombatarScreen() {
 	mZombatarWidget->mBackButton->mButtonImage = Sexy::IMAGE_BLANK;
 	mZombatarWidget->mBackButton->mDownImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
 	mZombatarWidget->mBackButton->mOverImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
+	mZombatarWidget->ResetZombatar();
 #ifdef _HAS_MORESCREEN
 	mMoreWidget->DisableButtons(true);
 #endif

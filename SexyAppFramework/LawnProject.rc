@@ -110,7 +110,7 @@ BEGIN
         BEGIN
             VALUE "FileDescription",  "Plants vs. Zombies\0"
             VALUE "FileVersion",      "1.2.0.1095\0"
-            VALUE "LegalCopyright",   "Copyright (C) 2009\0"
+            // VALUE "LegalCopyright",   "Copyright (C) 2009\0"
             VALUE "OriginalFilename", "PlantsVsZombies.exe\0"
             VALUE "ProductName",      "Plants vs. Zombies\0"
             VALUE "ProductVersion",   "1.2.0.1096\0"

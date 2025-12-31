@@ -29,11 +29,44 @@ class ZombatarWidget : public Widget, public ButtonListener
 {
 private:
 	enum {
-		ZombatarScreen_Back
+		ZombatarScreen_Back,
+		ZombatarScreen_Skin,
+		ZombatarScreen_Hair,
+		ZombatarScreen_FacialHair,
+		ZombatarScreen_Tidbits,
+		ZombatarScreen_EyeWear,
+		ZombatarScreen_Clothes,
+		ZombatarScreen_Acessory,
+		ZombatarScreen_Hats,
+		ZombatarScreen_Backdrops
+	};
+
+	enum ZombatarPage {
+		ZombatarPage_Skin,
+		ZombatarPage_Hair,
+		ZombatarPage_FacialHair,
+		ZombatarPage_Tidbits,
+		ZombatarPage_EyeWear,
+		ZombatarPage_Clothes,
+		ZombatarPage_Acessory,
+		ZombatarPage_Hats,
+		ZombatarPage_Backdrops,
+		MAX_ZOMBATAR_PAGES
 	};
 public:
 	LawnApp* mApp; 
 	NewLawnButton* mBackButton;
+	NewLawnButton* mSkinButton;
+	NewLawnButton* mHairButton;
+	NewLawnButton* mFacialHairButton;
+	NewLawnButton* mTidbitsButton;
+	NewLawnButton* mEyeWearButton;
+	NewLawnButton* mClothesButton;
+	NewLawnButton* mAccessoryButton;
+	NewLawnButton* mHatsButton;
+	NewLawnButton* mBackdropsButton;
+	ZombatarPage mPage;
+
 	//int							mNavigationID;
 	//NewLawnButton*				mFinishButton;
 	Zombie* mZombie;
@@ -49,5 +82,8 @@ public:
 	virtual void                ButtonMouseEnter(int theId);
 	virtual void                ButtonDepress(int theId);
 	virtual void                ButtonPress(int theId, int theClickCount);
+	void						ResetZombatar();
+	void						SetupZombie();
+	void						SetPage(ZombatarPage thePage);
 };
 #endif
