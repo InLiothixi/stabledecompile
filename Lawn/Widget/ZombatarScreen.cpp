@@ -63,20 +63,20 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	aZombatar->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
 	for (int i = 0; i < aZombatar->mDefinition->mTracks.count; i++)
 	{
-		aZombatar->mTrackInstances[i].mRenderGroup =
-			stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_head1") == 0 || stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_head2") == 0  
-			|| stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "anim_hair") == 0 ?
-			RENDER_GROUP_NORMAL : RENDER_GROUP_HIDDEN;
+		aZombatar->mTrackInstances[i].mRenderGroup = /*stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "hats_13") == 0 || stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "hats_13_line") == 0 ?
+			RENDER_GROUP_NORMAL :*/ RENDER_GROUP_HIDDEN;
+		/*if (stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "hats_13") == 0)
+			aZombatar->mTrackInstances[i].mTrackColor = Color(186, 45, 211, 255);*/
 	}
 	ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
-	aHeadTrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
-	ReanimatorTrackInstance* aHead2TrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head2");
-	aHead2TrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
-	ReanimatorTrackInstance* aHairTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_hair");
-	aHairTrackInstance->mImageOverride = Sexy::IMAGE_BLANK;
+
+	//mZombie->ReanimShowPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+
 	AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 	aBodyReanim->mFrameBasePose = 0;
-	TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+
+	//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+	TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 }
 
 ZombatarWidget::~ZombatarWidget() {
@@ -126,6 +126,7 @@ void ZombatarWidget::Draw(Graphics* g) {
 	g->PopState();
 	if (mZombie->BeginDraw(g))
 	{
+		mZombie->DrawShadow(g);
 		mZombie->Draw(g);
 		mZombie->EndDraw(g);
 	}
@@ -213,10 +214,14 @@ void ZombatarWidget::OrderInManagerChanged()
 
 void ZombatarWidget::ButtonDepress(int theId)
 {
+	if (mApp->mGameSelector->mSlideCounter > 0)
+		return;
+
 	switch (theId)
 	{
 		case ZombatarWidget::ZombatarScreen_Back:
 		{
+			mBackButton->SetDisabled(true);
 			mBackButton->mButtonImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_PRESSED;
 			mBackButton->mDownImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_PRESSED;
 			mBackButton->mOverImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_PRESSED;
@@ -246,6 +251,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 		}
 	}
 
+	mApp->PlaySample(Sexy::SOUND_TAP);
 }
 
 void ZombatarWidget::ButtonMouseEnter(int theId)
@@ -261,8 +267,6 @@ void ZombatarWidget::ButtonMouseEnter(int theId)
 
 void ZombatarWidget::ButtonPress(int theId, int theClickCount)
 {
-	//if (theId == GameSelector::GameSelector_Adventure)
-	//	mApp->PlaySample(Sexy::SOUND_GRAVEBUTTON);
-	//else
-	mApp->PlaySample(Sexy::SOUND_TAP);
+	if (mApp->mGameSelector->mSlideCounter > 0)
+		return;
 }

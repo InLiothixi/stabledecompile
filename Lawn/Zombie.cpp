@@ -7782,12 +7782,12 @@ void Zombie::UpdateAnimSpeed()
     if (IsImmobilizied() || (mYuckyFace && mYuckyFaceCounter < 170))
     {
         ApplyAnimRate(0.0f);
-        if (mZombieType == ZombieType::ZOMBIE_FLAG && mHasObject) {
+       /* if (mZombieType == ZombieType::ZOMBIE_FLAG && mHasObject) {
             Reanimation* aFlagReanim = mApp->ReanimationTryToGet(mSpecialHeadReanimID);
             if (aFlagReanim) {
                 aFlagReanim->mAnimRate = 0.0f;
             }
-        }
+        }*/
         return;
     }
 
@@ -7829,12 +7829,12 @@ void Zombie::UpdateAnimSpeed()
                 ApplyAnimRate(aAnimRate);
             }
 
-            if (mZombieType == ZombieType::ZOMBIE_FLAG && mHasObject) {
+           /* if (mZombieType == ZombieType::ZOMBIE_FLAG && mHasObject) {
                 Reanimation* aFlagReanim = mApp->ReanimationTryToGet(mSpecialHeadReanimID);
                 if (aFlagReanim && aFlagReanim->mAnimRate == 0.0f) {
                     aFlagReanim->mAnimRate = 15.0f;
                 }
-            }
+            }*/
         }
     }
 }

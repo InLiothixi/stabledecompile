@@ -1651,6 +1651,9 @@ void GameSelector::KeyChar(char theChar)
 //0x44C360
 void GameSelector::MouseDown(int x, int y, int theClickCount)
 {
+	if (mSlideCounter > 0)
+		return;
+
 	for (int i = 0; i < 3; i++)
 	{
 		Reanimation* aFlowerReanim = mApp->ReanimationGet(mFlowerReanimID[i]);
@@ -1669,6 +1672,9 @@ void GameSelector::MouseDown(int x, int y, int theClickCount)
 //0x44C4C0
 void GameSelector::ButtonMouseEnter(int theId)
 {
+	if (mSlideCounter > 0)
+		return;
+
 	if ((theId == GameSelector::GameSelector_Minigame && mMinigamesLocked) ||
 		(theId == GameSelector::GameSelector_Puzzle && mPuzzleLocked) ||
 		(theId == GameSelector::GameSelector_Survival && mSurvivalLocked) ||
@@ -1681,6 +1687,9 @@ void GameSelector::ButtonMouseEnter(int theId)
 //0x44C540
 void GameSelector::ButtonPress(int theId, int theClickCount)
 {
+	if (mSlideCounter > 0)
+		return;
+
 	if (theId == -1)
 		return;
 
@@ -1993,6 +2002,7 @@ void GameSelector::ShowZombatarScreen() {
 #if defined(_HAS_LEVELSELECTOR) && defined(_HAS_ZOMBATAR)
 	mWidgetManager->PutBehind(mLevelSelectorWidget, mZombatarWidget);
 #endif
+	mZombatarWidget->mBackButton->SetDisabled(false);
 	mZombatarWidget->mBackButton->mButtonImage = Sexy::IMAGE_BLANK;
 	mZombatarWidget->mBackButton->mDownImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
 	mZombatarWidget->mBackButton->mOverImage = Sexy::IMAGE_ZOMBATAR_MAINMENUBACK_HIGHLIGHT;
