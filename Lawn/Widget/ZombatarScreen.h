@@ -7,7 +7,9 @@
 #include "../Zombie.h"
 #include "GameButton.h"
 
+#define NUM_SKIN_COLOR_PALLETES 12
 #define NUM_COLOR_PALLETES 18
+#define NONE_COLOR_PALLETE 17
 
 class LawnApp;
 
@@ -75,6 +77,7 @@ public:
 	ZombatarPage mPage;
 	int mCurSkinPallete;
 	int mCurHair;
+	int mCurHairPallete;
 	int mCurBackground;
 	int mCurBackgroundPallete;
 	NewLawnButton* mZombatarItems[NUM_ZOMBATAR_ITEMS];
@@ -106,7 +109,7 @@ public:
 	void						UpdateItems();
 };
 
-extern Color gZombatarSkinPalletes[12];
-extern Color gZombatarDimPalletes[18];
-extern Color gZombatarBrightPalletes[18];
+extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];
+extern Color gZombatarDimPalletes[NUM_COLOR_PALLETES];
+extern Color gZombatarBrightPalletes[NUM_COLOR_PALLETES];
 #endif

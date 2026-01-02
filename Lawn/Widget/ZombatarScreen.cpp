@@ -16,27 +16,27 @@
 #include "../../Sexy.TodLib/TodStringFile.h"
 
 ZombatarDefinition gZombatarDefinitions[] = {
-	{ZombatarItem::ZOMBATAR_BACKGROUND_CRAZYDAVE,	&Sexy::IMAGE_ZOMBATAR_BACKGROUND_CRAZYDAVE,	nullptr, ZombatarPage::ZombatarPage_Backdrops, 0, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU,	    &Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU,		nullptr, ZombatarPage::ZombatarPage_Backdrops, 1, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU_DOS,    &Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU_DOS,  nullptr, ZombatarPage::ZombatarPage_Backdrops, 2, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_ROOF,	    &Sexy::IMAGE_ZOMBATAR_BACKGROUND_ROOF,		nullptr, ZombatarPage::ZombatarPage_Backdrops, 3, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_CRAZYDAVE,	&Sexy::IMAGE_ZOMBATAR_BACKGROUND_CRAZYDAVE,	nullptr,								ZombatarPage::ZombatarPage_Backdrops, 0, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU,	    &Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU,		nullptr,								ZombatarPage::ZombatarPage_Backdrops, 1, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU_DOS,    &Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU_DOS,  nullptr,								ZombatarPage::ZombatarPage_Backdrops, 2, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_ROOF,	    &Sexy::IMAGE_ZOMBATAR_BACKGROUND_ROOF,		nullptr,								ZombatarPage::ZombatarPage_Backdrops, 3, 0, nullptr},
 	{ZombatarItem::ZOMBATAR_BACKGROUND_BLANK,		nullptr ,									&Sexy::IMAGE_ZOMBATAR_BACKGROUND_BLANK, ZombatarPage::ZombatarPage_Backdrops, 4, 0, gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_1,					&Sexy::IMAGE_ZOMBATAR_HAIR_1,				&Sexy::IMAGE_ZOMBATAR_HAIR_1_MASK, ZombatarPage::ZombatarPage_Hair, 0, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_2,					&Sexy::IMAGE_ZOMBATAR_HAIR_2,				&Sexy::IMAGE_ZOMBATAR_HAIR_2_MASK, ZombatarPage::ZombatarPage_Hair, 1, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_3,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_3, ZombatarPage::ZombatarPage_Hair, 2, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_4,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_4, ZombatarPage::ZombatarPage_Hair, 3, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_5,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_5, ZombatarPage::ZombatarPage_Hair, 4, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_6,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_6, ZombatarPage::ZombatarPage_Hair, 5, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_7,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_7, ZombatarPage::ZombatarPage_Hair, 0, 1, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_8,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_8, ZombatarPage::ZombatarPage_Hair, 1, 1, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_9,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_9, ZombatarPage::ZombatarPage_Hair, 2, 1, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_10,				nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_10,	 ZombatarPage::ZombatarPage_Hair, 3, 1, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_11,				&Sexy::IMAGE_ZOMBATAR_HAIR_11,				&Sexy::IMAGE_ZOMBATAR_HAIR_11_MASK,	 ZombatarPage::ZombatarPage_Hair, 4, 1, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_12,				&Sexy::IMAGE_ZOMBATAR_HAIR_12,				&Sexy::IMAGE_ZOMBATAR_HAIR_12_MASK,	 ZombatarPage::ZombatarPage_Hair, 5, 1, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_13,				&Sexy::IMAGE_ZOMBATAR_HAIR_13,				&Sexy::IMAGE_ZOMBATAR_HAIR_13_MASK,	 ZombatarPage::ZombatarPage_Hair, 0, 2, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14_MASK,	 ZombatarPage::ZombatarPage_Hair, 1, 2, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15_MASK,	 ZombatarPage::ZombatarPage_Hair, 2, 2, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_16,				nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_16,	 ZombatarPage::ZombatarPage_Hair, 3, 2, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_1,					&Sexy::IMAGE_ZOMBATAR_HAIR_1,				&Sexy::IMAGE_ZOMBATAR_HAIR_1_MASK,		ZombatarPage::ZombatarPage_Hair, 0, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_2,					&Sexy::IMAGE_ZOMBATAR_HAIR_2,				&Sexy::IMAGE_ZOMBATAR_HAIR_2_MASK,		ZombatarPage::ZombatarPage_Hair, 1, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_3,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_3,			ZombatarPage::ZombatarPage_Hair, 2, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_4,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_4,			ZombatarPage::ZombatarPage_Hair, 3, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_5,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_5,			ZombatarPage::ZombatarPage_Hair, 4, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_6,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_6,			ZombatarPage::ZombatarPage_Hair, 5, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_7,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_7,			ZombatarPage::ZombatarPage_Hair, 0, 1, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_8,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_8,			ZombatarPage::ZombatarPage_Hair, 1, 1, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_9,					nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_9,			ZombatarPage::ZombatarPage_Hair, 2, 1, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_10,				nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_10,			ZombatarPage::ZombatarPage_Hair, 3, 1, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_11,				&Sexy::IMAGE_ZOMBATAR_HAIR_11,				&Sexy::IMAGE_ZOMBATAR_HAIR_11_MASK,		ZombatarPage::ZombatarPage_Hair, 4, 1, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_12,				&Sexy::IMAGE_ZOMBATAR_HAIR_12,				&Sexy::IMAGE_ZOMBATAR_HAIR_12_MASK,		ZombatarPage::ZombatarPage_Hair, 5, 1, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_13,				&Sexy::IMAGE_ZOMBATAR_HAIR_13,				&Sexy::IMAGE_ZOMBATAR_HAIR_13_MASK,		ZombatarPage::ZombatarPage_Hair, 0, 2, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14_MASK,		ZombatarPage::ZombatarPage_Hair, 1, 2, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15_MASK,		ZombatarPage::ZombatarPage_Hair, 2, 2, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_16,				nullptr,									&Sexy::IMAGE_ZOMBATAR_HAIR_16,			ZombatarPage::ZombatarPage_Hair, 3, 2, gZombatarDimPalletes},
 };
 
 Color gZombatarSkinPalletes[] = {
@@ -300,7 +300,9 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	SetPage(ZombatarPage::ZombatarPage_Skin);
 	mCurSkinPallete = 0;
 	mCurBackground = ZombatarItem::ZOMBATAR_BACKGROUND_BLANK;
-	mCurBackgroundPallete = 17;
+	mCurBackgroundPallete = NONE_COLOR_PALLETE;
+	mCurHair = -1;
+	mCurHairPallete = NONE_COLOR_PALLETE;
 }
 
 void ZombatarWidget::SetPage(ZombatarPage thePage) {
@@ -543,6 +545,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int* aTargetPallete = nullptr;
 
 		if (mPage == ZombatarPage::ZombatarPage_Skin) aTargetPallete = &mCurSkinPallete;
+		else if (mPage == ZombatarPage::ZombatarPage_Hair) aTargetPallete = &mCurHairPallete;
 		else if (mPage == ZombatarPage::ZombatarPage_Backdrops) aTargetPallete = &mCurBackgroundPallete;
 
 		if (aTargetPallete && aPallete != *aTargetPallete)
@@ -558,6 +561,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int* aTargetItem = nullptr;
 
 		if (mPage == ZombatarPage::ZombatarPage_Backdrops) aTargetItem = &mCurBackground;
+		else if (mPage == ZombatarPage::ZombatarPage_Hair) aTargetItem = &mCurHair;
 
 		if (aTargetItem && aItem != *aTargetItem)
 		{
@@ -626,27 +630,31 @@ void ZombatarWidget::DrawColorPalletes(Graphics* g)
 {
 	g->DrawImageF(IMAGE_ZOMBATAR_COLORS_BG, 221.5f, 335);
 
+	int* aTargetItem = nullptr;
 	int* aTargetPallete = nullptr;
 	Color* curPalletes = nullptr;
 	int palleteCount = 0;
 
-	int* aTargetItem = nullptr;
 
 	if (mPage == ZombatarPage::ZombatarPage_Skin) {
 		aTargetPallete = &mCurSkinPallete;
 		curPalletes = gZombatarSkinPalletes;
-		palleteCount = sizeof(gZombatarSkinPalletes) / sizeof(gZombatarSkinPalletes[0]);
+		palleteCount = NUM_SKIN_COLOR_PALLETES;
 	} else if (mPage == ZombatarPage::ZombatarPage_Backdrops) {
 		aTargetPallete = &mCurBackgroundPallete;
 		aTargetItem = &mCurBackground;
+	}
+	else if (mPage == ZombatarPage::ZombatarPage_Hair) {
+		aTargetPallete = &mCurHairPallete;
+		aTargetItem = &mCurHair;
 	}
 
 	if (aTargetItem) {
 		ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)*aTargetItem);
 		curPalletes = aDef.mColorGroup;
-
-		if (aDef.mPage == ZombatarPage::ZombatarPage_Backdrops && aDef.mColorGroup != nullptr) {
-			palleteCount = sizeof(gZombatarBrightPalletes) / sizeof(gZombatarBrightPalletes[0]);
+		if (aDef.mColorGroup != nullptr)
+		{
+			palleteCount = aDef.mPage != ZombatarPage::ZombatarPage_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
 		}
 	}
 
@@ -764,23 +772,23 @@ void ZombatarWidget::DrawZombatarItem(Graphics* g, NewLawnButton* button, Zombat
 }
 
 void ZombatarWidget::UpdatePalletes() {
+	int* aTargetItem = nullptr;
 	int* aTargetPallete = nullptr;
 	Color* curPalletes = nullptr;
 	int palleteCount = 0;
 
-	int* aTargetItem = nullptr;
-
 	if (mPage == ZombatarPage::ZombatarPage_Skin) {
 		aTargetPallete = &mCurSkinPallete;
 		curPalletes = gZombatarSkinPalletes;
-		palleteCount = sizeof(gZombatarSkinPalletes) / sizeof(gZombatarSkinPalletes[0]);
+		palleteCount = NUM_SKIN_COLOR_PALLETES;
 	}
 	else if (mPage == ZombatarPage::ZombatarPage_Backdrops) {
 		aTargetItem = &mCurBackground;
 		aTargetPallete = &mCurBackgroundPallete;
 		curPalletes = gZombatarBrightPalletes;
-		if (mCurBackground == 4)
-			palleteCount = sizeof(gZombatarBrightPalletes) / sizeof(gZombatarBrightPalletes[0]);
+	} else if (mPage == ZombatarPage::ZombatarPage_Hair) {
+		aTargetPallete = &mCurHairPallete;
+		aTargetItem = &mCurHair;
 	}
 
 	if (aTargetItem) {
@@ -789,12 +797,7 @@ void ZombatarWidget::UpdatePalletes() {
 
 		if (aDef.mColorGroup != nullptr)
 		{
-			if (curPalletes == gZombatarBrightPalletes) {
-				palleteCount = sizeof(gZombatarBrightPalletes) / sizeof(gZombatarBrightPalletes[0]);
-			}
-			else if (curPalletes == gZombatarDimPalletes) {
-				palleteCount = sizeof(gZombatarDimPalletes) / sizeof(gZombatarDimPalletes[0]);
-			}
+			palleteCount = aDef.mPage != ZombatarPage::ZombatarPage_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
 		}
 	}
 
