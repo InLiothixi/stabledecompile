@@ -7,29 +7,44 @@
 #include "../Zombie.h"
 #include "GameButton.h"
 
-enum ZombatarNavigation
-{
-	SKINS = 0,
-	HAIR = 1,
-	FACIAL_HAIR = 2,
-	TIDBITS = 3,
-	EYEWEAR = 4,
-	CLOTHES = 5,
-	ACCESSORIES = 6,
-	HATS = 7,
-	BACKDROPS = 8,
-	MAX_NAV = 9
-};
+#define NUM_COLOR_PALLETES 18
 
 class LawnApp;
 
 using namespace Sexy;
+
+enum ZombatarPage {
+	ZombatarPage_Skin,
+	ZombatarPage_Hair,
+	ZombatarPage_FacialHair,
+	ZombatarPage_Tidbits,
+	ZombatarPage_EyeWear,
+	ZombatarPage_Clothes,
+	ZombatarPage_Acessory,
+	ZombatarPage_Hats,
+	ZombatarPage_Backdrops,
+	MAX_ZOMBATAR_PAGES
+};
+
+class ZombatarDefinition {
+public:
+	ZombatarItem mZombatarItem;
+	Image** mOutlineImage;
+	Image** mImage;
+	ZombatarPage mPage;
+	int mColumn;
+	int mRow;
+	Color* mColorGroup;
+};
+extern ZombatarDefinition gZombatarDefinitions[NUM_ZOMBATAR_ITEMS];
+ZombatarDefinition& GetZombatarDefinition(ZombatarItem theItem);
 
 class ZombatarWidget : public Widget, public ButtonListener 
 {
 private:
 	enum {
 		ZombatarScreen_Back,
+		ZombatarScreen_Finish,
 		ZombatarScreen_Skin,
 		ZombatarScreen_Hair,
 		ZombatarScreen_FacialHair,
@@ -38,24 +53,16 @@ private:
 		ZombatarScreen_Clothes,
 		ZombatarScreen_Acessory,
 		ZombatarScreen_Hats,
-		ZombatarScreen_Backdrops
+		ZombatarScreen_Backdrops,
+		ZombatarScreen_Palletes,
+		ZombatarScreen_Items = ZombatarScreen_Palletes + NUM_COLOR_PALLETES + 1
 	};
 
-	enum ZombatarPage {
-		ZombatarPage_Skin,
-		ZombatarPage_Hair,
-		ZombatarPage_FacialHair,
-		ZombatarPage_Tidbits,
-		ZombatarPage_EyeWear,
-		ZombatarPage_Clothes,
-		ZombatarPage_Acessory,
-		ZombatarPage_Hats,
-		ZombatarPage_Backdrops,
-		MAX_ZOMBATAR_PAGES
-	};
 public:
+
 	LawnApp* mApp; 
 	NewLawnButton* mBackButton;
+	NewLawnButton* mFinishButton;
 	NewLawnButton* mSkinButton;
 	NewLawnButton* mHairButton;
 	NewLawnButton* mFacialHairButton;
@@ -66,9 +73,13 @@ public:
 	NewLawnButton* mHatsButton;
 	NewLawnButton* mBackdropsButton;
 	ZombatarPage mPage;
+	int mCurSkinPallete;
+	int mCurHair;
+	int mCurBackground;
+	int mCurBackgroundPallete;
+	NewLawnButton* mZombatarItems[NUM_ZOMBATAR_ITEMS];
+	NewLawnButton* mColorPalletes[NUM_COLOR_PALLETES];
 
-	//int							mNavigationID;
-	//NewLawnButton*				mFinishButton;
 	Zombie* mZombie;
 
 public:
@@ -85,5 +96,17 @@ public:
 	void						ResetZombatar();
 	void						SetupZombie();
 	void						SetPage(ZombatarPage thePage);
+	void						SetZombatarRef(int* theTargetPallete, int thePallete);
+	void						DrawColorPalletes(Graphics* g);
+	void						DrawZombiePortrait(Graphics* g);
+	void						DrawZombieAvatar(Graphics* g);
+	void						DrawZombatarItems(Graphics* g);
+	void						DrawZombatarItem(Graphics* g, NewLawnButton* button, ZombatarItem theItem, int* theTargetItem, ZombatarDefinition* aDef);
+	void						UpdatePalletes();
+	void						UpdateItems();
 };
+
+extern Color gZombatarSkinPalletes[12];
+extern Color gZombatarDimPalletes[18];
+extern Color gZombatarBrightPalletes[18];
 #endif

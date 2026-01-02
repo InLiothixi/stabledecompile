@@ -1474,6 +1474,32 @@ enum ZombieType
     NUM_CACHED_ZOMBIE_TYPES
 };
 
+enum ZombatarItem {
+    ZOMBATAR_NONE = -1,
+    ZOMBATAR_BACKGROUND_CRAZYDAVE,
+    ZOMBATAR_BACKGROUND_MENU,
+    ZOMBATAR_BACKGROUND_MENU_DOS,
+    ZOMBATAR_BACKGROUND_ROOF,
+    ZOMBATAR_BACKGROUND_BLANK,
+    ZOMBATAR_HAIR_1,
+    ZOMBATAR_HAIR_2,
+    ZOMBATAR_HAIR_3,
+    ZOMBATAR_HAIR_4,
+    ZOMBATAR_HAIR_5,
+    ZOMBATAR_HAIR_6,
+    ZOMBATAR_HAIR_7,
+    ZOMBATAR_HAIR_8,
+    ZOMBATAR_HAIR_9,
+    ZOMBATAR_HAIR_10,
+    ZOMBATAR_HAIR_11,
+    ZOMBATAR_HAIR_12,
+    ZOMBATAR_HAIR_13,
+    ZOMBATAR_HAIR_14,
+    ZOMBATAR_HAIR_15,
+    ZOMBATAR_HAIR_16,
+    NUM_ZOMBATAR_ITEMS
+};
+
 //////////////////////////////
 // Enums are not supposed to have invalid values, a typedef is much more appropriate
 //typedef unsigned int AttachmentID;
