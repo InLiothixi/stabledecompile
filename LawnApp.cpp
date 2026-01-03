@@ -309,11 +309,13 @@ void LawnApp::Shutdown()
 			WriteCurrentUserConfig();
 		}
 
+#ifdef _HAS_ZOMBATAR
 		if (mGameSelector && mGameSelector->mZombatarWidget && mGameSelector->mZombatarWidget->mZombie) {
 			mGameSelector->mZombatarWidget->mZombie->DieNoLoot();
 			delete mGameSelector->mZombatarWidget->mZombie;
 			mGameSelector->mZombatarWidget->mZombie = nullptr;
 		}
+#endif
 
 		ProcessSafeDeleteList();
 

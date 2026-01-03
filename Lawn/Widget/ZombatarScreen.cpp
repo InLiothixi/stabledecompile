@@ -1,3 +1,5 @@
+#include "../../GameConstants.h"
+#ifdef _HAS_ZOMBATAR
 #include "ZombatarScreen.h"
 #include "../../Resources.h"
 #include "../../LawnApp.h"
@@ -964,3 +966,4 @@ void ZombatarWidget::UpdateZombieAvatar() {
 		}
 	}
 }
+#endif
