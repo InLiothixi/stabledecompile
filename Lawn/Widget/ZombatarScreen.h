@@ -99,7 +99,7 @@ public:
 	void						ResetZombatar();
 	void						SetupZombie();
 	void						SetPage(ZombatarPage thePage);
-	void						SetZombatarRef(int* theTargetPallete, int thePallete);
+	void						SetZombatarRef(int* theTarget, int theValue);
 	void						DrawColorPalletes(Graphics* g);
 	void						DrawZombiePortrait(Graphics* g);
 	void						DrawZombieAvatar(Graphics* g);
@@ -107,6 +107,10 @@ public:
 	void						DrawZombatarItem(Graphics* g, NewLawnButton* button, ZombatarItem theItem, int* theTargetItem, ZombatarDefinition* aDef);
 	void						UpdatePalletes();
 	void						UpdateItems();
+	void						UpdateZombieAvatar();
+	void						GetOutlineOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
+	void						GetZombatarItemOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
+	void						GetZombatarItemScale(ZombatarItem theItem, float* scale);
 };
 
 extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];

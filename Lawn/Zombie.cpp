@@ -188,6 +188,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mSquashHeadColumn = -1;
 
     mIsAllergicToNuts = false;
+    mZombatarID = ReanimationID::REANIMATIONID_NULL;
 
     const ZombieDefinition& aZombieDef = GetZombieDefinition(mZombieType);
     RenderLayer aRenderLayer = RenderLayer::RENDER_LAYER_ZOMBIE;
@@ -669,7 +670,11 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     case ZombieType::ZOMBIE_IMP:  //0x523576
         if (!IsOnBoard())
         {
-            PlayZombieReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0f);
+            Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+            if (aBodyReanim && aBodyReanim->TrackExists("anim_idle"))
+            {
+                PlayZombieReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0f);
+            }
         }
         if (mApp->IsIZombieLevel())
         {
