@@ -360,26 +360,36 @@ void ZombatarWidget::SetupZombie() {
 		mZombie->mY = mZombie->mPosY = 351;
 
 		Reanimation* aBodyReanim = mApp->ReanimationTryToGet(mZombie->mBodyReanimID);
-		Reanimation* aZombatar = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_ZOMBATAR);
-		aZombatar->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
-		for (int i = 0; i < aZombatar->mDefinition->mTracks.count; i++)
+
 		{
-			aZombatar->mTrackInstances[i].mRenderGroup = /*stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "hats_13") == 0 || stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "hats_13_line") == 0 ?
-				RENDER_GROUP_NORMAL :*/ RENDER_GROUP_HIDDEN;
-				/*if (stricmp(aZombatar->mDefinition->mTracks.tracks[i].mName, "hats_13") == 0)
-					aZombatar->mTrackInstances[i].mTrackColor = Color(186, 45, 211, 255);*/
+			Reanimation* aZombatar = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_ZOMBATAR);
+			aZombatar->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
+			for (int i = 0; i < aZombatar->mDefinition->mTracks.count; i++)
+			{
+				aZombatar->mTrackInstances[i].mRenderGroup = RENDER_GROUP_HIDDEN;
+			}
+			ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
+			aBodyReanim->mFrameBasePose = 0;
+			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
+			mZombie->mZombatarID = mApp->ReanimationGetID(aZombatar);
 		}
-		ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
 
-		//mZombie->ReanimShowPrefix("anim_hair", RENDER_GROUP_HIDDEN);
-
-		AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
-		aBodyReanim->mFrameBasePose = 0;
-
-		//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
-		TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
-
-		mZombie->mZombatarID = mApp->ReanimationGetID(aZombatar);
+		{
+			Reanimation* aZombatarOutline = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_ZOMBATAR);
+			aZombatarOutline->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
+			for (int i = 0; i < aZombatarOutline->mDefinition->mTracks.count; i++)
+			{
+				aZombatarOutline->mTrackInstances[i].mRenderGroup = RENDER_GROUP_HIDDEN;
+			}
+			ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatarOutline, 0, 0);
+			aBodyReanim->mFrameBasePose = 0;
+			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
+			mZombie->mZombatarOutlineID = mApp->ReanimationGetID(aZombatarOutline);
+		}
 	}
 }
 
@@ -793,29 +803,45 @@ void ZombatarWidget::GetOutlineOffset(ZombatarItem theItem, float* offsetX, floa
 	}
 }
 
-void ZombatarWidget::GetZombatarItemScale(ZombatarItem theItem, float* scale) {
+void ZombatarWidget::GetZombatarItemScale(ZombatarItem theItem, float* scaleX, float* scaleY) {
 	switch (theItem) {
 		case ZombatarItem::ZOMBATAR_HAIR_1:
 		case ZombatarItem::ZOMBATAR_HAIR_2:
 		case ZombatarItem::ZOMBATAR_HAIR_3:
-		case ZombatarItem::ZOMBATAR_HAIR_4:
 		case ZombatarItem::ZOMBATAR_HAIR_8:
-		case ZombatarItem::ZOMBATAR_HAIR_10:
 		case ZombatarItem::ZOMBATAR_HAIR_11:
-		case ZombatarItem::ZOMBATAR_HAIR_12:
 		case ZombatarItem::ZOMBATAR_HAIR_13:
-		case ZombatarItem::ZOMBATAR_HAIR_14:
 		case ZombatarItem::ZOMBATAR_HAIR_15:
 		case ZombatarItem::ZOMBATAR_HAIR_16:
-			*scale = 0.35f;
+			*scaleX = 0.35f;
+			*scaleY = 0.35f;
+			break;
+		case ZombatarItem::ZOMBATAR_HAIR_12:
+			*scaleX = 0.375f;
+			*scaleY = 0.375f;
+			break;
+		case ZombatarItem::ZOMBATAR_HAIR_7:
+			*scaleX = 0.5f;
+			*scaleY = 0.5f;
+			break;
+		case ZombatarItem::ZOMBATAR_HAIR_9:
+			*scaleX = 1.0f;
+			*scaleY = 0.8f;
+			break;
+		case ZombatarItem::ZOMBATAR_HAIR_4:
+			*scaleX = 0.325f;
+			*scaleY = 0.325f;
+			break;
+		case ZombatarItem::ZOMBATAR_HAIR_14:
+
+		case ZombatarItem::ZOMBATAR_HAIR_10:
+			*scaleX = 0.3f;
+			*scaleY = 0.3f;
 			break;
 		case ZombatarItem::ZOMBATAR_HAIR_5:
 		case ZombatarItem::ZOMBATAR_HAIR_6:
-		case ZombatarItem::ZOMBATAR_HAIR_7:
-			*scale = 0.5f;
-			break;
-		case ZombatarItem::ZOMBATAR_HAIR_9:
-			*scale = 0.75f;
+			*scaleX = 0.45f;
+			*scaleY = 0.45f;
 			break;
 	}
 }
@@ -827,69 +853,109 @@ void ZombatarWidget::GetZombatarItemOffset(ZombatarItem theItem, float* offsetX,
 		*offsetY = 35.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_HAIR_2:
-	case ZombatarItem::ZOMBATAR_HAIR_5:
-	case ZombatarItem::ZOMBATAR_HAIR_6:
-	case ZombatarItem::ZOMBATAR_HAIR_7:
 		*offsetX = 20.0f;
 		*offsetY = 35.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_HAIR_3:
+		*offsetX = 21.0f;
+		*offsetY = 45.0f;
+		break;
 	case ZombatarItem::ZOMBATAR_HAIR_4:
+		*offsetX = 15.0f;
+		*offsetY = 20.0f;
+		break;
 	case ZombatarItem::ZOMBATAR_HAIR_8:
-	case ZombatarItem::ZOMBATAR_HAIR_9:
-	case ZombatarItem::ZOMBATAR_HAIR_10:
+		*offsetX = 22.5f;
+		*offsetY = 35.0f;
+		break;
 	case ZombatarItem::ZOMBATAR_HAIR_11:
-	case ZombatarItem::ZOMBATAR_HAIR_13:
-	case ZombatarItem::ZOMBATAR_HAIR_14:
-	case ZombatarItem::ZOMBATAR_HAIR_15:
-	case ZombatarItem::ZOMBATAR_HAIR_16:
 		*offsetX = 25.0f;
+		*offsetY = 27.5f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_13:
+		*offsetX = 22.5f;
+		*offsetY = 20.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_14:
+		*offsetX = 8.5f;
+		*offsetY = 27.5f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_15:
+		*offsetX = 22.5f;
+		*offsetY = 23.5f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_16:
+		*offsetX = 22.5f;
+		*offsetY = 37.5f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_10:
+		*offsetX = 11.5f;
 		*offsetY = 35.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_HAIR_12:
 		*offsetX = 25.0f;
-		*offsetY = 25.0f;
+		*offsetY = 30.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_5:
+		*offsetX = 27.5f;
+		*offsetY = 47.5f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_6:
+		*offsetX = 35.0f;
+		*offsetY = 37.5f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_7:
+		*offsetX = 42.5f;
+		*offsetY = 50.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_9:
+		*offsetX = 70.0f;
+		*offsetY = 62.5f;
 		break;
 	}
 }
 
 void ZombatarWidget::DrawZombatarItem(Graphics* g, NewLawnButton* button, ZombatarItem theItem, int* theTargetItem, ZombatarDefinition* aDef)
 {
-	g->DrawImageF(IMAGE_ZOMBATAR_ACCESSORY_BG, button->mX, button->mY);
 	g->PushState();
 	g->SetColorizeImages(true);
 	g->SetColor(Color::White);
+	g->mColor.mRed = (int)theItem == *theTargetItem ? 255 : 128;
+	g->mColor.mGreen = (int)theItem == *theTargetItem ? 255 : 128;
+	g->mColor.mBlue = (int)theItem == *theTargetItem ? 255 : 128;
 	g->mColor.mAlpha = (int)theItem == *theTargetItem ? 255 : 128;
+	g->DrawImageF((int)theItem ==*theTargetItem ? IMAGE_ZOMBATAR_ACCESSORY_BG_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BG, button->mX, button->mY);
 	g->SetClipRect(button->mX + 9, button->mY + 9, button->mWidth - 18, button->mHeight - 18);
 
 	float offsetX = 0.0f;
 	float offsetY = 0.0f;
-	float scale = 0.28f;
+	float scaleX = 0.28f;
+	float scaleY = 0.28f;
 
-	GetZombatarItemScale(aDef->mZombatarItem, &scale);
+	GetZombatarItemScale(aDef->mZombatarItem, &scaleX, &scaleY);
 	GetOutlineOffset(aDef->mZombatarItem, &offsetX, &offsetY);
-	offsetX *= 1-scale;
-	offsetY *= 1-scale;
+	offsetX *= 1-scaleX;
+	offsetY *= 1-scaleY;
 
 	float positionX = button->mX;
 	float positionY = button->mY;
 
 	if (aDef->mImage)
 	{
-		positionX -= (IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth + (*aDef->mImage)->mWidth * scale) / 2.0f;
-		positionY -= (IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight + (*aDef->mImage)->mHeight * scale) / 2.0f;
+		positionX -= (IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth + (*aDef->mImage)->mWidth * scaleX) / 2.0f;
+		positionY -= (IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight + (*aDef->mImage)->mHeight * scaleY) / 2.0f;
 		
-		float adjustmentX = 10 * scale;
-		float adjustmentY = 10 * scale;
+		float adjustmentX = 10 * scaleX;
+		float adjustmentY = 10 * scaleY;
 		GetZombatarItemOffset(aDef->mZombatarItem, &adjustmentX, &adjustmentY);
 		positionX += adjustmentX;
 		positionY += adjustmentY;
 
-		TodDrawImageCenterScaledF(g, *aDef->mImage, positionX, positionY, scale, scale);
+		TodDrawImageCenterScaledF(g, *aDef->mImage, positionX, positionY, scaleX, scaleY);
 	}
 	if (aDef->mOutlineImage)
 	{
-		TodDrawImageCenterScaledF(g, *aDef->mOutlineImage, positionX + offsetX, positionY + offsetY, scale, scale);
+		TodDrawImageCenterScaledF(g, *aDef->mOutlineImage, positionX + offsetX, positionY + offsetY, scaleX, scaleY);
 	}
 	g->PopState();
 }
@@ -962,7 +1028,19 @@ void ZombatarWidget::UpdateZombieAvatar() {
 		int theHair = mCurHair - ZombatarItem::ZOMBATAR_HAIR_1;
 		if (mCurHair != -1) {
 			aZombatarReanim->AssignRenderGroupToTrack(StrFormat("hair_%02d", theHair).c_str(), RENDER_GROUP_NORMAL);
-			aZombatarReanim->AssignRenderGroupToTrack(StrFormat("hair_%02d_line", theHair).c_str(), RENDER_GROUP_NORMAL);
+		}
+	}
+	Reanimation* aZombatarOutlineReanim = mApp->ReanimationTryToGet(mZombie->mZombatarOutlineID);
+	if (aZombatarOutlineReanim)
+	{
+		for (int i = 0; i < ZombatarItem::ZOMBATAR_HAIR_16; i++) {
+			aZombatarOutlineReanim->AssignRenderGroupToTrack(StrFormat("hair_%02d", i).c_str(), RENDER_GROUP_HIDDEN);
+			aZombatarOutlineReanim->AssignRenderGroupToTrack(StrFormat("hair_%02d_line", i).c_str(), RENDER_GROUP_HIDDEN);
+		}
+
+		int theHair = mCurHair - ZombatarItem::ZOMBATAR_HAIR_1;
+		if (mCurHair != -1) {
+			aZombatarOutlineReanim->AssignRenderGroupToTrack(StrFormat("hair_%02d_line", theHair).c_str(), RENDER_GROUP_NORMAL);
 		}
 	}
 }

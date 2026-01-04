@@ -110,7 +110,7 @@ public:
 	void						UpdateZombieAvatar();
 	void						GetOutlineOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
 	void						GetZombatarItemOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
-	void						GetZombatarItemScale(ZombatarItem theItem, float* scale);
+	void						GetZombatarItemScale(ZombatarItem theItem, float* scaleX, float* scaleY);
 };
 
 extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];

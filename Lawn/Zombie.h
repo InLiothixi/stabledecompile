@@ -179,6 +179,7 @@ public:
     int                             mSquashHeadColumn;
     bool                            mIsAllergicToNuts;
     ReanimationID                   mZombatarID;
+    ReanimationID                   mZombatarOutlineID;
 
 public:
     Zombie();
