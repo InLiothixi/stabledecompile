@@ -307,7 +307,7 @@ bool DefinitionLoadXML(const SexyString& theFileName, DefMap* theDefMap, void* t
 void SMemR(void*& _Src, void* _Dst, size_t _Size)
 {
     memcpy(_Dst, _Src, _Size);
-    _Src = (void*)((unsigned int)_Src + _Size);
+    _Src = (void*)((size_t)_Src + _Size);
 }
 //0x444020
 bool DefReadFromCacheArray(void*& theReadPtr, DefinitionArrayDef* theArray, DefMap* theDefMap)
@@ -425,30 +425,30 @@ bool DefMapReadFromCache(void*& theReadPtr, DefMap* theDefMap, void* theDefiniti
 }
 
 //0x444380
-uint DefinitionCalcHashSymbolMap(int aSchemaHash, DefSymbol* theSymbolMap)
+uint32_t DefinitionCalcHashSymbolMap(uint32_t aSchemaHash, DefSymbol* theSymbolMap)
 {
     while (theSymbolMap->mSymbolName != nullptr)
     {
         aSchemaHash = crc32(aSchemaHash, (const Bytef*)theSymbolMap->mSymbolName, strlen(theSymbolMap->mSymbolName));
-        aSchemaHash = crc32(aSchemaHash, (const Bytef*)&theSymbolMap->mSymbolValue, sizeof(int));
+        aSchemaHash = crc32(aSchemaHash, (const Bytef*)&theSymbolMap->mSymbolValue, sizeof(theSymbolMap->mSymbolValue));
         theSymbolMap++;
     }
     return aSchemaHash;
 }
 
 //0x4443D0
-uint DefinitionCalcHashDefMap(int aSchemaHash, DefMap* theDefMap, TodList<DefMap*>& theProgressMaps)
+uint32_t DefinitionCalcHashDefMap(uint32_t aSchemaHash, DefMap* theDefMap, TodList<DefMap*>& theProgressMaps)
 {
     for (TodListNode<DefMap*>* aNode = theProgressMaps.mHead; aNode != nullptr; aNode = aNode->mNext)
         if (aNode->mValue == theDefMap)
             return aSchemaHash;
     theProgressMaps.AddTail(theDefMap);
 
-    aSchemaHash = crc32(aSchemaHash, (Bytef*)&theDefMap->mDefSize, sizeof(int));
+    aSchemaHash = crc32(aSchemaHash, (Bytef*)&theDefMap->mDefSize, sizeof(theDefMap->mDefSize));
     for (DefField* aField = theDefMap->mMapFields; *aField->mFieldName != '\0'; aField++)
     {
-        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldType, sizeof(DefFieldType));
-        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldOffset, sizeof(int));
+        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldType, sizeof(aField->mFieldType));
+        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldOffset, sizeof(aField->mFieldOffset));
         switch (aField->mFieldType)
         {
         case DefFieldType::DT_ENUM:
@@ -464,10 +464,10 @@ uint DefinitionCalcHashDefMap(int aSchemaHash, DefMap* theDefMap, TodList<DefMap
 }
 
 //0x444490
-uint DefinitionCalcHash(DefMap* theDefMap)
+uint32_t DefinitionCalcHash(DefMap* theDefMap)
 {
-    TodList<DefMap*> aProgressMaps;
-    uint aResult = DefinitionCalcHashDefMap(crc32(0L, (Bytef*)Z_NULL, NULL) + 1, theDefMap, aProgressMaps);
+    TodList<DefMap*> aProgressMaps = TodList<DefMap*>();
+    uint32_t aResult = DefinitionCalcHashDefMap(crc32(0L, (Bytef*)Z_NULL, NULL) + 1, theDefMap, aProgressMaps);
     aProgressMaps.RemoveAll();
     return aResult;
 }
@@ -491,7 +491,7 @@ void* DefinitionUncompressCompiledBuffer(void* theCompressedBuffer, size_t theCo
     }
     Bytef* aUncompressedBuffer = (Bytef*)DefinitionAlloc(aHeader->mUncompressedSize);
     theCompressedBufferSize = aHeader->mUncompressedSize; //my addition
-    Bytef* aSrc = (Bytef*)((int)theCompressedBuffer + sizeof(CompressedDefinitionHeader));  // 实际解压数据从第 3 个四字节开始
+    Bytef* aSrc = (Bytef*)((intptr_t)theCompressedBuffer + sizeof(CompressedDefinitionHeader));  // 实际解压数据从第 3 个四字节开始
     int aResult = uncompress(aUncompressedBuffer, (uLongf*)&theCompressedBufferSize, aSrc, sz - sizeof(CompressedDefinitionHeader));
     TOD_ASSERT(aResult == Z_OK);
     TOD_ASSERT(theCompressedBufferSize == aHeader->mUncompressedSize);
@@ -504,57 +504,59 @@ bool DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* t
 {
     PerfTimer aTimer;
     aTimer.Start();
-    PFILE* pFile = p_fopen(SexyStringToString(theCompiledFilePath).c_str(), "rb");
+    PFILE* pFile = p_fopen(theCompiledFilePath.c_str(), _S("rb"));
     if (pFile)
     {
-        p_fseek(pFile, 0, 2);  // Move the pointer to the read location to the end of the file
-        size_t aCompressedSize = p_ftell(pFile);  // The offset obtained at this time is the size of the entire file
-        p_fseek(pFile, 0, 0);  // Then move the pointer to the read position back to the beginning of the file
+        p_fseek(pFile, 0, 2);  // 将读取位置的指针移动至文件末尾
+        size_t aCompressedSize = p_ftell(pFile);  // 此时获取到的偏移量即为整个文件的大小
+        p_fseek(pFile, 0, 0);  // 再把读取位置的指针移回文件开头
         void* aCompressedBuffer = DefinitionAlloc(aCompressedSize);
-        // Read the file, and determine whether the actual read size is the complete file size, if it is not equal, it is determined that the read failed
+        // 读取文件，并判断实际读取的大小是否为完整的文件大小，若不等则判断为读取失败
         bool aReadCompressedFailed = p_fread(aCompressedBuffer, sizeof(char), aCompressedSize, pFile) != aCompressedSize;
-        p_fclose(pFile);  // Close the resource file stream and free up the memory occupied by pFile
-        if (aReadCompressedFailed)  // Determine whether the reading is successful
+        p_fclose(pFile);  // 关闭资源文件流并释放 pFile 占用的内存
+        if (aReadCompressedFailed)  // 判断是否读取成功
         {
-            TodTrace("Failed to read compiled file: %s\n", theCompiledFilePath.c_str());
-            delete[] aCompressedBuffer;
+            TodTrace(_S("Failed to read compiled file: %s\n"), theCompiledFilePath.c_str());
+            free(aCompressedBuffer);
         }
         else
         {
             size_t aUncompressedSize;
             void* aUncompressedBuffer = DefinitionUncompressCompiledBuffer(aCompressedBuffer, aCompressedSize, aUncompressedSize, theCompiledFilePath);
-            delete[] aCompressedBuffer;
+            delete[](char*)aCompressedBuffer;
             if (aUncompressedBuffer)
             {
-                uint aDefHash = DefinitionCalcHash(theDefMap);  // Calculate the CRC check value, which will be used to detect the integrity of the data
-                if (aUncompressedSize < theDefMap->mDefSize + sizeof(uint))  // Detect whether the length of the decompressed data is sufficient for the length of "define data + a check value to record data"
-                    TodTrace("Compiled file size too small: %s\n", theCompiledFilePath.c_str());
+                uint32_t aDefHash = DefinitionCalcHash(theDefMap);  // 计算 CRC 校验值，后将用于检测数据的完整性
+                if (aUncompressedSize < theDefMap->mDefSize + sizeof(uint))  // 检测解压数据的长度是否足够“定义数据 + 一个校验值记录数据”的长度
+                    TodTrace(_S("Compiled file size too small: %s\n"), theCompiledFilePath.c_str());
                 else
                 {
-                    // A pointer to copy a copy of the decompressed data is used to move when reading, and the original pointer will be used to calculate the size of the read area and delete[] operations in the future.
+                    // 复制一份解压数据的指针用于读取时移动，原指针后续要用于计算读取区域大小及 delete[] 操作
                     void* aBufferPtr = aUncompressedBuffer;
-                    uint aCashHash;
-                    SMemR(aBufferPtr, &aCashHash, sizeof(uint));  //Read the CRC check value of the record
-                    if (aCashHash != aDefHash)  // Determine whether the check value is consistent, if it is inconsistent, the data is wrong
-                        TodTrace("Compiled file schema wrong: %s\n", theCompiledFilePath.c_str());
+                    uint32_t aCashHash;
+                    SMemR(aBufferPtr, &aCashHash, sizeof(uint32_t));  // 读取记录的 CRC 校验值
+                    //TodTrace("%u    -   %u", aCashHash, aDefHash);
+                    if (aCashHash != aDefHash)  // 判断校验值是否一致，若不一致则说明数据发生错误
+                        TodTrace(_S("Compiled file schema wrong: %s\n"), theCompiledFilePath.c_str());
+
                     else
                     {
-                        // ☆ Officially started reading definition data ☆
-                        // Roughly read the definition data of the original type of theDefinition for the first time, and gulp all the recorded data into theDefinition.
-                        // At this time, all the data of theDefinition's original non-pointer type will be read correctly, but the variables of its pointer type will be read and assigned as wild pointers.
-                        // / The problem of these wild pointers will be fixed in DefMapReadFromCache() with the help of the corresponding DEFIELD's MEXTRDATA in the future
+                        // ☆ 正式开始读取定义数据 ☆
+                        // 初次粗略读取 theDefinition 原类型的定义数据，囫囵吞枣地将所有记录的数据全部读入到 theDefinition 中
+                        // 此时 theDefinition 原本的非指针类型的数据将全部被正确读取，但其指针类型的变量会被读取并赋值为野指针
+                        // 这些野指针的问题后续将会在 DefMapReadFromCache() 中借助相应 DefField 的 mExtraData 进行修复
                         SMemR(aBufferPtr, theDefinition, theDefMap->mDefSize);
-                        // Repair the wild pointer and flag data, and save the result of whether it is successful, and use it as the return value later
+                        // 修复野指针及标志型数据，并保存是否成功的结果，后续作为返回值
                         bool aResult = DefMapReadFromCache(aBufferPtr, theDefMap, theDefinition);
-                        size_t aReadMemSize = (uint)aBufferPtr - (uint)aUncompressedBuffer;
-                        delete[] aUncompressedBuffer;
+                        size_t aReadMemSize = (size_t)aBufferPtr - (size_t)aUncompressedBuffer;
+                        delete[](char*)aUncompressedBuffer;
                         if (aResult && aReadMemSize != aUncompressedSize)
-                            TodTrace("Compiled file wrong size: %s\n", theCompiledFilePath.c_str());
+                            TodTrace(_S("Compiled file wrong size: %s\n"), theCompiledFilePath.c_str());
                         return aResult;
                     }
                 }
             }
-            delete[] aUncompressedBuffer;
+            delete[](char*)aUncompressedBuffer;
         }
     }
     return false;
@@ -954,7 +956,7 @@ bool DefinitionLoadMap(XMLParser* theXmlParser, DefMap* theDefMap, void* theDefi
     return true;
 }
 
-bool DefinitionWriteCompiledFile(const std::string& theCompiledFilePath, DefMap* theDefMap, void* theDefinition)
+bool DefinitionWriteCompiledFile(const SexyString& theCompiledFilePath, DefMap* theDefMap, void* theDefinition)
 {
     /*
     ####################################################################################################
@@ -971,7 +973,7 @@ bool DefinitionWriteCompiledFile(const std::string& theCompiledFilePath, DefMap*
     return true;
 }
 
-bool DefinitionCompileFile(const std::string theXMLFilePath, const std::string& theCompiledFilePath, DefMap* theDefMap, void* theDefinition)
+bool DefinitionCompileFile(const SexyString theXMLFilePath, const SexyString& theCompiledFilePath, DefMap* theDefMap, void* theDefinition)
 {
     XMLParser aXMLParser;
     if (!aXMLParser.OpenFile(theXMLFilePath))
@@ -1068,6 +1070,8 @@ bool DefinitionCompileAndLoad(const SexyString& theXMLFilePath, DefMap* theDefMa
     }
 
 #else  // 原版执行的内容
+    TodHesitationTrace(_S("predef"));
+
     SexyString aCompiledFilePathInResourcePack = DefinitionGetCompiledFilePathFromXMLFilePathInResourcePack(theXMLFilePath);
     if (DefinitionReadCompiledFile(aCompiledFilePathInResourcePack, theDefMap, theDefinition))
         return true;

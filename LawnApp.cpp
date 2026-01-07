@@ -54,10 +54,11 @@
 #include "Sexy.TodLib/Definition.h"
 
 #include "portaudio.h"
-#include <lua.hpp>
 
 #include "Particle/ParticleScreen.h"
 #include "SexyAppFramework/D3DInterface.h"
+
+#include "Lawn/Widget/MoreSettingsDialog.h"
 
 #include <windows.h>
 #include <windowsx.h>
@@ -2274,6 +2275,58 @@ void LawnApp::ButtonDepress(int theId)
 			mPlayerInfo->mDidRIPMode = true;
 			return;
 
+		//case Dialogs::DIALOG_MORESETTINGS:
+		//{
+		//	MoreSettingsDialog* aDialog = (MoreSettingsDialog*)GetDialog(Dialogs::DIALOG_MORESETTINGS);
+		//	if (aDialog)
+		//	{
+		//		mWindowCursor = !aAdvanceDialog->mCustomCursor->IsChecked();
+		//		RegistryWriteBoolean("WindowCursor", mWindowCursor);
+		//		EnforceCursor();
+		//		bool prevFPS = mFPSToggled;
+		//		mFPSToggled = aAdvanceDialog->mFPSToggle->IsChecked();
+		//		RegistryWriteBoolean("FPSToggled", mFPSToggled);
+		//		mShowFPS = mFPSToggled;
+		//		if (prevFPS != mShowFPS && mShowFPS)
+		//		{
+		//			mShowFPSMode = 0;
+		//			Sexy::gFPSTimer.Start();
+		//			Sexy::gFrameCount = 0;
+		//			Sexy::gFPSDisplay = 0;
+		//			Sexy::gForceDisplay = true;
+		//		}
+		//		mNoAutoPause = !aAdvanceDialog->mAutoPause->IsChecked();
+		//		RegistryWriteBoolean("NoAutoPause", mNoAutoPause);
+		//		mShowKeybindHint = aAdvanceDialog->mKeybindHint->IsChecked();
+		//		RegistryWriteBoolean("ShowKeybindHint", mShowKeybindHint);
+		//		mOptimizedGameplay = aAdvanceDialog->mOptimizedGameplay->IsChecked();
+		//		RegistryWriteBoolean("OptimizeGameplay", mOptimizedGameplay);
+		//		mClearerSeedCost = aAdvanceDialog->mClearerSeedCost->IsChecked();
+		//		RegistryWriteBoolean("ClearerSeedCost", mClearerSeedCost);
+		//		mNoTooltip = !aAdvanceDialog->mShowToolTip->IsChecked();
+		//		RegistryWriteBoolean("NoTooltip", mNoTooltip);
+		//		mNumericRecharge = aAdvanceDialog->mNumericRecharge->IsChecked();
+		//		RegistryWriteBoolean("NumericRecharge", mNumericRecharge);
+		//		bool prevWide = mWideToggled;
+		//		mWideToggled = aAdvanceDialog->mWideScreen->IsChecked();
+		//		RegistryWriteBoolean("WideToggled", mWideToggled);
+		//		mNoWarnings = !aAdvanceDialog->mShowWarnings->IsChecked();
+		//		RegistryWriteBoolean("NoWarnings", mNoWarnings);
+
+		//		bool want3D = aAdvanceDialog->mHardwareAcceleration->IsChecked();
+		//		SwitchScreenMode(mIsWindowed, want3D, false);
+
+		//	/*	if (prevWide != mWideToggled) {
+		//			SwitchScreenMode(mIsWindowed, mDDInterface->mIs3D, !mPlayerInfo->mHardmodeIsOff, !mPlayerInfo->mIsNotCoop, true);
+		//			if (gLawnApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO && mBoard->mCutScene) mBoard->mCutScene->RehupScreen();
+		//		}*/
+
+		//		KillDialog(Dialogs::DIALOG_MORESETTINGS);
+		//		ClearUpdateBacklog();
+		//	}
+		//	return;
+		//}
+
 		default:
 			KillDialog(theId - 2000);
 			return;
@@ -3995,159 +4048,6 @@ bool LawnApp::ChallengeHasScores(GameMode theGameMode)
 	return IsEndlessIZombie(theGameMode) || IsEndlessScaryPotter(theGameMode) || IsSurvivalEndless(theGameMode) || IsLastStandEndless(theGameMode);
 }
 
-int LawnApp::PutZombieInWaveL(lua_State* L)
-{
-	Board* board = static_cast<Board*>(lua_touserdata(L, 1));
-	ZombieType zombieType = (ZombieType)lua_tointeger(L, 2);
-	int wave = lua_tointeger(L, 3);
-	ZombiePicker* picker = static_cast<ZombiePicker*>(lua_touserdata(L, 4));
-
-	OutputDebugStringA(StrFormat("Zombie Type #%d spawned at wave #%d\n", zombieType, wave).c_str());
-
-	board->PutZombieInWave(zombieType, wave, picker);
-	return 0;
-}
-
-int LawnApp::TodStringTranslateL(lua_State* L)
-{
-	const char* input = luaL_checkstring(L, 1);
-	SexyString result = TodStringTranslate(StringToSexyString(input));
-	lua_pushstring(L, SexyStringToString(result.c_str()).c_str());
-	return 1;
-}
-
-int LawnApp::ChangeBackgroundL(lua_State* L)
-{
-	Board* board = static_cast<Board*>(lua_touserdata(L, 1));
-	int input = luaL_checkinteger(L, 2);
-	board->mBackground = (BackgroundType)input;
-	board->LoadBackgroundImages();
-
-	for (int i = 0; i < MAX_GRID_SIZE_X; i++)
-	{
-		for (int j = 0; j < MAX_GRID_SIZE_Y; j++)
-		{
-			board->mGridSquareType[i][j] = GridSquareType::GRIDSQUARE_GRASS;
-			board->mGridCelLook[i][j] = Rand(20);
-			board->mGridCelOffset[i][j][0] = Rand(10) - 5;
-			board->mGridCelOffset[i][j][1] = Rand(10) - 5;
-		}
-
-		for (int k = 0; k < MAX_GRID_SIZE_Y + 1; k++)
-		{
-			board->mGridCelFog[i][k] = 0;
-		}
-	}
-
-	if (board->mBackground == BackgroundType::BACKGROUND_1_DAY || board->mBackground == BackgroundType::BACKGROUND_GREENHOUSE || board->mBackground == BackgroundType::BACKGROUND_TREEOFWISDOM)
-	{
-		board->mPlantRow[0] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[1] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[2] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[3] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[4] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[5] = PlantRowType::PLANTROW_DIRT;
-
-		if (board->mApp->IsAdventureMode() && board->mApp->IsFirstTimeAdventureMode())
-		{
-			if (board->mLevel == 1)
-			{
-				board->mPlantRow[0] = PlantRowType::PLANTROW_DIRT;
-				board->mPlantRow[1] = PlantRowType::PLANTROW_DIRT;
-				board->mPlantRow[3] = PlantRowType::PLANTROW_DIRT;
-				board->mPlantRow[4] = PlantRowType::PLANTROW_DIRT;
-			}
-			else if (board->mLevel == 2 || board->mLevel == 3)
-			{
-				board->mPlantRow[0] = PlantRowType::PLANTROW_DIRT;
-				board->mPlantRow[4] = PlantRowType::PLANTROW_DIRT;
-			}
-		}
-		else if (board->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_RESODDED)
-		{
-			board->mPlantRow[0] = PlantRowType::PLANTROW_DIRT;
-			board->mPlantRow[4] = PlantRowType::PLANTROW_DIRT;
-		}
-	}
-	else if (board->mBackground == BackgroundType::BACKGROUND_2_NIGHT)
-	{
-		board->mPlantRow[0] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[1] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[2] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[3] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[4] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[5] = PlantRowType::PLANTROW_DIRT;
-	}
-	else if (board->mBackground == BackgroundType::BACKGROUND_3_POOL || board->mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM || board->mBackground == BackgroundType::BACKGROUND_4_FOG)
-	{
-		board->mPlantRow[0] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[1] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[2] = PlantRowType::PLANTROW_POOL;
-		board->mPlantRow[3] = PlantRowType::PLANTROW_POOL;
-		board->mPlantRow[4] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[5] = PlantRowType::PLANTROW_NORMAL;
-	}
-	else if (board->mBackground == BackgroundType::BACKGROUND_5_ROOF || board->mBackground == BackgroundType::BACKGROUND_6_BOSS)
-	{
-		board->mPlantRow[0] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[1] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[2] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[3] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[4] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[5] = PlantRowType::PLANTROW_DIRT;
-	}
-	else if (board->mBackground == BackgroundType::BACKGROUND_6)
-	{
-		board->mPlantRow[0] = PlantRowType::PLANTROW_HIGH_GROUND;
-		board->mPlantRow[1] = PlantRowType::PLANTROW_HIGH_GROUND;
-		board->mPlantRow[2] = PlantRowType::PLANTROW_HIGH_GROUND;
-		board->mPlantRow[3] = PlantRowType::PLANTROW_HIGH_GROUND;
-		board->mPlantRow[4] = PlantRowType::PLANTROW_NORMAL;
-		board->mPlantRow[5] = PlantRowType::PLANTROW_NORMAL;
-	}
-
-	for (int x = 0; x < MAX_GRID_SIZE_X; x++)
-	{
-		for (int y = 0; y < MAX_GRID_SIZE_Y; y++)
-		{
-			if (board->mPlantRow[y] == PlantRowType::PLANTROW_DIRT)
-			{
-				board->mGridSquareType[x][y] = GridSquareType::GRIDSQUARE_DIRT;
-			}
-			else if (board->mPlantRow[y] == PlantRowType::PLANTROW_POOL && x >= 0 && x <= 8)
-			{
-				board->mGridSquareType[x][y] = GridSquareType::GRIDSQUARE_POOL;
-			}
-			else if (board->mPlantRow[y] == PlantRowType::PLANTROW_HIGH_GROUND && x >= 4 && x <= 8)
-			{
-				board->mGridSquareType[x][y] = GridSquareType::GRIDSQUARE_HIGH_GROUND;
-			}
-		}
-	}
-
-	if (board->mBackground == BackgroundType::BACKGROUND_3_POOL && board->mPoolSparklyParticleID == ParticleSystemID::PARTICLESYSTEMID_NULL && board->mDrawCount > 0)
-	{
-		int aRenderPosition = board->MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, 2, 0);
-		TodParticleSystem* aPoolParticle = board->mApp->AddTodParticle(450, 295, aRenderPosition, ParticleEffect::PARTICLE_POOL_SPARKLY);
-		board->mPoolSparklyParticleID = board->mApp->ParticleGetID(aPoolParticle);
-	}
-	else if (board->mPoolSparklyParticleID != ParticleSystemID::PARTICLESYSTEMID_NULL)
-	{
-		board->mApp->RemoveParticle(board->mPoolSparklyParticleID);
-		board->mPoolSparklyParticleID = ParticleSystemID::PARTICLESYSTEMID_NULL;
-	}
-
-	return 0;
-}
-
-int LawnApp::ChangeMusicL(lua_State* L)
-{
-	Board* board = static_cast<Board*>(lua_touserdata(L, 1));
-	int input = luaL_checkinteger(L, 2);
-	board->mApp->mMusic->MakeSureMusicIsPlaying((MusicTune)input);
-	return 0;
-}
-
 bool LawnApp::IsLastStand() {
 	bool aIsLastStand = mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND;
 	aIsLastStand |= (mGameMode >= GameMode::GAMEMODE_LAST_STAND_STAGE_1 && mGameMode <= GameMode::GAMEMODE_LAST_STAND_STAGE_5);
@@ -4240,4 +4140,10 @@ void LawnApp::DoConfirmRIPMode()
 		_S(""),
 		Dialog::BUTTONS_YES_NO
 	);
+}
+
+void LawnApp::DoMoreSettingsDialog()
+{
+	MoreSettingsDialog* aDialog = new MoreSettingsDialog(this);
+	AddDialog(Dialogs::DIALOG_MORESETTINGS, aDialog);
 }

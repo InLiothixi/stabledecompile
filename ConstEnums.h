@@ -305,6 +305,7 @@ enum Dialogs
     DIALOG_PURCHASE_PACKET_SLOT,                // 50：升级卡槽的格子数量
     DIALOG_ZOMBATARTOS,
     DIALOG_CONFIRM_RIP_MODE,
+    DIALOG_MORESETTINGS,
     NUM_DIALOGS
 };
 enum DebugTextMode

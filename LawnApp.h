@@ -5,7 +5,6 @@
 #include "SexyAppFramework/SexyApp.h"
 
 #include "portaudio.h"
-#include <lua.hpp>
 #include "SexyAppFramework/DDImage.h"
 #include "SexyAppFramework/SexyMatrix.h"
 #include "Sexy.TodLib/FilterEffect.h"
@@ -144,7 +143,6 @@ public:
 	PaStream*						mPortAudioStream;
 	float							mVoiceVolume;
 	MemoryImage*					mBoardCamera;
-	//lua_State*						L;
 
 	Rect							gBoardBounds;
 	std::vector<SexyString>			mDebugTexts;
@@ -153,6 +151,7 @@ public:
 	bool							mRIPMode;
 
 	int								mPlayerLevelRef;
+	bool                            mEnableFPS;
 
 public:
 	LawnApp();
@@ -356,17 +355,14 @@ public:
 
 	static int						AudioCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData);
 	
-	static int						PutZombieInWaveL(lua_State* L);
-	static int						TodStringTranslateL(lua_State* L);
-	static int						ChangeBackgroundL(lua_State* L);
-	static int						ChangeMusicL(lua_State* L);
-	
 	void							DrawBoardCamera(Graphics* g, SexyTransform2D theTransform, Color theColor, int theDrawMode, Rect theClipRect, FilterEffect theFilterEffect, bool drawOnlyCamera);
 
 	void							ShowParticleEditor();
 	bool							TryToInitializePA();
 
 	void							DoConfirmRIPMode();
+	void							DoMoreSettingsDialog();
+	void							KillMoreSettingsDialog();
 };
 
 SexyString							LawnGetCurrentLevelName();

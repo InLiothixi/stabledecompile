@@ -63,7 +63,11 @@ BassMusicInterface::BassMusicInterface(HWND theHWnd)
 	}
 	else
 	{
+#ifdef _WIN64
+		success = gBass->BASS_Init(-1, 48000, 0, theHWnd, NULL);
+#else
 		success = gBass->BASS_Init(-1, 48000, 0, theHWnd);
+#endif
 	}
 
 	mixerSetControlDetails(phmx, &mcd, 0L);

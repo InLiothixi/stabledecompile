@@ -177,7 +177,11 @@ void Sexy::LoadBassDLL()
 	InterlockedIncrement(&gBassLoadCount);
 	if (gBass!=NULL)
 		return;
+#ifdef _WIN64
+	gBass = new BASS_INSTANCE(".\\bass_x64.dll");
+#else 
 	gBass = new BASS_INSTANCE(".\\bass.dll");
+#endif
 	if (gBass->mModule == NULL)
 	{
 		MessageBoxA(NULL, "Can't find bass.dll.", "Error", MB_OK | MB_ICONERROR);

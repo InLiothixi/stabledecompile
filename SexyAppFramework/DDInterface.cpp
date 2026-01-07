@@ -955,7 +955,7 @@ bool DDInterface::Redraw(Rect* theClipRect)
 	OffsetRect(&aDestRect, aPoint.x, aPoint.y);
 
 	DDSURFACEDESC aDesc;
-	ZeroMemory(&aDesc, sizeof(&aDesc));
+	ZeroMemory(&aDesc, sizeof(aDesc));
 	aDesc.dwSize = sizeof(aDesc);
 	mDrawSurface->Lock(NULL, &aDesc, DDLOCK_SURFACEMEMORYPTR | DDLOCK_WAIT | DDLOCK_READONLY, 0);
 	mDrawSurface->Unlock(NULL);

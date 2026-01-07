@@ -167,9 +167,9 @@ bool                    DefinitionWriteCompiledFile(const SexyString& theCompile
 bool                    DefinitionCompileFile(const SexyString theXMLFilePath, const SexyString& theCompiledFilePath, DefMap* theDefMap, void* theDefinition);
 /*inline*/ void*        DefinitionAlloc(int theSize);
 void*                   DefinitionUncompressCompiledBuffer(void* theCompressedBuffer, size_t theCompressedBufferSize, size_t& theUncompressedSize, const SexyString& theCompiledFilePath);
-uint /*__cdecl*/        DefinitionCalcHashSymbolMap(int aSchemaHash, DefSymbol* theSymbolMap);
-uint /*__cdecl*/        DefinitionCalcHashDefMap(int aSchemaHash, DefMap* theDefMap, TodList<DefMap*>& theProgressMaps);
-uint /*__cdecl*/        DefinitionCalcHash(DefMap* theDefMap);
+uint32_t /*__cdecl*/        DefinitionCalcHashSymbolMap(uint32_t aSchemaHash, DefSymbol* theSymbolMap);
+uint32_t /*__cdecl*/        DefinitionCalcHashDefMap(uint32_t aSchemaHash, DefMap* theDefMap, TodList<DefMap*>& theProgressMaps);
+uint32_t /*__cdecl*/        DefinitionCalcHash(DefMap* theDefMap);
 bool                    DefReadFromCacheString(void*& theReadPtr, char** theString);
 bool                    DefReadFromCacheArray(void*& theReadPtr, DefinitionArrayDef* theArray, DefMap* theDefMap);
 bool                    DefReadFromCacheImage(void*& theReadPtr, Image** theImage);

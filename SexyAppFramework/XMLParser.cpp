@@ -276,7 +276,7 @@ bool XMLParser::OpenFile(const SexyString& theFileName)
 			p_ungetc(aChar2, mFile);
 			p_ungetc(aChar1, mFile);
 		}
-		if (mGetCharFunc = &XMLParser::GetAsciiChar)
+		if (mGetCharFunc == &XMLParser::GetAsciiChar)
 		{
 			if (aFileLen >= 3) // UTF-8?
 			{
@@ -513,12 +513,12 @@ bool XMLParser::NextElement(XMLElement* theElement)
 								{
 									SexyString anAddString = _S("</") + theElement->mValue + _S(">");
 
-									int anOldSize = mBufferedText.size();
-									int anAddLength = anAddString.length();
+									size_t  anOldSize = mBufferedText.size();
+									size_t  anAddLength = anAddString.length();
 
 									mBufferedText.resize(anOldSize + anAddLength);
 
-									for (int i = 0; i < anAddLength; i++)
+									for (size_t i = 0; i < anAddLength; i++)
 										mBufferedText[anOldSize + i] = (wchar_t)(anAddString[anAddLength - i - 1]);
 
 									// clear out aAttributeKey, since it contains "/" as its value and will insert
