@@ -18,53 +18,53 @@
 #include "../../Sexy.TodLib/TodStringFile.h"
 
 ZombatarDefinition gZombatarDefinitions[] = {
-	{ZombatarItem::ZOMBATAR_BACKGROUND_CRAZYDAVE,	nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_CRAZYDAVE,	ZombatarCategory::ZombatarPage_Backdrops, 0, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU,	    nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU,		ZombatarCategory::ZombatarPage_Backdrops, 1, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU_DOS,    nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU_DOS,  ZombatarCategory::ZombatarPage_Backdrops, 2, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_ROOF,	    nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_ROOF,		ZombatarCategory::ZombatarPage_Backdrops, 3, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_BACKGROUND_BLANK,		nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_BLANK,		ZombatarCategory::ZombatarPage_Backdrops, 4, 0, gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_1,					&Sexy::IMAGE_ZOMBATAR_HAIR_1,	&Sexy::IMAGE_ZOMBATAR_HAIR_1_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  0, 0,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_2,					&Sexy::IMAGE_ZOMBATAR_HAIR_2,	&Sexy::IMAGE_ZOMBATAR_HAIR_2_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  1, 0, gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_3,					&Sexy::IMAGE_ZOMBATAR_HAIR_3,	nullptr,									ZombatarCategory::ZombatarPage_Hairs,	  2, 0,	nullptr},
-	{ZombatarItem::ZOMBATAR_HAIR_4,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_4,				ZombatarCategory::ZombatarPage_Hairs,	  3, 0,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_5,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_5,				ZombatarCategory::ZombatarPage_Hairs,	  4, 0,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_6,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_6,				ZombatarCategory::ZombatarPage_Hairs,	  5, 0,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_7,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_7,				ZombatarCategory::ZombatarPage_Hairs,	  0, 1,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_8,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_8,				ZombatarCategory::ZombatarPage_Hairs,	  1, 1,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_9,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_9,				ZombatarCategory::ZombatarPage_Hairs,	  2, 1,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_10,				nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_10,				ZombatarCategory::ZombatarPage_Hairs,	  3, 1,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_11,				&Sexy::IMAGE_ZOMBATAR_HAIR_11,	&Sexy::IMAGE_ZOMBATAR_HAIR_11_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  4, 1,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_12,				&Sexy::IMAGE_ZOMBATAR_HAIR_12,	&Sexy::IMAGE_ZOMBATAR_HAIR_12_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  5, 1,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_13,				&Sexy::IMAGE_ZOMBATAR_HAIR_13,	&Sexy::IMAGE_ZOMBATAR_HAIR_13_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  0, 2,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14,	&Sexy::IMAGE_ZOMBATAR_HAIR_14_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  1, 2,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15,	&Sexy::IMAGE_ZOMBATAR_HAIR_15_MASK,			ZombatarCategory::ZombatarPage_Hairs,	  2, 2,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_HAIR_16,				nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_16,				ZombatarCategory::ZombatarPage_Hairs,	  3, 2,	gZombatarDimPalletes},
-	{ZombatarItem::ZOMBATAR_CLOTHE_1,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_1,			ZombatarCategory::ZombatarPage_Clothes,	  0, 0,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_2,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_2,			ZombatarCategory::ZombatarPage_Clothes,	  1, 0, nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_3,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_3,			ZombatarCategory::ZombatarPage_Clothes,	  2, 0,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_4,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_4,			ZombatarCategory::ZombatarPage_Clothes,	  3, 0,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_5,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_5,			ZombatarCategory::ZombatarPage_Clothes,	  4, 0,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_6,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_6,			ZombatarCategory::ZombatarPage_Clothes,	  5, 0,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_7,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_7,			ZombatarCategory::ZombatarPage_Clothes,	  0, 1,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_8,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_8,			ZombatarCategory::ZombatarPage_Clothes,	  1, 1,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_9,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_9,			ZombatarCategory::ZombatarPage_Clothes,	  2, 1,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_10,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_10,			ZombatarCategory::ZombatarPage_Clothes,	  3, 1,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_11,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_11,			ZombatarCategory::ZombatarPage_Clothes,	  4, 1,	nullptr},
-	{ZombatarItem::ZOMBATAR_CLOTHE_12,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_12,			ZombatarCategory::ZombatarPage_Clothes,	  5, 1,	nullptr},
-	{ZombatarItem::ZOMBATAR_HAT_1,					&Sexy::IMAGE_ZOMBATAR_HATS_1,	&Sexy::IMAGE_ZOMBATAR_HATS_1_MASK,			ZombatarCategory::ZombatarPage_Hats,	  0, 0,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_2,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_2,				ZombatarCategory::ZombatarPage_Hats,	  1, 0, gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_3,					&Sexy::IMAGE_ZOMBATAR_HATS_3,	&Sexy::IMAGE_ZOMBATAR_HATS_3_MASK,			ZombatarCategory::ZombatarPage_Hats,	  2, 0,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_4,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_4,				ZombatarCategory::ZombatarPage_Hats,	  3, 0,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_5,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_5,				ZombatarCategory::ZombatarPage_Hats,	  4, 0,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_6,					&Sexy::IMAGE_ZOMBATAR_HATS_6,	&Sexy::IMAGE_ZOMBATAR_HATS_6_MASK,			ZombatarCategory::ZombatarPage_Hats,	  5, 0,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_7,					&Sexy::IMAGE_ZOMBATAR_HATS_7,	&Sexy::IMAGE_ZOMBATAR_HATS_7_MASK,			ZombatarCategory::ZombatarPage_Hats,	  0, 1,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_8,					&Sexy::IMAGE_ZOMBATAR_HATS_8,	&Sexy::IMAGE_ZOMBATAR_HATS_8_MASK,			ZombatarCategory::ZombatarPage_Hats,	  1, 1,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_9,					&Sexy::IMAGE_ZOMBATAR_HATS_9,	&Sexy::IMAGE_ZOMBATAR_HATS_9_MASK,			ZombatarCategory::ZombatarPage_Hats,	  2, 1,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_10,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_10,				ZombatarCategory::ZombatarPage_Hats,	  3, 1,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_11,					&Sexy::IMAGE_ZOMBATAR_HATS_11,	&Sexy::IMAGE_ZOMBATAR_HATS_11_MASK,			ZombatarCategory::ZombatarPage_Hats,	  4, 1,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_12,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_12,				ZombatarCategory::ZombatarPage_Hats,	  5, 1,	gZombatarBrightPalletes},
-	{ZombatarItem::ZOMBATAR_HAT_13,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_13,				ZombatarCategory::ZombatarPage_Hats,	  0, 2,	nullptr},
-	{ZombatarItem::ZOMBATAR_HAT_14,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_14,				ZombatarCategory::ZombatarPage_Hats,	  1, 2,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_CRAZYDAVE,	nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_CRAZYDAVE,	ZombatarCategory::ZombatarCategory_Backdrops, 0, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU,	    nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU,		ZombatarCategory::ZombatarCategory_Backdrops, 1, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_MENU_DOS,    nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_MENU_DOS,  ZombatarCategory::ZombatarCategory_Backdrops, 2, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_ROOF,	    nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_ROOF,		ZombatarCategory::ZombatarCategory_Backdrops, 3, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_BACKGROUND_BLANK,		nullptr,						&Sexy::IMAGE_ZOMBATAR_BACKGROUND_BLANK,		ZombatarCategory::ZombatarCategory_Backdrops, 4, 0, gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_1,					&Sexy::IMAGE_ZOMBATAR_HAIR_1,	&Sexy::IMAGE_ZOMBATAR_HAIR_1_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  0, 0,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_2,					&Sexy::IMAGE_ZOMBATAR_HAIR_2,	&Sexy::IMAGE_ZOMBATAR_HAIR_2_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  1, 0, gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_3,					&Sexy::IMAGE_ZOMBATAR_HAIR_3,	nullptr,									ZombatarCategory::ZombatarCategory_Hairs,	  2, 0,	nullptr},
+	{ZombatarItem::ZOMBATAR_HAIR_4,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_4,				ZombatarCategory::ZombatarCategory_Hairs,	  3, 0,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_5,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_5,				ZombatarCategory::ZombatarCategory_Hairs,	  4, 0,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_6,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_6,				ZombatarCategory::ZombatarCategory_Hairs,	  5, 0,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_7,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_7,				ZombatarCategory::ZombatarCategory_Hairs,	  0, 1,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_8,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_8,				ZombatarCategory::ZombatarCategory_Hairs,	  1, 1,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_9,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_9,				ZombatarCategory::ZombatarCategory_Hairs,	  2, 1,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_10,				nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_10,				ZombatarCategory::ZombatarCategory_Hairs,	  3, 1,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_11,				&Sexy::IMAGE_ZOMBATAR_HAIR_11,	&Sexy::IMAGE_ZOMBATAR_HAIR_11_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  4, 1,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_12,				&Sexy::IMAGE_ZOMBATAR_HAIR_12,	&Sexy::IMAGE_ZOMBATAR_HAIR_12_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  5, 1,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_13,				&Sexy::IMAGE_ZOMBATAR_HAIR_13,	&Sexy::IMAGE_ZOMBATAR_HAIR_13_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  0, 2,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14,	&Sexy::IMAGE_ZOMBATAR_HAIR_14_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  1, 2,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15,	&Sexy::IMAGE_ZOMBATAR_HAIR_15_MASK,			ZombatarCategory::ZombatarCategory_Hairs,	  2, 2,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_HAIR_16,				nullptr,						&Sexy::IMAGE_ZOMBATAR_HAIR_16,				ZombatarCategory::ZombatarCategory_Hairs,	  3, 2,	gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_CLOTHE_1,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_1,			ZombatarCategory::ZombatarCategory_Clothes,	  0, 0,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_2,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_2,			ZombatarCategory::ZombatarCategory_Clothes,	  1, 0, nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_3,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_3,			ZombatarCategory::ZombatarCategory_Clothes,	  2, 0,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_4,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_4,			ZombatarCategory::ZombatarCategory_Clothes,	  3, 0,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_5,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_5,			ZombatarCategory::ZombatarCategory_Clothes,	  4, 0,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_6,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_6,			ZombatarCategory::ZombatarCategory_Clothes,	  5, 0,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_7,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_7,			ZombatarCategory::ZombatarCategory_Clothes,	  0, 1,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_8,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_8,			ZombatarCategory::ZombatarCategory_Clothes,	  1, 1,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_9,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_9,			ZombatarCategory::ZombatarCategory_Clothes,	  2, 1,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_10,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_10,			ZombatarCategory::ZombatarCategory_Clothes,	  3, 1,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_11,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_11,			ZombatarCategory::ZombatarCategory_Clothes,	  4, 1,	nullptr},
+	{ZombatarItem::ZOMBATAR_CLOTHE_12,				nullptr,						&Sexy::IMAGE_ZOMBATAR_CLOTHES_12,			ZombatarCategory::ZombatarCategory_Clothes,	  5, 1,	nullptr},
+	{ZombatarItem::ZOMBATAR_HAT_1,					&Sexy::IMAGE_ZOMBATAR_HATS_1,	&Sexy::IMAGE_ZOMBATAR_HATS_1_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  0, 0,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_2,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_2,				ZombatarCategory::ZombatarCategory_Hats,	  1, 0, gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_3,					&Sexy::IMAGE_ZOMBATAR_HATS_3,	&Sexy::IMAGE_ZOMBATAR_HATS_3_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  2, 0,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_4,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_4,				ZombatarCategory::ZombatarCategory_Hats,	  3, 0,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_5,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_5,				ZombatarCategory::ZombatarCategory_Hats,	  4, 0,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_6,					&Sexy::IMAGE_ZOMBATAR_HATS_6,	&Sexy::IMAGE_ZOMBATAR_HATS_6_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  5, 0,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_7,					&Sexy::IMAGE_ZOMBATAR_HATS_7,	&Sexy::IMAGE_ZOMBATAR_HATS_7_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  0, 1,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_8,					&Sexy::IMAGE_ZOMBATAR_HATS_8,	&Sexy::IMAGE_ZOMBATAR_HATS_8_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  1, 1,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_9,					&Sexy::IMAGE_ZOMBATAR_HATS_9,	&Sexy::IMAGE_ZOMBATAR_HATS_9_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  2, 1,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_10,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_10,				ZombatarCategory::ZombatarCategory_Hats,	  3, 1,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_11,					&Sexy::IMAGE_ZOMBATAR_HATS_11,	&Sexy::IMAGE_ZOMBATAR_HATS_11_MASK,			ZombatarCategory::ZombatarCategory_Hats,	  4, 1,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_12,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_12,				ZombatarCategory::ZombatarCategory_Hats,	  5, 1,	gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_HAT_13,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_13,				ZombatarCategory::ZombatarCategory_Hats,	  0, 2,	nullptr},
+	{ZombatarItem::ZOMBATAR_HAT_14,					nullptr,						&Sexy::IMAGE_ZOMBATAR_HATS_14,				ZombatarCategory::ZombatarCategory_Hats,	  1, 2,	gZombatarBrightPalletes},
 
 };
 
@@ -346,40 +346,40 @@ void ZombatarWidget::SetCategory(ZombatarCategory theCategory) {
 	UpdateItems();
 	UpdatePalletes();
 
-	mSkinButton->mButtonImage = theCategory == ZombatarPage_Skin ? IMAGE_ZOMBATAR_SKIN_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_SKIN_BUTTON;
-	mSkinButton->mOverImage = theCategory == ZombatarPage_Skin ? IMAGE_ZOMBATAR_SKIN_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_SKIN_BUTTON;
-	mHairButton->mButtonImage = theCategory == ZombatarPage_Hairs ? IMAGE_ZOMBATAR_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HAIR_BUTTON;
-	mHairButton->mOverImage = theCategory == ZombatarPage_Hairs ? IMAGE_ZOMBATAR_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HAIR_BUTTON_OVER;
-	mFacialHairButton->mButtonImage = theCategory == ZombatarPage_FacialHair ? IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON;
-	mFacialHairButton->mOverImage = theCategory == ZombatarPage_FacialHair ? IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON_OVER;
-	mTidbitsButton->mButtonImage = theCategory == ZombatarPage_Tidbits ? IMAGE_ZOMBATAR_TIDBITS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_TIDBITS_BUTTON;
-	mTidbitsButton->mOverImage = theCategory == ZombatarPage_Tidbits ? IMAGE_ZOMBATAR_TIDBITS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_TIDBITS_BUTTON_OVER;
-	mEyeWearButton->mButtonImage = theCategory == ZombatarPage_EyeWear ? IMAGE_ZOMBATAR_EYEWEAR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_EYEWEAR_BUTTON;
-	mEyeWearButton->mOverImage = theCategory == ZombatarPage_EyeWear ? IMAGE_ZOMBATAR_EYEWEAR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_EYEWEAR_BUTTON_OVER;
-	mClothesButton->mButtonImage = theCategory == ZombatarPage_Clothes ? IMAGE_ZOMBATAR_CLOTHES_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_CLOTHES_BUTTON;
-	mClothesButton->mOverImage = theCategory == ZombatarPage_Clothes ? IMAGE_ZOMBATAR_CLOTHES_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_CLOTHES_BUTTON_OVER;
-	mAccessoryButton->mButtonImage = theCategory == ZombatarPage_Acessory ? IMAGE_ZOMBATAR_ACCESSORY_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BUTTON;
-	mAccessoryButton->mOverImage = theCategory == ZombatarPage_Acessory ? IMAGE_ZOMBATAR_ACCESSORY_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BUTTON_OVER;
-	mHatsButton->mButtonImage = theCategory == ZombatarPage_Hats ? IMAGE_ZOMBATAR_HATS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HATS_BUTTON;
-	mHatsButton->mOverImage = theCategory == ZombatarPage_Hats ? IMAGE_ZOMBATAR_HATS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HATS_BUTTON_OVER;
-	mBackdropsButton->mButtonImage = theCategory == ZombatarPage_Backdrops ? IMAGE_ZOMBATAR_BACKDROPS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_BACKDROPS_BUTTON;
-	mBackdropsButton->mOverImage = theCategory == ZombatarPage_Backdrops ? IMAGE_ZOMBATAR_BACKDROPS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_BACKDROPS_BUTTON_OVER;
+	mSkinButton->mButtonImage = theCategory == ZombatarCategory_Skin ? IMAGE_ZOMBATAR_SKIN_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_SKIN_BUTTON;
+	mSkinButton->mOverImage = theCategory == ZombatarCategory_Skin ? IMAGE_ZOMBATAR_SKIN_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_SKIN_BUTTON;
+	mHairButton->mButtonImage = theCategory == ZombatarCategory_Hairs ? IMAGE_ZOMBATAR_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HAIR_BUTTON;
+	mHairButton->mOverImage = theCategory == ZombatarCategory_Hairs ? IMAGE_ZOMBATAR_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HAIR_BUTTON_OVER;
+	mFacialHairButton->mButtonImage = theCategory == ZombatarCategory_FacialHair ? IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON;
+	mFacialHairButton->mOverImage = theCategory == ZombatarCategory_FacialHair ? IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_FACIAL_HAIR_BUTTON_OVER;
+	mTidbitsButton->mButtonImage = theCategory == ZombatarCategory_Tidbits ? IMAGE_ZOMBATAR_TIDBITS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_TIDBITS_BUTTON;
+	mTidbitsButton->mOverImage = theCategory == ZombatarCategory_Tidbits ? IMAGE_ZOMBATAR_TIDBITS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_TIDBITS_BUTTON_OVER;
+	mEyeWearButton->mButtonImage = theCategory == ZombatarCategory_EyeWear ? IMAGE_ZOMBATAR_EYEWEAR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_EYEWEAR_BUTTON;
+	mEyeWearButton->mOverImage = theCategory == ZombatarCategory_EyeWear ? IMAGE_ZOMBATAR_EYEWEAR_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_EYEWEAR_BUTTON_OVER;
+	mClothesButton->mButtonImage = theCategory == ZombatarCategory_Clothes ? IMAGE_ZOMBATAR_CLOTHES_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_CLOTHES_BUTTON;
+	mClothesButton->mOverImage = theCategory == ZombatarCategory_Clothes ? IMAGE_ZOMBATAR_CLOTHES_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_CLOTHES_BUTTON_OVER;
+	mAccessoryButton->mButtonImage = theCategory == ZombatarCategory_Acessory ? IMAGE_ZOMBATAR_ACCESSORY_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BUTTON;
+	mAccessoryButton->mOverImage = theCategory == ZombatarCategory_Acessory ? IMAGE_ZOMBATAR_ACCESSORY_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BUTTON_OVER;
+	mHatsButton->mButtonImage = theCategory == ZombatarCategory_Hats ? IMAGE_ZOMBATAR_HATS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HATS_BUTTON;
+	mHatsButton->mOverImage = theCategory == ZombatarCategory_Hats ? IMAGE_ZOMBATAR_HATS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_HATS_BUTTON_OVER;
+	mBackdropsButton->mButtonImage = theCategory == ZombatarCategory_Backdrops ? IMAGE_ZOMBATAR_BACKDROPS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_BACKDROPS_BUTTON;
+	mBackdropsButton->mOverImage = theCategory == ZombatarCategory_Backdrops ? IMAGE_ZOMBATAR_BACKDROPS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_BACKDROPS_BUTTON_OVER;
 
 	mClearPickButton->SetDisabled(true);
 	mClearPalleteButton->SetDisabled(true);
 
-	if (theCategory == ZombatarPage_Hairs) {
+	if (theCategory == ZombatarCategory_Hairs) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 4, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
-	} else if (theCategory == ZombatarPage_Clothes) {
+	} else if (theCategory == ZombatarCategory_Clothes) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
-	} else if (theCategory == ZombatarPage_Hats) {
+	} else if (theCategory == ZombatarCategory_Hats) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 2, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
 	}
 
-	if (theCategory == ZombatarCategory::ZombatarPage_Skin) {
+	if (theCategory == ZombatarCategory::ZombatarCategory_Skin) {
 		for (int x = 0; x < 6; x++) {
 			for (int y = 0; y < 2; y++) {
 				NewLawnButton* mColorPallete = mColorPalletes[x + y * 6];
@@ -406,7 +406,7 @@ void ZombatarWidget::SetZombatarRef(int* theTarget, int theValue) {
 }
 
 void ZombatarWidget::ResetZombatar() {
-	SetCategory(ZombatarCategory::ZombatarPage_Skin);
+	SetCategory(ZombatarCategory::ZombatarCategory_Skin);
 	if (mZombie)
 	{
 		mZombie->DieNoLoot();
@@ -675,10 +675,10 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int aPallete = theId - ZombatarWidget::ZombatarScreen_Palletes;
 		int* aTargetPallete = nullptr;
 
-		if (mCurCategory == ZombatarCategory::ZombatarPage_Skin) aTargetPallete = &mCurSkinPallete;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) aTargetPallete = &mCurHairPallete;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Backdrops) aTargetPallete = &mCurBackgroundPallete;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) aTargetPallete = &mCurHatPallete;
+		if (mCurCategory == ZombatarCategory::ZombatarCategory_Skin) aTargetPallete = &mCurSkinPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetPallete = &mCurHairPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetPallete = &mCurBackgroundPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) aTargetPallete = &mCurHatPallete;
 
 		if (aTargetPallete && aPallete != *aTargetPallete)
 		{
@@ -693,10 +693,10 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int aItem = theId - ZombatarWidget::ZombatarWidget::ZombatarScreen_Items;
 		int* aTargetItem = nullptr;
 
-		if (mCurCategory == ZombatarCategory::ZombatarPage_Backdrops) aTargetItem = &mCurBackground;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) aTargetItem = &mCurHair; 
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Clothes) aTargetItem = &mCurClothe;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) aTargetItem = &mCurHat;
+		if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetItem = &mCurBackground;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair; 
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) aTargetItem = &mCurHat;
 
 		if (aTargetItem && aItem != *aTargetItem)
 		{
@@ -712,9 +712,9 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int aItem = -1;
 		int* aTargetItem = nullptr;
 
-		if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) aTargetItem = &mCurHair;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Clothes) aTargetItem = &mCurClothe;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) aTargetItem = &mCurHat;
+		if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) aTargetItem = &mCurHat;
 
 		if (aTargetItem && aItem != *aTargetItem)
 		{
@@ -729,9 +729,9 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int aPallete = -1;
 		int* aTargetPallete = nullptr;
 
-		if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) aTargetPallete = &mCurHairPallete;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Backdrops) aTargetPallete = &mCurBackgroundPallete;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) aTargetPallete = &mCurHatPallete;
+		if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetPallete = &mCurHairPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetPallete = &mCurBackgroundPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) aTargetPallete = &mCurHatPallete;
 
 		if (aTargetPallete && aPallete != *aTargetPallete)
 		{
@@ -804,22 +804,22 @@ void ZombatarWidget::DrawColorPalletes(Graphics* g)
 	int palleteCount = 0;
 
 
-	if (mCurCategory == ZombatarCategory::ZombatarPage_Skin) {
+	if (mCurCategory == ZombatarCategory::ZombatarCategory_Skin) {
 		aTargetPallete = &mCurSkinPallete;
 		curPalletes = gZombatarSkinPalletes;
 		palleteCount = NUM_SKIN_COLOR_PALLETES;
-	} else if (mCurCategory == ZombatarCategory::ZombatarPage_Backdrops) {
+	} else if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) {
 		aTargetPallete = &mCurBackgroundPallete;
 		aTargetItem = &mCurBackground;
 	}
-	else if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) {
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) {
 		aTargetPallete = &mCurHairPallete;
 		aTargetItem = &mCurHair;
 	}
-	else if (mCurCategory == ZombatarCategory::ZombatarPage_Clothes) {
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) {
 		aTargetItem = &mCurClothe;
 	}
-	else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) {
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) {
 		aTargetPallete = &mCurHatPallete;
 		aTargetItem = &mCurHat;
 	}
@@ -829,7 +829,7 @@ void ZombatarWidget::DrawColorPalletes(Graphics* g)
 		curPalletes = aDef.mColorGroup;
 		if (aDef.mColorGroup != nullptr)
 		{
-			palleteCount = aDef.mPage != ZombatarCategory::ZombatarPage_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
+			palleteCount = aDef.mCategory != ZombatarCategory::ZombatarCategory_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
 		}
 	}
 
@@ -994,7 +994,7 @@ void ZombatarWidget::DrawZombatarItems(Graphics* g)
 {
 	g->DrawImageF(IMAGE_ZOMBATAR_WIDGET_INNER_BG, 152, 125);
 
-	if (mCurCategory == ZombatarCategory::ZombatarPage_Skin)
+	if (mCurCategory == ZombatarCategory::ZombatarCategory_Skin)
 	{
 		TodDrawStringWrapped(g, TodStringTranslate(_S("[ZOMBATAR_START_TEXT]")), Rect(142.5f, 180, IMAGE_ZOMBATAR_WIDGET_INNER_BG->GetWidth() + 18, 175), Sexy::FONT_DWARVENTODCRAFT15, Color(208, 190, 44, 192), DrawStringJustification::DS_ALIGN_CENTER);
 	}
@@ -1004,20 +1004,20 @@ void ZombatarWidget::DrawZombatarItems(Graphics* g)
 			ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)i);
 			NewLawnButton* aZombatarItem = mZombatarItems[i];
 			int* aTargetItem = nullptr;
-			if (aDef.mPage == ZombatarCategory::ZombatarPage_Backdrops) aTargetItem = &mCurBackground;
-			else if (aDef.mPage == ZombatarCategory::ZombatarPage_Hairs) aTargetItem = &mCurHair;
-			else if (aDef.mPage == ZombatarCategory::ZombatarPage_Clothes) aTargetItem = &mCurClothe;
-			else if (aDef.mPage == ZombatarCategory::ZombatarPage_Hats) aTargetItem = &mCurHat;
+			if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetItem = &mCurBackground;
+			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair;
+			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
+			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Hats) aTargetItem = &mCurHat;
 
-			if (aTargetItem && aDef.mPage == mCurCategory && !aZombatarItem->mDisabled) {
+			if (aTargetItem && aDef.mCategory == mCurCategory && !aZombatarItem->mDisabled) {
 				DrawZombatarItem(g, aZombatarItem, (ZombatarItem)i, aTargetItem, &aDef);
 			}
 		}
 
 		int* aTargetItem = nullptr;
-		if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) aTargetItem = &mCurHair;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Clothes) aTargetItem = &mCurClothe;
-		else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) aTargetItem = &mCurHat;
+		if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) aTargetItem = &mCurHat;
 		if (aTargetItem)
 		{
 			DrawClearItem(g, mClearPickButton, aTargetItem);
@@ -1485,7 +1485,7 @@ void ZombatarWidget::DrawZombatarItem(Graphics* g, NewLawnButton* button, Zombat
 	float scaleY = 0.27f;
 	GetZombatarItemScale(aDef->mZombatarItem, &scaleX, &scaleY);
 
-	if (aDef->mPage == ZombatarCategory::ZombatarPage_Clothes) {
+	if (aDef->mCategory == ZombatarCategory::ZombatarCategory_Clothes) {
 		TodDrawImageScaledF(g, gZombatarClothes[theItem - ZombatarItem::ZOMBATAR_CLOTHE_1], button->mX - 10.0f, button->mY - 10.0f, scaleX, scaleY);
 		g->PopState();
 		return;
@@ -1545,21 +1545,21 @@ void ZombatarWidget::UpdatePalletes() {
 	Color* curPalletes = nullptr;
 	int palleteCount = 0;
 
-	if (mCurCategory == ZombatarCategory::ZombatarPage_Skin) {
+	if (mCurCategory == ZombatarCategory::ZombatarCategory_Skin) {
 		aTargetPallete = &mCurSkinPallete;
 		curPalletes = gZombatarSkinPalletes;
 		palleteCount = NUM_SKIN_COLOR_PALLETES;
 	}
-	else if (mCurCategory == ZombatarCategory::ZombatarPage_Backdrops) {
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) {
 		aTargetItem = &mCurBackground;
 		aTargetPallete = &mCurBackgroundPallete;
 		curPalletes = gZombatarBrightPalletes;
 	} 
-	else if (mCurCategory == ZombatarCategory::ZombatarPage_Hairs) {
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) {
 		aTargetPallete = &mCurHairPallete;
 		aTargetItem = &mCurHair;
 	}
-	else if (mCurCategory == ZombatarCategory::ZombatarPage_Hats) {
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hats) {
 		aTargetPallete = &mCurHatPallete;
 		aTargetItem = &mCurHat;
 	}
@@ -1570,7 +1570,7 @@ void ZombatarWidget::UpdatePalletes() {
 
 		if (aDef.mColorGroup != nullptr)
 		{
-			palleteCount = aDef.mPage != ZombatarCategory::ZombatarPage_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
+			palleteCount = aDef.mCategory != ZombatarCategory::ZombatarCategory_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
 		}
 	}
 
@@ -1586,7 +1586,7 @@ void ZombatarWidget::UpdateItems() {
 	for (int i = 0; i < (int)ZombatarItem::NUM_ZOMBATAR_ITEMS; i++) {
 		ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)i);
 		NewLawnButton* aZombatarItem = mZombatarItems[i];
-		aZombatarItem->SetDisabled(aDef.mPage != mCurCategory);
+		aZombatarItem->SetDisabled(aDef.mCategory != mCurCategory);
 	}
 }
 
