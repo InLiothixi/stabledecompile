@@ -73,8 +73,7 @@ Color gZombatarDimPalletes[] = {
 	Color(158, 183, 19),
 	Color(30, 210, 64),
 	Color(225, 65, 230),
-	Color(128, 47, 204),
-	Color(255, 255, 255)
+	Color(128, 47, 204)
 };
 
 Color gZombatarBrightPalletes[] = {
@@ -94,8 +93,7 @@ Color gZombatarBrightPalletes[] = {
 	Color(241, 115, 25),
 	Color(248, 247, 175),
 	Color(103, 85, 54),
-	Color(159, 17, 20),
-	Color(255, 255, 255)
+	Color(159, 17, 20)
 };
 
 // GOTY @Inliothixi
@@ -304,6 +302,12 @@ ZombatarWidget::ZombatarWidget(LawnApp* theApp) {
 	mClearPickButton->mTranslateX = 0;
 	mClearPickButton->mTranslateY = 0;
 
+	mClearPalleteButton = MakeNewButton(ZombatarWidget::ZombatarScreen_ClearPallete, this, _S(""), nullptr, Sexy::IMAGE_BLANK, Sexy::IMAGE_BLANK, Sexy::IMAGE_BLANK);
+	mClearPalleteButton->Resize(0, 0, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight);
+	mClearPalleteButton->mClip = false;
+	mClearPalleteButton->mTranslateX = 0;
+	mClearPalleteButton->mTranslateY = 0;
+
 	mZombie = nullptr;
 	ResetZombatar();
 }
@@ -334,6 +338,8 @@ void ZombatarWidget::SetPage(ZombatarPage thePage) {
 	mBackdropsButton->mOverImage = thePage == ZombatarPage_Backdrops ? IMAGE_ZOMBATAR_BACKDROPS_BUTTON_HIGHLIGHT : IMAGE_ZOMBATAR_BACKDROPS_BUTTON_OVER;
 
 	mClearPickButton->SetDisabled(true);
+	mClearPalleteButton->SetDisabled(true);
+
 	if (thePage == ZombatarPage_Hair) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 4, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
@@ -350,10 +356,14 @@ void ZombatarWidget::SetPage(ZombatarPage thePage) {
 	else {
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 2; y++) {
+				if (x + y * 9 == 17) break; // we don't have the clear in the array
 				NewLawnButton* mColorPallete = mColorPalletes[x + y * 9];
 				mColorPallete->Resize(238 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth) * x, 367 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight) * y, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight);
 			}
 		}
+
+		mClearPalleteButton->SetDisabled(false);
+		mClearPalleteButton->Resize(238 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth) * 8, 367 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight), Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight);
 	}
 }
 
@@ -440,7 +450,7 @@ ZombatarWidget::~ZombatarWidget() {
 	if (mHatsButton) delete mHatsButton;
 	if (mBackdropsButton) delete mBackdropsButton;
 	if (mClearPickButton) delete mClearPickButton;
-
+	if (mClearPalleteButton) delete mClearPalleteButton;
 	for (NewLawnButton* pallete : mColorPalletes) {
 		delete pallete;
 	}
@@ -473,7 +483,7 @@ void ZombatarWidget::Update() {
 	mHatsButton->MarkDirty();
 	mBackdropsButton->MarkDirty();
 	mClearPickButton->MarkDirty();
-
+	mClearPalleteButton->MarkDirty();
 	if (mZombie) mZombie->Update();
 }
 
@@ -513,7 +523,7 @@ void ZombatarWidget::AddedToManager(WidgetManager* theWidgetManager)
 	AddWidget(mHatsButton);
 	AddWidget(mBackdropsButton);
 	AddWidget(mClearPickButton);
-
+	AddWidget(mClearPalleteButton);
 	for (NewLawnButton* pallete : mColorPalletes) {
 		AddWidget(pallete);
 	}
@@ -539,7 +549,7 @@ void ZombatarWidget::RemovedFromManager(WidgetManager* theWidgetManager)
 	RemoveWidget(mHatsButton);
 	RemoveWidget(mBackdropsButton);
 	RemoveWidget(mClearPickButton);
-
+	RemoveWidget(mClearPalleteButton);
 	for (NewLawnButton* pallete : mColorPalletes) {
 		RemoveWidget(pallete);
 	}
@@ -573,7 +583,7 @@ void ZombatarWidget::OrderInManagerChanged()
 	}
 
 	PutInfront(mClearPickButton, this);
-
+	PutInfront(mClearPalleteButton, this);
 	PutBehind(mApp->mGameSelector->mOverlayWidget, this);
 }
 
@@ -604,9 +614,6 @@ void ZombatarWidget::ButtonDepress(int theId)
 
 		if (aTargetPallete && aPallete != *aTargetPallete)
 		{
-			if (aPallete == NUM_COLOR_PALLETES - 1) {
-				aPallete = -1;
-			}
 			SetZombatarRef(aTargetPallete, aPallete);
 			mApp->PlaySample(Sexy::SOUND_TAP);
 			UpdateZombieAvatar();
@@ -646,6 +653,22 @@ void ZombatarWidget::ButtonDepress(int theId)
 			mApp->PlaySample(Sexy::SOUND_TAP);
 			UpdateZombieAvatar();
 		}
+	}
+
+	if (theId == ZombatarWidget::ZombatarScreen_ClearPallete) {
+		int aPallete = -1;
+		int* aTargetPallete = nullptr;
+
+		if (mPage == ZombatarPage::ZombatarPage_Hair) aTargetPallete = &mCurHairPallete;
+		else if (mPage == ZombatarPage::ZombatarPage_Backdrops) aTargetPallete = &mCurBackgroundPallete;
+
+		if (aTargetPallete && aPallete != *aTargetPallete)
+		{
+			SetZombatarRef(aTargetPallete, aPallete);
+			mApp->PlaySample(Sexy::SOUND_TAP);
+			UpdateZombieAvatar();
+		}
+		return;
 	}
 
 	switch (theId)
@@ -761,14 +784,15 @@ void ZombatarWidget::DrawColorPalletes(Graphics* g)
 			g->SetColor(curPalletes[i]);
 			bool isSelected = *aTargetPallete == i;
 			g->mColor.mAlpha = isSelected || aColorPallete->mIsOver ? 255 : 128;
-			if (isSelected && i != 17) {
+			if (isSelected) {
 				g->DrawImageF(IMAGE_ZOMBATAR_COLORPICKER_HIGHLIGHT, aColorPallete->mX - 2.0f, aColorPallete->mY - 2.5f);
 			}
-			g->DrawImageF(
-				i == 17 ? IMAGE_ZOMBATAR_COLORPICKER_NONE :
-				IMAGE_ZOMBATAR_COLORPICKER
-				, aColorPallete->mX, aColorPallete->mY);
+			g->DrawImageF(IMAGE_ZOMBATAR_COLORPICKER, aColorPallete->mX, aColorPallete->mY);
 			g->PopState();
+		}
+
+		if (!mClearPalleteButton->mDisabled) {
+			DrawClearPallete(g, mClearPalleteButton, aTargetPallete);
 		}
 	}
 }
@@ -1149,6 +1173,15 @@ void ZombatarWidget::DrawClearItem(Graphics* g, NewLawnButton* button, int* theT
 	g->PopState();
 }
 
+void ZombatarWidget::DrawClearPallete(Graphics* g, NewLawnButton* button, int* theTargetItem)
+{
+	g->PushState();
+	g->SetColorizeImages(true);
+	g->SetColor(Color::White);
+	g->mColor.mAlpha = button->mIsOver ? 255 : 128;
+	g->DrawImageF(IMAGE_ZOMBATAR_COLORPICKER_NONE, button->mX, button->mY);
+	g->PopState();
+}
 
 void ZombatarWidget::UpdatePalletes() {
 	int* aTargetItem = nullptr;

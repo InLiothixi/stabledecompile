@@ -8,7 +8,7 @@
 #include "GameButton.h"
 
 #define NUM_SKIN_COLOR_PALLETES 12
-#define NUM_COLOR_PALLETES 18
+#define NUM_COLOR_PALLETES 17
 
 class LawnApp;
 
@@ -56,6 +56,7 @@ private:
 		ZombatarScreen_Hats,
 		ZombatarScreen_Backdrops,
 		ZombatarScreen_ClearPick,
+		ZombatarScreen_ClearPallete,
 		ZombatarScreen_Palletes,
 		ZombatarScreen_Items = ZombatarScreen_Palletes + NUM_COLOR_PALLETES + 1,
 	};
@@ -75,6 +76,7 @@ public:
 	NewLawnButton* mHatsButton;
 	NewLawnButton* mBackdropsButton;
 	NewLawnButton* mClearPickButton;
+	NewLawnButton* mClearPalleteButton;
 	ZombatarPage mPage;
 	int mCurSkinPallete;
 	int mCurHair;
@@ -114,6 +116,7 @@ public:
 	void						GetZombatarItemOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
 	void						GetZombatarItemScale(ZombatarItem theItem, float* scaleX, float* scaleY);
 	void						GetZombatarPortraitOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
+	void						DrawClearPallete(Graphics* g, NewLawnButton* button, int* theTargetPallete);
 };
 
 extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];
