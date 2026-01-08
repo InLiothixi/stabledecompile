@@ -9,7 +9,6 @@
 
 #define NUM_SKIN_COLOR_PALLETES 12
 #define NUM_COLOR_PALLETES 18
-#define NONE_COLOR_PALLETE 17
 
 class LawnApp;
 
@@ -56,8 +55,9 @@ private:
 		ZombatarScreen_Acessory,
 		ZombatarScreen_Hats,
 		ZombatarScreen_Backdrops,
+		ZombatarScreen_ClearPick,
 		ZombatarScreen_Palletes,
-		ZombatarScreen_Items = ZombatarScreen_Palletes + NUM_COLOR_PALLETES + 1
+		ZombatarScreen_Items = ZombatarScreen_Palletes + NUM_COLOR_PALLETES + 1,
 	};
 
 public:
@@ -74,6 +74,7 @@ public:
 	NewLawnButton* mAccessoryButton;
 	NewLawnButton* mHatsButton;
 	NewLawnButton* mBackdropsButton;
+	NewLawnButton* mClearPickButton;
 	ZombatarPage mPage;
 	int mCurSkinPallete;
 	int mCurHair;
@@ -105,12 +106,14 @@ public:
 	void						DrawZombieAvatar(Graphics* g);
 	void						DrawZombatarItems(Graphics* g);
 	void						DrawZombatarItem(Graphics* g, NewLawnButton* button, ZombatarItem theItem, int* theTargetItem, ZombatarDefinition* aDef);
+	void						DrawClearItem(Graphics* g, NewLawnButton* button, int* theTargetItem);
 	void						UpdatePalletes();
 	void						UpdateItems();
 	void						UpdateZombieAvatar();
 	void						GetOutlineOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
 	void						GetZombatarItemOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
 	void						GetZombatarItemScale(ZombatarItem theItem, float* scaleX, float* scaleY);
+	void						GetZombatarPortraitOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
 };
 
 extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];

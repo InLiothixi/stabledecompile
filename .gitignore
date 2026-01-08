@@ -17,3 +17,4 @@ SexyAppFramework/ReleaseGOTY/*
 portaudio/*
 !portaudio/include/
 !portaudio/include/**
+enc_temp_folder/*
