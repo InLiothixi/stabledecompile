@@ -5189,36 +5189,52 @@ void Challenge::IZombieSetPlantFilterEffect(Plant* thePlant, FilterEffect theFil
 void Challenge::IZombieDrawPlant(Graphics* g, Plant* thePlant)
 {
 	Reanimation* aReanim = mApp->ReanimationTryToGet(thePlant->mBodyReanimID);
-	if (aReanim)
-	{
-		IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_WHITE);
-		g->SetColorizeImages(true);
+	if (aReanim) {
+		if (g->mIs3D) {
+			IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_WHITE);
+			g->SetColorizeImages(true);
 
-		float aOffsetX = g->mTransX, aOffsetY = g->mTransY;
-		g->mTransX = aOffsetX + 4;
-		g->mTransY = aOffsetY + 4;
-		g->SetColor(Color(122, 86, 58));
-		aReanim->DrawRenderGroup(g, 0);
+			float aOffsetX = g->mTransX, aOffsetY = g->mTransY;
+			g->mTransX = aOffsetX + 4;
+			g->mTransY = aOffsetY + 4;
+			g->SetColor(Color(122, 86, 58));
+			aReanim->DrawRenderGroup(g, 0);
 
-		g->mTransX = aOffsetX + 2;
-		g->mTransY = aOffsetY + 2;
-		g->SetColor(Color(171, 135, 107));
-		aReanim->DrawRenderGroup(g, 0);
+			g->mTransX = aOffsetX + 2;
+			g->mTransY = aOffsetY + 2;
+			g->SetColor(Color(171, 135, 107));
+			aReanim->DrawRenderGroup(g, 0);
 
-		g->mTransX = aOffsetX - 2;
-		g->mTransY = aOffsetY - 2;
-		g->SetColor(Color(171, 135, 107));
-		aReanim->DrawRenderGroup(g, 0);
+			g->mTransX = aOffsetX - 2;
+			g->mTransY = aOffsetY - 2;
+			g->SetColor(Color(171, 135, 107));
+			aReanim->DrawRenderGroup(g, 0);
 
-		g->mTransX = aOffsetX;
-		g->mTransY = aOffsetY;
-		g->SetColor(Color(255, 201, 160));
-		IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_NONE);
-		aReanim->DrawRenderGroup(g, 0);
+			g->mTransX = aOffsetX;
+			g->mTransY = aOffsetY;
+			g->SetColor(Color(255, 201, 160));
+			IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_NONE);
+			aReanim->DrawRenderGroup(g, 0);
 
-		IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_NONE);
-		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
-		g->SetColorizeImages(false);
+			IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_NONE);
+			g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+			g->SetColorizeImages(false);
+		}
+		else {
+			g->SetColorizeImages(true);
+
+			float aOffsetX = g->mTransX, aOffsetY = g->mTransY;
+			g->mTransX = aOffsetX - 2;
+			g->mTransY = aOffsetY - 2;
+			g->SetColor(Color(122, 86, 58));
+			aReanim->DrawRenderGroup(g, 0);
+			g->mTransX = aOffsetX;
+			g->mTransY = aOffsetY;
+			g->SetColor(Color(255, 201, 160));
+			aReanim->DrawRenderGroup(g, 0);
+			g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+			g->SetColorizeImages(false);
+		}
 	}
 }
 
