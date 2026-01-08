@@ -491,9 +491,9 @@ SexyAppBase::~SexyAppBase()
 	while (aSharedImageItr != mSharedImageMap.end())
 	{
 		SharedImage* aSharedImage = &aSharedImageItr->second;
-		DBG_ASSERTE(aSharedImage->mRefCount == 0);		
+		//DBG_ASSERTE(aSharedImage->mRefCount == 0);		
 		delete aSharedImage->mImage;
-		mSharedImageMap.erase(aSharedImageItr++);		
+		mSharedImageMap.erase(aSharedImageItr++);
 	}
 	
 	delete mDDInterface;

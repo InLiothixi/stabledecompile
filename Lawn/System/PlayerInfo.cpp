@@ -8,6 +8,7 @@
 #include "../../SexyAppFramework/SexyAppBase.h"
 #include "../Widget/AchievementsScreen.h"
 #include "../Plant.h"
+#include "../../GameConstants.h"
 
 static int gUserVersion = 12;
 
