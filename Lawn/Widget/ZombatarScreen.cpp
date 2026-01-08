@@ -338,6 +338,23 @@ void ZombatarWidget::SetPage(ZombatarPage thePage) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 4, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
 	}
+
+	if (thePage == ZombatarPage::ZombatarPage_Skin) {
+		for (int x = 0; x < 6; x++) {
+			for (int y = 0; y < 2; y++) {
+				NewLawnButton* mColorPallete = mColorPalletes[x + y * 6];
+				mColorPallete->Resize(274 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth) * x, 362 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight) * y, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight);
+			}
+		}
+	}
+	else {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 2; y++) {
+				NewLawnButton* mColorPallete = mColorPalletes[x + y * 9];
+				mColorPallete->Resize(238 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth) * x, 367 + (4 + Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight) * y, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mWidth, Sexy::IMAGE_ZOMBATAR_COLORPICKER->mHeight);
+			}
+		}
+	}
 }
 
 void ZombatarWidget::SetZombatarRef(int* theTarget, int theValue) {
@@ -687,8 +704,6 @@ void ZombatarWidget::ButtonPress(int theId, int theClickCount)
 
 void ZombatarWidget::DrawColorPalletes(Graphics* g)
 {
-	g->DrawImageF(IMAGE_ZOMBATAR_COLORS_BG, 221.5f, 335);
-
 	int* aTargetItem = nullptr;
 	int* aTargetPallete = nullptr;
 	Color* curPalletes = nullptr;
@@ -715,6 +730,13 @@ void ZombatarWidget::DrawColorPalletes(Graphics* g)
 		{
 			palleteCount = aDef.mPage != ZombatarPage::ZombatarPage_Skin ? NUM_COLOR_PALLETES : NUM_SKIN_COLOR_PALLETES;
 		}
+	}
+
+	if (palleteCount == 12) {
+		g->DrawImageF(IMAGE_ZOMBATAR_COLORS_BG_SMALL, 243, 325);
+	}
+	else {
+		g->DrawImageF(IMAGE_ZOMBATAR_COLORS_BG, 221.5f, 335);
 	}
 
 	if (palleteCount == 0)
