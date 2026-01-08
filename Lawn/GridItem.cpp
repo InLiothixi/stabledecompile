@@ -371,7 +371,7 @@ void GridItem::DrawScaryPot(Graphics* g)
     }
 
     g->DrawImageCel(IMAGE_SCARY_POT, aXPos, aYPos, aImageCol, 1);
-    if (mHighlighted)
+    if (!mBoard->mPaused && mHighlighted)
     {
         g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
         g->SetColorizeImages(true);
