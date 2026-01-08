@@ -188,8 +188,10 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mSquashHeadColumn = -1;
 
     mIsAllergicToNuts = false;
-    mZombatarID = ReanimationID::REANIMATIONID_NULL;
-    mZombatarOutlineID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarHairID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarHairLineID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarHatID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarHatLineID = ReanimationID::REANIMATIONID_NULL;
 
     const ZombieDefinition& aZombieDef = GetZombieDefinition(mZombieType);
     RenderLayer aRenderLayer = RenderLayer::RENDER_LAYER_ZOMBIE;

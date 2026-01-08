@@ -6,9 +6,11 @@
 #include "../../SexyAppFramework/ButtonListener.h"
 #include "../Zombie.h"
 #include "GameButton.h"
+#include "../../SexyAppFramework/MemoryImage.h"
 
 #define NUM_SKIN_COLOR_PALLETES 12
 #define NUM_COLOR_PALLETES 17
+#define NUM_CLOTHES 12
 
 class LawnApp;
 
@@ -16,7 +18,7 @@ using namespace Sexy;
 
 enum ZombatarPage {
 	ZombatarPage_Skin,
-	ZombatarPage_Hair,
+	ZombatarPage_Hairs,
 	ZombatarPage_FacialHair,
 	ZombatarPage_Tidbits,
 	ZombatarPage_EyeWear,
@@ -83,6 +85,9 @@ public:
 	int mCurHairPallete;
 	int mCurBackground;
 	int mCurBackgroundPallete;
+	int mCurClothe;
+	int mCurHat;
+	int mCurHatPallete;
 	NewLawnButton* mZombatarItems[NUM_ZOMBATAR_ITEMS];
 	NewLawnButton* mColorPalletes[NUM_COLOR_PALLETES];
 
@@ -117,9 +122,13 @@ public:
 	void						GetZombatarItemScale(ZombatarItem theItem, float* scaleX, float* scaleY);
 	void						GetZombatarPortraitOffset(ZombatarItem theItem, float* offsetX, float* offsetY);
 	void						DrawClearPallete(Graphics* g, NewLawnButton* button, int* theTargetPallete);
+	void						CreateZombatarClothes();
 };
 
 extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];
 extern Color gZombatarDimPalletes[NUM_COLOR_PALLETES];
 extern Color gZombatarBrightPalletes[NUM_COLOR_PALLETES];
+extern MemoryImage* gZombatarClothes[NUM_CLOTHES];
+
+void DisposeZombatarClothesCache();
 #endif

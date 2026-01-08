@@ -178,8 +178,10 @@ public:
     ParticleSystemID                mHeadParticleID;
     int                             mSquashHeadColumn;
     bool                            mIsAllergicToNuts;
-    ReanimationID                   mZombatarID;
-    ReanimationID                   mZombatarOutlineID;
+    ReanimationID                   mZombatarHairID;
+    ReanimationID                   mZombatarHairLineID;
+    ReanimationID                   mZombatarHatID;
+    ReanimationID                   mZombatarHatLineID;
 
 public:
     Zombie();
