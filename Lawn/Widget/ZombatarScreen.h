@@ -16,17 +16,17 @@ class LawnApp;
 
 using namespace Sexy;
 
-enum ZombatarPage {
-	ZombatarPage_Skin,
-	ZombatarPage_Hairs,
-	ZombatarPage_FacialHair,
-	ZombatarPage_Tidbits,
-	ZombatarPage_EyeWear,
-	ZombatarPage_Clothes,
-	ZombatarPage_Acessory,
-	ZombatarPage_Hats,
-	ZombatarPage_Backdrops,
-	MAX_ZOMBATAR_PAGES
+enum ZombatarCategory {
+	ZombatarCategory_Skin,
+	ZombatarCategory_Hairs,
+	ZombatarCategory_FacialHair,
+	ZombatarCategory_Tidbits,
+	ZombatarCategory_EyeWear,
+	ZombatarCategory_Clothes,
+	ZombatarCategory_Acessory,
+	ZombatarCategory_Hats,
+	ZombatarCategory_Backdrops,
+	MAX_ZOMBATAR_CATEGORIES
 };
 
 class ZombatarDefinition {
@@ -34,7 +34,7 @@ public:
 	ZombatarItem mZombatarItem;
 	Image** mOutlineImage;
 	Image** mImage;
-	ZombatarPage mPage;
+	ZombatarCategory mCategory;
 	int mColumn;
 	int mRow;
 	Color* mColorGroup;
@@ -79,7 +79,7 @@ public:
 	NewLawnButton* mBackdropsButton;
 	NewLawnButton* mClearPickButton;
 	NewLawnButton* mClearPalleteButton;
-	ZombatarPage mPage;
+	ZombatarCategory mCurCategory;
 	int mCurSkinPallete;
 	int mCurHair;
 	int mCurHairPallete;
@@ -106,7 +106,7 @@ public:
 	virtual void                ButtonPress(int theId, int theClickCount);
 	void						ResetZombatar();
 	void						SetupZombie();
-	void						SetPage(ZombatarPage thePage);
+	void						SetCategory(ZombatarCategory theCategory);
 	void						SetZombatarRef(int* theTarget, int theValue);
 	void						DrawColorPalletes(Graphics* g);
 	void						DrawZombiePortrait(Graphics* g);
