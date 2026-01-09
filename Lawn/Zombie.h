@@ -180,6 +180,7 @@ public:
     bool                            mIsAllergicToNuts;
     ReanimationID                   mZombatarHairID;
     ReanimationID                   mZombatarHairLineID;
+    ReanimationID                   mZombatarAccessoryID;
     ReanimationID                   mZombatarHatID;
     ReanimationID                   mZombatarHatLineID;
 

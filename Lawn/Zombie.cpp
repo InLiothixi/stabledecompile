@@ -190,6 +190,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mIsAllergicToNuts = false;
     mZombatarHairID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHairLineID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarAccessoryID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHatID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHatLineID = ReanimationID::REANIMATIONID_NULL;
 
@@ -7386,6 +7387,32 @@ void Zombie::Draw(Graphics* g)
             g->SetColor(Color::Black);
             g->DrawRect(HEALTH_POSX, HEALTH_POSY - 5, 50, 5);
         }
+    }
+
+    if (mZombatarHairID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarHairID);
+        aReanim->Draw(g);
+    }
+    if (mZombatarHairLineID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarHairLineID);
+        aReanim->Draw(g);
+    }
+    if (mZombatarAccessoryID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarAccessoryID);
+        aReanim->Draw(g);
+    }
+    if (mZombatarHatID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarHatID);
+        aReanim->Draw(g);
+    }
+    if (mZombatarHatLineID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarHatLineID);
+        aReanim->Draw(g);
     }
 }
 

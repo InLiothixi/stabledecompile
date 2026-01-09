@@ -23,7 +23,7 @@ enum ZombatarCategory {
 	ZombatarCategory_Tidbits,
 	ZombatarCategory_EyeWear,
 	ZombatarCategory_Clothes,
-	ZombatarCategory_Acessory,
+	ZombatarCategory_Accessories,
 	ZombatarCategory_Hats,
 	ZombatarCategory_Backdrops,
 	MAX_ZOMBATAR_CATEGORIES
@@ -86,6 +86,8 @@ public:
 	int mCurBackground;
 	int mCurBackgroundPallete;
 	int mCurClothe;
+	int mCurAccessory;
+	int mCurAccessoryPallete;
 	int mCurHat;
 	int mCurHatPallete;
 	NewLawnButton* mZombatarItems[NUM_ZOMBATAR_ITEMS];
