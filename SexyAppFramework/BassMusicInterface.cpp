@@ -58,15 +58,15 @@ BassMusicInterface::BassMusicInterface(HWND theHWnd)
 
 	if (gBass->mVersion2)
 	{
-		success = gBass->BASS_Init2(1, 48000, 0, theHWnd, NULL); // 44100
+		success = gBass->BASS_Init2(1, 44100, 0, theHWnd, NULL); // 44100
 		gBass->BASS_SetConfig(BASS_CONFIG_BUFFER, 2000);
 	}
 	else
 	{
 #ifdef _WIN64
-		success = gBass->BASS_Init(-1, 48000, 0, theHWnd, NULL);
+		success = gBass->BASS_Init(-1, 44100, 0, theHWnd, NULL);
 #else
-		success = gBass->BASS_Init(-1, 48000, 0, theHWnd);
+		success = gBass->BASS_Init(-1, 44100, 0, theHWnd);
 #endif
 	}
 
