@@ -425,30 +425,30 @@ bool DefMapReadFromCache(void*& theReadPtr, DefMap* theDefMap, void* theDefiniti
 }
 
 //0x444380
-uint32_t DefinitionCalcHashSymbolMap(uint32_t aSchemaHash, DefSymbol* theSymbolMap)
+uint DefinitionCalcHashSymbolMap(int aSchemaHash, DefSymbol* theSymbolMap)
 {
     while (theSymbolMap->mSymbolName != nullptr)
     {
         aSchemaHash = crc32(aSchemaHash, (const Bytef*)theSymbolMap->mSymbolName, strlen(theSymbolMap->mSymbolName));
-        aSchemaHash = crc32(aSchemaHash, (const Bytef*)&theSymbolMap->mSymbolValue, sizeof(theSymbolMap->mSymbolValue));
+        aSchemaHash = crc32(aSchemaHash, (const Bytef*)&theSymbolMap->mSymbolValue, sizeof(int));
         theSymbolMap++;
     }
     return aSchemaHash;
 }
 
 //0x4443D0
-uint32_t DefinitionCalcHashDefMap(uint32_t aSchemaHash, DefMap* theDefMap, TodList<DefMap*>& theProgressMaps)
+uint DefinitionCalcHashDefMap(int aSchemaHash, DefMap* theDefMap, TodList<DefMap*>& theProgressMaps)
 {
     for (TodListNode<DefMap*>* aNode = theProgressMaps.mHead; aNode != nullptr; aNode = aNode->mNext)
         if (aNode->mValue == theDefMap)
             return aSchemaHash;
     theProgressMaps.AddTail(theDefMap);
 
-    aSchemaHash = crc32(aSchemaHash, (Bytef*)&theDefMap->mDefSize, sizeof(theDefMap->mDefSize));
+    aSchemaHash = crc32(aSchemaHash, (Bytef*)&theDefMap->mDefSize, sizeof(int));
     for (DefField* aField = theDefMap->mMapFields; *aField->mFieldName != '\0'; aField++)
     {
-        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldType, sizeof(aField->mFieldType));
-        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldOffset, sizeof(aField->mFieldOffset));
+        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldType, sizeof(DefFieldType));
+        aSchemaHash = crc32(aSchemaHash, (Bytef*)&aField->mFieldOffset, sizeof(int));
         switch (aField->mFieldType)
         {
         case DefFieldType::DT_ENUM:
@@ -464,10 +464,10 @@ uint32_t DefinitionCalcHashDefMap(uint32_t aSchemaHash, DefMap* theDefMap, TodLi
 }
 
 //0x444490
-uint32_t DefinitionCalcHash(DefMap* theDefMap)
+uint DefinitionCalcHash(DefMap* theDefMap)
 {
     TodList<DefMap*> aProgressMaps = TodList<DefMap*>();
-    uint32_t aResult = DefinitionCalcHashDefMap(crc32(0L, (Bytef*)Z_NULL, NULL) + 1, theDefMap, aProgressMaps);
+    uint aResult = DefinitionCalcHashDefMap(crc32(0L, (Bytef*)Z_NULL, NULL) + 1, theDefMap, aProgressMaps);
     aProgressMaps.RemoveAll();
     return aResult;
 }
@@ -491,7 +491,7 @@ void* DefinitionUncompressCompiledBuffer(void* theCompressedBuffer, size_t theCo
     }
     Bytef* aUncompressedBuffer = (Bytef*)DefinitionAlloc(aHeader->mUncompressedSize);
     theCompressedBufferSize = aHeader->mUncompressedSize; //my addition
-    Bytef* aSrc = (Bytef*)((intptr_t)theCompressedBuffer + sizeof(CompressedDefinitionHeader));  // 实际解压数据从第 3 个四字节开始
+    Bytef* aSrc = (Bytef*)((size_t)theCompressedBuffer + sizeof(CompressedDefinitionHeader));  // 实际解压数据从第 3 个四字节开始
     int aResult = uncompress(aUncompressedBuffer, (uLongf*)&theCompressedBufferSize, aSrc, sz - sizeof(CompressedDefinitionHeader));
     TOD_ASSERT(aResult == Z_OK);
     TOD_ASSERT(theCompressedBufferSize == aHeader->mUncompressedSize);
@@ -526,16 +526,16 @@ bool DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* t
             delete[](char*)aCompressedBuffer;
             if (aUncompressedBuffer)
             {
-                uint32_t aDefHash = DefinitionCalcHash(theDefMap);  // 计算 CRC 校验值，后将用于检测数据的完整性
+                uint aDefHash = DefinitionCalcHash(theDefMap);  // 计算 CRC 校验值，后将用于检测数据的完整性
                 if (aUncompressedSize < theDefMap->mDefSize + sizeof(uint))  // 检测解压数据的长度是否足够“定义数据 + 一个校验值记录数据”的长度
                     TodTrace(_S("Compiled file size too small: %s\n"), theCompiledFilePath.c_str());
                 else
                 {
                     // 复制一份解压数据的指针用于读取时移动，原指针后续要用于计算读取区域大小及 delete[] 操作
                     void* aBufferPtr = aUncompressedBuffer;
-                    uint32_t aCashHash;
-                    SMemR(aBufferPtr, &aCashHash, sizeof(uint32_t));  // 读取记录的 CRC 校验值
-                    //TodTrace("%u    -   %u", aCashHash, aDefHash);
+                    uint aCashHash;
+                    SMemR(aBufferPtr, &aCashHash, sizeof(uint));  // 读取记录的 CRC 校验值
+                    TodTrace("%u    -   %u", aCashHash, aDefHash);
                     if (aCashHash != aDefHash)  // 判断校验值是否一致，若不一致则说明数据发生错误
                         TodTrace(_S("Compiled file schema wrong: %s\n"), theCompiledFilePath.c_str());
 
@@ -548,7 +548,7 @@ bool DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* t
                         SMemR(aBufferPtr, theDefinition, theDefMap->mDefSize);
                         // 修复野指针及标志型数据，并保存是否成功的结果，后续作为返回值
                         bool aResult = DefMapReadFromCache(aBufferPtr, theDefMap, theDefinition);
-                        size_t aReadMemSize = (size_t)aBufferPtr - (size_t)aUncompressedBuffer;
+                        size_t aReadMemSize = (uint)aBufferPtr - (uint)aUncompressedBuffer;
                         delete[](char*)aUncompressedBuffer;
                         if (aResult && aReadMemSize != aUncompressedSize)
                             TodTrace(_S("Compiled file wrong size: %s\n"), theCompiledFilePath.c_str());

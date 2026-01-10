@@ -293,7 +293,7 @@ SexyAppBase::SexyAppBase()
 	mAlphaDisabled = false;	
 	mDebugKeysEnabled = false;
 	mOldWndProc = 0;
-	mNoSoundNeeded = false;
+	mNoSoundNeeded = true;
 	mWantFMod = false;
 
 	mSyncRefreshRate = 100;
