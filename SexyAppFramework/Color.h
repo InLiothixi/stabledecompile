@@ -7,7 +7,7 @@ namespace Sexy
 {
 
 #pragma pack(push,1)
-	struct SexyRGBA { unsigned char r, g, b, a; };
+	struct SexyRGBA { unsigned char a, r, g, b; };
 #pragma pack(pop)
 
 class Color
