@@ -190,6 +190,8 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mIsAllergicToNuts = false;
     mZombatarHairID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHairLineID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarEyeWearID = ReanimationID::REANIMATIONID_NULL;
+    mZombatarEyeWearLineID = ReanimationID::REANIMATIONID_NULL;
     mZombatarAccessoryID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHatID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHatLineID = ReanimationID::REANIMATIONID_NULL;
@@ -7397,6 +7399,16 @@ void Zombie::Draw(Graphics* g)
     if (mZombatarHairLineID != REANIMATIONID_NULL)
     {
         Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarHairLineID);
+        aReanim->Draw(g);
+    }
+    if (mZombatarEyeWearID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarEyeWearID);
+        aReanim->Draw(g);
+    }
+    if (mZombatarEyeWearLineID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarEyeWearLineID);
         aReanim->Draw(g);
     }
     if (mZombatarAccessoryID != REANIMATIONID_NULL)

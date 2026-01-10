@@ -21,7 +21,7 @@ enum ZombatarCategory {
 	ZombatarCategory_Hairs,
 	ZombatarCategory_FacialHair,
 	ZombatarCategory_Tidbits,
-	ZombatarCategory_EyeWear,
+	ZombatarCategory_EyeWears,
 	ZombatarCategory_Clothes,
 	ZombatarCategory_Accessories,
 	ZombatarCategory_Hats,
@@ -85,6 +85,8 @@ public:
 	int mCurHairPallete;
 	int mCurBackground;
 	int mCurBackgroundPallete;
+	int mCurEyeWear;
+	int mCurEyeWearPallete;
 	int mCurClothe;
 	int mCurAccessory;
 	int mCurAccessoryPallete;

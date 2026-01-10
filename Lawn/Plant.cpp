@@ -4711,7 +4711,7 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
     else if (mSeedType == SeedType::SEED_UMBRELLA)
     {
         aScale = 0.5f;
-        aShadowOffsetX = -7.0f;
+        aShadowOffsetX = -5.0f;
         aShadowOffsetY = 52.0f;
     }
     else if (mSeedType == SeedType::SEED_FUMESHROOM || mSeedType == SeedType::SEED_GLOOMSHROOM)
