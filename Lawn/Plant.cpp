@@ -4735,7 +4735,7 @@ void Plant::DrawShadow(Sexy::Graphics* g, float theOffsetX, float theOffsetY)
     }
     else if (mSeedType == SeedType::SEED_CHOMPER)
     {
-        aShadowOffsetX = -21.0f;
+        aShadowOffsetX = -15.0f;
         aShadowOffsetY = 57.0f;
     }
     else if (mSeedType == SeedType::SEED_FLOWERPOT)
@@ -6369,13 +6369,13 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
                 if (mBoard->GetFlowerPotAt(mPlantCol, mRow) && aZombie->mZombiePhase == PHASE_DIGGER_TUNNELING)
                     continue;
 
-                /*if ((aZombie->mZombieType == ZombieType::ZOMBIE_POGO && aZombie->mHasObject) ||
+                if ((aZombie->mZombieType == ZombieType::ZOMBIE_POGO && aZombie->mHasObject) ||
                     aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT)
                 {
                     continue;
-                }*/
+                }
 
-                if (/*aZombie->mZombieType == ZombieType::ZOMBIE_POLEVAULTER || */ !aZombie->IsWalkingBackwards())
+                if (aZombie->mZombieType != ZombieType::ZOMBIE_POLEVAULTER && !aZombie->IsWalkingBackwards())
                 {
                     aAttackRect.mX -= 40;
                     aAttackRect.mWidth += 40;  // 原版经典土豆地雷 Bug 及“四撑杆引雷”的原理
@@ -6410,7 +6410,7 @@ Zombie* Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon)
 #endif
 
             Rect aZombieRect = aZombie->GetZombieRect();
-            if (aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT || aZombie->mZombieType == ZombieType::ZOMBIE_POGO && aZombie->mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL &&
+            if ((aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_POST_VAULT || aZombie->mZombieType == ZombieType::ZOMBIE_POGO) && aZombie->mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL &&
                 (mSeedType == SeedType::SEED_SPIKEWEED || mSeedType == SeedType::SEED_SPIKEROCK))
                 aZombieRect.mWidth += 50;
             if (!needPortalCheck && GetRectOverlap(aAttackRect, aZombieRect) < -aExtraRange)
