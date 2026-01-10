@@ -468,6 +468,7 @@ void ZombatarTOS::ButtonDepress(int theId)
             else if (mAgreementCheckbox->mChecked)   
             {
                 mApp->mPlayerInfo->mAckZombatarTOS = true;
+                mApp->WriteCurrentUserConfig();
                 mApp->KillDialog(Dialogs::DIALOG_ZOMBATARTOS);
                 mApp->mWidgetManager->SetFocus(mApp->mGameSelector);
                 mApp->mGameSelector->ShowZombatarScreen();
