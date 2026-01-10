@@ -178,6 +178,7 @@ public:
     ParticleSystemID                mHeadParticleID;
     int                             mSquashHeadColumn;
     bool                            mIsAllergicToNuts;
+    ReanimationID                   mZombatarTidbitID;
     ReanimationID                   mZombatarHairID;
     ReanimationID                   mZombatarHairLineID;
     ReanimationID                   mZombatarEyeWearID;

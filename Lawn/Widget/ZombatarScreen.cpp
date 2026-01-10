@@ -39,6 +39,20 @@ ZombatarDefinition gZombatarDefinitions[] = {
 	{ZombatarItem::ZOMBATAR_HAIR_14,				&Sexy::IMAGE_ZOMBATAR_HAIR_14,		&Sexy::IMAGE_ZOMBATAR_HAIR_14_MASK,			ZombatarCategory::ZombatarCategory_Hairs,		  1, 2,		gZombatarDimPalletes},
 	{ZombatarItem::ZOMBATAR_HAIR_15,				&Sexy::IMAGE_ZOMBATAR_HAIR_15,		&Sexy::IMAGE_ZOMBATAR_HAIR_15_MASK,			ZombatarCategory::ZombatarCategory_Hairs,		  2, 2,		gZombatarDimPalletes},
 	{ZombatarItem::ZOMBATAR_HAIR_16,				nullptr,							&Sexy::IMAGE_ZOMBATAR_HAIR_16,				ZombatarCategory::ZombatarCategory_Hairs,		  3, 2,		gZombatarDimPalletes},
+	{ZombatarItem::ZOMBATAR_TIDBIT_1,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_1,			ZombatarCategory::ZombatarCategory_Tidbits,		  0, 0,		gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_TIDBIT_2,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_2,			ZombatarCategory::ZombatarCategory_Tidbits,		  1, 0,		gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_TIDBIT_3,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_3,			ZombatarCategory::ZombatarCategory_Tidbits,		  2, 0,		gZombatarBrightPalletes},
+	{ZombatarItem::ZOMBATAR_TIDBIT_4,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_4,			ZombatarCategory::ZombatarCategory_Tidbits,		  3, 0,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_5,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_5,			ZombatarCategory::ZombatarCategory_Tidbits,		  4, 0,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_6,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_6,			ZombatarCategory::ZombatarCategory_Tidbits,		  5, 0,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_7,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_7,			ZombatarCategory::ZombatarCategory_Tidbits,		  0, 1,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_8,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_8,			ZombatarCategory::ZombatarCategory_Tidbits,		  1, 1,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_9,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_9,			ZombatarCategory::ZombatarCategory_Tidbits,		  2, 1,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_10,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_10,			ZombatarCategory::ZombatarCategory_Tidbits,		  3, 1,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_11,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_11,			ZombatarCategory::ZombatarCategory_Tidbits,		  4, 1,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_12,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_12,			ZombatarCategory::ZombatarCategory_Tidbits,		  5, 1,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_13,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_13,			ZombatarCategory::ZombatarCategory_Tidbits,		  0, 2,		nullptr},
+	{ZombatarItem::ZOMBATAR_TIDBIT_14,				nullptr,							&Sexy::IMAGE_ZOMBATAR_TIDBITS_14,			ZombatarCategory::ZombatarCategory_Tidbits,		  1, 2,		nullptr},
 	{ZombatarItem::ZOMBATAR_EYEWEAR_1,				&Sexy::IMAGE_ZOMBATAR_EYEWEAR_1,	&Sexy::IMAGE_ZOMBATAR_EYEWEAR_1_MASK,		ZombatarCategory::ZombatarCategory_EyeWears,	  0, 0,		gZombatarBrightPalletes},
 	{ZombatarItem::ZOMBATAR_EYEWEAR_2,				&Sexy::IMAGE_ZOMBATAR_EYEWEAR_2,	&Sexy::IMAGE_ZOMBATAR_EYEWEAR_2_MASK,		ZombatarCategory::ZombatarCategory_EyeWears,	  1, 0,		gZombatarBrightPalletes},
 	{ZombatarItem::ZOMBATAR_EYEWEAR_3,				&Sexy::IMAGE_ZOMBATAR_EYEWEAR_3,	&Sexy::IMAGE_ZOMBATAR_EYEWEAR_3_MASK,		ZombatarCategory::ZombatarCategory_EyeWears,	  2, 0,		gZombatarBrightPalletes},
@@ -402,6 +416,9 @@ void ZombatarWidget::SetCategory(ZombatarCategory theCategory) {
 	if (theCategory == ZombatarCategory_Hairs) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 4, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
+	} else if (theCategory == ZombatarCategory_Tidbits) {
+		mClearPickButton->SetDisabled(false);
+		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 2, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
 	} else if (theCategory == ZombatarCategory_EyeWears) {
 		mClearPickButton->SetDisabled(false);
 		mClearPickButton->Resize(166 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth - 4) * 4, 138 + (Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight - 4) * 2, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mWidth, Sexy::IMAGE_ZOMBATAR_ACCESSORY_BG->mHeight);
@@ -455,6 +472,8 @@ void ZombatarWidget::ResetZombatar() {
 	mCurBackgroundPallete = -1;
 	mCurHair = -1;
 	mCurHairPallete = -1;
+	mCurTidbit = -1;
+	mCurTidbitPallete = -1;
 	mCurEyeWear = -1;
 	mCurEyeWearPallete = -1;
 	mCurClothe = -1;
@@ -496,6 +515,22 @@ void ZombatarWidget::SetupZombie() {
 			aBodyReanim->mFrameBasePose = 0;
 			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
+			mZombie->mZombatarTidbitID = mApp->ReanimationGetID(aZombatar);
+		}
+
+		{
+			Reanimation* aZombatar = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_ZOMBATAR);
+			aZombatar->PlayReanim("anim_head1", REANIM_LOOP, 0, aBodyReanim->mAnimRate);
+			for (int i = 0; i < aZombatar->mDefinition->mTracks.count; i++)
+			{
+				aZombatar->mTrackInstances[i].mRenderGroup = RENDER_GROUP_HIDDEN;
+			}
+			ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
+			aAttachEffect->mDontDrawIfParentHidden = true;
+			aBodyReanim->mFrameBasePose = 0;
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarHairID = mApp->ReanimationGetID(aZombatar);
 		}
 
@@ -522,8 +557,6 @@ void ZombatarWidget::SetupZombie() {
 			{
 				aZombatar->mTrackInstances[i].mRenderGroup = RENDER_GROUP_HIDDEN;
 			}
-			aZombatar->GetTrackInstanceByName("anim_head1")->mRenderGroup = RENDER_GROUP_NORMAL;
-			aZombatar->GetTrackInstanceByName("anim_head2")->mRenderGroup = RENDER_GROUP_NORMAL;
 			ReanimatorTrackInstance* aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
@@ -772,6 +805,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 
 		if (mCurCategory == ZombatarCategory::ZombatarCategory_Skin) aTargetPallete = &mCurSkinPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetPallete = &mCurHairPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) aTargetPallete = &mCurTidbitPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetPallete = &mCurBackgroundPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) aTargetPallete = &mCurEyeWearPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Accessories) aTargetPallete = &mCurAccessoryPallete;
@@ -792,6 +826,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 
 		if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetItem = &mCurBackground;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair; 
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) aTargetItem = &mCurTidbit;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) aTargetItem = &mCurEyeWear;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Accessories) aTargetItem = &mCurAccessory;
@@ -812,6 +847,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int* aTargetItem = nullptr;
 
 		if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) aTargetItem = &mCurTidbit;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) aTargetItem = &mCurEyeWear;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Accessories) aTargetItem = &mCurAccessory;
@@ -831,6 +867,7 @@ void ZombatarWidget::ButtonDepress(int theId)
 		int* aTargetPallete = nullptr;
 
 		if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetPallete = &mCurHairPallete;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) aTargetPallete = &mCurTidbitPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetPallete = &mCurBackgroundPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) aTargetPallete = &mCurEyeWearPallete;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Accessories) aTargetPallete = &mCurAccessoryPallete;
@@ -918,6 +955,10 @@ void ZombatarWidget::DrawColorPalletes(Graphics* g)
 	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) {
 		aTargetPallete = &mCurHairPallete;
 		aTargetItem = &mCurHair;
+	}
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) {
+		aTargetPallete = &mCurTidbitPallete;
+		aTargetItem = &mCurTidbit;
 	}
 	else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) {
 		aTargetPallete = &mCurEyeWearPallete;
@@ -1011,6 +1052,53 @@ void ZombatarWidget::DrawZombiePortrait(Graphics* g) {
 		g->DrawImageF(IMAGE_ZOMBATAR_ZOMBIE_BLANK, 630.5f, 155);
 	}
 
+	if (mCurTidbit != -1)
+	{
+		{
+			ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)(mCurTidbit));
+			g->PushState();
+			g->SetColorizeImages(true);
+			g->SetColor(mCurTidbitPallete == -1 || aDef.mColorGroup == nullptr || mCurTidbit == ZombatarItem::ZOMBATAR_TIDBIT_1 ? Color::White : aDef.mColorGroup[mCurTidbitPallete]);
+			float posX = 630.5f;
+			float posY = 155.0f;
+			float offsetX = 0;
+			float offsetY = 0;
+			float outlineX = 0;
+			float outlineY = 0;
+			GetZombatarPortraitOffset((ZombatarItem)(mCurTidbit), &offsetX, &offsetY);
+			GetOutlineOffset((ZombatarItem)(mCurTidbit), &outlineX, &outlineY);
+			if (aDef.mImage)
+				g->DrawImageF(*aDef.mImage, posX + offsetX - outlineX - 1.5f, posY + offsetY - outlineY - 0.5f);
+			g->SetColor(Color::White);
+			if (aDef.mOutlineImage)
+				g->DrawImageF(*aDef.mOutlineImage, posX + offsetX, posY + offsetY);
+			g->PopState();
+		}
+
+		if (mCurTidbit == ZombatarItem::ZOMBATAR_TIDBIT_1) {
+			{
+				ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)(ZombatarItem::ZOMBATAR_TIDBIT_3));
+				g->PushState();
+				g->SetColorizeImages(true);
+				g->SetColor(mCurTidbitPallete == -1 || aDef.mColorGroup == nullptr ? Color::White : aDef.mColorGroup[mCurTidbitPallete]);
+				float posX = 630.5f;
+				float posY = 155.0f;
+				float offsetX = 0;
+				float offsetY = 0;
+				float outlineX = 0;
+				float outlineY = 0;
+				GetZombatarPortraitOffset((ZombatarItem)(ZombatarItem::ZOMBATAR_TIDBIT_3), &offsetX, &offsetY);
+				GetOutlineOffset((ZombatarItem)(ZombatarItem::ZOMBATAR_TIDBIT_3), &outlineX, &outlineY);
+				if (aDef.mImage)
+					g->DrawImageF(*aDef.mImage, posX + offsetX - outlineX - 1.5f, posY + offsetY - outlineY - 0.5f);
+				g->SetColor(Color::White);
+				if (aDef.mOutlineImage)
+					g->DrawImageF(*aDef.mOutlineImage, posX + offsetX, posY + offsetY);
+				g->PopState();
+			}
+		}
+	}
+
 	if (mCurHair != -1)
 	{
 		ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)(mCurHair));
@@ -1060,7 +1148,7 @@ void ZombatarWidget::DrawZombiePortrait(Graphics* g) {
 		ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)(mCurClothe));
 		g->PushState();
 		g->SetColorizeImages(true);
-		g->SetColor(mCurClothe == -1 || aDef.mColorGroup == nullptr ? Color::White : aDef.mColorGroup[mCurHairPallete]);
+		g->SetColor(Color::White);
 		float posX = 630.5f;
 		float posY = 155.0f;
 		float offsetX = 0;
@@ -1129,8 +1217,8 @@ ZombatarDefinition& GetZombatarDefinition(ZombatarItem theItem) {
 
 void ZombatarWidget::DrawZombieAvatar(Graphics* g) {
 	g->PushState();
-	g->SetClipRect(599, 300, 176, 200);
-	g->DrawImageF(IMAGE_ALMANAC_GROUNDDAY, 599.5f, 300);
+	g->SetClipRect(600, 300, 176, 200);
+	g->DrawImage(IMAGE_ALMANAC_GROUNDDAY, 600, 300);
 	if (mZombie)
 	{
 		if (mZombie->BeginDraw(g))
@@ -1161,6 +1249,7 @@ void ZombatarWidget::DrawZombatarItems(Graphics* g)
 			int* aTargetItem = nullptr;
 			if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Backdrops) aTargetItem = &mCurBackground;
 			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair;
+			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Tidbits) aTargetItem = &mCurTidbit;
 			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_EyeWears) aTargetItem = &mCurEyeWear;
 			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
 			else if (aDef.mCategory == ZombatarCategory::ZombatarCategory_Accessories) aTargetItem = &mCurAccessory;
@@ -1173,6 +1262,7 @@ void ZombatarWidget::DrawZombatarItems(Graphics* g)
 
 		int* aTargetItem = nullptr;
 		if (mCurCategory == ZombatarCategory::ZombatarCategory_Hairs) aTargetItem = &mCurHair;
+		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) aTargetItem = &mCurTidbit;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) aTargetItem = &mCurEyeWear;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Clothes) aTargetItem = &mCurClothe;
 		else if (mCurCategory == ZombatarCategory::ZombatarCategory_Accessories) aTargetItem = &mCurAccessory;
@@ -1195,23 +1285,20 @@ void ZombatarWidget::GetOutlineOffset(ZombatarItem theItem, float* offsetX, floa
 		*offsetY = -4.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_HAIR_11:
-		*offsetX = -2.0f;
-		*offsetY = -2.0f;
-		break;
-	case ZombatarItem::ZOMBATAR_HAIR_12:
-		*offsetX = -1.0f; 
+		*offsetX = -3.0f;
 		*offsetY = -3.0f;
 		break;
-	case ZombatarItem::ZOMBATAR_HAIR_13:
+	case ZombatarItem::ZOMBATAR_HAIR_12:
 		*offsetX = -2.0f; 
-		*offsetY = -1.0f;
+		*offsetY = -4.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_HAIR_13:
+		*offsetX = -3.0f; 
+		*offsetY = -2.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_HAIR_14:
-		*offsetX = -2.0f; 
-		*offsetY = -5.0f;
-		break;
-	case ZombatarItem::ZOMBATAR_HAIR_15:
-		*offsetX = -1.0f; 
+		*offsetX = -3.0f; 
+		*offsetY = -6.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_EYEWEAR_1:
 	case ZombatarItem::ZOMBATAR_EYEWEAR_3:
@@ -1304,6 +1391,50 @@ void ZombatarWidget::GetZombatarItemScale(ZombatarItem theItem, float* scaleX, f
 		case ZombatarItem::ZOMBATAR_HAIR_9:
 			*scaleX = 1.4f;
 			*scaleY = 0.9f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_1:
+			*scaleX = 0.475f;
+			*scaleY = 0.475f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_2:
+			*scaleX = 0.48f;
+			*scaleY = 0.44f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_5:
+		case ZombatarItem::ZOMBATAR_TIDBIT_6:
+			*scaleX = 0.48f;
+			*scaleY = 0.48f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_7:
+			*scaleX = 0.49f;
+			*scaleY = 0.49f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_11:
+			*scaleX = 0.5f;
+			*scaleY = 0.5f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_8:
+		case ZombatarItem::ZOMBATAR_TIDBIT_10:
+			*scaleX = 0.515f;
+			*scaleY = 0.515f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_4:
+			*scaleX = 0.52f;
+			*scaleY = 0.52f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_3:
+			*scaleX = 0.75f;
+			*scaleY = 0.75f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_13:
+			*scaleX = 0.875f;
+			*scaleY = 0.625f;
+			break;
+		case ZombatarItem::ZOMBATAR_TIDBIT_9:
+		case ZombatarItem::ZOMBATAR_TIDBIT_12:
+		case ZombatarItem::ZOMBATAR_TIDBIT_14:
+			*scaleX = 1.0f;
+			*scaleY = 1.0f;
 			break;
 		case ZombatarItem::ZOMBATAR_EYEWEAR_1:
 			*scaleX = 0.39f;
@@ -1509,6 +1640,43 @@ void ZombatarWidget::GetZombatarItemOffset(ZombatarItem theItem, float* offsetX,
 		*offsetX = 0.5f;
 		*offsetY = 0.5f;
 		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_1:
+		*offsetY = 3.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_9:
+		*offsetY = 5.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_3:
+		*offsetY = 10.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_2:
+	case ZombatarItem::ZOMBATAR_TIDBIT_12:
+		*offsetY = 12.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_10:
+		*offsetY = 14.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_4:
+		*offsetX = 2.0f;
+		*offsetY = 16.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_8:
+	case ZombatarItem::ZOMBATAR_TIDBIT_11:
+		*offsetY = 16.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_6:
+		*offsetY = 17.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_5:
+		*offsetY = 18.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_7:
+		*offsetY = 19.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_14:
+		*offsetX = 20.0f;
+		*offsetY = 20.0f;
+		break;
 	case ZombatarItem::ZOMBATAR_EYEWEAR_9:
 		*offsetY = 11.0f;
 		break;
@@ -1694,6 +1862,62 @@ void ZombatarWidget::GetZombatarPortraitOffset(ZombatarItem theItem, float* offs
 	case ZombatarItem::ZOMBATAR_HAIR_9:
 		*offsetX = 90.0f;
 		*offsetY = 15.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_1:
+		*offsetX = -9.0f;
+		*offsetY = 24.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_2:
+		*offsetX = -9.0f;
+		*offsetY = 24.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_3:
+		*offsetX = 9.0f;
+		*offsetY = 72.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_4:
+		*offsetX = -6.0f;
+		*offsetY = 23.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_5:
+		*offsetX = -6.0f;
+		*offsetY = 19.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_6:
+		*offsetX = -9.0f;
+		*offsetY = 27.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_7:
+		*offsetX = -9.0f;
+		*offsetY = 33.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_8:
+		*offsetX = -4.0f;
+		*offsetY = 16.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_9:
+		*offsetX = -16.0f;
+		*offsetY = 37.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_10:
+		*offsetX = -1.0f;
+		*offsetY = 32.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_11:
+		*offsetX = -1.0f;
+		*offsetY = 31.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_12:
+		*offsetX = 49.0f;
+		*offsetY = 52.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_13:
+		*offsetX = 51.0f;
+		*offsetY = 11.0f;
+		break;
+	case ZombatarItem::ZOMBATAR_TIDBIT_14:
+		*offsetX = 76.0f;
+		*offsetY = 76.0f;
 		break;
 	case ZombatarItem::ZOMBATAR_EYEWEAR_1:
 		*offsetX = -9.0f;
@@ -1923,44 +2147,81 @@ void ZombatarWidget::GetZombatarPortraitOffset(ZombatarItem theItem, float* offs
 void ZombatarWidget::DrawZombatarItem(Graphics* g, NewLawnButton* button, ZombatarItem theItem, int* theTargetItem, ZombatarDefinition* aDef)
 {
 	g->PushState();
-	g->SetColorizeImages(true);
-	g->SetColor(button->mIsOver || (int)theItem == *theTargetItem ? Color::White : Color(128, 128, 128, 128));
-	g->DrawImageF((int)theItem ==*theTargetItem ? IMAGE_ZOMBATAR_ACCESSORY_BG_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BG, button->mX, button->mY);
-	g->SetClipRect(button->mX + 8, button->mY + 8, button->mWidth - 17, button->mHeight - 17);
-	
-	float scaleX = 0.27f;
-	float scaleY = 0.27f;
-	GetZombatarItemScale(aDef->mZombatarItem, &scaleX, &scaleY);
+	{
+		g->SetColorizeImages(true);
+		g->SetColor(button->mIsOver || (int)theItem == *theTargetItem ? Color::White : Color(128, 128, 128, 128));
+		g->DrawImageF((int)theItem == *theTargetItem ? IMAGE_ZOMBATAR_ACCESSORY_BG_HIGHLIGHT : IMAGE_ZOMBATAR_ACCESSORY_BG, button->mX, button->mY);
+		g->SetClipRect(button->mX + 7, button->mY + 7, button->mWidth - 16, button->mHeight - 16);
 
-	if (aDef->mCategory == ZombatarCategory::ZombatarCategory_Clothes) {
-		TodDrawImageScaledF(g, gZombatarClothes[theItem - ZombatarItem::ZOMBATAR_CLOTHE_1], button->mX - 10.0f, button->mY - 10.0f, scaleX, scaleY);
-		g->PopState();
-		return;
+		float scaleX = 0.27f;
+		float scaleY = 0.27f;
+		GetZombatarItemScale(aDef->mZombatarItem, &scaleX, &scaleY);
+
+		if (aDef->mCategory == ZombatarCategory::ZombatarCategory_Clothes) {
+			TodDrawImageScaledF(g, gZombatarClothes[theItem - ZombatarItem::ZOMBATAR_CLOTHE_1], button->mX - 10.0f, button->mY - 10.0f, scaleX, scaleY);
+			g->PopState();
+			return;
+		}
+
+		float positionX = button->mX + 9.0f;
+		float positionY = button->mY + 9.0f;
+
+		float adjustmentX = 0.0f;
+		float adjustmentY = 0.0f;
+		GetZombatarItemOffset(aDef->mZombatarItem, &adjustmentX, &adjustmentY);
+		positionX += adjustmentX;
+		positionY += adjustmentY;
+
+		if (aDef->mImage) {
+			TodDrawImageScaledF(g, *aDef->mImage, positionX, positionY, scaleX, scaleY);
+		}
+
+		float offsetX = 0.0f;
+		float offsetY = 0.0f;
+		GetOutlineOffset(aDef->mZombatarItem, &offsetX, &offsetY);
+		offsetX *= scaleX;
+		offsetY *= scaleY;
+		positionX += offsetX;
+		positionY += offsetY;
+
+		if (aDef->mOutlineImage) {
+			TodDrawImageScaledF(g, *aDef->mOutlineImage, positionX, positionY, scaleX, scaleY);
+		}
 	}
 
-	float positionX = button->mX + 9.0f;
-	float positionY = button->mY + 9.0f;
+	if (theItem == ZombatarItem::ZOMBATAR_TIDBIT_1) {
+		ZombatarDefinition jDef = GetZombatarDefinition(ZombatarItem::ZOMBATAR_TIDBIT_3);
 
-	float adjustmentX = 0.0f;
-	float adjustmentY = 0.0f;
-	GetZombatarItemOffset(aDef->mZombatarItem, &adjustmentX, &adjustmentY);
-	positionX += adjustmentX;
-	positionY += adjustmentY;
+		float scaleX = 0.27f;
+		float scaleY = 0.27f;
+		GetZombatarItemScale(jDef.mZombatarItem, &scaleX, &scaleY);
+		scaleX *= 0.6385f;
+		scaleY *= 0.6185f;
 
-	if (aDef->mImage) {
-		TodDrawImageScaledF(g, *aDef->mImage, positionX, positionY, scaleX, scaleY);
-	}
+		float positionX = button->mX + 9.0f;
+		float positionY = button->mY + 9.0f;
 
-	float offsetX = 0.0f;
-	float offsetY = 0.0f;
-	GetOutlineOffset(aDef->mZombatarItem, &offsetX, &offsetY);
-	offsetX *= scaleX;
-	offsetY *= scaleY;
-	positionX += offsetX;
-	positionY += offsetY;
+		float adjustmentX = 0.0f;
+		float adjustmentY = 0.0f;
+		GetZombatarItemOffset(jDef.mZombatarItem, &adjustmentX, &adjustmentY);
+		positionX += adjustmentX + 8;
+		positionY += adjustmentY + 15;
 
-	if (aDef->mOutlineImage) {
-		TodDrawImageScaledF(g, *aDef->mOutlineImage, positionX, positionY, scaleX, scaleY);
+		if (jDef.mImage) {
+			TodDrawImageScaledF(g, *jDef.mImage, positionX, positionY, scaleX, scaleY);
+		}
+
+		float offsetX = 0.0f;
+		float offsetY = 0.0f;
+		GetOutlineOffset(jDef.mZombatarItem, &offsetX, &offsetY);
+		offsetX *= scaleX;
+		offsetY *= scaleY;
+		positionX += offsetX;
+		positionY += offsetY;
+
+		if (jDef.mOutlineImage) {
+			TodDrawImageScaledF(g, *jDef.mOutlineImage, positionX, positionY, scaleX, scaleY);
+		}
 	}
 	g->PopState();
 }
@@ -2010,6 +2271,10 @@ void ZombatarWidget::UpdatePalletes() {
 		aTargetPallete = &mCurHairPallete;
 		aTargetItem = &mCurHair;
 	}
+	else if (mCurCategory == ZombatarCategory::ZombatarCategory_Tidbits) {
+		aTargetPallete = &mCurTidbitPallete;
+		aTargetItem = &mCurTidbit;
+	}
 	else if (mCurCategory == ZombatarCategory::ZombatarCategory_EyeWears) {
 		aTargetPallete = &mCurEyeWearPallete;
 		aTargetItem = &mCurEyeWear;
@@ -2052,6 +2317,28 @@ void ZombatarWidget::UpdateItems() {
 void ZombatarWidget::UpdateZombieAvatar() {
 	if (!mZombie) return;
 
+	{
+		Reanimation* aZombatarTidbitReanim = mApp->ReanimationTryToGet(mZombie->mZombatarTidbitID);
+		if (aZombatarTidbitReanim)
+		{
+			for (int i = ZombatarItem::ZOMBATAR_TIDBIT_1; i <= ZombatarItem::ZOMBATAR_TIDBIT_14; i++) {
+				ZombatarDefinition& aDef = GetZombatarDefinition((ZombatarItem)i);
+				int tidbitNum = i - ZombatarItem::ZOMBATAR_TIDBIT_1;
+				if (aZombatarTidbitReanim->TrackExists(StrFormat("tidBits_%02d", tidbitNum).c_str())) aZombatarTidbitReanim->AssignRenderGroupToTrack(StrFormat("tidBits_%02d", tidbitNum).c_str(), RENDER_GROUP_HIDDEN);
+				if (aZombatarTidbitReanim->TrackExists(StrFormat("tidBits_%02d_line", tidbitNum).c_str())) aZombatarTidbitReanim->AssignRenderGroupToTrack(StrFormat("tidBits_%02d_line", tidbitNum).c_str(), RENDER_GROUP_HIDDEN);
+
+				if (aZombatarTidbitReanim->TrackExists(StrFormat("tidBits_%02d", tidbitNum).c_str())) {
+					ReanimatorTrackInstance* aHatTrack = aZombatarTidbitReanim->GetTrackInstanceByName(StrFormat("tidBits_%02d", tidbitNum).c_str());
+					aHatTrack->mTrackColor = mCurTidbitPallete == -1 || !aDef.mColorGroup ? Color::White : aDef.mColorGroup[mCurTidbitPallete];
+				}
+			}
+
+			int theTidbit = mCurTidbit - ZombatarItem::ZOMBATAR_TIDBIT_1;
+			if (mCurTidbit != -1) {
+				aZombatarTidbitReanim->AssignRenderGroupToTrack(StrFormat("tidBits_%02d", theTidbit).c_str(), RENDER_GROUP_NORMAL);
+			}
+		}
+	}
 	{
 		Reanimation* aZombatarHairReanim = mApp->ReanimationTryToGet(mZombie->mZombatarHairID);
 		aZombatarHairReanim->AssignRenderGroupToTrack("anim_hair", mCurHair != -1 ? RENDER_GROUP_HIDDEN : RENDER_GROUP_NORMAL);

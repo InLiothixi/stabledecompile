@@ -85,6 +85,8 @@ public:
 	int mCurHairPallete;
 	int mCurBackground;
 	int mCurBackgroundPallete;
+	int mCurTidbit;
+	int mCurTidbitPallete;
 	int mCurEyeWear;
 	int mCurEyeWearPallete;
 	int mCurClothe;

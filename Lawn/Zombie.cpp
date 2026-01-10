@@ -188,6 +188,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     mSquashHeadColumn = -1;
 
     mIsAllergicToNuts = false;
+    mZombatarTidbitID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHairID = ReanimationID::REANIMATIONID_NULL;
     mZombatarHairLineID = ReanimationID::REANIMATIONID_NULL;
     mZombatarEyeWearID = ReanimationID::REANIMATIONID_NULL;
@@ -7391,6 +7392,11 @@ void Zombie::Draw(Graphics* g)
         }
     }
 
+    if (mZombatarTidbitID != REANIMATIONID_NULL)
+    {
+        Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarTidbitID);
+        aReanim->Draw(g);
+    }
     if (mZombatarHairID != REANIMATIONID_NULL)
     {
         Reanimation* aReanim = mApp->ReanimationTryToGet(mZombatarHairID);
