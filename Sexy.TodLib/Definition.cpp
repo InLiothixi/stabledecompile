@@ -491,7 +491,7 @@ void* DefinitionUncompressCompiledBuffer(void* theCompressedBuffer, size_t theCo
     }
     Bytef* aUncompressedBuffer = (Bytef*)DefinitionAlloc(aHeader->mUncompressedSize);
     theCompressedBufferSize = aHeader->mUncompressedSize; //my addition
-    Bytef* aSrc = (Bytef*)((int)theCompressedBuffer + sizeof(CompressedDefinitionHeader));  // 实际解压数据从第 3 个四字节开始
+    Bytef* aSrc = (Bytef*)((unsigned int)theCompressedBuffer + sizeof(CompressedDefinitionHeader));  // 实际解压数据从第 3 个四字节开始
     int aResult = uncompress(aUncompressedBuffer, (uLongf*)&theCompressedBufferSize, aSrc, sz - sizeof(CompressedDefinitionHeader));
     TOD_ASSERT(aResult == Z_OK);
     TOD_ASSERT(theCompressedBufferSize == aHeader->mUncompressedSize);
