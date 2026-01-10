@@ -18,8 +18,10 @@ SexyAppFramework/ReleaseGOTY/*
 /Output/*.pdb
 
 portaudio/*
-!portaudio/build/msvc/Win32/*.lib
-!portaudio/build/msvc/x64/*.lib
+!portaudio/build/msvc/Win32/Release/*.lib
+!portaudio/build/msvc/Win32/Release/*.dll
+!portaudio/build/msvc/x64/Release/*.lib
+!portaudio/build/msvc/x64/Release/*.dll
 !portaudio/include/**
 
 enc_temp_folder/*
