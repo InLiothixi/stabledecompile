@@ -4,8 +4,10 @@ SexyAppFramework/DebugGOTY/*
 SexyAppFramework/Release/*
 SexyAppFramework/ReleaseGOTY/*
 !SexyAppFramework/Output/dependency.pak
+
 /.vs
 /Patch
+
 /Output/dependency/*
 /Output/properties/*
 /Output/*.exe
@@ -14,7 +16,10 @@ SexyAppFramework/ReleaseGOTY/*
 /Output/crash.txt
 /Output/*.ilk
 /Output/*.pdb
+
 portaudio/*
-!portaudio/include/
+!portaudio/build/msvc/Win32/*.lib
+!portaudio/build/msvc/x64/*.lib
 !portaudio/include/**
+
 enc_temp_folder/*
