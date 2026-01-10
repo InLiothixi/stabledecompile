@@ -535,7 +535,7 @@ bool DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* t
                     void* aBufferPtr = aUncompressedBuffer;
                     uint aCashHash;
                     SMemR(aBufferPtr, &aCashHash, sizeof(uint));  // 读取记录的 CRC 校验值
-                    TodTrace("%u    -   %u", aCashHash, aDefHash);
+                    // TodTrace("%u    -   %u", aCashHash, aDefHash);
                     if (aCashHash != aDefHash)  // 判断校验值是否一致，若不一致则说明数据发生错误
                         TodTrace(_S("Compiled file schema wrong: %s\n"), theCompiledFilePath.c_str());
 
