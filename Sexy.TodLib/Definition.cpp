@@ -523,7 +523,7 @@ bool DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* t
         {
             size_t aUncompressedSize;
             void* aUncompressedBuffer = DefinitionUncompressCompiledBuffer(aCompressedBuffer, aCompressedSize, aUncompressedSize, theCompiledFilePath);
-            delete[](char*)aCompressedBuffer;
+            delete[]aCompressedBuffer;
             if (aUncompressedBuffer)
             {
                 uint aDefHash = DefinitionCalcHash(theDefMap);  // 计算 CRC 校验值，后将用于检测数据的完整性
@@ -556,7 +556,7 @@ bool DefinitionReadCompiledFile(const SexyString& theCompiledFilePath, DefMap* t
                     }
                 }
             }
-            delete[](char*)aUncompressedBuffer;
+            delete[]aUncompressedBuffer;
         }
     }
     return false;
