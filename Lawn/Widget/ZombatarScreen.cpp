@@ -513,7 +513,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarTidbitID = mApp->ReanimationGetID(aZombatar);
 		}
@@ -529,7 +529,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarHairID = mApp->ReanimationGetID(aZombatar);
 		}
@@ -545,7 +545,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatarOutline, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarHairLineID = mApp->ReanimationGetID(aZombatarOutline);
 		}
@@ -561,7 +561,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarEyeWearID = mApp->ReanimationGetID(aZombatar);
 		}
@@ -577,7 +577,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatarOutline, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarEyeWearLineID = mApp->ReanimationGetID(aZombatarOutline);
 		}
@@ -593,7 +593,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarAccessoryID = mApp->ReanimationGetID(aZombatar);
 		}
@@ -609,7 +609,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatar, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarHatID = mApp->ReanimationGetID(aZombatar);
 		}
@@ -625,7 +625,7 @@ void ZombatarWidget::SetupZombie() {
 			AttachEffect* aAttachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatarOutline, 0, 0);
 			aAttachEffect->mDontDrawIfParentHidden = true;
 			aBodyReanim->mFrameBasePose = 0;
-			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -21.25f, 0.0f, 0.2f, 1.0f, 1.0f);
+			TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -20.0f, -2.5f, 0.2f, 1.0f, 1.0f);
 			//TodScaleRotateTransformMatrix(aAttachEffect->mOffset, -13.0f, -11.0f, 0.0f, 1.0f, 1.0f);
 			mZombie->mZombatarHatLineID = mApp->ReanimationGetID(aZombatarOutline);
 		}
