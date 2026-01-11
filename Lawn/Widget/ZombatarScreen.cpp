@@ -2514,7 +2514,6 @@ void ZombatarWidget::CreateZombatarClothes() {
 
 		Graphics aMemoryGraphics(aImage);
 		aMemoryGraphics.SetLinearBlend(true);
-		aMemoryGraphics.SetFastStretch(false);
 		aMemoryGraphics.PushState();
 		aMemoryGraphics.SetColorizeImages(true);
 		aMemoryGraphics.SetColor(Color(134, 147, 122));

@@ -277,7 +277,6 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 {
 	g->PushState();
 	g->SetLinearBlend(true);
-	g->SetFastStretch(false);
 
 	SeedType aSeedType = theSeedType;
 	if (aSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE)

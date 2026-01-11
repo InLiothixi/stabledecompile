@@ -4944,7 +4944,6 @@ void Plant::Draw(Graphics* g)
 
         g->PushState();
         g->SetLinearBlend(true);
-        g->SetFastStretch(false);
         g->SetScale(1.0f, 0.25f, 0.0f, 0.0f);
 
         int anAlpha = 255;
@@ -5235,7 +5234,6 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
         aOffsetX = -20.0f;
         aOffsetY = -40.0f;
         g->SetLinearBlend(true);
-        g->SetFastStretch(false);
 
         {
             Reanimation aReanim;
@@ -5302,7 +5300,6 @@ void Plant::DrawSeedType(Graphics* g, SeedType theSeedType, SeedType theImitater
 
     g->PushState();
     g->SetLinearBlend(true);
-    g->SetFastStretch(false);
 
     if (Challenge::IsZombieSeedType(aSeedType))
     {
