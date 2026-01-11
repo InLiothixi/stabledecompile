@@ -152,7 +152,7 @@ void WidgetManager::FlushDeferredOverlayWidgets(int theMaxPriority)
 					Graphics g(*mCurG);
 					g.Translate(-mMouseDestRect.mX, -mMouseDestRect.mY);
 					g.Translate(aWidget->mX, aWidget->mY);
-					g.SetFastStretch(!g.Is3D());
+					//g.SetFastStretch(!g.Is3D());
 					g.SetLinearBlend(g.Is3D());
 
 					aWidget->DrawOverlay(&g, aPriority);
@@ -450,7 +450,7 @@ bool WidgetManager::DrawScreen()
 			if ((aWidget->mDirty) && (aWidget->mVisible))
 			{
 				Graphics aClipG(g);
-				aClipG.SetFastStretch(!is3D);
+				//aClipG.SetFastStretch(!is3D);
 				aClipG.SetLinearBlend(is3D);
 				aClipG.Translate(aWidget->mX, aWidget->mY);				
 				aWidget->DrawAll(&aModalFlags, &aClipG);
