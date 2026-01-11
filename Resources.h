@@ -1009,9 +1009,12 @@ namespace Sexy
         IMAGE_LEVELSELECTOR_BOSS_THUMBNAIL_ID,
         IMAGE_LEVELSELECTOR_LEVEL_BUTTON_ID,
         IMAGE_LEVELSELECTOR_LEVEL_BUTTON_HIGHLIGHT_ID,
-        IMAGE_RIP_LEVER_HOLDER,
-        IMAGE_RIP_LEVER_STICK,
-        IMAGE_RIP_LEVER_STICK_PRESSED,
+        IMAGE_RIP_LEVER_HOLDER_ID,
+        IMAGE_RIP_LEVER_STICK_ID,
+        IMAGE_RIP_LEVER_STICK_PRESSED_ID,
+        IMAGE_UNLOCK_BUTTON_ID,
+        IMAGE_UNLOCK_BUTTON_HIGHLIGHT_ID,
+        IMAGE_UNLOCK_BUTTON_PRESSED_ID,
         RESOURCE_ID_MAX
     };
 
@@ -2022,6 +2025,9 @@ namespace Sexy
     extern Image* IMAGE_RIP_LEVER_STICK;
     extern Image* IMAGE_RIP_LEVER_STICK_PRESSED;
 
+    extern Image* IMAGE_UNLOCK_BUTTON;
+    extern Image* IMAGE_UNLOCK_BUTTON_HIGHLIGHT;
+    extern Image* IMAGE_UNLOCK_BUTTON_PRESSED;
 
     bool                ExtractResourcesByName(ResourceManager* theResourceManager, const char* theName);
     bool                ExtractDelayLoad_AlmanacResources(ResourceManager* theResourceManager);

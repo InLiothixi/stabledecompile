@@ -543,17 +543,6 @@ void TitleScreen::MouseDown(int x, int y, int theClickCount)
 	}
 }
 
-void TitleScreen::TouchDown(DWORD id, int x, int y)
-{
-	if (mApp->IsScreenSaver()) return;
-
-	if (mLoadingThreadComplete)
-	{
-		mApp->PlaySample(Sexy::SOUND_BUTTONCLICK);
-		mApp->LoadingCompleted();
-	}
-}
-
 //0x48E690
 void TitleScreen::KeyDown(KeyCode theKey)
 {

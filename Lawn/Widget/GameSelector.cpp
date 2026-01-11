@@ -305,6 +305,21 @@ GameSelector::GameSelector(LawnApp* theApp)
 	mAlmanacButton->mTranslateX = 0;
 	mAlmanacButton->mTranslateY = 0;
 
+#ifdef _HAS_UNLOCK
+	mUnlockButton = MakeNewButton(
+		GameSelector::GameSelector_Unlock,
+		this,
+		_S(""),
+		nullptr,
+		Sexy::IMAGE_BLANK,
+		Sexy::IMAGE_BLANK,
+		Sexy::IMAGE_BLANK
+	);
+	mUnlockButton->mClip = false;
+	mUnlockButton->Resize(700, 342, 60, 65);
+	mUnlockButton->mMouseVisible = false;
+#endif
+
 	mApp->mMusic->MakeSureMusicIsPlaying(MusicTune::MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME);
 
 	mStartingGame = false;
@@ -404,6 +419,9 @@ GameSelector::GameSelector(LawnApp* theApp)
 #ifdef _HAS_MORESCREEN
 	TrackButton(mQuickPlayButton, "SelectorScreen_BG_Right", 204, 329);
 #endif
+#ifdef _HAS_UNLOCK
+	TrackButton(mUnlockButton, "SelectorScreen_BG_Right", 629, 301);
+#endif
 
 	mApp->PlaySample(Sexy::SOUND_ROLL_IN);
 
@@ -482,7 +500,10 @@ GameSelector::~GameSelector()
 	if (mLevelSelectorWidget)
 		delete mLevelSelectorWidget;
 #endif
-
+#ifdef _HAS_UNLOCK
+	if (mUnlockButton)
+		delete mUnlockButton;
+#endif
 
 	delete mToolTip;
 }
@@ -768,6 +789,27 @@ void GameSelector::DrawOverlay(Graphics* g)
 {
 	g->SetLinearBlend(true);
 
+#ifdef _HAS_UNLOCK
+	{
+		g->PushState();
+
+		Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
+		int aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Right");
+		ReanimatorTransform aTransform;
+		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
+		g->TranslateF(691.5f, aTransform.mTransY - 41.0f + 329);
+		bool alreadyPressed = mApp->mPlayerInfo && mApp->mPlayerInfo->mHasUsedCheatKeys;
+		Sexy::Image* buttonImg = alreadyPressed ? IMAGE_UNLOCK_BUTTON_PRESSED : mUnlockButton->mIsOver ? Sexy::IMAGE_UNLOCK_BUTTON_HIGHLIGHT : Sexy::IMAGE_UNLOCK_BUTTON;
+		if (!alreadyPressed && mUnlockButton->mIsDown)
+		{
+			g->DrawImageF(buttonImg, 0, 0);
+			g->TranslateF(-1, 0);
+		}
+		g->DrawImageF(buttonImg, 0, 0);
+		g->PopState();
+	}
+#endif
+
 	for (int i = 0; i < 3; i++)
 		mApp->ReanimationGet(mFlowerReanimID[i])->Draw(g);
 
@@ -910,25 +952,6 @@ void GameSelector::DrawOverlay(Graphics* g)
 		}
 	}
 
-	if (mApp->mBetaValidate)
-	{
-		g->SetFont(Sexy::FONT_BRIANNETOD16);
-		g->SetColor(Color(200, 200, 200));
-
-		Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
-		int aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Right");
-		ReanimatorTransform aTransform;
-		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
-
-		int posX = (int)(aTransform.mTransX);
-		int posY = (int)(aTransform.mTransY);
-
-		if (gIsPartnerBuild)
-			g->DrawString(TodStringTranslate(_S("[PREVIEW_BUILD]")), posX + 27 - 71, posY + 594 - 41);
-		else
-			g->DrawString(TodStringTranslate(_S("[BETA_BUILD]")), posX + 27 - 71, posY + 594 - 41);
-	}
-
 
 	Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
 	int aLeftIdx = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Left");
@@ -967,6 +990,27 @@ void GameSelector::DrawOverlay(Graphics* g)
 	}
 
 	mApp->ReanimationGet(mLeafReanimID)->Draw(g);
+
+#ifndef _DEBUG 
+	if (mApp->mBetaValidate)
+#endif
+	{
+		g->SetFont(Sexy::FONT_BRIANNETOD16);
+		g->SetColor(Color(200, 200, 200, 255));
+
+		Reanimation* aSelectorReanim = mApp->ReanimationGet(mSelectorReanimID);
+		int aTrackIndex = aSelectorReanim->FindTrackIndex("SelectorScreen_BG_Right");
+		ReanimatorTransform aTransform;
+		aSelectorReanim->GetCurrentTransform(aTrackIndex, &aTransform);
+
+		int posX = (int)(aTransform.mTransX);
+		int posY = (int)(aTransform.mTransY);
+
+		if (gIsPartnerBuild)
+			g->DrawString(TodStringTranslate(_S("[PREVIEW_BUILD]")), posX + 27 - 71, posY + 594 - 41);
+		else
+			g->DrawString(TodStringTranslate(_S("[BETA_BUILD]")), posX + 27 - 71, posY + 594 - 41);
+	}
 
 	Reanimation* aSpotLightReanim = mApp->ReanimationTryToGet(mSpotLightID);
 	if (aSpotLightReanim)
@@ -1079,6 +1123,10 @@ void GameSelector::Update()
 #ifdef _HAS_MORESCREEN
 		mQuickPlayButton->SetOffset(aNewX, aNewY);
 #endif
+#ifdef _HAS_UNLOCK
+		mUnlockButton->SetOffset(aNewX, aNewY);
+#endif
+
 #ifdef _HAS_LEVELSELECTOR
 		mLevelSelectorWidget->Move(aNewX + mApp->mWidth, aNewY);
 		// @Patoke: make sure these are drawn even outside of bounds (force redraw)
@@ -1242,6 +1290,9 @@ void GameSelector::Update()
 #ifdef _HAS_MORESCREEN
 			mQuickPlayButton->mMouseVisible = true;
 #endif
+#ifdef _HAS_UNLOCK
+			mUnlockButton->mMouseVisible = true;
+#endif
 
 			
 			if (mApp->mPlayerInfo == nullptr)
@@ -1358,6 +1409,7 @@ void GameSelector::Update()
 	TrackButton(mHelpButton, "SelectorScreen_BG_Right", 576.0f, 458.0f);
 	TrackButton(mAlmanacButton, "SelectorScreen_BG_Right", 256.0f, 387.0f);
 	TrackButton(mStoreButton, "SelectorScreen_BG_Right", 334.0f, 441.0f);
+	TrackButton(mUnlockButton, "SelectorScreen_BG_Right", 629, 301);
 
 	//TrackButton(mChangeUserButton, "woodsign2", 24.0f, 10.0f);
 	//TrackButton(mZombatarButton, "woodsign3", 0.f, 0.f); // @Patoke: add shart here
@@ -1457,6 +1509,9 @@ void GameSelector::AddedToManager(WidgetManager* theWidgetManager)
 #ifdef _HAS_LEVELSELECTOR
 	theWidgetManager->AddWidget(mLevelSelectorWidget);
 #endif
+#ifdef _HAS_UNLOCK
+	theWidgetManager->AddWidget(mUnlockButton);
+#endif
 }
 
 //0x44BCA0
@@ -1492,6 +1547,9 @@ void GameSelector::RemovedFromManager(WidgetManager* theWidgetManager)
 #ifdef _HAS_LEVELSELECTOR
 	theWidgetManager->RemoveWidget(mLevelSelectorWidget);
 #endif
+#ifdef _HAS_UNLOCK
+	theWidgetManager->RemoveWidget(mUnlockButton);
+#endif
 }
 
 //0x44BD80
@@ -1524,6 +1582,9 @@ void GameSelector::OrderInManagerChanged()
 #endif
 #ifdef _HAS_LEVELSELECTOR
 	mWidgetManager->PutInfront(mLevelSelectorWidget, this);
+#endif
+#ifdef _HAS_UNLOCK
+	mWidgetManager->PutInfront(mUnlockButton, this);
 #endif
 }
 
@@ -1619,6 +1680,7 @@ void GameSelector::KeyChar(char theChar)
 	{
 		TodTraceAndLog("Selector cheat key '%c'", theChar);
 
+		mApp->mPlayerInfo->SetLevel(1);
 		mApp->mPlayerInfo->mFinishedAdventure = 2;
 		mApp->mPlayerInfo->AddCoins(50000);
 		mApp->mPlayerInfo->mHasUsedCheatKeys = true;
@@ -1626,10 +1688,34 @@ void GameSelector::KeyChar(char theChar)
 		mApp->mPlayerInfo->mHasUnlockedPuzzleMode = true;
 		mApp->mPlayerInfo->mHasUnlockedSurvivalMode = true;
 
-		for (int i = 1; i < 100; i++)
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FERTILIZER] = PURCHASE_COUNT_OFFSET + 5;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_BUG_SPRAY] = PURCHASE_COUNT_OFFSET + 5;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_CHOCOLATE] = PURCHASE_COUNT_OFFSET + 5;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_TREE_FOOD] = PURCHASE_COUNT_OFFSET + 5;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_GATLINGPEA] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_TWINSUNFLOWER] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_GLOOMSHROOM] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_CATTAIL] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_WINTERMELON] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_GOLD_MAGNET] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_SPIKEROCK] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_COBCANNON] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_IMITATER] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PACKET_UPGRADE] = 4;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_POOL_CLEANER] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_ROOF_CLEANER] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PHONOGRAPH] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_GARDENING_GLOVE] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_MUSHROOM_GARDEN] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_WHEEL_BARROW] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_AQUARIUM_GARDEN] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_TREE_OF_WISDOM] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FIRSTAID] = 1;
+
+		/*for (int i = 1; i < 100; i++)
 			if (i != (int)GameMode::GAMEMODE_TREE_OF_WISDOM && i != (int)GameMode::GAMEMODE_SCARY_POTTER_ENDLESS &&
 				i != (int)GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS && (i < (int)GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_1 || i >(int)GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_5))
-				mApp->mPlayerInfo->mChallengeRecords[i - 1] = 20;
+				mApp->mPlayerInfo->mChallengeRecords[i - 1] = 20;*/
 		SyncProfile(true);
 
 		mApp->EraseFile(GetSavedGameName(GameMode::GAMEMODE_ADVENTURE, mApp->mPlayerInfo->mId));
@@ -1697,6 +1783,9 @@ void GameSelector::ButtonPress(int theId, int theClickCount)
 		theId == GameSelector::GameSelector_Puzzle || theId == GameSelector::GameSelector_Survival  
 #ifdef _HAS_ZOMBATAR
 		|| theId == GameSelector::GameSelector_Zombatar
+#endif
+#ifdef _HAS_UNLOCK
+		|| theId == GameSelector::GameSelector_Unlock
 #endif
 		)
 		mApp->PlaySample(Sexy::SOUND_GRAVEBUTTON);
@@ -1846,16 +1935,31 @@ void GameSelector::ButtonDepress(int theId)
 		break;
 	}
 #endif
+#ifdef _HAS_ACHIEVEMENTS
 	case GameSelector::GameSelector_AchievementsBack: // @Patoke: seems to be unused
 		//SlideTo(0, 0);
 		break;
 	case GameSelector::GameSelector_Achievements:
 		ShowAchievementsScreen();
 		break;
+#endif
+#ifdef _HAS_MORESCREEN
 	case GameSelector::GameSelector_QuickPlay:
 		ShowMoreScreen();
 		// GameSelector::ShowQuickPlayScreen();
 		break;
+#endif
+#ifdef _HAS_UNLOCK
+	case GameSelector::GameSelector_Unlock:
+		if (mApp->mPlayerInfo)
+		{
+			if (mApp->mPlayerInfo->mHasUsedCheatKeys)
+				mApp->DoDialog(Dialogs::DIALOG_ALREADY_UNLOCK, true, _S("[ALREADY_UNLOCKED_DIALOG_HEADER]"), _S("[ALREADY_UNLOCKED_DIALOG_BODY]"), _S("OK"), Dialog::BUTTONS_FOOTER);
+			else
+				mApp->DoDialog(Dialogs::DIALOG_UNLOCK, true, _S("[UNLOCK_DIALOG_HEADER]"), _S("[UNLOCK_DIALOG_BODY]"), _S(""), Dialog::BUTTONS_YES_NO);
+		}
+		break;
+#endif
 	}
 }
 
@@ -1955,7 +2059,7 @@ void GameSelector::AddPreviewProfiles()
 		aProfile->mPurchases[StoreItem::STORE_ITEM_PLANT_SPIKEROCK] = 1;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_PLANT_COBCANNON] = 1;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_PLANT_IMITATER] = 1;
-		aProfile->mPurchases[StoreItem::STORE_ITEM_PACKET_UPGRADE] = 3;
+		aProfile->mPurchases[StoreItem::STORE_ITEM_PACKET_UPGRADE] = 4;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_POOL_CLEANER] = 1;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_ROOF_CLEANER] = 1;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_PHONOGRAPH] = 1;
@@ -1964,6 +2068,7 @@ void GameSelector::AddPreviewProfiles()
 		aProfile->mPurchases[StoreItem::STORE_ITEM_WHEEL_BARROW] = 1;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_AQUARIUM_GARDEN] = 1;
 		aProfile->mPurchases[StoreItem::STORE_ITEM_TREE_OF_WISDOM] = 1;
+		mApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FIRSTAID] = 1;
 
 		aProfile->mChallengeRecords[(int)GameMode::GAMEMODE_TREE_OF_WISDOM - 1] = 1;
 		for (int i = 1; i < 100; i++)
@@ -1983,18 +2088,19 @@ void GameSelector::SlideTo(int theX, int theY) {
 	mStartX = mX;
 	mStartY = mY;
 }
-
+#ifdef _HAS_ACHIEVEMENTS
 // GOTY @Patoke: 0x450200
 void GameSelector::ShowAchievementsScreen() {
 	SlideTo(0, -mApp->mHeight);
-#ifdef _HAS_ACHIEVEMENTS
+
 	mWidgetManager->SetFocus(mAchievementsWidget);
-#endif
+
 #ifdef _HAS_MORESCREEN
 	mMoreWidget->SetDisabled(true);
 #endif
 	DisableButtons(true);
 }
+#endif
 #ifdef _HAS_ZOMBATAR
 void GameSelector::ShowZombatarScreen() {
 	SlideTo(-mApp->mWidth, 0);
@@ -2013,23 +2119,21 @@ void GameSelector::ShowZombatarScreen() {
 	DisableButtons(true);
 }
 #endif
+#ifdef _HAS_MORESCREEN
 void GameSelector::ShowMoreScreen() {
 	SlideTo(mApp->mWidth, 0);
-#ifdef _HAS_MORESCREEN
+
 	mWidgetManager->SetFocus(mMoreWidget);
 	mMoreWidget->DisableButtons(false);
-#endif
 	DisableButtons(true);
 }
-
+#endif
+#ifdef _HAS_LEVELSELECTOR
 void GameSelector::ShowQuickplayScreen() {
 	SlideTo(-mApp->mWidth, 0);
-#ifdef _HAS_LEVELSELECTOR
+
 	mWidgetManager->SetFocus(mLevelSelectorWidget);
 	mWidgetManager->PutBehind(mZombatarWidget, mLevelSelectorWidget);
-#endif
-
-#ifdef _HAS_LEVELSELECTOR
 	//int currentStage = min((int)(mApp->mPlayerInfo->mLevel / 10.0f), 4) + 1;
 	//currentStage = 1;
 	//mLevelSelectorWidget->theCurrentId = currentStage;
@@ -2037,9 +2141,9 @@ void GameSelector::ShowQuickplayScreen() {
 	mLevelSelectorWidget->mHasFinishedSliding = false;
 	mLevelSelectorWidget->mIsSlidingOut = false;
 	mMoreWidget->DisableButtons(true);
-#endif
 	DisableButtons(true);
 }
+#endif
 
 void GameSelector::ShowGameSelectorScreen() {
 	SlideTo(0, 0);
@@ -2072,23 +2176,7 @@ void GameSelector::DisableButtons(bool isDisabled){
 #ifdef _HAS_MORESCREEN
 	mQuickPlayButton->SetDisabled(isDisabled);
 #endif
-}
-
-void GameSelector::TouchDown(DWORD id, int x, int y)
-{
-	Widget::TouchDown(id, x, y);
-
-	for (int i = 0; i < 3; i++)
-	{
-		Reanimation* aFlowerReanim = mApp->ReanimationGet(mFlowerReanimID[i]);
-		if (!mApp->mFlowersPlucked[i] && aFlowerReanim->mAnimRate <= 0.0f && Distance2D(x, y, gFlowerCenter[i][0], gFlowerCenter[i][1]) < 20.0f)
-		{
-			mApp->mFlowersPlucked[i] = true;
-			aFlowerReanim->mAnimRate = 24.0f;
-			mApp->PlayFoley(FoleyType::FOLEY_LIMBS_POP);
-		}
-	}
-
-	if (mApp->mTodCheatKeys && mStartingGame && mStartingGameCounter < 450)
-		mStartingGameCounter = 450;
+#ifdef _HAS_UNLOCK
+	mUnlockButton->SetDisabled(isDisabled);
+#endif
 }

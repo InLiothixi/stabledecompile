@@ -126,5 +126,7 @@ void MoreWidget::ButtonPress(int theId, int theClickCount)
 void MoreWidget::ButtonDepress(int theId)
 {
 	if (theId == MoreWidget::More_Back)	mApp->mGameSelector->ShowGameSelectorScreen();
+#ifdef _HAS_LEVELSELECTOR
 	else if (theId == MoreWidget::More_Quickplay) mApp->mGameSelector->ShowQuickplayScreen();
+#endif
 }

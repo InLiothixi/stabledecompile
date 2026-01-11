@@ -32,22 +32,29 @@ private:
     enum
     {
         GameSelector_Adventure = 100,
-        GameSelector_Minigame = 101,
-        GameSelector_Puzzle = 102,
-        GameSelector_Options = 103,
-        GameSelector_Help = 104,
-        GameSelector_Quit = 105,
-        GameSelector_ChangeUser = 106,
-        GameSelector_Store = 107,
-        GameSelector_Almanac = 108,
-        GameSelector_ZenGarden = 109,
-        GameSelector_Survival = 110,
+        GameSelector_Minigame,
+        GameSelector_Puzzle,
+        GameSelector_Options,
+        GameSelector_Help,
+        GameSelector_Quit,
+        GameSelector_ChangeUser,
+        GameSelector_Store,
+        GameSelector_Almanac,
+        GameSelector_ZenGarden,
+        GameSelector_Survival,
 #ifdef _HAS_ZOMBATAR
-        GameSelector_Zombatar = 111, // @Patoke: add stuff after 110
+        GameSelector_Zombatar, // @Patoke
 #endif
-        GameSelector_AchievementsBack = 112,
-        GameSelector_Achievements = 113,
-        GameSelector_QuickPlay = 114
+#ifdef _HAS_ACHIEVEMENTS
+        GameSelector_AchievementsBack,
+        GameSelector_Achievements,
+#endif 
+#ifdef _HAS_MORESCREEN
+        GameSelector_QuickPlay,
+#endif 
+#ifdef _HAS_UNLOCK
+        GameSelector_Unlock,
+#endif
     };
 
 public:
@@ -66,9 +73,16 @@ public:
 #ifdef _HAS_ZOMBATAR
     NewLawnButton*              mZombatarButton;             //+GOTY @Patoke: 0xC0
 #endif
+#ifdef _HAS_ACHIEVEMENTS
     NewLawnButton*              mAchievementsButton;        //+GOTY @Patoke: 0xC4
+#endif
     NewLawnButton*              mTrophyButton;
+#ifdef _HAS_MORESCREEN
     NewLawnButton*              mQuickPlayButton;           //+GOTY @Patoke: 0xC8
+#endif
+#ifdef _HAS_UNLOCK
+    NewLawnButton*              mUnlockButton;
+#endif
     Widget*                     mOverlayWidget;             //+0xBC
     bool                        mStartingGame;              //+0xC0
     int                         mStartingGameCounter;       //+0xC4
@@ -136,15 +150,20 @@ public:
     void                        AddPreviewProfiles();
     // @Patoke: implement functions
     /*inline*/ void             SlideTo(int theX, int theY);
+#ifdef _HAS_ACHIEVEMENTS
     void                        ShowAchievementsScreen(); // @Patoke: unofficial name
+#endif
 #ifdef _HAS_ZOMBATAR
     void                        ShowZombatarScreen();
 #endif
+#ifdef _HAS_MORESCREEN
     void                        ShowMoreScreen();
+#endif
+#ifdef _HAS_LEVELSELECTOR
     void                        ShowQuickplayScreen();
+#endif
     void                        ShowGameSelectorScreen();
     void                        DisableButtons(bool isDisabled);
-    virtual void                TouchDown(DWORD id, int x, int y);
 };
 
 class GameSelectorOverlay : public Widget

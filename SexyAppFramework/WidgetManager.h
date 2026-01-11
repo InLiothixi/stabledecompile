@@ -133,13 +133,6 @@ public:
 	bool					KeyChar(SexyChar theChar);
 	bool					KeyDown(KeyCode key);
 	bool					KeyUp(KeyCode key);
-	int						FindTouchIndexByID(DWORD id);
-	int						AllocateTouchSlot(DWORD id, int x, int y, Widget* widget);
-	void					ReleaseTouchSlot(DWORD id);
-	bool					TouchDown(DWORD id, int x, int y);
-	bool					TouchMove(DWORD id, int x, int y);
-	bool					TouchUp(DWORD id, int x, int y);
-
 
 	bool					IsLeftButtonDown();
 	bool					IsMiddleButtonDown();

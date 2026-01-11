@@ -2274,6 +2274,52 @@ void LawnApp::ButtonDepress(int theId)
 			mRIPMode = true;
 			mPlayerInfo->mDidRIPMode = true;
 			return;
+		
+		case Dialogs::DIALOG_UNLOCK:
+		{
+			KillDialog(Dialogs::DIALOG_UNLOCK);
+			if (mPlayerInfo)
+			{
+				mPlayerInfo->SetLevel(1);
+				mPlayerInfo->mFinishedAdventure = 2;
+				mPlayerInfo->AddCoins(50000);
+				mPlayerInfo->mHasUsedCheatKeys = true;
+				mPlayerInfo->mHasUnlockedMinigames = true;
+				mPlayerInfo->mHasUnlockedPuzzleMode = true;
+				mPlayerInfo->mHasUnlockedSurvivalMode = true;
+
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FERTILIZER] = PURCHASE_COUNT_OFFSET + 5;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_BUG_SPRAY] = PURCHASE_COUNT_OFFSET + 5;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_CHOCOLATE] = PURCHASE_COUNT_OFFSET + 5;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_TREE_FOOD] = PURCHASE_COUNT_OFFSET + 5;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_GATLINGPEA] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_TWINSUNFLOWER] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_GLOOMSHROOM] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_CATTAIL] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_WINTERMELON] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_GOLD_MAGNET] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_SPIKEROCK] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_COBCANNON] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PLANT_IMITATER] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PACKET_UPGRADE] = 4;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_POOL_CLEANER] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_ROOF_CLEANER] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_PHONOGRAPH] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_GARDENING_GLOVE] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_MUSHROOM_GARDEN] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_WHEEL_BARROW] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_AQUARIUM_GARDEN] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_TREE_OF_WISDOM] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_FIRSTAID] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_GOLD_WATERINGCAN] = 1;
+				mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_STINKY_THE_SNAIL] = 1;
+
+				if (mGameSelector) mGameSelector->SyncProfile(true);
+
+				EraseFile(GetSavedGameName(GameMode::GAMEMODE_ADVENTURE, mPlayerInfo->mId));
+			}
+			return;
+		}
 
 		//case Dialogs::DIALOG_MORESETTINGS:
 		//{
