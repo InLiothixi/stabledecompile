@@ -753,12 +753,12 @@ void Projectile::UpdateLobMotion()
 		mRotation = -PI / 2;
 	}
 
-	mPosZ += mVelZ + 0.5f * mAccZ;
-	mVelZ += mAccZ;
-	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY)
-	{
-		mVelZ += mAccZ;
+	float aAccZ = mAccZ;
+	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY) {
+		aAccZ *= 2;
 	}
+	mPosZ += mVelZ + 0.5f * aAccZ;
+	mVelZ += aAccZ;
 	mPosX += mVelX;
 	mPosY += mVelY;
 
