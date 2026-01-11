@@ -1530,7 +1530,7 @@ void CutScene::ShowShovel()
 		mApp->IsIZombieLevel())
 		return;
 
-	if (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4)
+	if (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4 || mBoard->mLevel > 4)
 	{
 		mBoard->mShowShovel = true;
 	}
