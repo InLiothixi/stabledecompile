@@ -1409,8 +1409,9 @@ void GameSelector::Update()
 	TrackButton(mHelpButton, "SelectorScreen_BG_Right", 576.0f, 458.0f);
 	TrackButton(mAlmanacButton, "SelectorScreen_BG_Right", 256.0f, 387.0f);
 	TrackButton(mStoreButton, "SelectorScreen_BG_Right", 334.0f, 441.0f);
+#ifdef _HAS_UNLOCK
 	TrackButton(mUnlockButton, "SelectorScreen_BG_Right", 629, 301);
-
+#endif
 	//TrackButton(mChangeUserButton, "woodsign2", 24.0f, 10.0f);
 	//TrackButton(mZombatarButton, "woodsign3", 0.f, 0.f); // @Patoke: add shart here
 
