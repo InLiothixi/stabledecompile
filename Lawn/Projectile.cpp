@@ -753,6 +753,7 @@ void Projectile::UpdateLobMotion()
 		mRotation = -PI / 2;
 	}
 
+	mPosZ += mVelZ + 0.5f * mAccZ;
 	mVelZ += mAccZ;
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HIGH_GRAVITY)
 	{
@@ -760,7 +761,6 @@ void Projectile::UpdateLobMotion()
 	}
 	mPosX += mVelX;
 	mPosY += mVelY;
-	mPosZ += mVelZ;
 
 	bool isRising = mVelZ < 0.0f;
 	if (isRising && (mProjectileType == ProjectileType::PROJECTILE_BASKETBALL || mProjectileType == ProjectileType::PROJECTILE_COBBIG))
