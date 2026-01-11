@@ -497,7 +497,7 @@ void LawnApp::PreNewGame(GameMode theGameMode, bool theLookForSavedGame, int the
 	EraseFile(aFileName);
 	int thePlayerLevel = mPlayerInfo->mLevel;
 	bool isReplaying = mPlayerLevelRef > theLevel;
-	mPlayerLevelRef = thePlayerLevel;
+	mPlayerLevelRef = isReplaying ? thePlayerLevel : -1;
 	mPlayerInfo->mLevel = theLevel;
 	NewGame();
 	mBoard->mIsReplay = isReplaying;
@@ -916,7 +916,7 @@ void LawnApp::FinishUserDialog(bool isYes)
 					mGameSelector->SyncProfile(true);
 				}
 			}
-			mPlayerLevelRef = mPlayerInfo->GetLevel();
+			mPlayerLevelRef = mPlayerInfo ? mPlayerInfo->GetLevel() : -1;
 		}
 
 		KillDialog(Dialogs::DIALOG_USERDIALOG);
@@ -1132,7 +1132,7 @@ void LawnApp::FinishRenameUserDialog(bool isYes)
 	{
 		mPlayerInfo = mProfileMgr->GetProfile(aNewName);
 	}
-	mPlayerLevelRef = mPlayerInfo->GetLevel();
+	mPlayerLevelRef = mPlayerInfo ? mPlayerInfo->GetLevel() : -1;
 
 	aUserDialog->FinishRenameUser(aNewName);
 	mWidgetManager->MarkAllDirty();
@@ -1413,8 +1413,7 @@ void LawnApp::Init()
 	{
 		aCurUser = StringToSexyString(theUser);
 		mPlayerInfo = mProfileMgr->GetProfile(aCurUser);
-		if (mPlayerInfo)
-			mPlayerLevelRef = mPlayerInfo->GetLevel();
+		mPlayerLevelRef = mPlayerInfo ? mPlayerInfo->GetLevel() : -1;
 	}
 	if (mPlayerInfo == nullptr)
 	{

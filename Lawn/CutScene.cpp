@@ -860,7 +860,7 @@ void CutScene::StartLevelIntro()
 	}
 	else if (mApp->IsFirstTimeAdventureMode() && aLevel == 12)
 	{
-		mCrazyDaveDialogStart = 1401;
+		mCrazyDaveDialogStart = CanGetPacketUpgrade() ? 1501 : 1401;
 	}
 	else if (mApp->IsFirstTimeAdventureMode() && aLevel >= 13 && aLevel <= 24 && aLevel != 15 && aLevel != 20 && aLevel != 21 && CanGetPacketUpgrade())
 	{

@@ -626,7 +626,7 @@ void GameSelector::SyncProfile(bool theShowLoading)
 	mLevel = 1;
 	if (mApp->mPlayerInfo)
 		mLevel = mApp->mPlayerInfo->GetLevel();
-	mApp->mPlayerLevelRef = mLevel;
+	mApp->mPlayerLevelRef = -1;
 	mShowStartButton = true;
 	mMinigamesLocked = true;
 	mPuzzleLocked = true;
