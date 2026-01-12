@@ -558,7 +558,7 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 				g->SetColor(Color(92, 92, 92));
 				g->SetColorizeImages(true);
 			}
-			if (theChallengeIndex == mUnlockChallengeIndex)
+			if (theChallengeIndex == mUnlockChallengeIndex &&mApp->mPlayerInfo && !mApp->mPlayerInfo->mHasUsedCheatKeys)
 			{
 				if (mUnlockState == UNLOCK_SHAKING)
 				{
@@ -595,7 +595,7 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 
 			SexyString aName = TodStringTranslate(aDef.mChallengeName);
 
-			if (aChallengeButton->mDisabled || (theChallengeIndex == mUnlockChallengeIndex && mUnlockState == UNLOCK_SHAKING))
+			if (aChallengeButton->mDisabled || (theChallengeIndex == mUnlockChallengeIndex && mUnlockState == UNLOCK_SHAKING && mApp->mPlayerInfo && !mApp->mPlayerInfo->mHasUsedCheatKeys))
 			{
 #ifdef _DS_MINIGAMES
 				if (!(aDef.mChallengeMode >= GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER && aDef.mChallengeMode <= GameMode::GAMEMODE_CHALLENGE_ZOMBIE_TRAP))
@@ -695,7 +695,7 @@ void ChallengeScreen::DrawButton(Graphics* g, int theChallengeIndex)
 			// ▲ 绘制关卡锁定或关卡完成的贴图以及关卡最高记录的文本等
 			// ============================================================================================
 			int aRecord = mApp->mPlayerInfo->mChallengeRecords[theChallengeIndex];
-			if (theChallengeIndex == mUnlockChallengeIndex)
+			if (theChallengeIndex == mUnlockChallengeIndex && mApp->mPlayerInfo && !mApp->mPlayerInfo->mHasUsedCheatKeys)
 			{
 				Image* aLockImage = Sexy::IMAGE_LOCK;
 				if (mUnlockState == UNLOCK_FADING)
@@ -798,7 +798,7 @@ void ChallengeScreen::Update()
 
 	if (mUnlockStateCounter > 0) mUnlockStateCounter--;
 
-	if (mUnlockState == UNLOCK_SHAKING)
+	if (mUnlockState == UNLOCK_SHAKING && mApp->mPlayerInfo && !mApp->mPlayerInfo->mHasUsedCheatKeys)
 	{
 		if (mUnlockStateCounter == 0)
 		{
@@ -814,7 +814,7 @@ void ChallengeScreen::Update()
 			mLockShakeY = RandRangeFloat(-2, 2);
 		}
 	}
-	else if (mUnlockState == UNLOCK_FADING && mUnlockStateCounter == 0)
+	else if (mUnlockState == UNLOCK_FADING && mUnlockStateCounter == 0 && mApp->mPlayerInfo && !mApp->mPlayerInfo->mHasUsedCheatKeys)
 	{
 		mUnlockState = UNLOCK_OFF;
 		mUnlockStateCounter = 0;
