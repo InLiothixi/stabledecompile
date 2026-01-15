@@ -111,14 +111,14 @@
     <_ProjectFileVersion>16.0.29511.113</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;D:\SDL3-3.4.0\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)SDL3-3.4.0\lib\x64</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
     <TargetName>PlantsVsZombies_x64</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
@@ -126,14 +126,14 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;D:\SDL3-3.4.0\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)SDL3-3.4.0\lib\x64</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
     <TargetName>PlantsVsZombies_x64</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
@@ -141,14 +141,14 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;D:\SDL3-3.4.0\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)SDL3-3.4.0\lib\x64</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
     <TargetName>PlantsVsZombies_x64</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
@@ -156,14 +156,14 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;D:\SDL3-3.4.0\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)SDL3-3.4.0\lib\x64</IncludePath>
     <LibraryPath>$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
     <TargetName>PlantsVsZombies_x64</TargetName>
     <OutDir>$(SolutionDir)Output\</OutDir>
