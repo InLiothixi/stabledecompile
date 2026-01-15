@@ -17,12 +17,12 @@ KeyNameEntry aKeyCodeArray[] =
 	{"RBUTTON", KEYCODE_RBUTTON},
 	{"CANCEL", KEYCODE_CANCEL},
 	{"MBUTTON", KEYCODE_MBUTTON},
-	{"BACK", KEYCODE_BACK},
+	{"BACKSPACE", KEYCODE_BACK},
 	{"TAB", KEYCODE_TAB},
 	{"CLEAR", KEYCODE_CLEAR},
 	{"RETURN", KEYCODE_RETURN},
-	{"SHIFT", KEYCODE_SHIFT},
-	{"CONTROL", KEYCODE_CONTROL},
+	{"LEFT SHIFT", KEYCODE_SHIFT},
+	{"LEFT CTRL", KEYCODE_CONTROL},
 	{"MENU", KEYCODE_MENU},
 	{"PAUSE", KEYCODE_PAUSE},
 	{"CAPITAL", KEYCODE_CAPITAL},
@@ -39,8 +39,8 @@ KeyNameEntry aKeyCodeArray[] =
 	{"ACCEPT", KEYCODE_ACCEPT},
 	{"MODECHANGE", KEYCODE_MODECHANGE},
 	{"SPACE", KEYCODE_SPACE},
-	{"PRIOR", KEYCODE_PRIOR},
-	{"NEXT", KEYCODE_NEXT},
+	{"PAGEUP", KEYCODE_PRIOR},
+	{"PAGEDOWN", KEYCODE_NEXT},
 	{"END", KEYCODE_END},
 	{"HOME", KEYCODE_HOME},
 	{"LEFT", KEYCODE_LEFT},
@@ -68,11 +68,11 @@ KeyNameEntry aKeyCodeArray[] =
 	{"NUMPAD8", KEYCODE_NUMPAD8},
 	{"NUMPAD9", KEYCODE_NUMPAD9},
 	{"MULTIPLY", KEYCODE_MULTIPLY},
-	{"ADD", KEYCODE_ADD},
-	{"SEPARATOR", KEYCODE_SEPARATOR},
-	{"SUBTRACT", KEYCODE_SUBTRACT},
-	{"DECIMAL", KEYCODE_DECIMAL},
-	{"DIVIDE", KEYCODE_DIVIDE},
+	{"Keypad +", KEYCODE_ADD},
+	{"Keypad |", KEYCODE_SEPARATOR},
+	{"Keypad -", KEYCODE_SUBTRACT},
+	{"Keypad .", KEYCODE_DECIMAL},
+	{"Keypad /", KEYCODE_DIVIDE},
 	{"F1", KEYCODE_F1},
 	{"F2", KEYCODE_F2},
 	{"F3", KEYCODE_F3},
@@ -98,8 +98,149 @@ KeyNameEntry aKeyCodeArray[] =
 	{"F23", KEYCODE_F23},
 	{"F24", KEYCODE_F24},
 	{"NUMLOCK", KEYCODE_NUMLOCK},
-	{"SCROLL", KEYCODE_SCROLL}	
+	{"SCROLL", KEYCODE_SCROLL},
+	{"LEFT ALT", KEYCODE_MENU},
+	{"RIGHT ALT", KEYCODE_MENU},
+	{"RIGHT SHIFT", KEYCODE_SHIFT},
+	{"RIGHT CTRL", KEYCODE_CONTROL}
 };
+
+
+typedef struct
+{
+	SDL_Keycode mSDLKey;
+	KeyCodeSDL mKeyCode;
+} KeyNameEntrySDL;
+
+KeyNameEntrySDL aKeyCodeArraySDL[] = { {SDLK_UNKNOWN, KEYCODESDL_UNKNOWN},
+								{SDLK_CANCEL, KEYCODESDL_CANCEL},
+								{SDLK_BACKSPACE, KEYCODESDL_BACK},
+								{SDLK_TAB, KEYCODESDL_TAB},
+								{SDLK_CLEAR, KEYCODESDL_CLEAR},
+								{SDLK_RETURN, KEYCODESDL_RETURN},
+								{SDLK_LSHIFT, KEYCODESDL_SHIFT},
+								{SDLK_RSHIFT, KEYCODESDL_SHIFT},
+								{SDLK_LCTRL, KEYCODESDL_CONTROL},
+								{SDLK_RCTRL, KEYCODESDL_CONTROL},
+								{SDLK_MENU, KEYCODESDL_MENU},
+								{SDLK_PAUSE, KEYCODESDL_PAUSE},
+								{SDLK_CAPSLOCK, KEYCODESDL_CAPITAL},
+								{SDLK_ESCAPE, KEYCODESDL_ESCAPE},
+								{SDLK_SPACE, KEYCODESDL_SPACE},
+								{SDLK_PAGEUP, KEYCODESDL_PAGEUP},
+								{SDLK_PAGEDOWN, KEYCODESDL_PAGEDOWN},
+								{SDLK_END, KEYCODESDL_END},
+								{SDLK_HOME, KEYCODESDL_HOME},
+								{SDLK_LEFT, KEYCODESDL_LEFT},
+								{SDLK_UP, KEYCODESDL_UP},
+								{SDLK_RIGHT, KEYCODESDL_RIGHT},
+								{SDLK_DOWN, KEYCODESDL_DOWN},
+								{SDLK_SELECT, KEYCODESDL_SELECT},
+								{SDLK_EXECUTE, KEYCODESDL_EXECUTE},
+								{SDLK_PRINTSCREEN, KEYCODESDL_SNAPSHOT},
+								{SDLK_INSERT, KEYCODESDL_INSERT},
+								{SDLK_DELETE, KEYCODESDL_DELETE},
+								{SDLK_HELP, KEYCODESDL_HELP},
+								{SDLK_LGUI, KEYCODESDL_LWIN},
+								{SDLK_RGUI, KEYCODESDL_RWIN},
+								{SDLK_APPLICATION, KEYCODESDL_APPS},
+								{SDLK_KP_0, KEYCODESDL_NUMPAD0},
+								{SDLK_KP_1, KEYCODESDL_NUMPAD1},
+								{SDLK_KP_2, KEYCODESDL_NUMPAD2},
+								{SDLK_KP_3, KEYCODESDL_NUMPAD3},
+								{SDLK_KP_4, KEYCODESDL_NUMPAD4},
+								{SDLK_KP_5, KEYCODESDL_NUMPAD5},
+								{SDLK_KP_6, KEYCODESDL_NUMPAD6},
+								{SDLK_KP_7, KEYCODESDL_NUMPAD7},
+								{SDLK_KP_8, KEYCODESDL_NUMPAD8},
+								{SDLK_KP_9, KEYCODESDL_NUMPAD9},
+								{SDLK_KP_MULTIPLY, KEYCODESDL_MULTIPLY},
+								{SDLK_KP_PLUS, KEYCODESDL_ADD},
+								{SDLK_KP_DECIMAL, KEYCODESDL_SEPARATOR},
+								{SDLK_KP_MINUS, KEYCODESDL_SUBTRACT},
+								{SDLK_KP_DECIMAL, KEYCODESDL_DECIMAL},
+								{SDLK_KP_DIVIDE, KEYCODESDL_DIVIDE},
+								{SDLK_F1, KEYCODESDL_F1},
+								{SDLK_F2, KEYCODESDL_F2},
+								{SDLK_F3, KEYCODESDL_F3},
+								{SDLK_F4, KEYCODESDL_F4},
+								{SDLK_F5, KEYCODESDL_F5},
+								{SDLK_F6, KEYCODESDL_F6},
+								{SDLK_F7, KEYCODESDL_F7},
+								{SDLK_F8, KEYCODESDL_F8},
+								{SDLK_F9, KEYCODESDL_F9},
+								{SDLK_F10, KEYCODESDL_F10},
+								{SDLK_F11, KEYCODESDL_F11},
+								{SDLK_F12, KEYCODESDL_F12},
+								{SDLK_F13, KEYCODESDL_F13},
+								{SDLK_F14, KEYCODESDL_F14},
+								{SDLK_F15, KEYCODESDL_F15},
+								{SDLK_F16, KEYCODESDL_F16},
+								{SDLK_F17, KEYCODESDL_F17},
+								{SDLK_F18, KEYCODESDL_F18},
+								{SDLK_F19, KEYCODESDL_F19},
+								{SDLK_F20, KEYCODESDL_F20},
+								{SDLK_F21, KEYCODESDL_F21},
+								{SDLK_F22, KEYCODESDL_F22},
+								{SDLK_F23, KEYCODESDL_F23},
+								{SDLK_F24, KEYCODESDL_F24},
+								{SDLK_NUMLOCKCLEAR, KEYCODESDL_NUMLOCK},
+								{SDLK_SCROLLLOCK, KEYCODESDL_SCROLL},
+								{SDLK_LALT, KEYCODESDL_LALT},
+								{SDLK_RALT, KEYCODESDL_RALT},
+								{SDLK_RSHIFT, KEYCODESDL_RSHIFT},
+								{SDLK_RCTRL, KEYCODESDL_RCTRL},
+};
+
+KeyCode Sexy::GetKeyCodeFromCodeSDL(const SDL_Keycode key)
+{
+	return GetKeyCodeFromNameSDL(SDL_GetKeyName(key));
+}
+
+KeyCode Sexy::GetKeyCodeFromNameSDL(const std::string& theKeyName)
+{
+	if (theKeyName.length() >= MAX_KEYNAME_LEN - 1)
+		return KEYCODE_UNKNOWN;
+
+	if (theKeyName.length() == 1)
+	{
+		unsigned char aKeyNameChar = theKeyName[0];
+
+		if ((aKeyNameChar >= KEYCODESDL_ASCIIBEGIN) && (aKeyNameChar <= KEYCODESDL_ASCIIEND))
+			return KeyCodeSDLToKeyCode((KeyCodeSDL)aKeyNameChar);
+	}
+
+	for (int i = 0; i < sizeof(aKeyCodeArraySDL) / sizeof(aKeyCodeArraySDL[0]); i++)
+	{
+		std::string keyName = SDL_GetKeyName(aKeyCodeArraySDL[i].mSDLKey);
+		if (strcmpi(theKeyName.c_str(), keyName.c_str()) == 0)
+			return KeyCodeSDLToKeyCode(aKeyCodeArraySDL[i].mKeyCode);
+	}
+
+	return KEYCODE_UNKNOWN;
+}
+
+KeyCode Sexy::KeyCodeSDLToKeyCode(KeyCodeSDL theKeyCode) {
+	if (((KeyCode)theKeyCode >= KEYCODE_ASCIIBEGIN) && ((KeyCode)theKeyCode <= KEYCODE_ASCIIEND))
+    {
+        return (KeyCode)theKeyCode;
+    }
+	if (((KeyCode)theKeyCode >= 0x5a) && ((KeyCode)theKeyCode <= 0x7a))
+	{
+		return (KeyCode)((KeyCode)theKeyCode + KEYCODE_ASCIIBEGIN2);
+	}
+
+    for (int i = 0; i < sizeof(aKeyCodeArraySDL) / sizeof(aKeyCodeArraySDL[0]); i++)
+    {
+        if (aKeyCodeArraySDL[i].mKeyCode == theKeyCode)
+        {
+            const char* sdlName = SDL_GetKeyName(aKeyCodeArraySDL[i].mSDLKey);
+            return GetKeyCodeFromName(sdlName);
+        }
+    }
+
+    return KEYCODE_UNKNOWN;
+}
 
 KeyCode	Sexy::GetKeyCodeFromName(const std::string& theKeyName)
 {
@@ -123,7 +264,7 @@ KeyCode	Sexy::GetKeyCodeFromName(const std::string& theKeyName)
 	}	
 
 	for (int i = 0; i < sizeof(aKeyCodeArray)/sizeof(aKeyCodeArray[0]); i++)	
-		if (strcmp(aKeyName, aKeyCodeArray[i].mKeyName) == 0)
+		if (strcmpi(aKeyName, aKeyCodeArray[i].mKeyName) == 0)
 			return aKeyCodeArray[i].mKeyCode;	
 
 	return KEYCODE_UNKNOWN;

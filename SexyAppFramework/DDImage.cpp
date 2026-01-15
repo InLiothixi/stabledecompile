@@ -129,6 +129,8 @@ void DDImage::SetSurface(LPDIRECTDRAWSURFACE theSurface)
 
 bool DDImage::GenerateDDSurface()
 {
+	return true;
+
 	if (mSurface != NULL)
 		return true;
 

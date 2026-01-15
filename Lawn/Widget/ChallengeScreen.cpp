@@ -104,9 +104,9 @@ ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES] = {
 	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_4,           13,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  3,  _S("[LAST_STAND_FOG_ENDLESS]") },
 	{ GameMode::GAMEMODE_LAST_STAND_ENDLESS_STAGE_5,           14,  ChallengePage::CHALLENGE_PAGE_LAST_STAND,   1,  4,  _S("[LAST_STAND_ROOF_ENDLESS]") },
 #ifdef _MOBILE_MINIGAMES
-	{ GameMode::GAMEMODE_CHALLENGE_VASEBREAKER,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  0,  _S("[VASE_BREAKER]") },
-	{ GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  1,  _S("[HEAT_WAVE]") },
-	{ GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  2,  _S("[BUTTERED_POPCORN]") },
+	{ GameMode::GAMEMODE_CHALLENGE_VASEBREAKER,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  2,  _S("[VASE_BREAKER]") },
+	{ GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE,				   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  3,  _S("[HEAT_WAVE]") },
+	{ GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  4,  _S("[BUTTERED_POPCORN]") },
 #endif
 #ifdef _DS_MINIGAMES
 	{ GameMode::GAMEMODE_CHALLENGE_BOMB_ALL_TOGETHER,		   10,  ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE,       3,  3,  _S("[BOMB_ALL_TOGETHER]") },
@@ -175,11 +175,13 @@ ChallengeScreen::ChallengeScreen(LawnApp* theApp, ChallengePage thePage)
 
 		aPageButton->mVisible = false;
 
-#ifdef _SHOW_LIMBO_PAGE
-		if ((thePage == ChallengePage::CHALLENGE_PAGE_CHALLENGE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE) ||
-			thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL || aPageIdx == ChallengePage::CHALLENGE_PAGE_SURVIVAL)))
-			aPageButton->mVisible = true;
-#endif
+		if (mApp->mPlayerInfo && mApp->mPlayerInfo->mHasUsedCheatKeys)
+		{
+			if ((thePage == ChallengePage::CHALLENGE_PAGE_CHALLENGE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_CHALLENGE || aPageIdx == ChallengePage::CHALLENGE_PAGE_CHALLENGE) ||
+				thePage == ChallengePage::CHALLENGE_PAGE_SURVIVAL && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LIMBO_SURVIVAL || aPageIdx == ChallengePage::CHALLENGE_PAGE_SURVIVAL)))
+				aPageButton->mVisible = true;
+		}
+
 
 #ifdef _HAS_EXTENDED_MINIGAMES
 		if (thePage == ChallengePage::CHALLENGE_PAGE_PUZZLE && (aPageIdx == ChallengePage::CHALLENGE_PAGE_LAST_STAND || aPageIdx == ChallengePage::CHALLENGE_PAGE_PUZZLE))

@@ -4,6 +4,8 @@
 #include "SexyAppBase.h"
 #include "MemoryImage.h"
 #include "..\SexyAppFramework\AutoCrit.h"
+#include "SDL3Image.h"
+#include "../LawnApp.h"
 
 using namespace Sexy;
 
@@ -1039,7 +1041,7 @@ bool FontData::LoadLegacy(Image* theFontImage, const std::string& theFontDescFil
 	if (anItr == mFontLayerMap.end())
 		return false;	
 	
-	aFontLayer->mImage = (MemoryImage*) theFontImage;	
+	aFontLayer->mImage = (SDL3Image*) theFontImage;	
 	aFontLayer->mDefaultHeight = aFontLayer->mImage->GetHeight();	
 	aFontLayer->mAscent = aFontLayer->mImage->GetHeight();	
 
@@ -1143,7 +1145,7 @@ ImageFont::ImageFont(Image *theFontImage)
 	FontLayer* aFontLayer = &mFontData->mFontLayerList.back();
 
 	mFontData->mFontLayerMap.insert(FontLayerMap::value_type("", aFontLayer)).first;	
-	aFontLayer->mImage = (MemoryImage*) theFontImage;	
+	aFontLayer->mImage = (SDL3Image*) theFontImage;	
 	aFontLayer->mDefaultHeight = aFontLayer->mImage->GetHeight();	
 	aFontLayer->mAscent = aFontLayer->mImage->GetHeight();	
 }
@@ -1261,7 +1263,7 @@ void ImageFont::GenerateActiveFontLayers()
 					// Resize font elements
 					int aCharNum;
 
-					MemoryImage* aMemoryImage = new MemoryImage(mFontData->mApp);
+					SDL3Image* aMemoryImage = new SDL3Image(LawnApp::mSDLRenderer);
 					
 					int aCurX = 0;
 					int aMaxHeight = 0;
@@ -1287,9 +1289,14 @@ void ImageFont::GenerateActiveFontLayers()
 					
 					// Create the image now
 
-					aMemoryImage->Create(aCurX, aMaxHeight);
-					
+					aMemoryImage->mWidth = aCurX;
+					aMemoryImage->mHeight = aMaxHeight;
+					aMemoryImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, aMemoryImage->mWidth, aMemoryImage->mHeight);
+					SDL_SetTextureBlendMode((SDL_Texture*)aMemoryImage->mD3DData, SDL_BLENDMODE_BLEND);
 					Graphics g(aMemoryImage);
+					g.SetLinearBlend(true);
+
+					SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)aMemoryImage->mD3DData);
 
 					for (aCharNum = 0; aCharNum < 256; aCharNum++)
 					{
@@ -1298,16 +1305,32 @@ void ImageFont::GenerateActiveFontLayers()
 								aFontLayer->mCharData[aCharNum].mImageRect);						
 					}
 
-					if (mForceScaledImagesWhite)
+					if (mForceScaledImagesWhite || true)
 					{
-						int aCount = aMemoryImage->mWidth*aMemoryImage->mHeight;
-						ulong* aBits = aMemoryImage->GetBits();
+						SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)aMemoryImage->mD3DData);
 
-						for (int i = 0; i < aCount; i++)
-							*(aBits++) = *aBits | 0x00FFFFFF;
+						SDL_Surface* surface = SDL_RenderReadPixels(LawnApp::mSDLRenderer, nullptr);
+						Uint32* pixels = (Uint32*)surface->pixels;
+						int width = surface->w;
+						int height = surface->h;
+						int pitch = surface->pitch / 4; 
+
+						for (int y = 0; y < height; y++)
+						{
+							Uint32* row = pixels + y * pitch;
+							for (int x = 0; x < width; x++)
+							{
+								Uint32 pixel = row[x];
+								row[x] = (pixel & 0xFF000000) | 0x00FFFFFF; 
+							}
+						}
+
+						SDL_UpdateTexture((SDL_Texture*)aMemoryImage->mD3DData, nullptr, surface->pixels, surface->pitch);
+						SDL_DestroySurface(surface);
+						SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
 					}
 
-					aMemoryImage->Palletize();
+					SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
 				}
 
 				int aLayerAscent = (aFontLayer->mAscent * aPointSize) / aLayerPointSize;

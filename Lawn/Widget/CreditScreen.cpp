@@ -722,7 +722,7 @@ void CreditScreen::DrawOverlay(Graphics* g)
         if (aFadeAlpha > 0)
         {
             g->SetColor(Color(0, 0, 0, aFadeAlpha));
-            g->FillRect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, mWidth - WIDESCREEN_OFFSETX * 2, mHeight - WIDESCREEN_OFFSETY * 2);
+            g->FillRect(0, 0, 800, 600);
         }
     }
 }
@@ -761,7 +761,7 @@ void CreditScreen::Draw(Graphics* g)
     if (!mPreloaded)
     {
         g->SetColor(Color::Black);
-        g->FillRect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, mWidth - WIDESCREEN_OFFSETX * 2, mHeight - WIDESCREEN_OFFSETY * 2);
+        g->FillRect(0, 0, 800, 600);
         mDrawCount = 1;
         return;
     }
@@ -781,7 +781,7 @@ void CreditScreen::Draw(Graphics* g)
         DrawReanimToPreload(g, ReanimationType::REANIM_SUNFLOWER);
     }
     g->SetColor(Color::Black);
-    g->FillRect(WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY, mWidth - WIDESCREEN_OFFSETX * 2, mHeight - WIDESCREEN_OFFSETY * 2);
+    g->FillRect(0, 0, 800, 600);
 
     Reanimation* aCreditsReanim = mApp->ReanimationGet(mCreditsReanimID);
     int aFrameCount = aCreditsReanim->mDefinition->mTracks.tracks->mTransforms.count - 1;
@@ -877,7 +877,44 @@ void CreditScreen::Draw(Graphics* g)
             g->PopState();
         }
     }
-    aCreditsReanim->DrawRenderGroup(g, 1);
+
+    g->PushState();
+    if (!aCreditsReanim->mDead) {
+        TodTriangleGroup aTriangleGroup;
+        for (int aTrackIndex = 0; aTrackIndex < aCreditsReanim->mDefinition->mTracks.count; aTrackIndex++)
+        {
+            ReanimatorTrackInstance* aTrackInstance = &aCreditsReanim->mTrackInstances[aTrackIndex];
+            
+            if (aTrackInstance == aCreditsReanim->GetTrackInstanceByName("Background") &&
+                (aCreditsReanim->mReanimationType != ReanimationType::REANIM_CREDITS_MAIN2 || aCreditsReanim->mReanimationType == ReanimationType::REANIM_CREDITS_MAIN2 && aCreditsReanim->mLastFrameTime >= 0.328125f) &&
+                (aCreditsReanim->mReanimationType != ReanimationType::REANIM_CREDITS_MAIN3 || aCreditsReanim->mReanimationType == ReanimationType::REANIM_CREDITS_MAIN3 && aCreditsReanim->mLastFrameTime >= 0.376899f)) {
+                g->TranslateF(-240, -60);
+            }
+
+            if (aTrackInstance->mRenderGroup == 1)
+            {
+                bool aTrackDrawn = false;
+
+                if (aTrackInstance->mRenderInBack && aTrackInstance->mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
+                {
+                    aTriangleGroup.DrawGroup(g);
+                    AttachmentDraw(aTrackInstance->mAttachmentID, g, aTrackDrawn);
+                }
+
+                if (!aTrackInstance->mForceDontRender)
+                    aTrackDrawn = aCreditsReanim->DrawTrack(g, aTrackIndex, RENDER_GROUP_NORMAL, &aTriangleGroup);
+
+                if (!aTrackInstance->mRenderInBack && aTrackInstance->mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
+                {
+                    aTriangleGroup.DrawGroup(g);
+                    AttachmentDraw(aTrackInstance->mAttachmentID, g, !aTrackDrawn);
+                }
+            }
+        }
+
+        aTriangleGroup.DrawGroup(g);
+    }
+    g->PopState();
 
     bool aDrawPool = false;
     bool aDrawNightPool = false;
@@ -1121,11 +1158,11 @@ void CreditScreen::Update()
         int aUnsyncedFrames = (aUnsyncedDuration + 5) / 10;
         if (aUnsyncedFrames < 0)
         {
-            TodTrace("Movie playing too fast %d frames", 1 - aUnsyncedFrames);
+            //TodTrace("Movie playing too fast %d frames", 1 - aUnsyncedFrames);
         }
         else if (aUnsyncedFrames > 2)
         {
-            TodTrace("Movie playing too slow %d frames", aUnsyncedFrames - 1);
+            //TodTrace("Movie playing too slow %d frames", aUnsyncedFrames - 1);
         }
 
         if (aUnsyncedDuration > 10000)
@@ -1171,6 +1208,8 @@ void CreditScreen::UpdateMovie()
     else if (mCreditsPhase == CreditsPhase::CREDITS_MAIN3 && aCreditsReanim->mLoopCount > 0)
     {
         mCreditsPhase = CreditsPhase::CREDITS_END;
+        mApp->mMusic->StopAllMusic();
+        mApp->mMusic->MakeSureMusicIsPlaying(MusicTune::MUSIC_TUNE_CHOOSE_YOUR_SEEDS);
     }
     else if (mCreditsPhase == CreditsPhase::CREDITS_END)
     {
@@ -1611,6 +1650,7 @@ void CreditScreen::JumpToFrame(CreditsPhase thePhase, float theFrame)
         aJumpMilliseconds += 159142;
     }
 
+    mApp->mMusic->StopAllMusic();
     mApp->mMusic->PlayFromOffset(MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN, aMusicOffset - 900, 1.0f);
     if (thePhase == CreditsPhase::CREDITS_END)
     {

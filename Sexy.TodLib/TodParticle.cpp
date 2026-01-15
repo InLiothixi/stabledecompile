@@ -1108,7 +1108,7 @@ void RenderParticle(Graphics* g, TodParticle* theParticle, const Color& theColor
 		else if (theParams->mFilterEffect == FilterEffect::FILTER_EFFECT_WHITE)
 			g->SetColor(Color::White);
 		
-		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
+		g->FillRect(-g->mTransX, -g->mTransY, 800, 600);
 		g->SetColor(anOldColor);
 		g->SetDrawMode(anOldDrawMode);
 	}

@@ -335,6 +335,8 @@ public:
 	bool					mIsTouch;
 	int						mResolutionMode;
 
+	bool					mEnableVsync;
+
 protected:	
 	void					RehupFocus();
 	void					ClearKeysDown();

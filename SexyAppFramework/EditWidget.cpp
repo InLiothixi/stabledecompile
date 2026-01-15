@@ -4,6 +4,9 @@
 #include "SexyAppBase.h"
 #include "EditListener.h"
 
+#include <SDL3/SDL.h>
+#include "../LawnApp.h"
+
 using namespace Sexy;
 
 static int gEditWidgetColors[][3] = 
@@ -194,6 +197,7 @@ void EditWidget::GotFocus()
 	mShowingCursor = true;
 	mBlinkAcc = 0;
 	MarkDirty();	
+	SDL_StartTextInput(LawnApp::mSDLWindow);
 }
 
 void EditWidget::LostFocus()
@@ -208,6 +212,7 @@ void EditWidget::LostFocus()
 
 	mShowingCursor = false;	
 	MarkDirty();
+	SDL_StopTextInput(LawnApp::mSDLWindow);
 }
 
 void EditWidget::Update()

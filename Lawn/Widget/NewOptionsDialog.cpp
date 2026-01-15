@@ -59,7 +59,7 @@ NewOptionsDialog::NewOptionsDialog(LawnApp* theApp, bool theFromGameSelector) :
     mSfxVolumeSlider->SetValue(theApp->GetSfxVolume() / 0.65);
 
     mFullscreenCheckbox = MakeNewCheckbox(NewOptionsDialog::NewOptionsDialog_Fullscreen, this, !theApp->mIsWindowed);
-    mHardwareAccelerationCheckbox = MakeNewCheckbox(NewOptionsDialog::NewOptionsDialog_HardwareAcceleration, this, theApp->Is3DAccelerated());
+    mHardwareAccelerationCheckbox = MakeNewCheckbox(NewOptionsDialog::NewOptionsDialog_HardwareAcceleration, this, theApp->mEnableVsync);
 
     if (mFromGameSelector)
     {
@@ -232,7 +232,7 @@ void NewOptionsDialog::Draw(Sexy::Graphics* g)
     {
         TodDrawString(g, TodStringTranslate(_S("[MUSIC_LABEL]")), 186, 140 + aMusicOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);
         TodDrawString(g, TodStringTranslate(_S("[SOUND_LABEL]")), 186, 167 + aSfxOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);
-        TodDrawString(g, TodStringTranslate(_S("[HARDWARE_LABEL]")), 274, 197 + a3DAccelOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);
+        TodDrawString(g, TodStringTranslate(_S("Vertical-Sync")), 274, 197 + a3DAccelOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);
         TodDrawString(g, TodStringTranslate(_S("[FULLSCREEN_LABEL]")), 274, 229 + aFullScreenOffset, FONT_DWARVENTODCRAFT18, aTextColor, DrawStringJustification::DS_ALIGN_RIGHT);
     }
 }
@@ -267,7 +267,7 @@ void NewOptionsDialog::CheckboxChecked(int theId, bool checked)
 {
     mApp->PlaySample(SOUND_BUTTONCLICK);
 
-    switch (theId)
+    /*switch (theId)
     {
     case NewOptionsDialog::NewOptionsDialog_Fullscreen:
     {
@@ -319,7 +319,7 @@ void NewOptionsDialog::CheckboxChecked(int theId, bool checked)
         }
         break;
     }
-    }
+    }*/
 }
 
 //0x45D290

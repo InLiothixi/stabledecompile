@@ -7,6 +7,7 @@
 #include "../../SexyAppFramework/Graphics.h"
 #include "../../SexyAppFramework/DDInterface.h"
 #include "../../SexyAppFramework/D3DInterface.h"
+#include "../../SexyAppFramework/SDL3Image.h"
 
 //0x469A60
 void PoolEffect::PoolEffectInitialize()
@@ -15,14 +16,14 @@ void PoolEffect::PoolEffectInitialize()
 
     mApp = gLawnApp;
 
-    mCausticImage = new MemoryImage(gSexyAppBase);
+    mCausticImage = new SDL3Image(LawnApp::mSDLRenderer);
     mCausticImage->mWidth = CAUSTIC_IMAGE_WIDTH;
     mCausticImage->mHeight = CAUSTIC_IMAGE_HEIGHT;
     mCausticImage->mBits = new unsigned long[CAUSTIC_IMAGE_WIDTH * CAUSTIC_IMAGE_HEIGHT + 1];
-    mCausticImage->mHasTrans = true;
-    mCausticImage->mHasAlpha = true;
     memset(mCausticImage->mBits, 0xFF, CAUSTIC_IMAGE_WIDTH * CAUSTIC_IMAGE_HEIGHT * 4);
     mCausticImage->mBits[CAUSTIC_IMAGE_WIDTH * CAUSTIC_IMAGE_HEIGHT] = MEMORYCHECK_ID;
+    mCausticImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, mCausticImage->mWidth, mCausticImage->mHeight);
+    SDL_SetTextureBlendMode((SDL_Texture*)mCausticImage->mD3DData, SDL_BLENDMODE_BLEND);
 
     mCausticGrayscaleImage = new unsigned char[256 * 256];
     MemoryImage* aCausticGrayscaleImage = (MemoryImage*)IMAGE_POOL_CAUSTIC_EFFECT;
@@ -46,28 +47,34 @@ void PoolEffect::PoolEffectDispose()
 //0x469BC0
 unsigned int PoolEffect::BilinearLookupFixedPoint(unsigned int u, unsigned int v)
 {
-    unsigned int timeU = u & 0xFFFF0000;
-    unsigned int timeV = v & 0xFFFF0000;
-    unsigned int factorU1 = ((u - timeU) & 0x0000FFFE) + 1;
-    unsigned int factorV1 = ((v - timeV) & 0x0000FFFE) + 1;
-    unsigned int factorU0 = 65536 - factorU1;
-    unsigned int factorV0 = 65536 - factorV1;
-    unsigned int indexU0 = (timeU >> 16) % 256;
-    unsigned int indexU1 = ((timeU >> 16) + 1) % 256;
-    unsigned int indexV0 = (timeV >> 16) % 256;
-    unsigned int indexV1 = ((timeV >> 16) + 1) % 256;
+    int x0 = (u >> 16) & 255;
+    int y0 = (v >> 16) & 255;
+    int x1 = (x0 + 1) & 255;
+    int y1 = (y0 + 1) & 255;
 
-    return
-        ((((factorU0 * factorV1) / 65536) * mCausticGrayscaleImage[indexV1 * 256 + indexU0]) / 65536) +
-        ((((factorU1 * factorV1) / 65536) * mCausticGrayscaleImage[indexV1 * 256 + indexU1]) / 65536) +
-        ((((factorU0 * factorV0) / 65536) * mCausticGrayscaleImage[indexV0 * 256 + indexU0]) / 65536) +
-        ((((factorU1 * factorV0) / 65536) * mCausticGrayscaleImage[indexV0 * 256 + indexU1]) / 65536);
+    float fx = (u & 0xFFFF) / 65536.0f;
+    float fy = (v & 0xFFFF) / 65536.0f;
+
+    int p00 = mCausticGrayscaleImage[y0 * 256 + x0];
+    int p10 = mCausticGrayscaleImage[y0 * 256 + x1];
+    int p01 = mCausticGrayscaleImage[y1 * 256 + x0];
+    int p11 = mCausticGrayscaleImage[y1 * 256 + x1];
+
+    float val =
+        p00 * (1 - fx) * (1 - fy) +
+        p10 * fx * (1 - fy) +
+        p01 * (1 - fx) * fy +
+        p11 * fx * fy;
+
+    return (unsigned int)val;
 }
 
 //0x469CA0
 void PoolEffect::UpdateWaterEffect(Sexy::Graphics* g)
 {
-    int idx = 0;
+
+    std::vector<Uint32> buffer(CAUSTIC_IMAGE_WIDTH * CAUSTIC_IMAGE_HEIGHT);
+
     for (int y = 0; y < CAUSTIC_IMAGE_HEIGHT; y++)
     {
         int timeV1 = (256 - y) << 17;
@@ -75,53 +82,42 @@ void PoolEffect::UpdateWaterEffect(Sexy::Graphics* g)
 
         for (int x = 0; x < CAUSTIC_IMAGE_WIDTH; x++)
         {
-            unsigned long* pix = &mCausticImage->mBits[idx];
+            int idx = y * CAUSTIC_IMAGE_WIDTH + x;
+            Uint32 oldPixel = mCausticImage->mBits[idx];  
 
             int timeU = x << 17;
             int timePool0 = mPoolCounter << 16;
             int timePool1 = ((mPoolCounter & 65535) + 1) << 16;
-            int a1 = (unsigned char)BilinearLookupFixedPoint(timeU - timePool1 / 6, timeV1 + timePool0 / 8);
-            int a0 = (unsigned char)BilinearLookupFixedPoint(timeU + timePool0 / 10, timeV0);
+
+            int a1 = (unsigned char)BilinearLookupFixedPoint(timeU - timePool1 / 6,
+                timeV1 + timePool0 / 8);
+            int a0 = (unsigned char)BilinearLookupFixedPoint(timeU + timePool0 / 10,
+                timeV0);
             unsigned char a = (unsigned char)((a0 + a1) / 2);
 
             unsigned char alpha;
             if (a >= 160U)
-            {
                 alpha = 255 - 2 * (a - 160U);
-            }
             else if (a >= 128U)
-            {
                 alpha = 5 * (a - 128U);
-            }
             else
-            {
                 alpha = 0;
-            }
 
-            *pix = (*pix & 0x00FFFFFF) + (((int)alpha / 3) << 24);
-            idx++;
+           mCausticImage->mBits[idx] = buffer[idx] = (oldPixel & 0x00FFFFFF) + (((int)alpha / 3) << 24);
         }
     }
 
-    ++mCausticImage->mBitsChangedCount;
+    SDL_UpdateTexture(
+        (SDL_Texture*)mCausticImage->mD3DData,
+        nullptr,
+        buffer.data(),
+        CAUSTIC_IMAGE_WIDTH * sizeof(Uint32)
+    );
 }
 
 //0x469DE0
 void PoolEffect::PoolEffectDraw(Sexy::Graphics* g, bool theIsNight)
 {
-    if (!mApp->Is3DAccelerated())
-    {
-        if (theIsNight)
-        {
-            g->DrawImage(IMAGE_POOL_NIGHT, 34, 278);
-        }
-        else
-        {
-            g->DrawImage(IMAGE_POOL, 34, 278);
-        }
-        return;
-    }
-
     float aGridSquareX = IMAGE_POOL->GetWidth() / 15.0f;
     float aGridSquareY = IMAGE_POOL->GetHeight() / 5.0f;
     float aOffsetArray[3][16][6][2] = { 0 };
@@ -227,12 +223,7 @@ void PoolEffect::PoolEffectDraw(Sexy::Graphics* g, bool theIsNight)
     }
 
     UpdateWaterEffect(g);
-    D3DInterface* anInterface = ((DDImage*)g->mDestImage)->mDDInterface->mD3DInterface;
-    anInterface->CheckDXError(anInterface->mD3DDevice->SetTextureStageState(0, D3DTEXTURESTAGESTATETYPE::D3DTSS_ADDRESSU, D3DTEXTUREADDRESS::D3DTADDRESS_WRAP), "DrawPool");
-    anInterface->CheckDXError(anInterface->mD3DDevice->SetTextureStageState(0, D3DTEXTURESTAGESTATETYPE::D3DTSS_ADDRESSV, D3DTEXTUREADDRESS::D3DTADDRESS_WRAP), "DrawPool");
     g->DrawTrianglesTex(mCausticImage, aVertArray[2], 150);
-    anInterface->CheckDXError(anInterface->mD3DDevice->SetTextureStageState(0, D3DTEXTURESTAGESTATETYPE::D3DTSS_ADDRESSU, D3DTEXTUREADDRESS::D3DTADDRESS_CLAMP), "DrawPool");
-    anInterface->CheckDXError(anInterface->mD3DDevice->SetTextureStageState(0, D3DTEXTURESTAGESTATETYPE::D3DTSS_ADDRESSV, D3DTEXTUREADDRESS::D3DTADDRESS_CLAMP), "DrawPool");
 }
 
 void PoolEffect::PoolEffectUpdate()

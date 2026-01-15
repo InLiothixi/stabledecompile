@@ -122,10 +122,10 @@ SeedChooserScreen::SeedChooserScreen()
 	mStoreButton->mTextOffsetY = 1;
 
 	mImitaterButton = new GameButton(SeedChooserScreen::SeedChooserScreen_Imitater);
-	mImitaterButton->mButtonImage = Sexy::IMAGE_IMITATERSEED;
-	mImitaterButton->mOverImage = Sexy::IMAGE_IMITATERSEED;
-	mImitaterButton->mDownImage = Sexy::IMAGE_IMITATERSEED;
-	mImitaterButton->mDisabledImage = Sexy::IMAGE_IMITATERSEEDDISABLED;
+	mImitaterButton->mButtonImage = Sexy::IMAGE_BLANK;
+	mImitaterButton->mOverImage = Sexy::IMAGE_BLANK;
+	mImitaterButton->mDownImage = Sexy::IMAGE_BLANK;
+	mImitaterButton->mDisabledImage = Sexy::IMAGE_BLANK;
 	mImitaterButton->Resize(464, 515, Sexy::IMAGE_IMITATERSEED->mWidth, Sexy::IMAGE_IMITATERSEED->mHeight);
 	mImitaterButton->mParentWidget = this;
 
@@ -509,7 +509,12 @@ void SeedChooserScreen::Draw(Graphics* g)
 		}
 	}
 
-	mImitaterButton->Draw(g);
+	//mImitaterButton->Draw(g);
+	if (mApp->SeedTypeAvailable(SEED_IMITATER))
+	{
+		DrawSeedPacket(g, mImitaterButton->mX, mImitaterButton->mY, SeedType::SEED_IMITATER, SEED_NONE, 0, mImitaterButton->mDisabled ? 55 : 255, false, false);
+	}
+
 	for (SeedType aSeedType = SEED_PEASHOOTER; aSeedType < NUM_SEEDS_IN_CHOOSER; aSeedType = (SeedType)(aSeedType + 1))
 	{
 		ChosenSeed& aChosenSeed = mChosenSeeds[aSeedType];
@@ -562,7 +567,7 @@ void SeedChooserScreen::UpdateViewLawn()
 	if (mViewLawnTime == 100) mBoard->DisplayAdviceAgain(_S("[CLICK_TO_CONTINUE]"), MESSAGE_STYLE_HINT_STAY, ADVICE_CLICK_TO_CONTINUE);
 	else if (mViewLawnTime == 251) mViewLawnTime = 250;
 
-	int aBoardX = BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth;
+	int aBoardX = (mBoard->StageHasRoof() ? 0 : 170) + BOARD_IMAGE_WIDTH_OFFSET - mApp->mWidth;
 	int aSeedChooserY = SEED_CHOOSER_OFFSET_Y - Sexy::IMAGE_SEEDCHOOSER_BACKGROUND->mHeight;
 	if (mViewLawnTime <= 100)
 	{
@@ -636,9 +641,13 @@ void SeedChooserScreen::UpdateCursor()
 	if (mMouseVisible && mChooseState != CHOOSE_VIEW_LAWN && (aMouseSeedType != SEED_NONE && !SeedNotAllowedToPick(aMouseSeedType)) ||
 		mRandomButton->IsMouseOver() || mViewLawnButton->IsMouseOver() || mAlmanacButton->IsMouseOver() || mImitaterButton->IsMouseOver() ||
 		mStoreButton->IsMouseOver() || mMenuButton->IsMouseOver() || mStartButton->IsMouseOver() || mScrollbar->isThumbOver())
+	{
 		mApp->SetCursor(CURSOR_HAND);
+	}
 	else
+	{
 		mApp->SetCursor(CURSOR_POINTER);
+	}
 }
 
 //0x4851A0

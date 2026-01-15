@@ -710,36 +710,14 @@ void TodSandImageIfNeeded(Image* theImage)
 //0x512650
 void TodBltMatrix(Graphics* g, Image* theImage, const SexyMatrix3& theTransform, const Rect& theClipRect, const Color& theColor, int theDrawMode, const Rect& theSrcRect)
 {
-	float aOffsetX = 0.0f;
-	float aOffsetY = 0.0f;
-	if (gSexyAppBase->Is3DAccelerated())
-	{
-		aOffsetX -= 0.5f;
-		aOffsetY -= 0.5f;
-	}
-	else if (theDrawMode == Graphics::DRAWMODE_ADDITIVE)
+	/*if (theDrawMode == Graphics::DRAWMODE_ADDITIVE)
 	{
 		gTodTriangleDrawAdditive = true;
-	}
+	}*/
 
 	TodSandImageIfNeeded(theImage);
-
-	if (theClipRect.mX != 0 || theClipRect.mY != 0 || theClipRect.mWidth != BOARD_WIDTH || theClipRect.mHeight != BOARD_HEIGHT)
-	{
-		g->mDestImage->BltMatrix(theImage, aOffsetX, aOffsetY, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
-	}
-	else if (DDImage::Check3D(g->mDestImage))
-	{
-		theImage->mDrawn = true;
-		D3DInterface* aInterface = ((DDImage*)g->mDestImage)->mDDInterface->mD3DInterface;
-		aInterface->BltTransformed(theImage, nullptr, theColor, theDrawMode, theSrcRect, theTransform, g->mLinearBlend, aOffsetX, aOffsetY, true);
-	}
-	else
-	{
-		g->mDestImage->BltMatrix(theImage, aOffsetX, aOffsetY, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
-	}
-
-	gTodTriangleDrawAdditive = false;
+	g->mDestImage->BltMatrix(theImage, 0, 0, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
+	//gTodTriangleDrawAdditive = false;
 }
 
 //0x5127C0

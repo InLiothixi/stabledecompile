@@ -623,52 +623,52 @@ void Reanimation::MatrixFromTransform(const ReanimatorTransform& theTransform, S
 //0x472190
 void Reanimation::ReanimBltMatrix(Graphics* g, Image* theImage, SexyMatrix3& theTransform, const Rect& theClipRect, const Color& theColor, int theDrawMode, const Rect& theSrcRect)	
 {
-	if (!gSexyAppBase->Is3DAccelerated()  // 未开启 3D 硬件加速
-		&& TestBit(gReanimationParamArray[(int)mReanimationType].mReanimParamFlags, (int)ReanimFlags::REANIM_FAST_DRAW_IN_SW_MODE) // 动画允许使用软件渲染
-		&& FloatApproxEqual(theTransform.m01, 0.0f) && FloatApproxEqual(theTransform.m10, 0.0f)  // 横向和纵向的倾斜值均为 0
-		&& abs(theTransform.m00) > 0.0f && abs(theTransform.m11) > 0.0f  // 横向和纵向的拉伸值均大于 0
-		&& theColor == Color::White)
-	{
-		const float aScaleX = theTransform.m00;
-		const float aScaleY = theTransform.m11;
-		const int aPosX = FloatRoundToInt(theTransform.m02 - abs(aScaleX) * theSrcRect.mWidth * 0.5f);
-		const int aPosY = FloatRoundToInt(theTransform.m12 - abs(aScaleY) * theSrcRect.mHeight * 0.5f);
-		const bool isMirrored = aScaleX < 0.0f;
+	//if (!gSexyAppBase->Is3DAccelerated()  // 未开启 3D 硬件加速
+	//	&& TestBit(gReanimationParamArray[(int)mReanimationType].mReanimParamFlags, (int)ReanimFlags::REANIM_FAST_DRAW_IN_SW_MODE) // 动画允许使用软件渲染
+	//	&& FloatApproxEqual(theTransform.m01, 0.0f) && FloatApproxEqual(theTransform.m10, 0.0f)  // 横向和纵向的倾斜值均为 0
+	//	&& abs(theTransform.m00) > 0.0f && abs(theTransform.m11) > 0.0f  // 横向和纵向的拉伸值均大于 0
+	//	&& theColor == Color::White)
+	//{
+	//	const float aScaleX = theTransform.m00;
+	//	const float aScaleY = theTransform.m11;
+	//	const int aPosX = FloatRoundToInt(theTransform.m02 - abs(aScaleX) * theSrcRect.mWidth * 0.5f);
+	//	const int aPosY = FloatRoundToInt(theTransform.m12 - abs(aScaleY) * theSrcRect.mHeight * 0.5f);
+	//	const bool isMirrored = aScaleX < 0.0f;
 
-		g->PushState();
-		g->mClipRect = theClipRect;
-		g->mTransX = 0;
-		g->mTransY = 0;
-		
-		if (FloatApproxEqual(abs(aScaleX), 1.0f) && FloatApproxEqual(abs(aScaleY), 1.0f))  // 如果无拉伸
-		{
-			if (isMirrored)
-			{
-				g->DrawImageMirror(theImage, aPosX, aPosY, theSrcRect);
-			}
-			else
-			{
-				g->DrawImage(theImage, aPosX, aPosY, theSrcRect);
-			}
-		}
-		else
-		{
-			const int aWidth = FloatRoundToInt(abs(aScaleX) * theSrcRect.mWidth);
-			const int aHeight = FloatRoundToInt(abs(aScaleY) * theSrcRect.mHeight);
-			const Rect aDestRect(aPosX, aPosY, aWidth, aHeight);
+	//	g->PushState();
+	//	g->mClipRect = theClipRect;
+	//	g->mTransX = 0;
+	//	g->mTransY = 0;
+	//	
+	//	if (FloatApproxEqual(abs(aScaleX), 1.0f) && FloatApproxEqual(abs(aScaleY), 1.0f))  // 如果无拉伸
+	//	{
+	//		if (isMirrored)
+	//		{
+	//			g->DrawImageMirror(theImage, aPosX, aPosY, theSrcRect);
+	//		}
+	//		else
+	//		{
+	//			g->DrawImage(theImage, aPosX, aPosY, theSrcRect);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		const int aWidth = FloatRoundToInt(abs(aScaleX) * theSrcRect.mWidth);
+	//		const int aHeight = FloatRoundToInt(abs(aScaleY) * theSrcRect.mHeight);
+	//		const Rect aDestRect(aPosX, aPosY, aWidth, aHeight);
 
-			if (isMirrored)
-			{
-				g->DrawImageMirror(theImage, aDestRect, theSrcRect);
-			}
-			else
-			{
-				g->DrawImage(theImage, aDestRect, theSrcRect);
-			}
-		}
-		g->PopState();
-	}
-	else
+	//		if (isMirrored)
+	//		{
+	//			g->DrawImageMirror(theImage, aDestRect, theSrcRect);
+	//		}
+	//		else
+	//		{
+	//			g->DrawImage(theImage, aDestRect, theSrcRect);
+	//		}
+	//	}
+	//	g->PopState();
+	//}
+	//else
 	{
 		TodBltMatrix(g, theImage, theTransform, theClipRect, theColor, theDrawMode, theSrcRect);
 	}
@@ -834,7 +834,7 @@ bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, int theRenderGroup, 
 	{
 		Color aOldColor = g->GetColor();  // 备份颜色
 		g->SetColor(aColor);
-		g->FillRect(-g->mTransX, -g->mTransY, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
+		g->FillRect(-g->mTransX, -g->mTransY, 800, 600);
 		g->SetColor(aOldColor);  // 还原颜色
 	}
 	return true;
@@ -935,7 +935,18 @@ void Reanimation::DrawRenderGroup(Graphics* g, int theRenderGroup)
 			}
 
 			if (!aTrackInstance->mForceDontRender)
+			{
+				g->PushState();
+				if (mReanimationType == ReanimationType::REANIM_CREDITS_ANYHOUR)
+				{
+					if (strcmpi(mDefinition->mTracks.tracks[aTrackIndex].mName, "Background1") == 0 || strcmpi(mDefinition->mTracks.tracks[aTrackIndex].mName, "Background2") == 0)
+					{
+						g->TranslateF(-240, -60);
+					}
+				}
 				aTrackDrawn = DrawTrack(g, aTrackIndex, theRenderGroup, &aTriangleGroup);
+				g->PopState();
+			}
 
 			if (!aTrackInstance->mRenderInBack && aTrackInstance->mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
 			{

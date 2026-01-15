@@ -5190,7 +5190,8 @@ void Challenge::IZombieDrawPlant(Graphics* g, Plant* thePlant)
 {
 	Reanimation* aReanim = mApp->ReanimationTryToGet(thePlant->mBodyReanimID);
 	if (aReanim) {
-		if (g->mIs3D) {
+		//if (g->mIs3D) 
+		{
 			IZombieSetPlantFilterEffect(thePlant, FILTER_EFFECT_WHITE);
 			g->SetColorizeImages(true);
 
@@ -5220,7 +5221,7 @@ void Challenge::IZombieDrawPlant(Graphics* g, Plant* thePlant)
 			g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 			g->SetColorizeImages(false);
 		}
-		else {
+		/*else {
 			g->SetColorizeImages(true);
 
 			float aOffsetX = g->mTransX, aOffsetY = g->mTransY;
@@ -5234,7 +5235,7 @@ void Challenge::IZombieDrawPlant(Graphics* g, Plant* thePlant)
 			aReanim->DrawRenderGroup(g, 0);
 			g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 			g->SetColorizeImages(false);
-		}
+		}*/
 	}
 }
 
@@ -6076,7 +6077,7 @@ bool Challenge::TreeOfWisdomCanFeed()
 
 	return true;
 }
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 void Challenge::HeatWaveUpdate()
 {
 	if (mBoard->mMainCounter % 750 == 0 && mBoard->mMainCounter > 1500)

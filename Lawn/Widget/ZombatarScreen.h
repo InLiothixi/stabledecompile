@@ -6,7 +6,7 @@
 #include "../../SexyAppFramework/ButtonListener.h"
 #include "../Zombie.h"
 #include "GameButton.h"
-#include "../../SexyAppFramework/MemoryImage.h"
+#include "../SexyAppFramework/SDL3Image.h"
 
 #define NUM_SKIN_COLOR_PALLETES 12
 #define NUM_COLOR_PALLETES 17
@@ -134,7 +134,7 @@ public:
 extern Color gZombatarSkinPalletes[NUM_SKIN_COLOR_PALLETES];
 extern Color gZombatarDimPalletes[NUM_COLOR_PALLETES];
 extern Color gZombatarBrightPalletes[NUM_COLOR_PALLETES];
-extern MemoryImage* gZombatarClothes[NUM_CLOTHES];
+extern SDL3Image* gZombatarClothes[NUM_CLOTHES];
 
 void DisposeZombatarClothesCache();
 #endif

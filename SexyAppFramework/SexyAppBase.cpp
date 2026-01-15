@@ -122,7 +122,9 @@ static const int mHeights[] = { 600, 720, 800};
 static const int mNumWidths = sizeof(mWidths) / sizeof(int);
 static const int mNumHeights = sizeof(mHeights) / sizeof(int);
 
-static DDImage* gFPSImage = NULL; 
+#include "SDL3Image.h"
+
+static SDL3Image* gFPSImage = NULL;
 
 //////////////////////////////////////////////////////////////////////////
 #ifdef _USE_WIDE_STRING
@@ -164,7 +166,7 @@ SexyAppBase::SexyAppBase()
 	gSexyAppBase = this;
 
 	gVersionDLL = LoadLibraryA("version.dll");
-	gDDrawDLL = LoadLibraryA("ddraw.dll");
+	//gDDrawDLL = LoadLibraryA("ddraw.dll");
 	gDSoundDLL = LoadLibraryA("dsound.dll");
 	gGetLastInputInfoFunc = (GetLastInputInfoFunc) GetProcAddress(GetModuleHandleA("user32.dll"),"GetLastInputInfo");
 
@@ -323,6 +325,7 @@ SexyAppBase::SexyAppBase()
 	mIsParticleEditor = false;
 	mIsTouch = false;
 	mResolutionMode = 0;
+	mEnableVsync = true;
 
 	int i;
 
@@ -408,56 +411,56 @@ SexyAppBase::~SexyAppBase()
 	Shutdown();
 
 	// Check if we should write the current 3d setting
-	bool showedMsgBox = false;
-	if (mUserChanged3DSetting)
-	{
-		bool writeToRegistry = true;
-		bool is3D = false;
-		bool is3DOptionSet = RegistryReadBoolean(_S("Is3D"), &is3D);
-		if(!is3DOptionSet) // should we write the option?
-		{
-			if(!Is3DAccelerationRecommended()) // may need to prompt user if he wants to keep 3d acceleration on
-			{
-				if (Is3DAccelerated())
-				{
-					showedMsgBox = true;
-					int aResult = MessageBox(NULL,
-									GetString(_S("HARDWARE_ACCEL_SWITCHED_ON"), 
-															_S("Hardware Acceleration was switched on during this session.\r\n")
-															_S("If this resulted in slower performance, it should be switched off.\r\n")
-															_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
-									(mCompanyName + _S(" ") +
-									 GetString(_S("HARDWARE_ACCEL_CONFIRMATION"), _S("Hardware Acceleration Confirmation"))).c_str(),
-									MB_YESNO | MB_ICONQUESTION);
+	//bool showedMsgBox = false;
+	//if (mUserChanged3DSetting)
+	//{
+	//	bool writeToRegistry = true;
+	//	bool is3D = false;
+	//	bool is3DOptionSet = RegistryReadBoolean(_S("Is3D"), &is3D);
+	//	if(!is3DOptionSet) // should we write the option?
+	//	{
+	//		if(!Is3DAccelerationRecommended()) // may need to prompt user if he wants to keep 3d acceleration on
+	//		{
+	//			if (Is3DAccelerated())
+	//			{
+	//				showedMsgBox = true;
+	//				int aResult = MessageBox(NULL,
+	//								GetString(_S("HARDWARE_ACCEL_SWITCHED_ON"), 
+	//														_S("Hardware Acceleration was switched on during this session.\r\n")
+	//														_S("If this resulted in slower performance, it should be switched off.\r\n")
+	//														_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
+	//								(mCompanyName + _S(" ") +
+	//								 GetString(_S("HARDWARE_ACCEL_CONFIRMATION"), _S("Hardware Acceleration Confirmation"))).c_str(),
+	//								MB_YESNO | MB_ICONQUESTION);
 
-					mDDInterface->mIs3D = aResult == IDYES ? true : false;
-					if (aResult!=IDYES)
-						writeToRegistry = false;
-				}
-				else
-					writeToRegistry = false;
-			}
-		}
+	//				mDDInterface->mIs3D = aResult == IDYES ? true : false;
+	//				if (aResult!=IDYES)
+	//					writeToRegistry = false;
+	//			}
+	//			else
+	//				writeToRegistry = false;
+	//		}
+	//	}
 
-		if (writeToRegistry)
-			RegistryWriteBoolean(_S("Is3D"), mDDInterface->mIs3D);
-	}
+	//	if (writeToRegistry)
+	//		RegistryWriteBoolean(_S("Is3D"), mDDInterface->mIs3D);
+	//}
 
-	extern bool gD3DInterfacePreDrawError;
-	if (!showedMsgBox && gD3DInterfacePreDrawError && !IsScreenSaver())
-	{
-		int aResult = MessageBox(NULL, 
-						GetString(_S("HARDWARE_ACCEL_NOT_WORKING"),
-									_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
-									_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
-									_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
-						(mCompanyName + _S(" ") +
-						 GetString(_S("HARDWARE_ACCEL_CONFIRMATION"), _S("Hardware Acceleration Confirmation"))).c_str(),
-						MB_YESNO | MB_ICONQUESTION);
+	//extern bool gD3DInterfacePreDrawError;
+	//if (!showedMsgBox && gD3DInterfacePreDrawError && !IsScreenSaver())
+	//{
+	//	int aResult = MessageBox(NULL, 
+	//					GetString(_S("HARDWARE_ACCEL_NOT_WORKING"),
+	//								_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
+	//								_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
+	//								_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
+	//					(mCompanyName + _S(" ") +
+	//					 GetString(_S("HARDWARE_ACCEL_CONFIRMATION"), _S("Hardware Acceleration Confirmation"))).c_str(),
+	//					MB_YESNO | MB_ICONQUESTION);
 
-		if (aResult==IDNO)
-			RegistryWriteBoolean(_S("Is3D"), false);
-	}
+	//	if (aResult==IDNO)
+	//		RegistryWriteBoolean(_S("Is3D"), false);
+	//}
 
 
 	DialogMap::iterator aDialogItr = mDialogMap.begin();
@@ -474,7 +477,7 @@ SexyAppBase::~SexyAppBase()
 	{
 		HWND aWindow = mInvisHWnd;
 		mInvisHWnd = NULL;
-#ifdef _WIN64
+#ifndef _WIN32
 		SetWindowLong(aWindow, GWLP_USERDATA, NULL);
 #else
 		SetWindowLong(aWindow, GWL_USERDATA, NULL);
@@ -504,7 +507,7 @@ SexyAppBase::~SexyAppBase()
 	{
 		HWND aWindow = mHWnd;
 		mHWnd = NULL;
-#ifdef _WIN64
+#ifndef _WIN32
 		SetWindowLong(aWindow, GWLP_USERDATA, NULL);
 #else 
 		SetWindowLong(aWindow, GWL_USERDATA, NULL);
@@ -528,7 +531,7 @@ SexyAppBase::~SexyAppBase()
 	if (mMutex != NULL)
 		::CloseHandle(mMutex);	
 
-	FreeLibrary(gDDrawDLL);
+	//FreeLibrary(gDDrawDLL);
 	FreeLibrary(gDSoundDLL);
 	FreeLibrary(gVersionDLL);
 }
@@ -1682,7 +1685,8 @@ void SexyAppBase::WriteToRegistry()
 	RegistryWriteInteger(_S("PreferredMAXIMIZED"), mPreferredMAXIMIZED);
 	RegistryWriteInteger(_S("CustomCursors"), mCustomCursorsEnabled ? 1 : 0);		
 	RegistryWriteInteger(_S("InProgress"), 0);
-	RegistryWriteBoolean(_S("WaitForVSync"), mWaitForVSync);	
+	RegistryWriteBoolean(_S("WaitForVSync"), mWaitForVSync);
+	RegistryWriteBoolean(_S("EnableVsync"), mEnableVsync);
 }
 
 bool SexyAppBase::RegistryEraseKey(const SexyString& _theKeyName)
@@ -2061,6 +2065,8 @@ void SexyAppBase::ReadFromRegistry()
 		
 	if (!IsScreenSaver())
 		RegistryWriteInteger(_S("InProgress"), 1);
+
+	RegistryReadBoolean(_S("EnableVsync"), &mEnableVsync);
 }
 
 bool SexyAppBase::WriteBytesToFile(const SexyString& theFileName, const void *theData, unsigned long theDataLen)
@@ -2525,14 +2531,14 @@ static void CalculateFPS()
 	
 	if (gFPSImage==NULL)
 	{
-		gFPSImage = new DDImage(gSexyAppBase->mDDInterface);
-		gFPSImage->Create(50,aFont.GetHeight()+4);
-		gFPSImage->SetImageMode(false,false);
-		gFPSImage->SetVolatile(true);
-		gFPSImage->mPurgeBits = false;
-		gFPSImage->mWantDDSurface = true;
-		gFPSImage->PurgeBits();
+		gFPSImage = new SDL3Image(LawnApp::mSDLRenderer);
+		gFPSImage->mWidth = 50;
+		gFPSImage->mHeight = aFont.GetHeight() + 4;
+		gFPSImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, gFPSImage->mWidth, gFPSImage->mHeight);
+		SDL_SetTextureBlendMode((SDL_Texture*)gFPSImage->mD3DData, SDL_BLENDMODE_BLEND);
 	}
+
+	SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)gFPSImage->mD3DData);
 
 	if (gFPSTimer.GetDuration() >= 1000 || gForceDisplay)
 	{
@@ -2558,15 +2564,13 @@ static void CalculateFPS()
 		aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
 		aDrawG.SetColor(0xFFFFFF);
 		aDrawG.DrawString(aFPS,2,aFont.GetAscent());
-		//gFPSImage->mKeepBits = false;
-		//gFPSImage->GenerateDDSurface();
-		gFPSImage->mBitsChangedCount++;
 	}	
 
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetColor(gFrameCount % 2 == 1 ? Color(0xff00) : Color(0xff0000));
 	aDrawG.FillRect(0, gFPSImage->GetHeight()-2, gSexyAppBase->mLoadingThreadCompleted ? gFPSImage->GetWidth() : gFPSImage->GetWidth() / 2, 2);
-	gFPSImage->mBitsChangedCount++;
+
+	SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
 }
 
 ///////////////////////////// FPS Stuff to draw mouse coords
@@ -2575,14 +2579,15 @@ static void FPSDrawCoords(int theX, int theY)
 	static SysFont aFont(gSexyAppBase,"Tahoma",8);
 	if (gFPSImage==NULL)
 	{
-		gFPSImage = new DDImage(gSexyAppBase->mDDInterface);
-		gFPSImage->Create(50,aFont.GetHeight()+4);
-		gFPSImage->SetImageMode(false,false);
-		gFPSImage->SetVolatile(true);
-		gFPSImage->mPurgeBits = false;
-		gFPSImage->mWantDDSurface = true;
-		gFPSImage->PurgeBits();
+
+		gFPSImage = new SDL3Image(LawnApp::mSDLRenderer);
+		gFPSImage->mWidth = 50;
+		gFPSImage->mHeight = aFont.GetHeight() + 4;
+		gFPSImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, gFPSImage->mWidth, gFPSImage->mHeight);
+		SDL_SetTextureBlendMode((SDL_Texture*)gFPSImage->mD3DData, SDL_BLENDMODE_BLEND);
 	}
+
+	SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)gFPSImage->mD3DData);
 
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetFont(&aFont);
@@ -2591,7 +2596,8 @@ static void FPSDrawCoords(int theX, int theY)
 	aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
 	aDrawG.SetColor(0xFFFFFF);
 	aDrawG.DrawString(aFPS,2,aFont.GetAscent());	
-	gFPSImage->mBitsChangedCount++;
+
+	SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
 }
 
 ///////////////////////////// Demo TimeLeft Stuff
@@ -2781,11 +2787,13 @@ bool SexyAppBase::DrawDirtyStuff()
 
 		if (mShowFPS)
 		{
-			Graphics g(mDDInterface->GetScreenImage());
-			g.DrawImage(gFPSImage,mDDInterface->mWidth-gFPSImage->GetWidth()-10, mDDInterface->mHeight-gFPSImage->GetHeight()-10);
+			Graphics g(mWidgetManager->mImage);
+			g.DrawImage(gFPSImage, 800-gFPSImage->GetWidth()-10, 590-gFPSImage->GetHeight());
+			/*SDL_FRect dstRect = {(float)(790 - gFPSImage->GetWidth()), (float)(590 - gFPSImage->GetHeight()), gFPSImage->GetWidth(), gFPSImage->GetHeight()};
+			SDL_RenderTexture(LawnApp::mSDLRenderer, (SDL_Texture*)gFPSImage->mD3DData, nullptr, &dstRect);*/
 		
-			if (mPlayingDemoBuffer)
-				g.DrawImage(gDemoTimeLeftImage, mDDInterface->mWidth -gDemoTimeLeftImage->GetWidth()-10, mDDInterface->mHeight-gFPSImage->GetHeight()-gDemoTimeLeftImage->GetHeight()-15);
+			/*if (mPlayingDemoBuffer)
+				g.DrawImage(gDemoTimeLeftImage, mDDInterface->mWidth -gDemoTimeLeftImage->GetWidth()-10, mDDInterface->mHeight-gFPSImage->GetHeight()-gDemoTimeLeftImage->GetHeight()-15);*/
 		}
 
 		if (mWaitForVSync && mIsPhysWindowed && mSoftVSyncWait)
@@ -3568,10 +3576,10 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			return aResult;
 	}
 
-#if defined(WIN64)
+#if defined(_WIN32)
+	SexyAppBase* aSexyApp = (SexyAppBase*)GetWindowLong(hWnd, GWL_USERDATA);
+#elif defined(_WIN64)
 	SexyAppBase* aSexyApp = (SexyAppBase*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-#elif defined(WIN32)
-	SexyAppBase* aSexyApp = (SexyAppBase*) GetWindowLong(hWnd, GWL_USERDATA);	
 #endif
 	switch (uMsg)
 	{		
@@ -4409,7 +4417,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 		}
 #endif
 	}
-	else if (theKey == VK_F3)
+	else if (theKey == KEYCODE_F3)
 	{
 		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
@@ -4430,7 +4438,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 			gForceDisplay = true;
 		}
 	}
-	else if (theKey == VK_F8)
+	else if (theKey == KEYCODE_F8)
 	{
 		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
@@ -4446,7 +4454,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F10)
+	else if (theKey == KEYCODE_F10)
 	{
 #ifndef RELEASEFINAL
 		if (mWidgetManager->mKeyDown[KEYCODE_CONTROL])
@@ -4467,7 +4475,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F11)
+	else if (theKey == KEYCODE_F11)
 	{
 		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 			DumpProgramInfo();
@@ -4476,7 +4484,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F2)
+	else if (theKey == KEYCODE_F2)
 	{
 		bool isPerfOn = !SexyPerf::IsPerfOn();
 		if (isPerfOn)
@@ -4991,10 +4999,10 @@ void SexyAppBase::MakeWindow()
 
 	if (mHWnd != NULL)
 	{
-#if defined(WIN64)
-		SetWindowLongPtr(mHWnd, GWLP_USERDATA, (LONG_PTR)NULL);
-#elif defined(WIN32)
+#if defined(_WIN32)
 		SetWindowLong(mHWnd, GWL_USERDATA, NULL);
+#elif defined(_WIN64)
+		SetWindowLongPtr(mHWnd, GWLP_USERDATA, (LONG_PTR)NULL);
 #endif
 		HWND anOldWindow = mHWnd;
 		mHWnd = NULL;		
@@ -5181,10 +5189,10 @@ void SexyAppBase::MakeWindow()
 	char aStr[256];
 	sprintf(aStr, "HWND: %d\r\n", mHWnd);
 	TodTrace(aStr);
-#if defined(WIN64)
+#if defined(_WIN32)
+	SetWindowLongW(mHWnd, GWL_USERDATA, (LONG)this);
+#elif defined(_WIN64)
 	SetWindowLongPtr(mHWnd, GWLP_USERDATA, (LONG_PTR)this);
-#elif defined(WIN32)
-	SetWindowLongW(mHWnd, GWL_USERDATA, (LONG) this);
 #endif
 
 	if (IsPreviewSaver()) {
@@ -6622,7 +6630,7 @@ void SexyAppBase::Init()
 	if (mShutdown)
 		return;
 
-	if (gDDrawDLL==NULL || gDSoundDLL==NULL)
+	if (/*gDDrawDLL==NULL ||*/ gDSoundDLL==NULL)
 	{
 		MessageBox(NULL, 
 						GetString(_S("APP_REQUIRES_DIRECTX"), _S("This application requires DirectX to run.  You can get DirectX at http://www.microsoft.com/directx")).c_str(),
@@ -6758,9 +6766,9 @@ void SexyAppBase::Init()
 				NULL,
 				gHInstance,
 				0);	
-#if defined(WIN64)
+#if defined(_WIN32)
 		SetWindowLongPtr(mInvisHWnd, GWLP_USERDATA, (LONG_PTR)this);
-#elif defined(WIN32)
+#elif defined(_WIN64)
 		SetWindowLong(mInvisHWnd, GWL_USERDATA, (LONG) this);
 #endif
 	}
@@ -6812,9 +6820,9 @@ void SexyAppBase::Init()
 				NULL,
 				gHInstance,
 				0);	
-#if defined(WIN64)
+#if defined(WIN32)
 		SetWindowLongPtr(mInvisHWnd, GWLP_USERDATA, (LONG_PTR)this);
-#elif defined(WIN32)
+#elif defined(WIN64)
 		SetWindowLong(mInvisHWnd, GWL_USERDATA, (LONG) this);
 #endif
 	}
@@ -7567,14 +7575,20 @@ void SexyAppBase::RemoveMemoryImage(MemoryImage* theMemoryImage)
 
 void SexyAppBase::Remove3DData(MemoryImage* theMemoryImage)
 {
-	if (mDDInterface)
-		mDDInterface->Remove3DData(theMemoryImage);
+	/*if (mDDInterface)
+		mDDInterface->Remove3DData(theMemoryImage);*/
+	if (theMemoryImage->mD3DData != nullptr)
+	{
+		SDL_DestroyTexture((SDL_Texture*)theMemoryImage->mD3DData);
+		theMemoryImage->mD3DData = nullptr;
+	}
 }
 
 
 bool SexyAppBase::Is3DAccelerated()
 {
-	return mDDInterface->mIs3D;
+	//return mDDInterface->mIs3D;
+	return true;
 }
 
 bool SexyAppBase::Is3DAccelerationSupported()

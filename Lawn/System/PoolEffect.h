@@ -2,6 +2,7 @@
 #define __POOLEFFECT_H__
 
 #include "../../ConstEnums.h"
+#include "../../SexyAppFramework/SDL3Image.h"
 
 constexpr const int CAUSTIC_IMAGE_WIDTH = 128;
 constexpr const int CAUSTIC_IMAGE_HEIGHT = 64;
@@ -17,7 +18,7 @@ class PoolEffect
 {
 public:
 	unsigned char*		mCausticGrayscaleImage;
-	Sexy::MemoryImage*	mCausticImage;
+	Sexy::SDL3Image*	mCausticImage;
 	LawnApp*			mApp;
 	int					mPoolCounter;
 

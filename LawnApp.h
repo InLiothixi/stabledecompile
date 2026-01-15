@@ -11,6 +11,8 @@
 
 #include "SexyAppFramework/Common.h"
 
+#include <SDL3/SDL.h>
+
 #define SAMPLE_RATE  44100
 #define FRAMES_PER_BUFFER 256
 #define SHOUT_THRESHOLD 0.2f 
@@ -67,6 +69,16 @@ public:
 
 class LawnApp : public SexyApp
 {
+public:
+	static SDL_Window*				mSDLWindow;
+	static SDL_Renderer*			mSDLRenderer;
+	static SDL_Cursor*				mSDLPointerCursor;
+	static SDL_Cursor*				mSDLHandCursor;
+	static SDL_Cursor*				mSDLDraggingCursor;
+	static SDL_Cursor*				mSDLTextCursor;
+	static SDL_Cursor*				mSDLWaitCursor;
+	static SDL_Cursor*				mSDLNoCursor;
+
 public:
 	Board*							mBoard;											//+0x768
 	TitleScreen*					mTitleScreen;									//+0x76C
@@ -363,6 +375,10 @@ public:
 	void							DoConfirmRIPMode();
 	void							DoMoreSettingsDialog();
 	void							KillMoreSettingsDialog();
+	void							MakeWindow();
+	bool							DrawDirtyStuff();
+	void							Redraw(Rect* theClipRect);
+	bool							UpdateAppStep(bool* updated);
 };
 
 SexyString							LawnGetCurrentLevelName();
@@ -379,6 +395,4 @@ extern bool gFastMo;  //0x6A9EAB
 extern bool gSlowMo;  //0x6A9EAA
 extern LawnApp* gLawnApp;  //0x6A9EC0
 extern int gSlowMoCounter;  //0x6A9EC4
-
-
 #endif	// __LAWNAPP_H__

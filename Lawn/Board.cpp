@@ -623,7 +623,7 @@ int Board::GetNumWavesPerFlag()
 //0x409080
 bool Board::IsFlagWave(int theWaveNumber)
 {
-	if (mApp->IsFirstTimeAdventureMode() && mLevel == 1 && mApp->mPlayerLevelRef <= 4)
+	if (mApp->IsFirstTimeAdventureMode() && mLevel == 1 /*&& mApp->mPlayerLevelRef <= 4*/)
 		return false;
 
 #ifdef _MOBILE_MINIGAMES
@@ -691,7 +691,7 @@ void Board::PickZombieWaves()
 		else
 		{
 			mNumWaves = gZombieWaves[ClampInt(abs(mLevel) - 1, 0, 49)];
-			if ((!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4) && !mApp->IsMiniBossLevel())
+			if ((!mApp->IsFirstTimeAdventureMode() /*|| mApp->mPlayerLevelRef > 4*/) && !mApp->IsMiniBossLevel())
 			{
 				mNumWaves = mNumWaves < 10 ? 20 : mNumWaves + 10;
 			}
@@ -769,7 +769,7 @@ void Board::PickZombieWaves()
 		{
 			aZombiePoints = (mChallenge->mSurvivalStage * GetNumWavesPerSurvivalStage() + aWave) * 2 / 5 + 1;
 		}
-		else if (mApp->IsAdventureMode() && (mApp->HasFinishedAdventure() || mApp->mPlayerLevelRef > 4) && mLevel != 5)
+		else if (mApp->IsAdventureMode() && (mApp->HasFinishedAdventure() /*|| mApp->mPlayerLevelRef > 4*/) && mLevel != 5)
 		{
 			aZombiePoints = aWave * 2 / 5 + 1;
 		}
@@ -1192,7 +1192,7 @@ void Board::PickBackground()
 		mPlantRow[4] = PlantRowType::PLANTROW_NORMAL;
 		mPlantRow[5] = PlantRowType::PLANTROW_DIRT;
 
-		if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerLevelRef <= 4)
+		if (mApp->IsAdventureMode() && mApp->IsFirstTimeAdventureMode() /*&& mApp->mPlayerLevelRef <= 4*/)
 		{
 			if (mLevel == 1)
 			{
@@ -1703,11 +1703,11 @@ void Board::InitLevel()
 	// 初始化字幕播放记录
 	memset(mHelpDisplayed, 0, sizeof(mHelpDisplayed));
 	// 初始化卡槽及卡牌
-	if (mApp->mPlayerLevelRef > 4)
-		mApp->mPlayerInfo->SetLevel(mApp->mPlayerLevelRef);
+	//if (mApp->mPlayerLevelRef > 4)
+	//	mApp->mPlayerInfo->SetLevel(mApp->mPlayerLevelRef);
 	mSeedBank->UpdateWidth();
-	if (mApp->mPlayerLevelRef > 4)
-		mApp->mPlayerInfo->SetLevel(mLevel);
+	//if (mApp->mPlayerLevelRef > 4)
+	//	mApp->mPlayerInfo->SetLevel(mLevel);
 	for (int i = 0; i < SEEDBANK_MAX; i++)
 	{
 		SeedPacket* aPacket = &mSeedBank->mSeedPackets[i];
@@ -2042,7 +2042,7 @@ bool Board::ChooseSeedsOnCurrentLevel()
 	if (mApp->mGameMode >= GameMode::GAMEMODE_LAST_STAND_STAGE_1 && mApp->mGameMode <= GameMode::GAMEMODE_LAST_STAND_STAGE_5)
 		return false;
 
-	return (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4 || mLevel > 7);
+	return (!mApp->IsFirstTimeAdventureMode() /*|| mApp->mPlayerLevelRef > 4 */|| mLevel > 7);
 }
 
 //0x40BE00
@@ -6533,7 +6533,7 @@ void Board::UpdateGame()
 	UpdateGameObjects();
 	if (StageHasFog() && mFogBlownCountDown > 0)
 	{
-		float aMaxFogOffset = 1065.0f - LeftFogColumn() * 80.0f;
+		float aMaxFogOffset = 1065.0f + 170 - LeftFogColumn() * 80.0f;
 		if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO)
 		{
 			mFogOffset = TodAnimateCurveFloat(200, 0, mFogBlownCountDown, aMaxFogOffset, 0, TodCurves::CURVE_EASE_OUT);
@@ -6954,14 +6954,14 @@ void Board::DrawBackdrop(Graphics* g)
 	default:											TOD_ASSERT();											break;
 	}
 
-	if (mLevel == 1 && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerLevelRef <= 4)
+	if (mLevel == 1 && mApp->IsFirstTimeAdventureMode() /*&& mApp->mPlayerLevelRef <= 4*/)
 	{
 		g->DrawImageF(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		int aWidth = TodAnimateCurve(0, 1000, mSodPosition, 0, Sexy::IMAGE_SOD1ROW->GetWidth(), TodCurves::CURVE_LINEAR);
 		Rect aSrcRect(0, 0, aWidth, Sexy::IMAGE_SOD1ROW->GetHeight());
 		g->DrawImageF(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265, aSrcRect);
 	}
-	else if ((((mLevel == 2 || mLevel == 3) && mApp->IsFirstTimeAdventureMode()) || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_RESODDED) && mApp->mPlayerLevelRef <= 4)
+	else if ((((mLevel == 2 || mLevel == 3) && mApp->IsFirstTimeAdventureMode()) || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_RESODDED) /*&& mApp->mPlayerLevelRef <= 4*/)
 	{
 		g->DrawImageF(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		g->DrawImageF(Sexy::IMAGE_SOD1ROW, 239 - BOARD_OFFSET, 265);
@@ -6969,7 +6969,7 @@ void Board::DrawBackdrop(Graphics* g)
 		Rect aSrcRect(0, 0, aWidth, Sexy::IMAGE_SOD3ROW->GetHeight());
 		g->DrawImageF(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149, aSrcRect);
 	}
-	else if (mLevel == 4 && mApp->IsFirstTimeAdventureMode() && mApp->mPlayerLevelRef <= 4)
+	else if (mLevel == 4 && mApp->IsFirstTimeAdventureMode() /*&& mApp->mPlayerLevelRef <= 4*/)
 	{
 		g->DrawImageF(Sexy::IMAGE_BACKGROUND1UNSODDED, -BOARD_OFFSET + WIDESCREEN_OFFSETX, WIDESCREEN_OFFSETY);
 		g->DrawImageF(Sexy::IMAGE_SOD3ROW, 235 - BOARD_OFFSET, 149);
@@ -7190,7 +7190,7 @@ void Board::DrawGameObjects(Graphics* g)
 				{
 					RenderItem& aRenderItem = aRenderList[aRenderItemCount];
 					aRenderItem.mRenderObjectType = RenderObjectType::RENDER_ITEM_PLANT_OVERLAY;
-					aRenderItem.mZPos = MakeRenderOrder(RenderLayer::RENDER_LAYER_PARTICLE, 0, mY);
+					aRenderItem.mZPos = aPlant->mRenderOrder + 1;
 					aRenderItem.mPlant = aPlant;
 					aRenderItemCount++;
 				}
@@ -8557,7 +8557,7 @@ void Board::DrawFadeOut(Graphics* g)
 	}
 	g->mTransX = 0;
 	g->mTransY = 0;
-	g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
+	g->FillRect(0, 0, 800, 600);
 	g->PopState();
 }
 
@@ -8869,8 +8869,8 @@ void Board::DrawFog(Graphics* g)
 			g->SetColor(Color(aColorVariant, aColorVariant, aLightnessVariant, aFadeAmount));
 
 			g->ClearClipRect();
-			g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth - 1;
-			g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight - 1;
+			g->mClipRect.mWidth = BOARD_WIDTH;
+			g->mClipRect.mHeight = BOARD_HEIGHT;
 
 			Rect srcRect(aImageFog->GetCelWidth() * aCelCol, 0, aImageFog->GetCelWidth(), aImageFog->GetCelHeight());
 			g->DrawImageF(aImageFog, aPosX, aPosY, srcRect);
@@ -9239,7 +9239,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(200, 200, 200, 210));
-		g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
+		g->FillRect(0, 0, 800, 600);
 		g->PopState();
 	}
 
@@ -9249,7 +9249,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(255, 255, 255, (int)(min(mNukeCounter, 150) / 150.0f * 255)));
-		g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
+		g->FillRect(0, 0, 800, 600);
 		g->PopState();
 	}
 
@@ -9381,7 +9381,7 @@ void Board::DrawUITop(Graphics* g)
 		g->mTransX = 0;
 		g->mTransY = 0;
 		g->SetColor(Color(0, 0, 0));
-		g->FillRect(0, 0, gSexyAppBase->mDDInterface->GetScreenImage()->GetWidth(), gSexyAppBase->mDDInterface->GetScreenImage()->GetHeight());
+		g->FillRect(0, 0, 800, 600);
 		g->PopState();
 	}
 
@@ -9639,6 +9639,12 @@ void Board::KeyDown(KeyCode theKey)
 {
 	DoTypingCheck(theKey);
 
+#ifdef _HAS_HEALTHBAR_TOGGLE
+	if (theKey == KeyCode::KEYCODE_TAB) {
+		mApp->mShowHealthBar = !mApp->mShowHealthBar;
+	}
+#endif
+
 	if (mApp->mGameScene == GameScenes::SCENE_LEVEL_INTRO && 
 		mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && 
 		mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM)
@@ -9687,11 +9693,6 @@ static void TodCrash()
 //0x41B950（原版中废弃）
 void Board::KeyChar(SexyChar theChar)
 {
-#ifdef _HAS_HEALTHBAR_TOGGLE
-	if (theChar == KeyCode::KEYCODE_TAB) {
-		mApp->mShowHealthBar = !mApp->mShowHealthBar;
-	}
-#endif
 #ifdef _REPLANTED_SPEED_CONTROL
 	if (!mApp->mDebugKeysEnabled && mAllowSpeedMod && !mLevelAwardSpawned && mApp->mGameScene == GameScenes::SCENE_PLAYING)
 	{
@@ -11501,7 +11502,7 @@ void Board::DropLootPiece(int thePosX, int thePosY, int theDropFactor)
 //0x41D2C0
 bool Board::CanDropLoot()
 {
-	return !mCutScene->ShouldRunUpsellBoard() && (!mApp->IsFirstTimeAdventureMode() || mApp->mPlayerLevelRef > 4 && mLevel < 11 || mLevel >= 11);
+	return !mCutScene->ShouldRunUpsellBoard() && (!mApp->IsFirstTimeAdventureMode() /*|| mApp->mPlayerLevelRef > 4 && mLevel < 11*/ || mLevel >= 11);
 }
 
 //0x41D320

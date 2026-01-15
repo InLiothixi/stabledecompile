@@ -95,11 +95,11 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 
 // Unused or Restored
 //#define _HAS_BLOOM_AND_DOOM_CONTENTS
-//#define _HAS_EXTENDED_MINIGAMES
+#define _HAS_EXTENDED_MINIGAMES
 //#define _HAS_UNUSED_ACHIEVEMENTS
 
 //Ported from other editions
-//#define _MOBILE_MINIGAMES
+#define _MOBILE_MINIGAMES
 //#define _DS_MINIGAMES
 //#define _CONSOLE_MINIGAMES
 //#define _REPLANTED_SPEED_CONTROL
@@ -109,7 +109,7 @@ const int           STORESCREEN_PAGESTRING_Y = 500;
 // Quality Of Life
 //#define _HAS_HEALTHBAR_TOGGLE
 //#define _ALLOW_SWIPE
-#//define _HAS_GAMESELECTOR_SPOTLIGHT
+//#define _HAS_GAMESELECTOR_SPOTLIGHT
 //#define _HAS_ANIMATED_WOOD_SIGN
 //#define _HAS_KERNELPULT_BUTTER_IDLE
 

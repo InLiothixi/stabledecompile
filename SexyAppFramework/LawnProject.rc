@@ -50,7 +50,7 @@ END
 // Cursor
 //
 
-IDC_CURSOR1             CURSOR                  "..\\Cursor13.cur"
+IDC_CURSOR1             RCDATA                  "..\\Cursor13.bmp"
 
 #endif    // ????????? (?????????? ??????, ?????) resources
 /////////////////////////////////////////////////////////////////////////////

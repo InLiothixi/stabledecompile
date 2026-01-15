@@ -1574,11 +1574,7 @@ Image* ImageLib::GetImage(const SexyString& theFilename, bool lookForAlphaImage)
 	Image* anImage = NULL;
 
 	if ((anImage == NULL) && ((sexystricmp(anExt.c_str(), _S(".png")) == 0) || (anExt.length() == 0)))
-	{
 		anImage = GetPNGImage(aFilename + _S(".png"));
-
-		if (anImage != NULL) return anImage;
-	}
 
 	if ((anImage == NULL) && ((sexystricmp(anExt.c_str(), _S(".tga")) == 0) || (anExt.length() == 0)))
 		 anImage = GetTGAImage(aFilename + _S(".tga"));

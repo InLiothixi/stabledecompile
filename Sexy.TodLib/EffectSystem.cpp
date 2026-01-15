@@ -396,13 +396,13 @@ void TodTriangleGroup::DrawGroup(Graphics* g)
 			gTodTriangleDrawAdditive = true;
 		TodSandImageIfNeeded(mImage);
 
-		if (DDImage::Check3D(g->mDestImage))
+		/*if (DDImage::Check3D(g->mDestImage))
 		{
 			DDImage* anImage = (DDImage*)g->mDestImage;
 			mImage->mDrawn = true;
 			anImage->mDDInterface->mD3DInterface->DrawTrianglesTex(mVertArray, mTriangleCount, Color::White, mDrawMode, mImage, 0.0f, 0.0f, g->mLinearBlend);
 		}
-		else
+		else*/
 		{
 			g->mDestImage->BltTrianglesTex(mImage, mVertArray, mTriangleCount, Rect(0, 0, g->mDestImage->GetWidth(), g->mDestImage->GetHeight()), Color::White, mDrawMode, 0, 0, g->mLinearBlend);
 		}

@@ -69,6 +69,270 @@ bool gFastMo = false;  //0x6A9EAB
 LawnApp* gLawnApp = nullptr;  //0x6A9EC0
 int gSlowMoCounter = 0;  //0x6A9EC4
 
+#include "SexyAppFramework/Debug.h"
+
+#include <SDL3/SDL.h>
+#include "SexyAppFramework/SDL3Image.h"
+
+SDL_Window* LawnApp::mSDLWindow = nullptr;
+SDL_Renderer* LawnApp::mSDLRenderer = nullptr;
+SDL_Cursor* LawnApp::mSDLPointerCursor = nullptr;
+SDL_Cursor* LawnApp::mSDLHandCursor = nullptr;
+SDL_Cursor* LawnApp::mSDLDraggingCursor = nullptr;
+SDL_Cursor* LawnApp::mSDLTextCursor = nullptr;
+SDL_Cursor* LawnApp::mSDLWaitCursor = nullptr;
+SDL_Cursor* LawnApp::mSDLNoCursor = nullptr;
+
+void LawnApp::MakeWindow()
+{
+	//SexyAppBase::MakeWindow();
+	if (mSDLWindow != nullptr) {
+		SDL_DestroyRenderer(mSDLRenderer);
+		SDL_DestroyWindow(mSDLWindow);
+	}
+
+	if (mDDInterface == nullptr) {
+		mDDInterface = new DDInterface(this);
+	}
+
+	mSDLWindow = SDL_CreateWindow(mTitle.c_str(), mWidth, mHeight, SDL_WINDOW_RESIZABLE | (mIsWindowed ? 0 : SDL_WINDOW_FULLSCREEN) | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+	mSDLRenderer = SDL_CreateRenderer(mSDLWindow, nullptr);
+	SDL_SetRenderVSync(mSDLRenderer, mEnableVsync);
+	SDL_SetRenderLogicalPresentation(mSDLRenderer, mWidth, mHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+	mHWnd = (HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(mSDLWindow), SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL);
+
+	mWidgetManager->mImage = new SDL3Image(mSDLRenderer);
+	mWidgetManager->mImage->mWidth = mWidth;
+	mWidgetManager->mImage->mHeight = mHeight;
+	mWidgetManager->mImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, mWidgetManager->mImage->mWidth, mWidgetManager->mImage->mHeight);
+	SDL_SetTextureBlendMode((SDL_Texture*)mWidgetManager->mImage->mD3DData, SDL_BLENDMODE_BLEND);
+	mWidgetManager->MarkAllDirty();
+}
+
+bool LawnApp::DrawDirtyStuff()
+{
+	SDL_SetRenderDrawColor(mSDLRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+	SDL_RenderClear(mSDLRenderer);
+	return SexyAppBase::DrawDirtyStuff();
+}
+
+void LawnApp::Redraw(Rect* theClipRect)
+{
+	//SexyAppBase::Redraw(theClipRect);
+	SDL_RenderPresent(mSDLRenderer);
+}
+
+bool LawnApp::UpdateAppStep(bool* updated)
+{
+	if (updated != nullptr)
+		*updated = false;
+
+	if (mExitToTop)
+		return false;
+
+	if (mUpdateAppState == UPDATESTATE_PROCESS_DONE)
+		mUpdateAppState = UPDATESTATE_MESSAGES;
+
+	mUpdateAppDepth++;
+
+	auto buttonTrans = [](Uint8 button)
+	{
+		switch (button)
+		{
+		case SDL_BUTTON_LEFT: return 1;
+		case SDL_BUTTON_RIGHT: return -1;
+		case SDL_BUTTON_MIDDLE: return 3;
+		}
+		return 0;
+	};
+
+	if (mUpdateAppState == UPDATESTATE_MESSAGES)
+	{
+		//SDL_StartTextInput(mSDLWindow);
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
+		{
+			SDL_ConvertEventToRenderCoordinates(mSDLRenderer, &event);
+			switch (event.type)
+			{
+			case SDL_EVENT_QUIT:
+				Shutdown();
+				break;
+			case SDL_EVENT_MOUSE_BUTTON_DOWN:
+				if ((!gInAssert) && (!mSEHOccured))
+				{
+					int x = event.button.x;
+					int y = event.button.y;
+					mWidgetManager->RemapMouse(x, y);
+					mLastUserInputTick = mLastTimerTime;
+					mWidgetManager->MouseMove(x, y);
+
+					if (!mMouseIn)
+					{
+						mMouseIn = true;
+						EnforceCursor();
+					}
+
+					mWidgetManager->MouseDown(event.button.x, event.button.y, buttonTrans(event.button.button));
+				}
+				break;
+			case SDL_EVENT_MOUSE_BUTTON_UP:
+				if ((!gInAssert) && (!mSEHOccured))
+				{
+					int x = event.button.x;
+					int y = event.button.y;
+					mWidgetManager->RemapMouse(x, y);
+					mLastUserInputTick = mLastTimerTime;
+					mWidgetManager->MouseMove(x, y);
+
+					if (!mMouseIn)
+					{
+						mMouseIn = true;
+						EnforceCursor();
+					}
+
+					mWidgetManager->MouseUp(event.button.x, event.button.y, buttonTrans(event.button.button));
+				}
+				break;
+			case SDL_EVENT_MOUSE_MOTION:
+				if ((!gInAssert) && (!mSEHOccured))
+				{
+					int x = event.motion.x;
+					int y = event.motion.y;
+					mWidgetManager->RemapMouse(x, y);
+					mLastUserInputTick = mLastTimerTime;
+					mWidgetManager->MouseMove(x, y);
+
+					if (!mMouseIn)
+					{
+						mMouseIn = true;
+						EnforceCursor();
+					}
+				}
+				break;
+			case SDL_EVENT_MOUSE_WHEEL:
+				mLastUserInputTick = mLastTimerTime;
+				mWidgetManager->MouseWheel(event.wheel.y);
+				break;
+			case SDL_EVENT_WINDOW_FOCUS_GAINED:
+				mActive = true;
+				RehupFocus();
+				EnforceCursor();
+				break;
+			case SDL_EVENT_WINDOW_FOCUS_LOST:
+				mActive = false;
+				RehupFocus();
+				break;
+			case SDL_EVENT_KEY_DOWN:
+			{
+				mLastUserInputTick = mLastTimerTime;
+				if (mDebugKeysEnabled)
+				{
+					if (DebugKeyDown(GetKeyCodeFromCodeSDL(event.key.key)))
+						break;
+				}
+
+				int theChar = GetKeyCodeFromCodeSDL(event.key.key);
+
+				if ((theChar < KEYCODE_ASCIIBEGIN || theChar > KEYCODE_ASCIIEND) && (theChar < KEYCODE_ASCIIBEGIN2 || theChar > KEYCODE_ASCIIEND2))
+				{
+					theChar = -1;
+				}
+
+				switch (event.key.key)
+				{
+					case SDLK_KP_PLUS:   theChar = '+'; break;
+					case SDLK_KP_MINUS:  theChar = '-'; break;
+					case SDLK_KP_MULTIPLY: theChar = '*'; break;
+					case SDLK_KP_DIVIDE: theChar = '/'; break;
+					case SDLK_KP_PERIOD: theChar = '.'; break;
+
+					case SDLK_KP_0: theChar = '0'; break;
+					case SDLK_KP_1: theChar = '1'; break;
+					case SDLK_KP_2: theChar = '2'; break;
+					case SDLK_KP_3: theChar = '3'; break;
+					case SDLK_KP_4: theChar = '4'; break;
+					case SDLK_KP_5: theChar = '5'; break;
+					case SDLK_KP_6: theChar = '6'; break;
+					case SDLK_KP_7: theChar = '7'; break;
+					case SDLK_KP_8: theChar = '8'; break;
+					case SDLK_KP_9: theChar = '9'; break;
+				}
+
+				if (theChar != -1 && theChar == 'D' && (mWidgetManager != NULL) && (mWidgetManager->mKeyDown[KEYCODE_CONTROL]) && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
+				{
+					PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
+					mDebugKeysEnabled = !mDebugKeysEnabled;
+				}
+
+				mWidgetManager->KeyDown(GetKeyCodeFromCodeSDL(event.key.key));
+
+				if (theChar != -1 && !SDL_TextInputActive(mSDLWindow)) {
+
+					bool shift = (event.key.mod & SDL_KMOD_SHIFT) != 0;
+					bool caps = (event.key.mod & SDL_KMOD_CAPS) != 0;
+
+					SexyChar c = theChar;
+
+					if (isalpha(c))
+					{
+						if (shift ^ caps)
+							c = toupper(c);
+						else
+							c = tolower(c);
+					}
+					mWidgetManager->KeyChar(c);
+				}
+
+				break;
+			}
+			case SDL_EVENT_KEY_UP:
+				mLastUserInputTick = mLastTimerTime;
+				mWidgetManager->KeyUp(GetKeyCodeFromCodeSDL(event.key.key));
+				break;
+			case SDL_EVENT_TEXT_INPUT: 
+				mLastUserInputTick = mLastTimerTime;
+				SexyChar aChar = event.text.text[0]; 
+
+				mWidgetManager->KeyChar((SexyChar)aChar);
+				break;
+			
+			}
+		}
+		//SDL_StopTextInput(mSDLWindow);
+		mUpdateAppState = UPDATESTATE_PROCESS_1;
+	}
+	else
+	{
+		if (mStepMode)
+		{
+			if (mStepMode == 2)
+			{
+				Sleep(mFrameTime);
+				mUpdateAppState = UPDATESTATE_PROCESS_DONE;
+			}
+			else
+			{
+				mStepMode = 2;
+				DoUpdateFrames();
+				DoUpdateFramesF(1.0f);
+				DrawDirtyStuff();
+			}
+		}
+		else
+		{
+			int anOldUpdateCnt = mUpdateCount;
+			Process();
+			if (updated != NULL)
+				*updated = mUpdateCount != anOldUpdateCnt;
+		}
+	}
+
+	mUpdateAppDepth--;
+
+	return true;
+}
+
 //0x44E8A0
 bool LawnGetCloseRequest()
 {
@@ -1241,8 +1505,11 @@ bool LawnApp::KillNewOptionsDialog()
 		return false;
 
 	bool wantWindowed = !aNewOptionsDialog->mFullscreenCheckbox->IsChecked();
-	bool want3D = aNewOptionsDialog->mHardwareAccelerationCheckbox->IsChecked();
-	SwitchScreenMode(wantWindowed, want3D, false);
+	//bool want3D = aNewOptionsDialog->mHardwareAccelerationCheckbox->IsChecked();
+	mEnableVsync = aNewOptionsDialog->mHardwareAccelerationCheckbox->IsChecked();
+	RegistryWriteBoolean(_S("EnableVsync"), mEnableVsync);
+	SDL_SetRenderVSync(mSDLRenderer, mEnableVsync);
+	SwitchScreenMode(wantWindowed, true, false);
 
 	KillDialog(Dialogs::DIALOG_NEWOPTIONS);
 	ClearUpdateBacklog();
@@ -1333,6 +1600,101 @@ void BetaSubmitFunc()
 	{
 		gLawnApp->BetaSubmit(false);
 	}
+}
+
+SDL_Cursor* CreateCursorFromResource(HINSTANCE hInstance, int resourceID, int hotX, int hotY)
+{
+	HRSRC hRes = FindResource(hInstance, MAKEINTRESOURCE(resourceID), RT_RCDATA);
+	HGLOBAL hResData = LoadResource(hInstance, hRes);
+	void* pData = LockResource(hResData);
+	DWORD size = SizeofResource(hInstance, hRes);
+	SDL_IOStream* io = SDL_IOFromConstMem(pData, size);
+	SDL_Surface* surface = SDL_LoadBMP_IO(io, true);
+	SDL_Cursor* cursor = SDL_CreateColorCursor(surface, hotX, hotY);
+	SDL_DestroySurface(surface);
+	return cursor;
+}
+
+//HotSpot: 11 4
+//Size: 32 32
+unsigned char mFingerCursorData[] = {
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xe7, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3,
+	0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc0, 0xff, 0xff, 0xff, 0xc0, 0x1f, 0xff, 0xff,
+	0xc0, 0x07, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xfc, 0x40, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff,
+	0xfc, 0x00, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01,
+	0xff, 0xff, 0x80, 0x01, 0xff, 0xff, 0x80, 0x03, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xff, 0xc0,
+	0x03, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18,
+	0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00,
+	0x18, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x1b, 0x60, 0x00, 0x00, 0x1b, 0x68, 0x00,
+	0x00, 0x1b, 0x6c, 0x00, 0x01, 0x9f, 0xec, 0x00, 0x01, 0xdf, 0xfc, 0x00, 0x00, 0xdf, 0xfc,
+	0x00, 0x00, 0x5f, 0xfc, 0x00, 0x00, 0x7f, 0xfc, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x3f,
+	0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00,
+	0x0f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00
+};
+
+//HotSpot: 15 10
+//Size: 32 32
+unsigned char mDraggingCursorData[] = {
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xfe, 0x7f, 0xff, 0xff, 0xfc, 0x0f, 0xff, 0xff, 0xf0, 0x07, 0xff, 0xff, 0xe0,
+	0x01, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff,
+	0xe0, 0x00, 0xff, 0xfe, 0x60, 0x00, 0xff, 0xfc, 0x20, 0x00, 0xff, 0xfc, 0x00, 0x00, 0xff,
+	0xfe, 0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x80, 0x00,
+	0xff, 0xff, 0x80, 0x01, 0xff, 0xff, 0xc0, 0x01, 0xff, 0xff, 0xe0, 0x01, 0xff, 0xff, 0xf0,
+	0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+	0x80, 0x00, 0x00, 0x01, 0xb0, 0x00, 0x00, 0x0d, 0xb0, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00,
+	0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00,
+	0x01, 0x8d, 0xb6, 0x00, 0x01, 0xcf, 0xfe, 0x00, 0x00, 0xef, 0xfe, 0x00, 0x00, 0xff, 0xfe,
+	0x00, 0x00, 0x7f, 0xfe, 0x00, 0x00, 0x3f, 0xfe, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x1f,
+	0xfc, 0x00, 0x00, 0x0f, 0xfc, 0x00, 0x00, 0x07, 0xf8, 0x00, 0x00, 0x03, 0xf8, 0x00, 0x00,
+	0x03, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00
+};
+
+SDL_Cursor* CreateCursorFromRaw(const unsigned char* src, int w, int h, int hotX, int hotY)
+{
+	size_t maskSize = (w * h) / 8;
+	SDL_Surface* surface = SDL_CreateSurface(w, h, SDL_PIXELFORMAT_ARGB8888);
+
+	Uint32* pixels = (Uint32*)surface->pixels;
+	int pitch = surface->pitch / sizeof(Uint32);  
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			pixels[y * pitch + x] = 0x00000000;  
+		}
+	}
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			int byteIndex = y * (w / 8) + (x / 8);
+			int bitIndex = 7 - (x % 8); 
+
+			Uint8 andBit = (src[byteIndex] >> bitIndex) & 1;
+			Uint8 xorBit = (src[byteIndex + maskSize] >> bitIndex) & 1;
+
+			if (andBit == 0) {  
+				if (xorBit == 0) {
+					pixels[y * pitch + x] = 0xFF000000;
+				}
+				else {
+					pixels[y * pitch + x] = 0xFFFFFFFF;  
+				}
+			}
+		}
+	}
+	SDL_UnlockSurface(surface);
+	SDL_Cursor* cursor = SDL_CreateColorCursor(surface, hotX, hotY);
+	SDL_DestroySurface(surface);
+	return cursor;
 }
 
 //0x451880
@@ -1434,6 +1796,15 @@ void LawnApp::Init()
 	TodTrace("loading: 'profiles' %d ms", aDuration);
 #endif
 	mTimer.Start();
+
+	SDL_Init(SDL_INIT_VIDEO);
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	mSDLPointerCursor = CreateCursorFromResource(hInstance, IDC_CURSOR1, 0, 0);
+	mSDLHandCursor = CreateCursorFromRaw(mFingerCursorData, 32, 32, 11, 4);
+	mSDLDraggingCursor = CreateCursorFromRaw(mDraggingCursorData, 32, 32, 15, 10);
+	mSDLTextCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_TEXT);
+	mSDLWaitCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_WAIT);
+	mSDLNoCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_NOT_ALLOWED);
 
 	mMusic = new Music();
 	mSoundSystem = new TodFoley();
@@ -2582,7 +2953,7 @@ bool LawnApp::IsWallnutBowlingLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING_2)
 		return true;
 
-	return IsAdventureMode() && mBoard && mBoard->mLevel == 5;
+	return IsAdventureMode() && mPlayerInfo->mLevel == 5;
 }
 
 //0x453870
@@ -2600,7 +2971,7 @@ bool LawnApp::IsWhackAZombieLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WHACK_A_ZOMBIE)
 		return true;
 
-	return IsAdventureMode() && mBoard && mBoard->mLevel == 15;
+	return IsAdventureMode() && mPlayerInfo->mLevel == 15;
 }
 
 //0x4538C0
@@ -2609,7 +2980,7 @@ bool LawnApp::IsLittleTroubleLevel()
 	if (mBoard == nullptr)
 		return false;
 
-	return mGameMode == GameMode::GAMEMODE_CHALLENGE_LITTLE_TROUBLE || (mGameMode == GameMode::GAMEMODE_ADVENTURE && mBoard && mBoard->mLevel == 25);
+	return mGameMode == GameMode::GAMEMODE_CHALLENGE_LITTLE_TROUBLE || (mGameMode == GameMode::GAMEMODE_ADVENTURE && mPlayerInfo->mLevel == 25);
 }
 
 //0x4538F0
@@ -2626,7 +2997,7 @@ bool LawnApp::IsScaryPotterLevel()
 	if (mBoard == nullptr)
 		return false;
 
-	return IsAdventureMode() && mBoard && mBoard->mLevel == 35;
+	return IsAdventureMode() && mPlayerInfo->mLevel == 35;
 }
 
 //0x453920
@@ -2638,7 +3009,7 @@ bool LawnApp::IsStormyNightLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_STORMY_NIGHT)
 		return true;
 
-	return IsAdventureMode() && mBoard && mBoard->mLevel == 40;
+	return IsAdventureMode() && mPlayerInfo->mLevel == 40;
 }
 
 //0x453950
@@ -2650,7 +3021,7 @@ bool LawnApp::IsBungeeBlitzLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_BUNGEE_BLITZ)
 		return true;
 
-	return IsAdventureMode() && mBoard && mBoard->mLevel == 45;
+	return IsAdventureMode() && mPlayerInfo->mLevel == 45;
 }
 
 //0x453980
@@ -2660,10 +3031,10 @@ bool LawnApp::IsMiniBossLevel()
 		return false;
 
 	return
-		(IsAdventureMode() && mBoard && mBoard->mLevel == 10) ||
-		(IsAdventureMode() && mBoard && mBoard->mLevel == 20) ||
-		(IsAdventureMode() && mBoard && mBoard->mLevel == 30) ||
-		(IsAdventureMode() && mBoard && mBoard->mLevel == 40);
+		(IsAdventureMode() && mPlayerInfo->mLevel == 10) ||
+		(IsAdventureMode() && mPlayerInfo->mLevel == 20) ||
+		(IsAdventureMode() && mPlayerInfo->mLevel == 30) ||
+		(IsAdventureMode() && mPlayerInfo->mLevel == 40);
 }
 
 //0x4539D0
@@ -2675,7 +3046,7 @@ bool LawnApp::IsFinalBossLevel()
 	if (mGameMode == GameMode::GAMEMODE_CHALLENGE_FINAL_BOSS)
 		return true;
 
-	return IsAdventureMode() && mBoard && mBoard->mLevel == 50;
+	return IsAdventureMode() && mPlayerInfo->mLevel == 50;
 }
 
 //0x453A00
@@ -2784,9 +3155,9 @@ int LawnApp::GetSeedsAvailable()
 	int aLevel = mBoard && mBoard->mIsReplay && mPlayerLevelRef > 4 ? mPlayerLevelRef : mPlayerInfo->GetLevel();
 	int maxPlants = 49;
 
-	if (HasFinishedAdventure() || aLevel > 50)
+	if (HasFinishedAdventure() || aLevel > 50 || mPlayerInfo && mPlayerInfo->mHasUsedCheatKeys)
 	{
-		if (mTodCheatKeys || mDebugKeysEnabled) maxPlants += NUM_SEEDS_IN_CHOOSER - SEED_IMITATER - 1;
+		if (mTodCheatKeys || mDebugKeysEnabled || mPlayerInfo && mPlayerInfo->mHasUsedCheatKeys) maxPlants += NUM_SEEDS_IN_CHOOSER - SEED_IMITATER - 1;
 		return maxPlants;
 	}
 
@@ -3714,80 +4085,41 @@ void LawnApp::EnforceCursor()
 {
 	if (mSEHOccured || !mMouseIn)
 	{
-		::SetCursor(LoadCursor(NULL, IDC_ARROW));
+		SDL_SetCursor(NULL);
 		return;
 	}
 
-	LRESULT hitTest = SendMessage(mHWnd, WM_NCHITTEST, 0, MAKELPARAM(GET_X_LPARAM(GetMessagePos()), GET_Y_LPARAM(GetMessagePos())));
+    LRESULT hitTest = SendMessage(mHWnd, WM_NCHITTEST, 0, MAKELPARAM(GET_X_LPARAM(GetMessagePos()), GET_Y_LPARAM(GetMessagePos())));
 	if (hitTest != HTCLIENT)
 		return;
 
+	SDL_Cursor* newCursor = nullptr;
+
 	if (mOverrideCursor)
 	{
-		::SetCursor(mOverrideCursor);
-		return;
+		SDL_SetCursor(newCursor);
+		SDL_ShowCursor();
+	}
+	else
+	{
+		switch (mCursorNum)
+		{
+			case CURSOR_POINTER: newCursor = mSDLPointerCursor; break;
+			case CURSOR_HAND: newCursor = mSDLHandCursor; break;
+			case CURSOR_DRAGGING: newCursor = mSDLDraggingCursor; break;
+			case CURSOR_TEXT: newCursor = mSDLTextCursor; break;
+			case CURSOR_CIRCLE_SLASH: newCursor = mSDLNoCursor; break;
+			case CURSOR_WAIT: newCursor = mSDLWaitCursor; break;
+			case CURSOR_CUSTOM:
+			case CURSOR_NONE: SDL_HideCursor(); break;
+			default: newCursor = mSDLPointerCursor; break;
+		}
 	}
 
-	switch (mCursorNum)
+	if (newCursor)
 	{
-	case CURSOR_POINTER:
-		::SetCursor(mBigArrowCursor);
-		//::SetCursor(LoadCursor(NULL, IDC_ARROW));
-		return;
-
-	case CURSOR_HAND:
-		::SetCursor(mHandCursor);
-		//::SetCursor(LoadCursor(NULL, IDC_HAND));
-		return;
-
-	case CURSOR_TEXT:
-		::SetCursor(LoadCursor(NULL, IDC_IBEAM));
-		return;
-
-	case CURSOR_DRAGGING:
-		::SetCursor(mDraggingCursor);
-		//::SetCursor(LoadCursor(NULL, IDC_ARROW));
-		return;
-
-	case CURSOR_CIRCLE_SLASH:
-		::SetCursor(LoadCursor(NULL, IDC_NO));
-		return;
-
-	case CURSOR_SIZEALL:
-		::SetCursor(LoadCursor(NULL, IDC_SIZEALL));
-		return;
-
-	case CURSOR_SIZENESW:
-		::SetCursor(LoadCursor(NULL, IDC_SIZENESW));
-		return;
-
-	case CURSOR_SIZENS:
-		::SetCursor(LoadCursor(NULL, IDC_SIZENS));
-		return;
-
-	case CURSOR_SIZENWSE:
-		::SetCursor(LoadCursor(NULL, IDC_SIZENWSE));
-		return;
-
-	case CURSOR_SIZEWE:
-		::SetCursor(LoadCursor(NULL, IDC_SIZEWE));
-		return;
-
-	case CURSOR_WAIT:
-		::SetCursor(LoadCursor(NULL, IDC_WAIT));
-		return;
-
-	case CURSOR_CUSTOM:
-		::SetCursor(NULL);
-		return;
-
-	case CURSOR_NONE:
-		::SetCursor(NULL);
-		return;
-
-	default:
-		::SetCursor(mBigArrowCursor);
-		return;
+		SDL_ShowCursor();
+		SDL_SetCursor(newCursor);
 	}
 }
 
@@ -3971,7 +4303,9 @@ void LawnApp::PlaySample(int theSoundNum)
 //0x4560E0
 void LawnApp::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 {
-	SexyAppBase::SwitchScreenMode(wantWindowed, is3d, force);
+	//SexyAppBase::SwitchScreenMode(wantWindowed, is3d, force);
+	mIsWindowed = wantWindowed;
+	SDL_SetWindowFullscreen(mSDLWindow, !wantWindowed);
 
 	NewOptionsDialog* aNewOptionsDialog = (NewOptionsDialog*)GetDialog(Dialogs::DIALOG_NEWOPTIONS);
 	if (aNewOptionsDialog)
