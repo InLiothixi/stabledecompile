@@ -5,10 +5,7 @@ SexyAppFramework/Release/*
 SexyAppFramework/ReleaseGOTY/*
 !SexyAppFramework/Output/dependency.pak
 
-/.vs/PlantsVsZombies/*
-/.vs/Stable Decompile/*
-/.vs/slnx.sqlite
-*.sqlite
+/.vs/*
 /Patch
 
 /Output/dependency/*

@@ -231,6 +231,20 @@ bool LawnApp::UpdateAppStep(bool* updated)
 					if (DebugKeyDown(GetKeyCodeFromCodeSDL(event.key.key)))
 						break;
 				}
+				else
+				{
+					KeyCode theKey = GetKeyCodeFromCodeSDL(event.key.key);
+					if (theKey == KEYCODE_F10)
+					{
+						TakeScreenshot();
+						break;
+					}
+					else if (theKey == KeyCode::KEYCODE_F11)
+					{
+						gLawnApp->SwitchScreenMode(!gLawnApp->mIsWindowed, true);
+						break;
+					}
+				}
 
 				int theChar = GetKeyCodeFromCodeSDL(event.key.key);
 

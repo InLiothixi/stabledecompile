@@ -1203,6 +1203,7 @@ void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
 }
 
 #include <SDL3/SDL.h>
+#include <thread>
 
 void SexyAppBase::TakeScreenshot()
 {
@@ -1235,8 +1236,10 @@ void SexyAppBase::TakeScreenshot()
 
 	SDL_Surface* surface = SDL_RenderReadPixels(LawnApp::mSDLRenderer, NULL);
 	if (!surface) return;
-	SDL_SavePNG(surface, anImageName.c_str());
-	SDL_DestroySurface(surface);
+	std::thread([surface, anImageName]() {
+		SDL_SavePNG(surface, anImageName.c_str());
+		SDL_DestroySurface(surface);
+	}).detach();
 	ClearUpdateBacklog();
 }
 
@@ -4263,20 +4266,20 @@ void SexyAppBase::ShowMemoryUsage()
 	DWORD aTotal = 0;
 	DWORD aFree = 0;
 
-	if (mDDInterface->mDD7 != NULL)
+	/*if (mDDInterface->mDD7 != NULL)
 	{
 		DDSCAPS2 aCaps;
 		ZeroMemory(&aCaps,sizeof(aCaps));
 		aCaps.dwCaps = DDSCAPS_VIDEOMEMORY;	
 		mDDInterface->mDD7->GetAvailableVidMem(&aCaps,&aTotal,&aFree);
-	}
+	}*/
 
 	MemoryImageSet::iterator anItr = mMemoryImageSet.begin();
 	typedef std::pair<int,int> FormatUsage;
 	typedef std::map<PixelFormat,FormatUsage> FormatMap;
 	FormatMap aFormatMap;
 	int aTextureMemory = 0;
-	while (anItr != mMemoryImageSet.end())
+	/*while (anItr != mMemoryImageSet.end())
 	{
 		MemoryImage* aMemoryImage = *anItr;				
 		if (aMemoryImage->mD3DData != NULL)
@@ -4290,33 +4293,30 @@ void SexyAppBase::ShowMemoryUsage()
 		}
 
 		++anItr;
-	}
+	}*/
 
-	std::string aStr;
+	std::string aStr = "";
 
-	const char *aDesc;
-	if (Is3DAccelerationRecommended())
-		aDesc = "Recommended";
-	else if (Is3DAccelerationSupported())
-		aDesc = "Supported";
-	else
-		aDesc = "Unsupported";
+	int major = SDL_MAJOR_VERSION;
+	int minor = SDL_MINOR_VERSION;
+	int patch = SDL_MICRO_VERSION;
 
-	aStr += StrFormat("3D-Mode is %s (3D is %s on this system)\r\n\r\n",Is3DAccelerated()?"On":"Off",aDesc);
+	aStr += StrFormat("SDL %d.%d.%d\n", major, minor, patch);
+	aStr += StrFormat("Renderer: %s\n\n", SDL_GetRendererName(LawnApp::mSDLRenderer));
 
-	aStr += StrFormat("Num Images: %d\r\n",(int)mMemoryImageSet.size());
+	/*aStr += StrFormat("Num Images: %d\r\n",(int)mMemoryImageSet.size());
 	aStr += StrFormat("Num Sounds: %d\r\n",mSoundManager->GetNumSounds());
 	aStr += StrFormat("Video Memory: %s/%s KB\r\n", SexyStringToString(CommaSeperate((aTotal-aFree)/1024)).c_str(), SexyStringToString(CommaSeperate(aTotal/1024)).c_str());
-	aStr += StrFormat("Texture Memory: %s KB\r\n",CommaSeperate(aTextureMemory/1024).c_str());
+	aStr += StrFormat("Texture Memory: %s KB\r\n",CommaSeperate(aTextureMemory/1024).c_str());*/
 
-	FormatUsage aUsage = aFormatMap[PixelFormat_A8R8G8B8];
-	aStr += StrFormat("A8R8G8B8: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	aUsage = aFormatMap[PixelFormat_A4R4G4B4];
-	aStr += StrFormat("A4R4G4B4: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	aUsage = aFormatMap[PixelFormat_R5G6B5];
-	aStr += StrFormat("R5G6B5: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	aUsage = aFormatMap[PixelFormat_Palette8];
-	aStr += StrFormat("Palette8: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
+	//FormatUsage aUsage = aFormatMap[PixelFormat_A8R8G8B8];
+	//aStr += StrFormat("A8R8G8B8: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
+	//aUsage = aFormatMap[PixelFormat_A4R4G4B4];
+	//aStr += StrFormat("A4R4G4B4: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
+	//aUsage = aFormatMap[PixelFormat_R5G6B5];
+	//aStr += StrFormat("R5G6B5: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
+	//aUsage = aFormatMap[PixelFormat_Palette8];
+	//aStr += StrFormat("Palette8: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
 	
 	MsgBox(aStr,"Video Stats",MB_OK);
 	mLastTime = timeGetTime();
@@ -4372,7 +4372,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 	}
 	else if (theKey == KEYCODE_F8)
 	{
-		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		/*if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
 			Set3DAcclerated(!Is3DAccelerated());
 
@@ -4381,14 +4381,13 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 			MsgBox(aBuf,"Mode Switch",MB_OK);
 			mLastTime = timeGetTime();
 		}
-		else
-			ShowMemoryUsage();
+		else*/
+		ShowMemoryUsage();
 
 		return true;
 	}
 	else if (theKey == KEYCODE_F10)
 	{
-/*#ifndef RELEASEFINAL
 		if (mWidgetManager->mKeyDown[KEYCODE_CONTROL])
 		{
 			if (mUpdateMultiplier==0.25)
@@ -4403,17 +4402,14 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 		}
 		else
 			mStepMode = 1;
-#else*/
-		TakeScreenshot();
 		return true;
 	}
 	else if (theKey == KeyCode::KEYCODE_F11)
 	{
-		/*if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 			DumpProgramInfo();
 		else
-			TakeScreenshot();*/
-		gLawnApp->SwitchScreenMode(!gLawnApp->mIsWindowed, true);
+			TakeScreenshot();
 		return true;
 	}
 	else if (theKey == KEYCODE_F2)
