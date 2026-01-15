@@ -1202,109 +1202,41 @@ void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
 	}
 }
 
+#include <SDL3/SDL.h>
+
 void SexyAppBase::TakeScreenshot()
 {
-	if (mDDInterface==NULL || mDDInterface->mDrawSurface==NULL)
-		return;
-
-	// Get free image name
-	SexyString anImageDir = GetAppDataFolder() + _S("_screenshots");
+	SexyString anImageDir = SDL_GetBasePath();
+	anImageDir += "//screenshots";
 	MkDir(anImageDir);
 	anImageDir += _S("/");
 
-#ifdef _USE_WIDE_STRING
-	WIN32_FIND_DATAW aData;
-	int aMaxId = 0;
-	SexyString anImagePrefix = _S("image");
-	HANDLE aHandle = FindFirstFileW((anImageDir + _S("*.png")).c_str(), &aData);
-#else 
 	WIN32_FIND_DATAA aData;
 	int aMaxId = 0;
 	SexyString anImagePrefix = "image";
 	HANDLE aHandle = FindFirstFileA((anImageDir + "*.png").c_str(), &aData);
-#endif
+
 	if (aHandle!=INVALID_HANDLE_VALUE)
 	{
 		do {
 			int aNum = 0;
-			if (sexysscanf(aData.cFileName, (anImagePrefix + _S("%d.png")).c_str(), &aNum) == 1)
+			if (sexysscanf(aData.cFileName, (anImagePrefix + "%d.png").c_str(), &aNum) == 1)
 			{
 				if (aNum>aMaxId)
 					aMaxId = aNum;
 			}
 
 		} 
-#ifdef _USE_WIDE_STRING
-		while(FindNextFileW(aHandle,&aData));
-#else 
 		while (FindNextFileA(aHandle, &aData));
-#endif
 		FindClose(aHandle);
 	}
 
-	SexyString anImageName = anImageDir + anImagePrefix + StrFormat(_S("%d.png"),aMaxId+1).c_str();
+	SexyString anImageName = anImageDir + anImagePrefix + StrFormat("%d.png",aMaxId+1).c_str();
 
-	// Capture screen
-	LPDIRECTDRAWSURFACE aSurface = mDDInterface->mDrawSurface;
-	
-	// Temporarily set the mDrawSurface to NULL so DDImage::Check3D 
-	// returns false so we can lock the surface.
-	mDDInterface->mDrawSurface = NULL; 
-	
-	DDImage anImage(mDDInterface);
-	anImage.SetSurface(aSurface);
-	anImage.GetBits();
-	anImage.DeleteDDSurface();
-	mDDInterface->mDrawSurface = aSurface; 
-
-	if (anImage.mBits==NULL)
-		return;
-		
-	// Write image
-	ImageLib::Image aSaveImage;
-	aSaveImage.mBits = anImage.mBits;
-	aSaveImage.mWidth = anImage.mWidth;
-	aSaveImage.mHeight = anImage.mHeight;
-	ImageLib::WritePNGImage(anImageName, &aSaveImage);
-	aSaveImage.mBits = NULL;
-		
-
-/*
-	keybd_event(VK_MENU,0,0,0);
-    keybd_event(VK_SNAPSHOT,0,0,0);
-    keybd_event(VK_MENU,0,KEYEVENTF_KEYUP,0);
-	if (OpenClipboard(mHWnd))
-	{
-		HBITMAP aBitmap = (HBITMAP)GetClipboardData(CF_BITMAP);
-		if (aBitmap!=NULL)
-		{
-			BITMAP anObject;
-			ZeroMemory(&anObject,sizeof(anObject));
-			GetObject(aBitmap,sizeof(anObject),&anObject);
-
-			BITMAPINFO anInfo;
-			ZeroMemory(&anInfo,sizeof(anInfo));
-			BITMAPINFOHEADER &aHeader = anInfo.bmiHeader;
-			aHeader.biBitCount = 32;
-			aHeader.biPlanes = 1;
-			aHeader.biHeight = -abs(anObject.bmHeight);
-			aHeader.biWidth = abs(anObject.bmWidth);
-			aHeader.biSize = sizeof(aHeader);
-			aHeader.biSizeImage = aHeader.biHeight*aHeader.biWidth*4;
-			ImageLib::Image aSaveImage;
-			aSaveImage.mBits = new DWORD[abs(anObject.bmWidth*anObject.bmHeight)];
-			aSaveImage.mWidth = abs(anObject.bmWidth);
-			aSaveImage.mHeight = abs(anObject.bmHeight);
-
-			HDC aDC = GetDC(NULL);
-			if (GetDIBits(aDC,aBitmap,0,aSaveImage.mHeight,aSaveImage.mBits,&anInfo,DIB_RGB_COLORS))
-				ImageLib::WritePNGImage(anImageName, &aSaveImage);
-
-			ReleaseDC(NULL,aDC);
-		}
-		CloseClipboard();
-	}*/
-
+	SDL_Surface* surface = SDL_RenderReadPixels(LawnApp::mSDLRenderer, NULL);
+	if (!surface) return;
+	SDL_SavePNG(surface, anImageName.c_str());
+	SDL_DestroySurface(surface);
 	ClearUpdateBacklog();
 }
 
@@ -4456,7 +4388,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 	}
 	else if (theKey == KEYCODE_F10)
 	{
-#ifndef RELEASEFINAL
+/*#ifndef RELEASEFINAL
 		if (mWidgetManager->mKeyDown[KEYCODE_CONTROL])
 		{
 			if (mUpdateMultiplier==0.25)
@@ -4471,17 +4403,17 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 		}
 		else
 			mStepMode = 1;
-#endif
-
+#else*/
+		TakeScreenshot();
 		return true;
 	}
-	else if (theKey == KEYCODE_F11)
+	else if (theKey == KeyCode::KEYCODE_F11)
 	{
-		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		/*if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 			DumpProgramInfo();
 		else
-			TakeScreenshot();
-
+			TakeScreenshot();*/
+		gLawnApp->SwitchScreenMode(!gLawnApp->mIsWindowed, true);
 		return true;
 	}
 	else if (theKey == KEYCODE_F2)
