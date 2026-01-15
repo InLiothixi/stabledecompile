@@ -1699,7 +1699,7 @@ void Projectile::DrawShadow(Graphics* g)
 		aScaleX = aScaleY *= 200.0f / (aHeight + 200.0f);
 	}
 
-	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) 
+	if (mProjectileType == ProjectileType::PROJECTILE_COBBIG && mMotionType == ProjectileMotion::MOTION_LOBBED)
 	{
 		float aShadowX = mCobTargetX;
 		float aShadowY = mBoard->GridToPixelY(mBoard->PixelToGridXKeepOnBoard(mCobTargetX, 0), mCobTargetRow);
