@@ -9,6 +9,17 @@ namespace Sexy
 	class SDL3Image : public MemoryImage
 	{
 		public:
+			enum SDL_BlendModes {
+				NONE = -1,
+				BLEND,
+				ADD,
+				BLEND_PREMUL,
+				ADD_PREMUL,
+				MOD,
+				MUL
+			};
+			Uint32					GetBlendMode(SDL_BlendModes theDrawMode);
+		public:
 			SDL_Renderer* mRenderer;
 			SDL_Texture* GetTexture(Image* image);
 		public:

@@ -181,7 +181,7 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 				const Uint64 elapsed_time_ns = SDL_GetTicksNS() - start_ns;
 				const double elapsed_time_s = (double)elapsed_time_ns / SDL_NS_PER_SECOND;
 				const double delay_s = frame_time_s - elapsed_time_s;
-				if (delay_s > 0.5) SDL_Delay((Uint32)(delay_s * SDL_MS_PER_SECOND));
+				if (delay_s > 0) SDL_Delay((Uint32)(delay_s * SDL_MS_PER_SECOND));
 				else if (delay_s < -0.5) continue;
 				
 				SDL_UpdateYUVTexture(texture, NULL,

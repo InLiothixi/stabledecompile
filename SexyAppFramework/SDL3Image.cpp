@@ -7,6 +7,20 @@
 
 using namespace Sexy;
 
+Uint32  SDL3Image::GetBlendMode(SDL_BlendModes theDrawMode)
+{
+    switch (theDrawMode) {
+    case NONE: return SDL_BLENDMODE_NONE;
+    case BLEND: return SDL_BLENDMODE_BLEND;
+    case BLEND_PREMUL: return SDL_BLENDMODE_BLEND_PREMULTIPLIED;
+    case ADD: return SDL_BLENDMODE_ADD;
+    case ADD_PREMUL: return SDL_BLENDMODE_ADD_PREMULTIPLIED;
+    case MOD: return SDL_BLENDMODE_MOD;
+    case MUL: return SDL_BLENDMODE_MUL;
+    default: return SDL_BLENDMODE_INVALID;
+    }
+}
+
 SDL_Texture* Sexy::SDL3Image::GetTexture(Image* image)
 {
     if (auto sdlImage = dynamic_cast<SDL3Image*>(image))
@@ -52,7 +66,7 @@ void SDL3Image::FillRect(const Rect& theRect, const Color& theColor, int theDraw
 {
     SDL_FRect rect = { (float)theRect.mX, (float)theRect.mY, (float)theRect.mWidth, (float)theRect.mHeight };
     SDL_SetRenderDrawColor(mRenderer, theColor.mRed, theColor.mGreen, theColor.mBlue, theColor.mAlpha);
-    SDL_SetRenderDrawBlendMode(mRenderer, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetRenderDrawBlendMode(mRenderer, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_RenderFillRect(mRenderer, &rect);
 }
 
@@ -60,7 +74,7 @@ void SDL3Image::DrawRect(const Rect& theRect, const Color& theColor, int theDraw
 {
     SDL_FRect rect = { (float)theRect.mX, (float)theRect.mY, (float)theRect.mWidth + 1, (float)theRect.mHeight + 1 };
     SDL_SetRenderDrawColor(mRenderer, theColor.mRed, theColor.mGreen, theColor.mBlue, theColor.mAlpha);
-    SDL_SetRenderDrawBlendMode(mRenderer, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetRenderDrawBlendMode(mRenderer, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_RenderRect(mRenderer, &rect);
 }
 
@@ -101,7 +115,7 @@ void SDL3Image::Blt(Image* theImage, int theX, int theY, const Rect& theSrcRect,
     SDL_FRect dstRect = { (float)theX, (float)theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
     SDL_SetTextureAlphaMod(texture, theColor.mAlpha);
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_RenderTexture(mRenderer, texture, &srcRect, &dstRect);
 }
 
@@ -119,7 +133,7 @@ void SDL3Image::BltF(Image* theImage, float theX, float theY, const Rect& theSrc
     SDL_Rect clipRect = { theClipRect.mX, theClipRect.mY, theClipRect.mWidth, theClipRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
     SDL_SetTextureAlphaMod(texture, theColor.mAlpha);
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_SetRenderClipRect(mRenderer, &clipRect);
     SDL_RenderTexture(mRenderer, texture, &srcRect, &dstRect);
     SDL_SetRenderClipRect(mRenderer, nullptr);
@@ -140,7 +154,7 @@ void SDL3Image::BltRotated(Image* theImage, float theX, float theY, const Rect& 
     SDL_FPoint center = { theRotCenterX, theRotCenterY };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
     SDL_SetTextureAlphaMod(texture, theColor.mAlpha);
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_SetRenderClipRect(mRenderer, &clipRect);
     SDL_RenderTextureRotated(mRenderer, texture, &srcRect, &destRect, theRot, &center, SDL_FLIP_NONE);
     SDL_SetRenderClipRect(mRenderer, nullptr);
@@ -160,7 +174,7 @@ void SDL3Image::StretchBlt(Image* theImage, const Rect& theDestRect, const Rect&
     SDL_Rect clipRect = { theClipRect.mX, theClipRect.mY, theClipRect.mWidth, theClipRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
     SDL_SetTextureAlphaMod(texture, theColor.mAlpha);
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_SetRenderClipRect(mRenderer, &clipRect);
     SDL_RenderTexture(mRenderer, texture, &srcRect, &destRect);
     SDL_SetRenderClipRect(mRenderer, nullptr);
@@ -205,7 +219,7 @@ void SDL3Image::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3& 
 
     SDL_Rect clipRect = { theClipRect.mX, theClipRect.mY, theClipRect.mWidth, theClipRect.mHeight };
 
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_SetRenderClipRect(mRenderer, &clipRect);
     SDL_RenderGeometry(mRenderer, texture, vertices, 4, indices, 6);
     SDL_SetRenderClipRect(mRenderer, nullptr);
@@ -250,7 +264,7 @@ void SDL3Image::BltTrianglesTex(Image* theTexture, const TriVertex theVertices[]
 
     SDL_Rect clipRect = { theClipRect.mX, theClipRect.mY, theClipRect.mWidth, theClipRect.mHeight };
 
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_SetRenderClipRect(mRenderer, &clipRect);
     SDL_RenderGeometry(mRenderer, texture, vertices.data(), vertices.size(), nullptr, 0);
     SDL_SetRenderClipRect(mRenderer, nullptr);
@@ -269,7 +283,7 @@ void SDL3Image::BltMirror(Image* theImage, int theX, int theY, const Rect& theSr
     SDL_FRect destRect = { (float)theX, (float)theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
     SDL_SetTextureAlphaMod(texture, theColor.mAlpha);
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_RenderTextureRotated(mRenderer, texture, &srcRect, &destRect, 0, nullptr, SDL_FLIP_HORIZONTAL);
 }
 
@@ -287,7 +301,7 @@ void SDL3Image::StretchBltMirror(Image* theImage, const Rect& theDestRect, const
     SDL_Rect clipRect = { theClipRect.mX, theClipRect.mY, theClipRect.mWidth, theClipRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
     SDL_SetTextureAlphaMod(texture, theColor.mAlpha);
-    SDL_SetTextureBlendMode(texture, theDrawMode == 0 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(texture, GetBlendMode((SDL_BlendModes)theDrawMode));
     SDL_SetRenderClipRect(mRenderer, &clipRect);
     SDL_RenderTextureRotated(mRenderer, texture, &srcRect, &destRect, 0, nullptr, SDL_FLIP_HORIZONTAL);
     SDL_SetRenderClipRect(mRenderer, nullptr);
