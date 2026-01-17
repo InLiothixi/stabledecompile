@@ -1305,7 +1305,7 @@ void ImageFont::GenerateActiveFontLayers()
 								aFontLayer->mCharData[aCharNum].mImageRect);						
 					}
 
-					if (mForceScaledImagesWhite || true)
+					if (mForceScaledImagesWhite)
 					{
 						SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)aMemoryImage->mD3DData);
 
