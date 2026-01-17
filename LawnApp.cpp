@@ -160,10 +160,91 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 				RehupFocus();
 				break;
 			case SDL_EVENT_KEY_DOWN:
+			{
+				mLastUserInputTick = mLastTimerTime;
+				if (mDebugKeysEnabled)
+				{
+					if (DebugKeyDown(GetKeyCodeFromCodeSDL(event.key.key)))
+						break;
+				}
+				else
+				{
+					KeyCode theKey = GetKeyCodeFromCodeSDL(event.key.key);
+					if (theKey == KEYCODE_F10)
+					{
+						TakeScreenshot();
+						break;
+					}
+					else if (theKey == KeyCode::KEYCODE_F11)
+					{
+						gLawnApp->SwitchScreenMode(!gLawnApp->mIsWindowed, true);
+						break;
+					}
+				}
+
 				if (isSkipable && event.key.key == SDLK_ESCAPE)
 				{
 					mIsPlayingVideo = false;
+					break;
 				}
+
+				int theChar = GetKeyCodeFromCodeSDL(event.key.key);
+
+				if ((theChar < KEYCODE_ASCIIBEGIN || theChar > KEYCODE_ASCIIEND) && (theChar < KEYCODE_ASCIIBEGIN2 || theChar > KEYCODE_ASCIIEND2))
+				{
+					theChar = -1;
+				}
+
+				switch (event.key.key)
+				{
+				case SDLK_KP_PLUS:   theChar = '+'; break;
+				case SDLK_KP_MINUS:  theChar = '-'; break;
+				case SDLK_KP_MULTIPLY: theChar = '*'; break;
+				case SDLK_KP_DIVIDE: theChar = '/'; break;
+				case SDLK_KP_PERIOD: theChar = '.'; break;
+
+				case SDLK_KP_0: theChar = '0'; break;
+				case SDLK_KP_1: theChar = '1'; break;
+				case SDLK_KP_2: theChar = '2'; break;
+				case SDLK_KP_3: theChar = '3'; break;
+				case SDLK_KP_4: theChar = '4'; break;
+				case SDLK_KP_5: theChar = '5'; break;
+				case SDLK_KP_6: theChar = '6'; break;
+				case SDLK_KP_7: theChar = '7'; break;
+				case SDLK_KP_8: theChar = '8'; break;
+				case SDLK_KP_9: theChar = '9'; break;
+				}
+
+				if (theChar != -1 && theChar == 'D' && (mWidgetManager != NULL) && (mWidgetManager->mKeyDown[KEYCODE_CONTROL]) && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
+				{
+					PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
+					mDebugKeysEnabled = !mDebugKeysEnabled;
+				}
+
+				mWidgetManager->KeyDown(GetKeyCodeFromCodeSDL(event.key.key));
+
+				if (theChar != -1 && !SDL_TextInputActive(mSDLWindow)) {
+
+					bool shift = (event.key.mod & SDL_KMOD_SHIFT) != 0;
+					bool caps = (event.key.mod & SDL_KMOD_CAPS) != 0;
+
+					SexyChar c = theChar;
+
+					if (isalpha(c))
+					{
+						if (shift ^ caps)
+							c = toupper(c);
+						else
+							c = tolower(c);
+					}
+					mWidgetManager->KeyChar(c);
+				}
+
+				break;
+			}
+			case SDL_EVENT_KEY_UP:
+				mLastUserInputTick = mLastTimerTime;
+				mWidgetManager->KeyUp(GetKeyCodeFromCodeSDL(event.key.key));
 				break;
 			}
 		}
@@ -181,9 +262,9 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 				const double frame_time_s = (double)frame->pts * av_q2d(video_stream->time_base);
 				if (start_ns == 0) start_ns = SDL_GetTicksNS();
 				const Uint64 elapsed_time_ns = SDL_GetTicksNS() - start_ns;
-				const double elapsed_time_s = (double)elapsed_time_ns / SDL_NS_PER_SECOND;
+				const double elapsed_time_s = (double) elapsed_time_ns / SDL_NS_PER_SECOND;
 				const double delay_s = frame_time_s - elapsed_time_s;
-				if (delay_s > 0) SDL_Delay((Uint32)(delay_s * SDL_MS_PER_SECOND));
+				if (delay_s > 0) SDL_Delay((Uint32) (delay_s * SDL_MS_PER_SECOND));
 				else if (delay_s < -0.5) continue;
 				
 				SDL_UpdateYUVTexture(texture, NULL,
@@ -191,7 +272,20 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 					frame->data[1], frame->linesize[1],
 					frame->data[2], frame->linesize[2]);
 
-				SDL_RenderTexture(mSDLRenderer, texture, NULL, NULL);
+				int w, h;
+				SDL_GetCurrentRenderOutputSize(mSDLRenderer, &w, &h);
+				const float frame_width = (float)video_decoder->width;
+				const float frame_height = (float)video_decoder->height;
+				const float scale_w = (float)w / frame_width;
+				const float scale_h = (float)h / frame_height;
+				const float scale = SDL_max(scale_w, scale_h);
+				SDL_FRect dstrect;
+				dstrect.w = frame_width * scale;
+				dstrect.h = frame_height * scale;
+				dstrect.x = ((float)w - dstrect.w) / 2;
+				dstrect.y = ((float)h - dstrect.h) / 2;
+
+				SDL_RenderTexture(mSDLRenderer, texture, NULL, &dstrect);
 				SDL_RenderPresent(mSDLRenderer);
 			}
 		}
