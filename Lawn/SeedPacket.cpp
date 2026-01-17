@@ -307,9 +307,9 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 
 	//if (g->mScaleX > 1 || g->mScaleY > 1)
 	{
-		if (aPacketBackground == 0)	TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKETIMITATER_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
-		else if (aPacketBackground == 1) TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKETUPGRADE_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
-		else if (aPacketBackground == 2) TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDPACKET_LARGER, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
+		if (aPacketBackground == 0)	TodDrawImageScaledF(g, Sexy::IMAGE_SEEDPACKETIMITATER_LARGER, x, y, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
+		else if (aPacketBackground == 1) TodDrawImageScaledF(g, Sexy::IMAGE_SEEDPACKETUPGRADE_LARGER, x, y, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
+		else if (aPacketBackground == 2) TodDrawImageScaledF(g, Sexy::IMAGE_SEEDPACKET_LARGER, x, y, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
 		else
 		{
 			TodDrawImageCelScaledF(g, Sexy::IMAGE_SEEDS, x, y, aPacketBackground, 0, g->mScaleX, g->mScaleY);
@@ -460,6 +460,10 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		aScale = 0.5f;
 		aOffsetX = 2.0f;
 		aOffsetY = 8.0f;
+		break;
+
+	case SeedType::SEED_IMITATER:
+		aOffsetY = 10.0f;
 		break;
 
 	case SeedType::SEED_ZOMBIE_NORMAL:

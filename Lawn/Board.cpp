@@ -8911,11 +8911,6 @@ void Board::DrawCover(Graphics* g)
 
 void Board::DrawForeGround(Graphics* g)
 {
-	g->PushState();
-	g->SetLinearBlend(true);
-	g->ClearClipRect();
-	g->mClipRect.mWidth = BOARD_WIDTH + mApp->mDDInterface->mWideScreenExtraWidth;
-	g->mClipRect.mHeight = BOARD_HEIGHT + mApp->mDDInterface->mWideScreenExtraHeight;
 	switch (mBackground)
 	{
 		case BackgroundType::BACKGROUND_5_ROOF:
@@ -8927,7 +8922,6 @@ void Board::DrawForeGround(Graphics* g)
 			g->DrawImageF(Sexy::IMAGE_NIGHT_POLE, mPoleX, WIDESCREEN_OFFSETY);
 			break;
 	}
-	g->PopState();
 }
 
 //0x41AA00

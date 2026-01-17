@@ -102,6 +102,8 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 		return false;
 	}
 
+	SDL_HideCursor();
+
 	const AVCodec* video_codec = NULL;
 	const int video_stream_index = av_find_best_stream(format_context, AVMEDIA_TYPE_VIDEO, -1, -1, &video_codec, 0);
 	const AVStream* video_stream = format_context->streams[video_stream_index];
@@ -205,6 +207,8 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 	SDL_DestroyTexture(texture);
 
 	mIsPlayingVideo = false;
+
+	SDL_ShowCursor();
 
 	if (willShutdown) Shutdown();
 
@@ -4239,7 +4243,11 @@ void LawnApp::EnforceCursor()
 
 	SDL_Cursor* newCursor = nullptr;
 
-	if (mOverrideCursor)
+	if (mIsPlayingVideo)
+	{
+		SDL_HideCursor();
+	}
+	else if (mOverrideCursor)
 	{
 		SDL_SetCursor(newCursor);
 		SDL_ShowCursor();
