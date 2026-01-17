@@ -6619,9 +6619,7 @@ void SexyAppBase::Init()
 	if (GetFileAttributesExA("extension.pak", GetFileExInfoStandard, &fileInfo) != 0)
 		gPakInterface->AddPakFile(_S("extension.pak"));
 
-	if (GetFileAttributesExA("dependency.pak", GetFileExInfoStandard, &fileInfo) != 0)
-		gPakInterface->AddPakFile(_S("dependency.pak"));
-
+	gPakInterface->AddPakFile(_S("dependency.pak"));
 	gPakInterface->AddPakFile(_S("main.pak"));
 
 	// Create a message we can use to talk to ourselves inter-process

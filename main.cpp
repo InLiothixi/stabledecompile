@@ -11,7 +11,7 @@ SexyString (*gGetCurrentLevelName)();
 
 //0x44E8F0
 #include <shlwapi.h> 
-std::string GetExeDirectory() {
+static std::string GetExeDirectory() {
 	char exePath[MAX_PATH];
 	GetModuleFileNameA(NULL, exePath, MAX_PATH); 
 	PathRemoveFileSpecA(exePath);

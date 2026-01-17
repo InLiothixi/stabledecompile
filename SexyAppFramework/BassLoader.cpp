@@ -178,7 +178,7 @@ void Sexy::LoadBassDLL()
 	if (gBass!=NULL)
 		return;
 #ifdef _WIN64
-	gBass = new BASS_INSTANCE(".\\bass_x64.dll");
+	gBass = new BASS_INSTANCE(".\\bass.dll");
 #else 
 	gBass = new BASS_INSTANCE(".\\bass.dll");
 #endif

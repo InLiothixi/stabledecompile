@@ -111,63 +111,67 @@
     <_ProjectFileVersion>16.0.29511.113</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
-    <TargetName>PlantsVsZombies_x64</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <TargetName>PlantsVsZombies</TargetName>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
-    <TargetName>PlantsVsZombies_x64</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <TargetName>PlantsVsZombies</TargetName>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
-    <TargetName>PlantsVsZombies_x64</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <TargetName>PlantsVsZombies</TargetName>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\Win32\Release;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\include;$(SolutionDIr)SDL3-3.4.0\include</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\lib;$(SolutionDIr)portaudio\build\msvc\x64\Release;$(SolutionDIr)SDL3-3.4.0\lib\x64</LibraryPath>
-    <TargetName>PlantsVsZombies_x64</TargetName>
-    <OutDir>$(SolutionDir)Output\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <TargetName>PlantsVsZombies</TargetName>
+    <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -196,11 +200,21 @@
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
-      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN32;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;_GOTY;GOTY</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <UseFullPaths>true</UseFullPaths>
@@ -225,6 +239,16 @@
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
     <ClCompile>
@@ -248,17 +272,28 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalOptions>/INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
       <Command>
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
+EXIT 0
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
     <ClCompile>
       <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
-      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;_CRT_SECURE_NO_WARNINGS;_DEBUG;_GOTY;GOTY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;_GOTY;GOTY</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <UseFullPaths>true</UseFullPaths>
@@ -278,12 +313,23 @@
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalOptions>/INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
       <Command>
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
+EXIT 0
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -324,13 +370,23 @@
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalOptions>/Oy- /wd4996 %(AdditionalOptions)</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN32;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;NDEBUG;_GOTY;GOTY</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -366,6 +422,16 @@
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
     <ClCompile>
@@ -408,13 +474,23 @@
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
     <ClCompile>
       <AdditionalOptions>/Oy- /wd4996 %(AdditionalOptions)</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN32;WIN32;NDEBUG;_GOTY;GOTY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;NDEBUG;_GOTY;GOTY</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -450,6 +526,16 @@
       </Command>
     </PreBuildEvent>
     <Manifest />
+    <PostBuildEvent>
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
+IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Lawn\Board.cpp" />

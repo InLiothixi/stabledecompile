@@ -86,9 +86,8 @@ extern "C" {
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 }
-#include <thread>
-bool LawnApp::mIsPlayingVideo = false;
 
+bool LawnApp::mIsPlayingVideo = false;
 // I wouldn't be able to make this without Codotaku. Huge W for them
 bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 {
