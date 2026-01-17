@@ -65,7 +65,7 @@ void TitleScreen::Draw(Graphics* g)
 
 	if (mTitleState == TitleState::TITLESTATE_WAITING_FOR_FIRST_DRAW)
 	{
-		g->SetColor(Color::Black);
+		g->SetColor(Color::White);
 		g->FillRect(0, 0, mWidth, mHeight);
 
 		if (!mDrawnYet)
@@ -214,7 +214,7 @@ void TitleScreen::Update()
 		mApp->mMusic->MusicTitleScreenInit();
 		mApp->StartLoadingThread();
 
-		mTitleState = TitleState::TITLESTATE_POPCAP_LOGO;
+		mTitleState = TitleState::TITLESTATE_SCREEN;//TitleState::TITLESTATE_POPCAP_LOGO;
 		if (mDisplayPartnerLogo)
 		{
 			mTitleStateDuration = 150;

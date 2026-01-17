@@ -111,10 +111,10 @@ static bool FindModValsInMemoryHelper(const char *theMem, DWORD theLength)
 		if (ParseModValString(aFileName,&aCounter,&aLineNum))
 		{
 			if (aLineNum == 4105)
-#ifdef _WIN32
-				_asm nop;
-#else
+#ifdef _WIN64
 				__debugbreak();
+#else
+				_asm nop;
 #endif
 
 			FileMod &aFileMod = aMap[aFileName];

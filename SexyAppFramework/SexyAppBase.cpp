@@ -477,7 +477,7 @@ SexyAppBase::~SexyAppBase()
 	{
 		HWND aWindow = mInvisHWnd;
 		mInvisHWnd = NULL;
-#ifndef _WIN32
+#ifdef _WIN64
 		SetWindowLong(aWindow, GWLP_USERDATA, NULL);
 #else
 		SetWindowLong(aWindow, GWL_USERDATA, NULL);
@@ -507,7 +507,7 @@ SexyAppBase::~SexyAppBase()
 	{
 		HWND aWindow = mHWnd;
 		mHWnd = NULL;
-#ifndef _WIN32
+#ifdef _WIN64
 		SetWindowLong(aWindow, GWLP_USERDATA, NULL);
 #else 
 		SetWindowLong(aWindow, GWL_USERDATA, NULL);
@@ -3511,10 +3511,10 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			return aResult;
 	}
 
-#if defined(_WIN32)
-	SexyAppBase* aSexyApp = (SexyAppBase*)GetWindowLong(hWnd, GWL_USERDATA);
-#elif defined(_WIN64)
+#ifdef _WIN64
 	SexyAppBase* aSexyApp = (SexyAppBase*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+#else
+	SexyAppBase* aSexyApp = (SexyAppBase*)GetWindowLong(hWnd, GWL_USERDATA);
 #endif
 	switch (uMsg)
 	{		
@@ -4927,10 +4927,10 @@ void SexyAppBase::MakeWindow()
 
 	if (mHWnd != NULL)
 	{
-#if defined(_WIN32)
-		SetWindowLong(mHWnd, GWL_USERDATA, NULL);
-#elif defined(_WIN64)
+#ifdef _WIN64
 		SetWindowLongPtr(mHWnd, GWLP_USERDATA, (LONG_PTR)NULL);
+#else
+		SetWindowLong(mHWnd, GWL_USERDATA, NULL);
 #endif
 		HWND anOldWindow = mHWnd;
 		mHWnd = NULL;		
@@ -5117,10 +5117,10 @@ void SexyAppBase::MakeWindow()
 	char aStr[256];
 	sprintf(aStr, "HWND: %d\r\n", mHWnd);
 	TodTrace(aStr);
-#if defined(_WIN32)
-	SetWindowLongW(mHWnd, GWL_USERDATA, (LONG)this);
-#elif defined(_WIN64)
+#ifdef _WIN64
 	SetWindowLongPtr(mHWnd, GWLP_USERDATA, (LONG_PTR)this);
+#else
+	SetWindowLongW(mHWnd, GWL_USERDATA, (LONG)this);
 #endif
 
 	if (IsPreviewSaver()) {
@@ -6755,8 +6755,8 @@ void SexyAppBase::Init()
 #endif
 	}
 		
-	mHandCursor = CreateCursor(gHInstance, 11, 4, 32, 32, gFingerCursorData, gFingerCursorData+sizeof(gFingerCursorData)/2); 
-	mDraggingCursor = CreateCursor(gHInstance, 15, 10, 32, 32, gDraggingCursorData, gDraggingCursorData+sizeof(gDraggingCursorData)/2); 
+	//mHandCursor = CreateCursor(gHInstance, 11, 4, 32, 32, gFingerCursorData, gFingerCursorData+sizeof(gFingerCursorData)/2); 
+	//mDraggingCursor = CreateCursor(gHInstance, 15, 10, 32, 32, gDraggingCursorData, gDraggingCursorData+sizeof(gDraggingCursorData)/2); 
 		
 	// Let app do something before showing window, or switching to fullscreen mode
 	// NOTE: Moved call to PreDisplayHook above mIsWindowed and GetSystemsMetrics

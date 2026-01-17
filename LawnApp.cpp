@@ -73,7 +73,6 @@ int gSlowMoCounter = 0;  //0x6A9EC4
 
 #include <SDL3/SDL.h>
 #include "SexyAppFramework/SDL3Image.h"
-
 SDL_Window* LawnApp::mSDLWindow = nullptr;
 SDL_Renderer* LawnApp::mSDLRenderer = nullptr;
 SDL_Cursor* LawnApp::mSDLPointerCursor = nullptr;
@@ -82,6 +81,135 @@ SDL_Cursor* LawnApp::mSDLDraggingCursor = nullptr;
 SDL_Cursor* LawnApp::mSDLTextCursor = nullptr;
 SDL_Cursor* LawnApp::mSDLWaitCursor = nullptr;
 SDL_Cursor* LawnApp::mSDLNoCursor = nullptr;
+
+extern "C" {
+#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+}
+#include <thread>
+bool LawnApp::mIsPlayingVideo = false;
+
+// I wouldn't be able to make this without Codotaku. Huge W for them
+bool LawnApp::PlayVideo(std::string url, bool isSkipable)
+{
+	mIsPlayingVideo = true;
+
+	AVFormatContext* format_context = NULL;
+	const int ret = avformat_open_input(&format_context, url.c_str(), NULL, NULL);
+	if (ret < 0) 
+	{
+		TodTrace("Video: %s is missing or corrupted!\n", url.c_str());
+		return false;
+	}
+
+	const AVCodec* video_codec = NULL;
+	const int video_stream_index = av_find_best_stream(format_context, AVMEDIA_TYPE_VIDEO, -1, -1, &video_codec, 0);
+	const AVStream* video_stream = format_context->streams[video_stream_index];
+
+	const AVCodec* audio_codec = NULL;
+	const int  audio_stream_index = av_find_best_stream(format_context, AVMEDIA_TYPE_AUDIO, -1, video_stream_index, &audio_codec, 0);
+	const AVStream* audio_stream = format_context->streams[audio_stream_index];
+
+	AVCodecContext* video_decoder = avcodec_alloc_context3(video_codec);
+	video_decoder->thread_count = 0;
+	avcodec_parameters_to_context(video_decoder, video_stream->codecpar);
+	avcodec_open2(video_decoder, video_codec, NULL);
+
+	AVCodecContext* audio_decoder = avcodec_alloc_context3(audio_codec);
+	audio_decoder->thread_count = 0;
+	avcodec_parameters_to_context(audio_decoder, audio_stream->codecpar);
+	avcodec_open2(audio_decoder, audio_codec, NULL);
+
+	AVPacket* packet = av_packet_alloc();
+	AVFrame* frame = av_frame_alloc();
+
+	SDL_AudioSpec audio_spec = { SDL_AUDIO_F32, audio_decoder->ch_layout.nb_channels, audio_decoder->sample_rate };
+	SDL_AudioStream* audio_playback_stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audio_spec, NULL, NULL);
+	SDL_ResumeAudioStreamDevice(audio_playback_stream);
+
+	SDL_Texture* texture = SDL_CreateTexture(mSDLRenderer, SDL_PIXELFORMAT_YV12, SDL_TEXTUREACCESS_STREAMING, video_decoder->width, video_decoder->height);
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+
+	SDL_SetRenderDrawColor(mSDLRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+	SDL_RenderClear(mSDLRenderer);
+
+	bool willShutdown = false;
+
+	Uint64 start_ns = 0;
+
+	while (av_read_frame(format_context, packet) >= 0) {
+		mLastUserInputTick = mLastTimerTime;
+
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+			case SDL_EVENT_QUIT:
+				willShutdown = true;
+				break;
+			case SDL_EVENT_WINDOW_FOCUS_GAINED:
+				mActive = true;
+				RehupFocus();
+				EnforceCursor();
+				break;
+			case SDL_EVENT_WINDOW_FOCUS_LOST:
+				mActive = false;
+				RehupFocus();
+				break;
+			case SDL_EVENT_KEY_DOWN:
+				if (isSkipable && event.key.key == SDLK_ESCAPE)
+				{
+					mIsPlayingVideo = false;
+				}
+				break;
+			}
+		}
+
+		if (!mIsPlayingVideo || willShutdown)
+		{
+			SDL_RenderClear(mSDLRenderer);
+			av_packet_unref(packet);
+			break;
+		}
+
+		if (packet->stream_index == video_stream_index) {
+			avcodec_send_packet(video_decoder, packet);
+			while (avcodec_receive_frame(video_decoder, frame) == 0) {
+				const double frame_time_s = (double)frame->pts * av_q2d(video_stream->time_base);
+				if (start_ns == 0) start_ns = SDL_GetTicksNS();
+				const Uint64 elapsed_time_ns = SDL_GetTicksNS() - start_ns;
+				const double elapsed_time_s = (double)elapsed_time_ns / SDL_NS_PER_SECOND;
+				const double delay_s = frame_time_s - elapsed_time_s;
+				if (delay_s > 0.5) SDL_Delay((Uint32)(delay_s * SDL_MS_PER_SECOND));
+				else if (delay_s < -0.5) continue;
+				
+				SDL_UpdateYUVTexture(texture, NULL,
+					frame->data[0], frame->linesize[0],
+					frame->data[1], frame->linesize[1],
+					frame->data[2], frame->linesize[2]);
+
+				SDL_RenderTexture(mSDLRenderer, texture, NULL, NULL);
+				SDL_RenderPresent(mSDLRenderer);
+			}
+		}
+		else if (packet->stream_index == audio_stream_index) {
+			avcodec_send_packet(audio_decoder, packet);
+			while (avcodec_receive_frame(audio_decoder, frame) == 0) {
+				SDL_PutAudioStreamPlanarData(audio_playback_stream, (const void* const*)frame->data, audio_decoder->ch_layout.nb_channels, frame->nb_samples);
+			}
+		}
+		av_packet_unref(packet);
+	}
+	
+	SDL_DestroyTexture(texture);
+
+	mIsPlayingVideo = false;
+
+	if (willShutdown) Shutdown();
+
+	return true;
+}
 
 void LawnApp::MakeWindow()
 {
@@ -106,11 +234,12 @@ void LawnApp::MakeWindow()
 	mWidgetManager->mImage->mHeight = mHeight;
 	mWidgetManager->mImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, mWidgetManager->mImage->mWidth, mWidgetManager->mImage->mHeight);
 	SDL_SetTextureBlendMode((SDL_Texture*)mWidgetManager->mImage->mD3DData, SDL_BLENDMODE_BLEND);
-	mWidgetManager->MarkAllDirty();
+	mWidgetManager->MarkAllDirty();	
 }
 
 bool LawnApp::DrawDirtyStuff()
 {
+	if (mIsPlayingVideo) return true;
 	SDL_SetRenderDrawColor(mSDLRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
 	SDL_RenderClear(mSDLRenderer);
 	return SexyAppBase::DrawDirtyStuff();
@@ -118,6 +247,7 @@ bool LawnApp::DrawDirtyStuff()
 
 void LawnApp::Redraw(Rect* theClipRect)
 {
+	if (mIsPlayingVideo) return;
 	//SexyAppBase::Redraw(theClipRect);
 	SDL_RenderPresent(mSDLRenderer);
 }
@@ -148,7 +278,6 @@ bool LawnApp::UpdateAppStep(bool* updated)
 
 	if (mUpdateAppState == UPDATESTATE_MESSAGES)
 	{
-		//SDL_StartTextInput(mSDLWindow);
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -313,7 +442,6 @@ bool LawnApp::UpdateAppStep(bool* updated)
 			
 			}
 		}
-		//SDL_StopTextInput(mSDLWindow);
 		mUpdateAppState = UPDATESTATE_PROCESS_1;
 	}
 	else
@@ -1811,7 +1939,7 @@ void LawnApp::Init()
 #endif
 	mTimer.Start();
 
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	mSDLPointerCursor = CreateCursorFromResource(hInstance, IDC_CURSOR1, 0, 0);
 	mSDLHandCursor = CreateCursorFromRaw(mFingerCursorData, 32, 32, 11, 4);
@@ -1861,6 +1989,8 @@ void LawnApp::Init()
 	TodTrace("loading: 'loaderbar' %d ms", aDuration);
 #endif
 	mTimer.Start();
+
+	PlayVideo(StrFormat("%svideos/intro.mp4", SDL_GetBasePath()).c_str(), true);
 }
 
 //0x4522A0
