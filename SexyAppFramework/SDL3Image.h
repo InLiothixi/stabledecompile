@@ -15,6 +15,8 @@ namespace Sexy
 			SDL3Image(SDL_Renderer* renderer);
 			virtual ~SDL3Image();
 
+			void					SetLinearBlend(SDL_Texture* theTexture, bool blend);
+
 			virtual bool			PolyFill3D(const Point theVertices[], int theNumVertices, const Rect* theClipRect, const Color& theColor, int theDrawMode, int tx, int ty, bool convex);
 
 			virtual void			FillRect(const Rect& theRect, const Color& theColor, int theDrawMode);

@@ -43,6 +43,11 @@ bool SDL3Image::PolyFill3D(const Point theVertices[], int theNumVertices, const 
     return false;
 }
 
+void SDL3Image::SetLinearBlend(SDL_Texture* theTexture, bool blend)
+{
+    SDL_SetTextureScaleMode(theTexture, blend ? SDL_ScaleMode::SDL_SCALEMODE_LINEAR : SDL_ScaleMode::SDL_SCALEMODE_PIXELART);
+}
+
 void SDL3Image::FillRect(const Rect& theRect, const Color& theColor, int theDrawMode)
 {
     SDL_FRect rect = { (float)theRect.mX, (float)theRect.mY, (float)theRect.mWidth, (float)theRect.mHeight };
@@ -90,6 +95,8 @@ void SDL3Image::Blt(Image* theImage, int theX, int theY, const Rect& theSrcRect,
     if (texture == nullptr)
         return;
 
+    SetLinearBlend(texture, false);
+
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect dstRect = { (float)theX, (float)theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
@@ -104,6 +111,8 @@ void SDL3Image::BltF(Image* theImage, float theX, float theY, const Rect& theSrc
 
     if (texture == nullptr)
         return;
+
+    SetLinearBlend(texture, true);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect dstRect = { theX, theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
@@ -122,6 +131,8 @@ void SDL3Image::BltRotated(Image* theImage, float theX, float theY, const Rect& 
 
     if (texture == nullptr)
         return;
+
+    SetLinearBlend(texture, true);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { theX, theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
@@ -142,6 +153,8 @@ void SDL3Image::StretchBlt(Image* theImage, const Rect& theDestRect, const Rect&
     if (texture == nullptr)
         return;
 
+    SetLinearBlend(texture, true);
+
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { (float)theDestRect.mX, (float)theDestRect.mY, (float)theDestRect.mWidth, (float)theDestRect.mHeight };
     SDL_Rect clipRect = { theClipRect.mX, theClipRect.mY, theClipRect.mWidth, theClipRect.mHeight };
@@ -159,6 +172,8 @@ void SDL3Image::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3& 
 
     if (texture == nullptr)
         return;
+
+    SetLinearBlend(texture, blend);
 
     float w2 = theSrcRect.mWidth / 2.0f;
     float h2 = theSrcRect.mHeight / 2.0f;
@@ -203,6 +218,8 @@ void SDL3Image::BltTrianglesTex(Image* theTexture, const TriVertex theVertices[]
     if (texture == nullptr)
         return;
 
+    SetLinearBlend(texture, blend);
+
     std::vector<SDL_Vertex> vertices;
     vertices.resize(theNumTriangles * 3);
 
@@ -246,6 +263,8 @@ void SDL3Image::BltMirror(Image* theImage, int theX, int theY, const Rect& theSr
     if (texture == nullptr)
         return;
 
+    SetLinearBlend(texture, false);
+
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { (float)theX, (float)theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_SetTextureColorMod(texture, theColor.mRed, theColor.mGreen, theColor.mBlue);
@@ -260,6 +279,8 @@ void SDL3Image::StretchBltMirror(Image* theImage, const Rect& theDestRect, const
 
     if (texture == nullptr)
         return;
+
+    SetLinearBlend(texture, true);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { (float)theDestRect.mX, (float)theDestRect.mY, (float)theDestRect.mWidth, (float)theDestRect.mHeight };
