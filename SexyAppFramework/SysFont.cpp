@@ -12,7 +12,7 @@ using namespace Sexy;
 
 SysFont::SysFont(const std::string& theFace, int thePointSize, bool bold, bool italics, bool underline)
 {
-	Init(gSexyAppBase,theFace,thePointSize,ANSI_CHARSET,bold,italics,underline,false);
+	Init(gSexyAppBase,theFace,thePointSize,ANSI_CHARSET,bold,italics,underline,true);
 }
 
 SysFont::SysFont(SexyAppBase* theApp, const std::string& theFace, int thePointSize, int theScript, bool bold, bool italics, bool underline)
@@ -25,8 +25,8 @@ void SysFont::Init(SexyAppBase* theApp, const std::string& theFace, int thePoint
 	mApp = theApp;
 
 	HDC aDC = ::GetDC(mApp->mHWnd);
-
-	int aHeight = -MulDiv(thePointSize, useDevCaps?GetDeviceCaps(aDC, LOGPIXELSY):96, 72);
+	float scale = GetDeviceCaps(aDC, LOGPIXELSY) / 96.0f;
+	int aHeight = -MulDiv(thePointSize, useDevCaps?GetDeviceCaps(aDC, LOGPIXELSY):96, 72 * scale);
 
 	mHFont = CreateFontA(aHeight, 0, 0, 0, bold ? FW_BOLD : FW_NORMAL, italics, underline,
 			false, theScript, OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
