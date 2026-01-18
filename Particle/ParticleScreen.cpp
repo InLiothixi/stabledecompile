@@ -11,7 +11,7 @@
 #include "../GameConstants.h"
 
 extern "C" {
-#include "tinyfiledialogs.h"
+#include <tinyfiledialogs.h>
 }
 
 std::vector<TodParticleSystem*> gParticleTests;

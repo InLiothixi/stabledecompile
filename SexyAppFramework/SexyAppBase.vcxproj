@@ -111,64 +111,64 @@
     <_ProjectFileVersion>16.0.29511.113</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)lua\include;$(SolutionDIr)SDL3-3.4.0\include;$(SolutionDIr)FFmpeg\x86\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x86\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)dx8sdk\include;$(SolutionDIr)tinyfiledialogs;$(SolutionDIr)portaudio\include;$(SolutionDIr)FFmpeg\x64\include;$(SolutionDIr)SDL3-3.4.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDIr)FFmpeg\x64\lib;$(SolutionDIr)portaudio\lib;$(SolutionDIr)SDL3-3.4.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/PakLib;$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
@@ -190,7 +190,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;portaudio_x86.lib;shlwapi.lib;SDL3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -228,7 +228,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;portaudio_x64.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -268,7 +268,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;portaudio_x86.lib;shlwapi.lib;SDL3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -308,7 +308,7 @@ EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;portaudio_x64.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -362,7 +362,7 @@ EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;portaudio_x86.lib;shlwapi.lib;SDL3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
@@ -413,7 +413,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;portaudio_x64.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -466,7 +466,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;portaudio_x86.lib;shlwapi.lib;SDL3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
@@ -517,7 +517,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;portaudio_x64.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -583,8 +583,8 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClCompile Include="..\Lawn\Widget\GameButton.cpp" />
     <ClCompile Include="..\Lawn\GameObject.cpp" />
     <ClCompile Include="..\Lawn\GridItem.cpp" />
-    <ClCompile Include="..\ImageLib\ImageLib.cpp" />
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_cm.c">
+    <ClCompile Include="..\include\ImageLib\ImageLib.cpp" />
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_cm.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -594,7 +594,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_debug.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_debug.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -604,7 +604,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_getopt.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_getopt.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -614,7 +614,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_icc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_icc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -624,7 +624,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_iccdata.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_iccdata.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -634,7 +634,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_image.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_image.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -644,7 +644,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_init.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_init.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -654,7 +654,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_malloc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_malloc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -664,7 +664,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_seq.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_seq.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -674,7 +674,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_stream.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_stream.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -684,7 +684,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_string.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_string.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -694,7 +694,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_tvp.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_tvp.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -704,7 +704,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jas_version.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_version.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -714,7 +714,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jp2_cod.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jp2_cod.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -724,7 +724,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jp2_dec.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jp2_dec.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -734,7 +734,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jp2_enc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jp2_enc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -744,7 +744,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_bs.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_bs.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -754,7 +754,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_cs.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_cs.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -764,7 +764,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_dec.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_dec.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -774,7 +774,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_enc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_enc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -784,7 +784,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_math.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_math.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -794,7 +794,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_mct.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mct.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -804,7 +804,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_mqcod.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mqcod.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -814,7 +814,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_mqdec.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mqdec.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -824,7 +824,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_mqenc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mqenc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -834,7 +834,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_qmfb.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_qmfb.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -844,7 +844,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_t1cod.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t1cod.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -854,7 +854,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_t1dec.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t1dec.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -864,7 +864,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_t1enc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t1enc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -874,7 +874,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_t2cod.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t2cod.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -884,7 +884,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_t2dec.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t2dec.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -894,7 +894,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_t2enc.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t2enc.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -904,7 +904,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_tagtree.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_tagtree.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -914,7 +914,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_tsfb.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_tsfb.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -924,7 +924,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg2000\jpc_util.c">
+    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_util.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
@@ -934,96 +934,96 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\ImageLib\jpeg\cdjpeg.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcapimin.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcapistd.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jccoefct.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jccolor.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcdctmgr.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jchuff.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcinit.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcmainct.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcmarker.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcmaster.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcomapi.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcparam.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcphuff.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcprepct.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jcsample.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jctrans.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdapimin.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdapistd.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdatadst.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdatasrc.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdcoefct.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdcolor.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jddctmgr.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdhuff.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdinput.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdmainct.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdmarker.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdmaster.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdmerge.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdphuff.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdpostct.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdsample.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jdtrans.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jerror.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jfdctflt.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jfdctfst.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jfdctint.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jidctflt.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jidctfst.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jidctint.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jidctred.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jmemmgr.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jmemnobs.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jquant1.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jquant2.c" />
-    <ClCompile Include="..\ImageLib\jpeg\jutils.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdbmp.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdcolmap.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdgif.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdppm.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdrle.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdswitch.c" />
-    <ClCompile Include="..\ImageLib\jpeg\rdtarga.c" />
-    <ClCompile Include="..\ImageLib\jpeg\transupp.c" />
-    <ClCompile Include="..\ImageLib\jpeg\wrbmp.c" />
-    <ClCompile Include="..\ImageLib\jpeg\wrgif.c" />
-    <ClCompile Include="..\ImageLib\jpeg\wrppm.c" />
-    <ClCompile Include="..\ImageLib\jpeg\wrrle.c" />
-    <ClCompile Include="..\ImageLib\jpeg\wrtarga.c" />
-    <ClCompile Include="..\ImageLib\png\png.c" />
-    <ClCompile Include="..\ImageLib\png\pngerror.c" />
-    <ClCompile Include="..\ImageLib\png\pngget.c" />
-    <ClCompile Include="..\ImageLib\png\pngmem.c" />
-    <ClCompile Include="..\ImageLib\png\pngpread.c" />
-    <ClCompile Include="..\ImageLib\png\pngread.c" />
-    <ClCompile Include="..\ImageLib\png\pngrio.c" />
-    <ClCompile Include="..\ImageLib\png\pngrtran.c" />
-    <ClCompile Include="..\ImageLib\png\pngrutil.c" />
-    <ClCompile Include="..\ImageLib\png\pngset.c" />
-    <ClCompile Include="..\ImageLib\png\pngtrans.c" />
-    <ClCompile Include="..\ImageLib\png\pngvcrd.c" />
-    <ClCompile Include="..\ImageLib\png\pngwio.c" />
-    <ClCompile Include="..\ImageLib\png\pngwrite.c" />
-    <ClCompile Include="..\ImageLib\png\pngwtran.c" />
-    <ClCompile Include="..\ImageLib\png\pngwutil.c" />
-    <ClCompile Include="..\ImageLib\zlib\adler32.c" />
-    <ClCompile Include="..\ImageLib\zlib\compress.c" />
-    <ClCompile Include="..\ImageLib\zlib\crc32.c" />
-    <ClCompile Include="..\ImageLib\zlib\deflate.c" />
-    <ClCompile Include="..\ImageLib\zlib\gzio.c" />
-    <ClCompile Include="..\ImageLib\zlib\infblock.c" />
-    <ClCompile Include="..\ImageLib\zlib\infcodes.c" />
-    <ClCompile Include="..\ImageLib\zlib\inffast.c" />
-    <ClCompile Include="..\ImageLib\zlib\inflate.c" />
-    <ClCompile Include="..\ImageLib\zlib\inftrees.c" />
-    <ClCompile Include="..\ImageLib\zlib\infutil.c" />
-    <ClCompile Include="..\ImageLib\zlib\trees.c" />
-    <ClCompile Include="..\ImageLib\zlib\uncompr.c" />
-    <ClCompile Include="..\ImageLib\zlib\zutil.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\cdjpeg.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcapimin.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcapistd.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jccoefct.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jccolor.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcdctmgr.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jchuff.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcinit.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcmainct.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcmarker.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcmaster.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcomapi.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcparam.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcphuff.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcprepct.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jcsample.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jctrans.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdapimin.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdapistd.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdatadst.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdatasrc.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdcoefct.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdcolor.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jddctmgr.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdhuff.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdinput.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdmainct.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdmarker.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdmaster.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdmerge.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdphuff.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdpostct.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdsample.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jdtrans.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jerror.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jfdctflt.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jfdctfst.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jfdctint.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jidctflt.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jidctfst.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jidctint.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jidctred.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jmemmgr.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jmemnobs.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jquant1.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jquant2.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\jutils.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdbmp.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdcolmap.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdgif.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdppm.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdrle.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdswitch.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\rdtarga.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\transupp.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\wrbmp.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\wrgif.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\wrppm.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\wrrle.c" />
+    <ClCompile Include="..\include\ImageLib\jpeg\wrtarga.c" />
+    <ClCompile Include="..\include\ImageLib\png\png.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngerror.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngget.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngmem.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngpread.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngread.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngrio.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngrtran.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngrutil.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngset.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngtrans.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngvcrd.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngwio.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngwrite.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngwtran.c" />
+    <ClCompile Include="..\include\ImageLib\png\pngwutil.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\adler32.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\compress.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\crc32.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\deflate.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\gzio.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\infblock.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\infcodes.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\inffast.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\inflate.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\inftrees.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\infutil.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\trees.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\uncompr.c" />
+    <ClCompile Include="..\include\ImageLib\zlib\zutil.c" />
     <ClCompile Include="..\LawnApp.cpp" />
     <ClCompile Include="..\Lawn\LawnCommon.cpp" />
     <ClCompile Include="..\Lawn\Widget\LawnDialog.cpp" />
@@ -1048,7 +1048,6 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClCompile Include="..\Sexy.TodLib\TodParticle.cpp" />
     <ClCompile Include="..\Sexy.TodLib\TodStringFile.cpp" />
     <ClCompile Include="..\Sexy.TodLib\Trail.cpp" />
-    <ClCompile Include="..\tinyfiledialogs\tinyfiledialogs.c" />
     <ClCompile Include="BassLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -1516,6 +1515,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SDL3Font.cpp" />
     <ClCompile Include="SDL3Image.cpp" />
     <ClCompile Include="SEHCatcher.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -1614,6 +1614,8 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\ImageLib\ImageLib.h" />
+    <ClInclude Include="..\include\ImageLib\jpeg\jpeglib.h" />
     <ClInclude Include="..\Lawn\System\DataSync.h" />
     <ClInclude Include="..\Lawn\System\ProfileMgr.h" />
     <ClInclude Include="..\Lawn\System\ReanimationLawn.h" />
@@ -1657,455 +1659,6 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClInclude Include="..\GameConstants.h" />
     <ClInclude Include="..\Lawn\GameObject.h" />
     <ClInclude Include="..\Lawn\GridItem.h" />
-    <ClInclude Include="..\ImageLib\ImageLib.h" />
-    <CustomBuild Include="..\ImageLib\jpeg2000\jasper.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_cm.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_config.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_config2.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_debug.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_fix.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_getopt.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_icc.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_image.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_init.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_malloc.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_math.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_seq.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_stream.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_string.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_tvp.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_types.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jas_version.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jp2_cod.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jp2_dec.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_bs.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_cod.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_cs.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_dec.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_enc.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_fix.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_flt.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_math.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_mct.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_mqcod.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_mqdec.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_mqenc.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_qmfb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_t1cod.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_t1dec.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_t1enc.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_t2cod.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_t2dec.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_t2enc.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_tagtree.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_tsfb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\ImageLib\jpeg2000\jpc_util.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <ClInclude Include="..\ImageLib\jpeg\cderror.h" />
-    <ClInclude Include="..\ImageLib\jpeg\cdjpeg.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jchuff.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jconfig.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jdct.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jdhuff.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jerror.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jinclude.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jmemsys.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jmorecfg.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jpegint.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jpeglib.h" />
-    <ClInclude Include="..\ImageLib\jpeg\jversion.h" />
-    <ClInclude Include="..\ImageLib\jpeg\transupp.h" />
-    <ClInclude Include="..\ImageLib\png\png.h" />
-    <ClInclude Include="..\ImageLib\png\pngasmrd.h" />
-    <ClInclude Include="..\ImageLib\png\pngconf.h" />
-    <ClInclude Include="..\ImageLib\zlib\deflate.h" />
-    <ClInclude Include="..\ImageLib\zlib\infblock.h" />
-    <ClInclude Include="..\ImageLib\zlib\infcodes.h" />
-    <ClInclude Include="..\ImageLib\zlib\inffast.h" />
-    <ClInclude Include="..\ImageLib\zlib\inffixed.h" />
-    <ClInclude Include="..\ImageLib\zlib\inftrees.h" />
-    <ClInclude Include="..\ImageLib\zlib\infutil.h" />
-    <ClInclude Include="..\ImageLib\zlib\trees.h" />
-    <ClInclude Include="..\ImageLib\zlib\zconf.h" />
-    <ClInclude Include="..\ImageLib\zlib\zlib.h" />
-    <ClInclude Include="..\ImageLib\zlib\zutil.h" />
     <ClInclude Include="..\LawnApp.h" />
     <ClInclude Include="..\Lawn\LawnCommon.h" />
     <ClInclude Include="..\Lawn\Widget\LawnDialog.h" />
@@ -2208,6 +1761,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClInclude Include="ScrollbarWidget.h" />
     <ClInclude Include="ScrollbuttonWidget.h" />
     <ClInclude Include="ScrollListener.h" />
+    <ClInclude Include="SDL3Font.h" />
     <ClInclude Include="SDL3Image.h" />
     <ClInclude Include="SEHCatcher.h" />
     <ClInclude Include="SexyApp.h" />

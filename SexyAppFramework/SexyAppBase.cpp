@@ -15,7 +15,7 @@
 #include "MemoryImage.h"
 #include "HTTPTransfer.h"
 #include "Dialog.h"
-#include "..\ImageLib\ImageLib.h"
+#include "../include/ImageLib/ImageLib.h"
 #include "DSoundManager.h"
 #include "DSoundInstance.h"
 #include "Rect.h"

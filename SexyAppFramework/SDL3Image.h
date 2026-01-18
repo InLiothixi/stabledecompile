@@ -1,5 +1,5 @@
-#ifndef __SDL3IMAGE__
-#define __SDL3IMAGE__
+#ifndef __SDL3IMAGE_H__
+#define __SDL3IMAGE_H__
 
 #include <SDL3/SDL.h>
 #include "MemoryImage.h"

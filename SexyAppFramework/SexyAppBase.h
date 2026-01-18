@@ -10,6 +10,7 @@
 #include "CritSect.h"
 #include "SharedImage.h"
 #include "Ratio.h"
+#include <ImageLib.h>
 
 namespace ImageLib
 {

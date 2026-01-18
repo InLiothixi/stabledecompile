@@ -6,7 +6,7 @@
 #include "../../SexyAppFramework/ButtonListener.h"
 #include "../Zombie.h"
 #include "GameButton.h"
-#include "../SexyAppFramework/SDL3Image.h"
+#include "../../SexyAppFramework/SDL3Image.h"
 
 #define NUM_SKIN_COLOR_PALLETES 12
 #define NUM_COLOR_PALLETES 17
