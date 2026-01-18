@@ -16,6 +16,8 @@
 #include "../SexyAppFramework/DDInterface.h"
 #include "../SexyAppFramework/SexyMatrix.h"
 
+#include "../SexyAppFramework/SDL3Font.h"
+
 using namespace Sexy;
 
 #define MAX_GRID_SIZE_X 9
@@ -140,7 +142,7 @@ public:
 	GameButton*						mStoreButton;											//+0x14C
 	bool							mIgnoreMouseUp;											//+0x150
 	ToolTipWidget*					mToolTip;												//+0x154
-	Font*							mDebugFont;												//+0x158
+	SDL3Font*						mDebugFont;												//+0x158
 	CutScene*						mCutScene;												//+0x15C
 	Challenge*						mChallenge;												//+0x160
 	SexyTransform2D					mCameraTranform;

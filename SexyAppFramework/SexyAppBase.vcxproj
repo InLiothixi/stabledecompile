@@ -111,64 +111,64 @@
     <_ProjectFileVersion>16.0.29511.113</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
@@ -190,7 +190,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -228,7 +228,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -268,7 +268,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -308,7 +308,7 @@ EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -362,7 +362,7 @@ EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
@@ -413,7 +413,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -466,7 +466,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
@@ -517,7 +517,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>

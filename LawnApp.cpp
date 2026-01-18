@@ -87,6 +87,8 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 }
 
+#include <SDL3_ttf/SDL_ttf.h>
+
 bool LawnApp::mIsPlayingVideo = false;
 // I wouldn't be able to make this without Codotaku. Huge W for them
 bool LawnApp::PlayVideo(std::string url, bool isSkipable)
@@ -449,6 +451,16 @@ bool LawnApp::UpdateAppStep(bool* updated)
 				mActive = false;
 				RehupFocus();
 				break;
+			case SDL_EVENT_WINDOW_RESIZED:
+			{
+				float scale = 1.0f;
+				int pw, ph;
+				SDL_GetWindowSizeInPixels(mSDLWindow, &pw, &ph);
+
+				if (pw >= 800 || ph >= 600) scale = max(max(static_cast<float>(pw)/ 800.0f, static_cast<float>(ph) / 600.0f), 1.0f);
+				SDL3Font::RebuildFonts(scale);
+				break;
+			}
 			case SDL_EVENT_KEY_DOWN:
 			{
 				mLastUserInputTick = mLastTimerTime;
@@ -2035,6 +2047,7 @@ void LawnApp::Init()
 	mTimer.Start();
 
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	TTF_Init();
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	mSDLPointerCursor = CreateCursorFromResource(hInstance, IDC_CURSOR1, 0, 0);
 	mSDLHandCursor = CreateCursorFromRaw(mFingerCursorData, 32, 32, 11, 4);

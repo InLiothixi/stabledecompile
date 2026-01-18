@@ -2458,17 +2458,20 @@ static PerfTimer gFPSTimer;
 static int gFrameCount;
 static int gFPSDisplay;
 static bool gForceDisplay = false;
+
+#include "SDL3Font.h"
+static SDL3Font* gFPSFont;
 static void CalculateFPS()
 {
 	gFrameCount++;
-
-	static SysFont aFont(gSexyAppBase,"Tahoma",8);
 	
 	if (gFPSImage==NULL)
 	{
+		gFPSFont = new SDL3Font("C:\\Windows\\Fonts\\Tahoma.ttf", 12);
+
 		gFPSImage = new SDL3Image(LawnApp::mSDLRenderer);
-		gFPSImage->mWidth = 50;
-		gFPSImage->mHeight = aFont.GetHeight() + 4;
+		gFPSImage->mWidth = 55;
+		gFPSImage->mHeight = gFPSFont->GetHeight() + 4;
 		gFPSImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, gFPSImage->mWidth, gFPSImage->mHeight);
 		SDL_SetTextureBlendMode((SDL_Texture*)gFPSImage->mD3DData, SDL_BLENDMODE_BLEND);
 	}
@@ -2493,17 +2496,17 @@ static void CalculateFPS()
 		gFrameCount = 0;
 
 		Graphics aDrawG(gFPSImage);
-		aDrawG.SetFont(&aFont);
+		aDrawG.SetFont(gFPSFont);
 		SexyString aFPS = StrFormat(_S("FPS: %d"), gFPSDisplay);
 		aDrawG.SetColor(0x000000);
 		aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
 		aDrawG.SetColor(0xFFFFFF);
-		aDrawG.DrawString(aFPS,2,aFont.GetAscent());
+		aDrawG.DrawString(aFPS,2, gFPSFont->GetAscent());
 	}	
 
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetColor(gFrameCount % 2 == 1 ? Color(0xff00) : Color(0xff0000));
-	aDrawG.FillRect(0, gFPSImage->GetHeight()-2, gSexyAppBase->mLoadingThreadCompleted ? gFPSImage->GetWidth() : gFPSImage->GetWidth() / 2, 2);
+	aDrawG.FillRect(0, gFPSImage->GetHeight() - 2, gSexyAppBase->mLoadingThreadCompleted ? gFPSImage->GetWidth() : gFPSImage->GetWidth() / 2, 2);
 
 	SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
 }
@@ -2511,13 +2514,13 @@ static void CalculateFPS()
 ///////////////////////////// FPS Stuff to draw mouse coords
 static void FPSDrawCoords(int theX, int theY)
 {
-	static SysFont aFont(gSexyAppBase,"Tahoma",8);
 	if (gFPSImage==NULL)
 	{
+		gFPSFont = new SDL3Font("C:\\Windows\\Fonts\\Tahoma.ttf", 12);
 
 		gFPSImage = new SDL3Image(LawnApp::mSDLRenderer);
-		gFPSImage->mWidth = 50;
-		gFPSImage->mHeight = aFont.GetHeight() + 4;
+		gFPSImage->mWidth = 55;
+		gFPSImage->mHeight = gFPSFont->GetHeight() + 4;
 		gFPSImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, gFPSImage->mWidth, gFPSImage->mHeight);
 		SDL_SetTextureBlendMode((SDL_Texture*)gFPSImage->mD3DData, SDL_BLENDMODE_BLEND);
 	}
@@ -2525,12 +2528,12 @@ static void FPSDrawCoords(int theX, int theY)
 	SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)gFPSImage->mD3DData);
 
 	Graphics aDrawG(gFPSImage);
-	aDrawG.SetFont(&aFont);
+	aDrawG.SetFont(gFPSFont);
 	SexyString aFPS = StrFormat(_S("%d,%d"),theX,theY);
 	aDrawG.SetColor(0x000000);
 	aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
 	aDrawG.SetColor(0xFFFFFF);
-	aDrawG.DrawString(aFPS,2,aFont.GetAscent());	
+	aDrawG.DrawString(aFPS,2, gFPSFont->GetAscent());
 
 	SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
 }

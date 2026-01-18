@@ -59,7 +59,7 @@ bool SDL3Image::PolyFill3D(const Point theVertices[], int theNumVertices, const 
 
 void SDL3Image::SetLinearBlend(SDL_Texture* theTexture, bool blend)
 {
-    SDL_SetTextureScaleMode(theTexture, blend ? SDL_ScaleMode::SDL_SCALEMODE_LINEAR : SDL_ScaleMode::SDL_SCALEMODE_PIXELART);
+    SDL_SetTextureScaleMode(theTexture, blend ? SDL_ScaleMode::SDL_SCALEMODE_LINEAR : SDL_ScaleMode::SDL_SCALEMODE_NEAREST);
 }
 
 void SDL3Image::FillRect(const Rect& theRect, const Color& theColor, int theDrawMode)
