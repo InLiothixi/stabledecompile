@@ -578,7 +578,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClCompile Include="..\Lawn\ZenGarden.cpp" />
     <ClCompile Include="..\Lawn\Zombie.cpp" />
     <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\Particle\ParticleScreen.cpp" />
+    <ClCompile Include="..\Editor\ParticleScreen.cpp" />
     <ClCompile Include="..\Resources.cpp" />
     <ClCompile Include="..\Lawn\Widget\GameButton.cpp" />
     <ClCompile Include="..\Lawn\GameObject.cpp" />
@@ -1614,6 +1614,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Editor\ParticleScreen.h" />
     <ClInclude Include="..\include\ImageLib\ImageLib.h" />
     <ClInclude Include="..\include\ImageLib\jpeg\jpeglib.h" />
     <ClInclude Include="..\Lawn\System\DataSync.h" />
@@ -1643,7 +1644,6 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClInclude Include="..\Lawn\Widget\UserDialog.h" />
     <ClInclude Include="..\Lawn\Widget\ZombatarScreen.h" />
     <ClInclude Include="..\Lawn\Widget\ZombatarTOS.h" />
-    <ClInclude Include="..\Particle\ParticleScreen.h" />
     <ClInclude Include="..\Sexy.TodLib\Attachment.h" />
     <ClInclude Include="..\Lawn\Board.h" />
     <ClInclude Include="..\Lawn\BoardInclude.h" />
