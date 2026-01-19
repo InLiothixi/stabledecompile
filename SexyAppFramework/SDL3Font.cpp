@@ -1,5 +1,6 @@
 #include "SDL3Font.h"
 #include "../LawnApp.h"
+#include "Graphics.h"
 
 using namespace Sexy;
 
@@ -10,11 +11,12 @@ void SDL3Font::RebuildFonts(float scale)
 	float snappedScale = floor(scale * 4.0f) / 4.0f;
 
 	for (SDL3Font* font : gSDLFonts) {
-		if (font->mScale == snappedScale) continue;
+		if (font->mScale == snappedScale || !font->mIsActive) continue;
 
 		font->mScale = snappedScale;
 		font->mScaleOffset = scale - snappedScale;
 		font->Rebuild();
+		font->mIsActive = true;
 	}
 }
 
@@ -35,6 +37,27 @@ void SDL3Font::Rebuild()
 	Init(mApp, mPathFile, mPointSize, mBold, mItalic, mUnderline);
 }
 
+void SDL3Font::SetActive(bool active)
+{
+	bool prevActive = mIsActive;
+	mIsActive = active;
+	if (prevActive != mIsActive && active) {
+		float scale = 1.0f;
+		int pw, ph;
+		SDL_GetWindowSizeInPixels(LawnApp::mSDLWindow, &pw, &ph);
+		float gScale = max(static_cast<float>(pw) / 800.0f, static_cast<float>(ph) / 600.0f);
+		if (pw >= 800 || ph >= 600) scale = max(floor(gScale * 4.0f) / 4.0f, 1.0f);
+		float prevMScale = mScale;
+		if (prevMScale != scale)
+		{
+			mScale = scale;
+			mScaleOffset = gScale - scale;
+			Rebuild();
+			mIsActive = true;
+		}
+	}
+}
+
 void SDL3Font::Init(SexyAppBase* theApp, const std::string& theFace, int thePointSize, bool bold, bool italics, bool underline)
 {
 	if (mInitializedScale) {
@@ -48,6 +71,7 @@ void SDL3Font::Init(SexyAppBase* theApp, const std::string& theFace, int thePoin
 		mScaleOffset = gScale - scale;
 	}
 
+	mIsActive = false;
 	mApp = theApp;
 	mPointSize = thePointSize;
 	mPathFile = theFace;
@@ -171,7 +195,7 @@ void SDL3Font::DrawString(Graphics* g, int theX, int theY, const SexyString& the
 			SDL_FRect dst = { float(x), float(theY - GetAscent()), float(mGlyphWidth[c]) / GetRelativeScale(), float(mGlyphHeight[c]) / GetRelativeScale()};
 			SDL_SetTextureColorMod(tex, theColor.mRed, theColor.mGreen, theColor.mBlue);
 			SDL_SetTextureAlphaMod(tex, theColor.mAlpha);
-			SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_LINEAR);
+			SDL_SetTextureScaleMode(tex, g->GetLinearBlend() ? SDL_ScaleMode::SDL_SCALEMODE_LINEAR : g->mIsPixelArt ? SDL_ScaleMode::SDL_SCALEMODE_PIXELART : SDL_ScaleMode::SDL_SCALEMODE_NEAREST);
 			SDL_RenderTexture(LawnApp::mSDLRenderer, tex, nullptr, &dst);
 			x += mGlyphWidth[c] / GetRelativeScale();
 		}

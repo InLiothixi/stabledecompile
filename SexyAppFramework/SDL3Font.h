@@ -33,6 +33,9 @@ namespace Sexy
 
 		bool mInitializedScale = false;
 		float mScale = 1.0f;
+		bool mIsActive;
+
+		void SetActive(bool active);
 
 		std::unordered_map<SexyChar, SDL_Texture*> mGlyphCache;
 		std::unordered_map<SexyChar, int> mGlyphWidth;

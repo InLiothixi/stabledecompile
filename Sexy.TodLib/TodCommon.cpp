@@ -15,6 +15,7 @@
 #include "../SexyAppFramework/SexyMatrix.h"
 #include "../SexyAppFramework/DDInterface.h"
 #include "../SexyAppFramework/D3DInterface.h"
+#include "../SexyAppFramework/SDL3Image.h"
 
 //0x510BC0
 void Tod_SWTri_AddAllDrawTriFuncs()
@@ -716,7 +717,14 @@ void TodBltMatrix(Graphics* g, Image* theImage, const SexyMatrix3& theTransform,
 	}*/
 
 	TodSandImageIfNeeded(theImage);
-	g->mDestImage->BltMatrix(theImage, 0, 0, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
+	if (auto texture = dynamic_cast<SDL3Image*>(g->mDestImage))
+	{
+		texture->BltMatrix(theImage, 0, 0, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend, g->mPixelArtBlend);
+	}
+	else
+	{
+		g->mDestImage->BltMatrix(theImage, 0, 0, theTransform, theClipRect, theColor, theDrawMode, theSrcRect, g->mLinearBlend);
+	}
 	//gTodTriangleDrawAdditive = false;
 }
 

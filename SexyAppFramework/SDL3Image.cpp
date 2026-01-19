@@ -57,9 +57,9 @@ bool SDL3Image::PolyFill3D(const Point theVertices[], int theNumVertices, const 
     return false;
 }
 
-void SDL3Image::SetLinearBlend(SDL_Texture* theTexture, bool blend)
+void SDL3Image::SetLinearBlend(SDL_Texture* theTexture, bool blend, bool pixelart)
 {
-    SDL_SetTextureScaleMode(theTexture, blend ? SDL_ScaleMode::SDL_SCALEMODE_LINEAR : SDL_ScaleMode::SDL_SCALEMODE_NEAREST);
+    SDL_SetTextureScaleMode(theTexture, pixelart ? SDL_ScaleMode::SDL_SCALEMODE_PIXELART : blend ? SDL_ScaleMode::SDL_SCALEMODE_LINEAR : SDL_ScaleMode::SDL_SCALEMODE_NEAREST);
 }
 
 void SDL3Image::FillRect(const Rect& theRect, const Color& theColor, int theDrawMode)
@@ -102,14 +102,14 @@ void SDL3Image::FillScanLinesWithCoverage(Span* theSpans, int theSpanCount, cons
 {
 }
 
-void SDL3Image::Blt(Image* theImage, int theX, int theY, const Rect& theSrcRect, const Color& theColor, int theDrawMode, bool blend)
+void SDL3Image::Blt(Image* theImage, int theX, int theY, const Rect& theSrcRect, const Color& theColor, int theDrawMode, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect dstRect = { (float)theX, (float)theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
@@ -119,14 +119,14 @@ void SDL3Image::Blt(Image* theImage, int theX, int theY, const Rect& theSrcRect,
     SDL_RenderTexture(mRenderer, texture, &srcRect, &dstRect);
 }
 
-void SDL3Image::BltF(Image* theImage, float theX, float theY, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool blend)
+void SDL3Image::BltF(Image* theImage, float theX, float theY, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect dstRect = { theX, theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
@@ -139,14 +139,14 @@ void SDL3Image::BltF(Image* theImage, float theX, float theY, const Rect& theSrc
     SDL_SetRenderClipRect(mRenderer, nullptr);
 }
 
-void SDL3Image::BltRotated(Image* theImage, float theX, float theY, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, double theRot, float theRotCenterX, float theRotCenterY, bool blend)
+void SDL3Image::BltRotated(Image* theImage, float theX, float theY, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, double theRot, float theRotCenterX, float theRotCenterY, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { theX, theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
@@ -160,14 +160,14 @@ void SDL3Image::BltRotated(Image* theImage, float theX, float theY, const Rect& 
     SDL_SetRenderClipRect(mRenderer, nullptr);
 }
 
-void SDL3Image::StretchBlt(Image* theImage, const Rect& theDestRect, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool blend)
+void SDL3Image::StretchBlt(Image* theImage, const Rect& theDestRect, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { (float)theDestRect.mX, (float)theDestRect.mY, (float)theDestRect.mWidth, (float)theDestRect.mHeight };
@@ -180,14 +180,14 @@ void SDL3Image::StretchBlt(Image* theImage, const Rect& theDestRect, const Rect&
     SDL_SetRenderClipRect(mRenderer, nullptr);
 }
 
-void SDL3Image::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3& theMatrix, const Rect& theClipRect, const Color& theColor, int theDrawMode, const Rect& theSrcRect, bool blend)
+void SDL3Image::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3& theMatrix, const Rect& theClipRect, const Color& theColor, int theDrawMode, const Rect& theSrcRect, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     float w2 = theSrcRect.mWidth / 2.0f;
     float h2 = theSrcRect.mHeight / 2.0f;
@@ -225,14 +225,14 @@ void SDL3Image::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3& 
     SDL_SetRenderClipRect(mRenderer, nullptr);
 }
 
-void SDL3Image::BltTrianglesTex(Image* theTexture, const TriVertex theVertices[][3], int theNumTriangles, const Rect& theClipRect, const Color& theColor, int theDrawMode, float tx, float ty, bool blend)
+void SDL3Image::BltTrianglesTex(Image* theTexture, const TriVertex theVertices[][3], int theNumTriangles, const Rect& theClipRect, const Color& theColor, int theDrawMode, float tx, float ty, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theTexture);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     std::vector<SDL_Vertex> vertices;
     vertices.resize(theNumTriangles * 3);
@@ -270,14 +270,14 @@ void SDL3Image::BltTrianglesTex(Image* theTexture, const TriVertex theVertices[]
     SDL_SetRenderClipRect(mRenderer, nullptr);
 }
 
-void SDL3Image::BltMirror(Image* theImage, int theX, int theY, const Rect& theSrcRect, const Color& theColor, int theDrawMode, bool blend)
+void SDL3Image::BltMirror(Image* theImage, int theX, int theY, const Rect& theSrcRect, const Color& theColor, int theDrawMode, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { (float)theX, (float)theY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
@@ -287,14 +287,14 @@ void SDL3Image::BltMirror(Image* theImage, int theX, int theY, const Rect& theSr
     SDL_RenderTextureRotated(mRenderer, texture, &srcRect, &destRect, 0, nullptr, SDL_FLIP_HORIZONTAL);
 }
 
-void SDL3Image::StretchBltMirror(Image* theImage, const Rect& theDestRect, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool blend)
+void SDL3Image::StretchBltMirror(Image* theImage, const Rect& theDestRect, const Rect& theSrcRect, const Rect& theClipRect, const Color& theColor, int theDrawMode, bool blend, bool pixelart)
 {
     auto texture = GetTexture(theImage);
 
     if (texture == nullptr)
         return;
 
-    SetLinearBlend(texture, blend);
+    SetLinearBlend(texture, blend, pixelart);
 
     SDL_FRect srcRect = { (float)theSrcRect.mX,(float)theSrcRect.mY, (float)theSrcRect.mWidth, (float)theSrcRect.mHeight };
     SDL_FRect destRect = { (float)theDestRect.mX, (float)theDestRect.mY, (float)theDestRect.mWidth, (float)theDestRect.mHeight };

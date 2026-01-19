@@ -152,6 +152,9 @@ void ToolTipWidget::Draw(Graphics* g)
 	g->DrawRect(aPosX, aPosY, mWidth - 1, mHeight - 1);
 	aPosY++;
 
+	g->PushState();
+	g->SetLinearBlend(false);
+	g->SetPixelArtBlend(true);
 	if (!mTitle.empty())
 	{
 		g->SetFont(FONT_TINYBOLD);
@@ -188,4 +191,5 @@ void ToolTipWidget::Draw(Graphics* g)
 		g->DrawString(aLine, aPosX + (mWidth - FONT_PICO129->StringWidth(aLine)) / 2, aPosY + FONT_PICO129->GetAscent());
 		aPosY += FONT_PICO129->GetAscent() + 2;
 	}
+	g->PopState();
 }

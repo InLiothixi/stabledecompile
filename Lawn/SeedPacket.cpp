@@ -594,6 +594,7 @@ void DrawSeedPacket(Graphics* g, float x, float y, SeedType theSeedType, SeedTyp
 		}
 
 		g->SetLinearBlend(false);
+		g->SetPixelArtBlend(true);
 
 		Font* aTextFont = Sexy::FONT_PICO129;
 		int aTextOffsetX = 32 - aTextFont->StringWidth(aCostStr);

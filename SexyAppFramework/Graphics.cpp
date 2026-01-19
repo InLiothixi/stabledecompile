@@ -36,6 +36,7 @@ void GraphicsState::CopyStateFrom(const GraphicsState* theState)
 	mScaleOrigX = theState->mScaleOrigX;
 	mScaleOrigY = theState->mScaleOrigY;
 	mIs3D = theState->mIs3D;
+	mPixelArtBlend = theState->mPixelArtBlend;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,6 +61,7 @@ Graphics::Graphics(Image* theDestImage)
 	mFastStretch = false;
 	mWriteColoredString = true;
 	mLinearBlend = false;
+	mPixelArtBlend = false;
 
 	if (mDestImage == NULL)
 	{
@@ -157,6 +159,16 @@ void Graphics::SetLinearBlend(bool linear)
 bool Graphics::GetLinearBlend()
 {
 	return mLinearBlend;
+}
+
+void Graphics::SetPixelArtBlend(bool pixelArt)
+{
+	mPixelArtBlend = pixelArt;
+}
+
+bool Graphics::GetPixelArtBlend()
+{
+	return mPixelArtBlend;
 }
 
 void Graphics::ClearRect(int theX, int theY, int theWidth, int theHeight)
@@ -698,9 +710,9 @@ void Graphics::DrawImage(Sexy::Image* theImage, int theX, int theY)
 
 	if ((aSrcRect.mWidth > 0) && (aSrcRect.mHeight > 0))
 	{
-		if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+		if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 		{
-			((SDL3Image*)mDestImage)->Blt(theImage, aDestRect.mX, aDestRect.mY, aSrcRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+			texture->Blt(theImage, aDestRect.mX, aDestRect.mY, aSrcRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 		}
 		else
 		{
@@ -728,9 +740,9 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, const Rect& theSrc
 	if (mScaleX!=1 || mScaleY!=1)
 	{
 		Rect aDestRect(mScaleOrigX+floor((theX-mScaleOrigX)*mScaleX),mScaleOrigY+floor((theY-mScaleOrigY)*mScaleY),ceil(theSrcRect.mWidth*mScaleX),ceil(theSrcRect.mHeight*mScaleY));
-		if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+		if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 		{
-			((SDL3Image*)mDestImage)->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+			texture->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 		}
 		else
 		{
@@ -744,9 +756,9 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, const Rect& theSrc
 
 	if ((aSrcRect.mWidth > 0) && (aSrcRect.mHeight > 0))
 	{
-		if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+		if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 		{
-			((SDL3Image*)mDestImage)->Blt(theImage, aDestRect.mX, aDestRect.mY, aSrcRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+			texture->Blt(theImage, aDestRect.mX, aDestRect.mY, aSrcRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 		}
 		else 
 		{
@@ -792,9 +804,9 @@ void Graphics::DrawImageMirror(Image* theImage, int theX, int theY, const Rect& 
 
 	if ((aSrcRect.mWidth > 0) && (aSrcRect.mHeight > 0))
 	{
-		if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+		if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 		{
-			((SDL3Image*)mDestImage)->BltMirror(theImage, aDestRect.mX, aDestRect.mY, aSrcRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+			texture->BltMirror(theImage, aDestRect.mX, aDestRect.mY, aSrcRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 		}
 		else
 		{
@@ -817,9 +829,9 @@ void Graphics::DrawImageMirror(Image* theImage, const Rect& theDestRect, const R
 	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
-	if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 	{
-		((SDL3Image*)mDestImage)->StretchBltMirror(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+		texture->StretchBltMirror(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 	}
 	else
 	{
@@ -837,9 +849,9 @@ void Graphics::DrawImage(Image* theImage, int theX, int theY, int theStretchedWi
 	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
-	if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 	{
-		((SDL3Image*)mDestImage)->StretchBlt(theImage, aDestRect, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+		texture->StretchBlt(theImage, aDestRect, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 	}
 	else
 	{
@@ -855,9 +867,9 @@ void Graphics::DrawImage(Image* theImage, const Rect& theDestRect, const Rect& t
 	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
-	if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 	{
-		((SDL3Image*)mDestImage)->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+		texture->StretchBlt(theImage, aDestRect, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 	}
 	else
 	{
@@ -876,9 +888,9 @@ void Graphics::DrawImageF(Image* theImage, float theX, float theY)
 	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 
-	if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 	{
-		((SDL3Image*)mDestImage)->BltF(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+		texture->BltF(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 	}
 	else
 	{
@@ -898,9 +910,9 @@ void Graphics::DrawImageF(Image* theImage, float theX, float theY, const Rect& t
 	/*if (aClipRect.mWidth == BOARD_WIDTH)	aClipRect.mWidth += gSexyAppBase->mDDInterface->mWideScreenExtraWidth;
 	if (aClipRect.mHeight == BOARD_HEIGHT)	aClipRect.mHeight += gSexyAppBase->mDDInterface->mWideScreenExtraHeight;*/
 	
-	if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 	{
-		((SDL3Image*)mDestImage)->BltF(theImage, theX, theY, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mLinearBlend);
+		texture->BltF(theImage, theX, theY, theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, GetLinearBlend(), GetPixelArtBlend());
 	}
 	else
 	{
@@ -961,9 +973,9 @@ void Graphics::DrawImageRotatedF(Image* theImage, float theX, float theY, double
 	if (theSrcRect==NULL)
 	{
 		Rect aSrcRect(0,0,theImage->mWidth,theImage->mHeight);
-		if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+		if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 		{
-			((SDL3Image*)mDestImage)->BltRotated(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY, mLinearBlend);
+			texture->BltRotated(theImage, theX, theY, aSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY, GetLinearBlend(), GetPixelArtBlend());
 		}
 		else
 		{
@@ -972,9 +984,9 @@ void Graphics::DrawImageRotatedF(Image* theImage, float theX, float theY, double
 	}
 	else
 	{
-		if (auto textur = dynamic_cast<SDL3Image*>(mDestImage))
+		if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
 		{
-			((SDL3Image*)mDestImage)->BltRotated(theImage, theX, theY, *theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY, mLinearBlend);
+			texture->BltRotated(theImage, theX, theY, *theSrcRect, aClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theRot, theRotCenterX, theRotCenterY, GetLinearBlend(), GetPixelArtBlend());
 		}
 		else
 		{
@@ -986,12 +998,26 @@ void Graphics::DrawImageRotatedF(Image* theImage, float theX, float theY, double
 void Graphics::DrawImageMatrix(Image* theImage, const SexyMatrix3 &theMatrix, float x, float y)
 {	
 	Rect aSrcRect(0,0,theImage->mWidth,theImage->mHeight);
-	mDestImage->BltMatrix(theImage,x+mTransX,y+mTransY,theMatrix,mClipRect,mColorizeImages?mColor:Color::White,mDrawMode,aSrcRect,mLinearBlend);
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
+	{
+		texture->BltMatrix(theImage, x + mTransX, y + mTransY, theMatrix, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, aSrcRect, GetLinearBlend(), GetPixelArtBlend());
+	}
+	else
+	{
+		mDestImage->BltMatrix(theImage, x + mTransX, y + mTransY, theMatrix, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, aSrcRect, mLinearBlend);
+	}
 }
 
 void Graphics::DrawImageMatrix(Image* theImage, const SexyMatrix3 &theMatrix, const Rect &theSrcRect, float x, float y)
 {
-	mDestImage->BltMatrix(theImage,x+mTransX,y+mTransY,theMatrix,mClipRect,mColorizeImages?mColor:Color::White,mDrawMode,theSrcRect,mLinearBlend);
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
+	{
+		texture->BltMatrix(theImage, x + mTransX, y + mTransY, theMatrix, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theSrcRect, GetLinearBlend(), GetPixelArtBlend());
+	}
+	else
+	{
+		mDestImage->BltMatrix(theImage, x + mTransX, y + mTransY, theMatrix, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, theSrcRect, mLinearBlend);
+	}
 }
 
 void Graphics::DrawImageTransformHelper(Image* theImage, const Transform &theTransform, const Rect &theSrcRect, float x, float y, bool useFloat)
@@ -1078,12 +1104,26 @@ void Graphics::DrawImageTransformF(Image* theImage, const Transform &theTransfor
 void Graphics::DrawTriangleTex(Image *theTexture, const TriVertex &v1, const TriVertex &v2, const TriVertex &v3)
 {
 	TriVertex v[1][3] = {{v1,v2,v3}};
-	mDestImage->BltTrianglesTex(theTexture,v,1,mClipRect,mColorizeImages?mColor:Color::White,mDrawMode,mTransX,mTransY,mLinearBlend);
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
+	{
+		texture->BltTrianglesTex(theTexture, v, 1, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mTransX, mTransY, GetLinearBlend(), GetPixelArtBlend());
+	}
+	else
+	{
+		mDestImage->BltTrianglesTex(theTexture, v, 1, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mTransX, mTransY, mLinearBlend);
+	}
 }
 
 void Graphics::DrawTrianglesTex(Image *theTexture, const TriVertex theVertices[][3], int theNumTriangles)
 {
-	mDestImage->BltTrianglesTex(theTexture,theVertices,theNumTriangles,mClipRect,mColorizeImages?mColor:Color::White,mDrawMode,mTransX,mTransY,mLinearBlend);
+	if (auto texture = dynamic_cast<SDL3Image*>(mDestImage))
+	{
+		texture->BltTrianglesTex(theTexture, theVertices, theNumTriangles, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mTransX, mTransY, GetLinearBlend(), GetPixelArtBlend());
+	}
+	else
+	{
+		mDestImage->BltTrianglesTex(theTexture, theVertices, theNumTriangles, mClipRect, mColorizeImages ? mColor : Color::White, mDrawMode, mTransX, mTransY, mLinearBlend);
+	}
 }
 
 void Graphics::ClearClipRect()

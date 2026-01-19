@@ -10,6 +10,7 @@
 #include "../SexyAppFramework/DDImage.h"
 #include "../SexyAppFramework/DDInterface.h"
 #include "../SexyAppFramework/D3DInterface.h"
+#include "../SexyAppFramework/SDL3Image.h"
 
 EffectSystem* gEffectSystem = nullptr;  //[0x6A9EB8]
 
@@ -403,6 +404,11 @@ void TodTriangleGroup::DrawGroup(Graphics* g)
 			anImage->mDDInterface->mD3DInterface->DrawTrianglesTex(mVertArray, mTriangleCount, Color::White, mDrawMode, mImage, 0.0f, 0.0f, g->mLinearBlend);
 		}
 		else*/
+		if (auto texture = dynamic_cast<SDL3Image*>(g->mDestImage))
+		{
+			texture->BltTrianglesTex(mImage, mVertArray, mTriangleCount, Rect(0, 0, g->mDestImage->GetWidth(), g->mDestImage->GetHeight()), Color::White, mDrawMode, 0, 0, g->mLinearBlend, g->mPixelArtBlend);
+		}
+		else
 		{
 			g->mDestImage->BltTrianglesTex(mImage, mVertArray, mTriangleCount, Rect(0, 0, g->mDestImage->GetWidth(), g->mDestImage->GetHeight()), Color::White, mDrawMode, 0, 0, g->mLinearBlend);
 		}
