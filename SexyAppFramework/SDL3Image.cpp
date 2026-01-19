@@ -33,6 +33,7 @@ SDL_Texture* Sexy::SDL3Image::GetTexture(Image* image)
             sdlImage->mHasTrans = true;
             sdlImage->mHasAlpha = true;
 
+            SDL_Texture* oldRenderTarget = SDL_GetRenderTarget(LawnApp::mSDLRenderer);
             SDL_SetRenderTarget(LawnApp::mSDLRenderer, (SDL_Texture*)sdlImage->mD3DData);
             SDL_Surface* surface = SDL_RenderReadPixels(LawnApp::mSDLRenderer, NULL);
             uint8_t* srcPixels = static_cast<uint8_t*>(surface->pixels);
@@ -46,7 +47,8 @@ SDL_Texture* Sexy::SDL3Image::GetTexture(Image* image)
                 );
             }
             sdlImage->mBits[aBitsCount] = Sexy::MEMORYCHECK_ID;
-            SDL_SetRenderTarget(LawnApp::mSDLRenderer, nullptr);
+            SDL_SetRenderTarget(LawnApp::mSDLRenderer, oldRenderTarget);
+            SDL_DestroySurface(surface);
         }
 
         return (SDL_Texture*)sdlImage->mD3DData;
