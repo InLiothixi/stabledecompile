@@ -274,18 +274,18 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 					frame->data[1], frame->linesize[1],
 					frame->data[2], frame->linesize[2]);
 
-				int w, h;
-				SDL_GetCurrentRenderOutputSize(mSDLRenderer, &w, &h);
+				//int w, h;
+				//SDL_GetCurrentRenderOutputSize(mSDLRenderer, &w, &h);
 				const float frame_width = (float)video_decoder->width;
 				const float frame_height = (float)video_decoder->height;
-				const float scale_w = (float)w / frame_width;
-				const float scale_h = (float)h / frame_height;
+				const float scale_w = (float)mWidth / frame_width;
+				const float scale_h = (float)mHeight / frame_height;
 				const float scale = SDL_max(scale_w, scale_h);
 				SDL_FRect dstrect;
 				dstrect.w = frame_width * scale;
 				dstrect.h = frame_height * scale;
-				dstrect.x = ((float)w - dstrect.w) / 2;
-				dstrect.y = ((float)h - dstrect.h) / 2;
+				dstrect.x = ((float)mWidth - dstrect.w) / 2;
+				dstrect.y = ((float)mHeight - dstrect.h) / 2;
 
 				SDL_RenderTexture(mSDLRenderer, texture, NULL, &dstrect);
 				SDL_RenderPresent(mSDLRenderer);

@@ -897,7 +897,7 @@ unsigned long AverageNearByPixels(MemoryImage* theImage, unsigned long* thePixel
 void FixPixelsOnAlphaEdgeForBlending(Image* theImage)
 {
 	MemoryImage* aImage = (MemoryImage*)theImage;
-	if (aImage->mBits == nullptr)
+	if (!aImage || !theImage || aImage && aImage->mBits == nullptr)
 		return;
 
 	aImage->CommitBits();  // 分析 mHasTrans 和 mHasAlpha
