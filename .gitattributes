@@ -48,3 +48,4 @@
 #*.RTF   diff=astextplain
 bin/x64/*.dll filter=lfs diff=lfs merge=lfs -text
 bin/x86/*.dll filter=lfs diff=lfs merge=lfs -text
+bin/**/*.dll filter=lfs diff=lfs merge=lfs -text
