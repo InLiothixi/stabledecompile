@@ -90,8 +90,9 @@ extern "C" {
 #include <SDL3_ttf/SDL_ttf.h>
 
 bool LawnApp::mIsPlayingVideo = false;
+
 // I wouldn't be able to make this without Codotaku. Huge W for them
-bool LawnApp::PlayVideo(std::string url, bool isSkipable)
+bool LawnApp::PlayVideo(std::string url, bool isSkipable, Color bgColor)
 {
 	mIsPlayingVideo = true;
 
@@ -133,7 +134,7 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 	SDL_Texture* texture = SDL_CreateTexture(mSDLRenderer, SDL_PIXELFORMAT_YV12, SDL_TEXTUREACCESS_STREAMING, video_decoder->width, video_decoder->height);
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
-	SDL_SetRenderDrawColor(mSDLRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+	SDL_SetRenderDrawColor(mSDLRenderer, bgColor.mRed, bgColor.mGreen, bgColor.mBlue, bgColor.mAlpha);
 	SDL_RenderClear(mSDLRenderer);
 
 	bool willShutdown = false;
@@ -334,7 +335,7 @@ void LawnApp::MakeWindow()
 	mWidgetManager->mImage->mHeight = mHeight;
 	mWidgetManager->mImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, mWidgetManager->mImage->mWidth, mWidgetManager->mImage->mHeight);
 	SDL_SetTextureBlendMode((SDL_Texture*)mWidgetManager->mImage->mD3DData, SDL_BLENDMODE_BLEND);
-	mWidgetManager->MarkAllDirty();	
+	mWidgetManager->MarkAllDirty();
 }
 
 bool LawnApp::DrawDirtyStuff()
