@@ -28,7 +28,7 @@ SDL_Texture* Sexy::SDL3Image::GetTexture(Image* image)
     {
         if (sdlImage->mBits == nullptr)
         {
-            int aBitsCount = sdlImage->mWidth * sdlImage->mHeight);
+            int aBitsCount = sdlImage->mWidth * sdlImage->mHeight;
             sdlImage->mBits = new unsigned long[aBitsCount + 1];
             sdlImage->mHasTrans = true;
             sdlImage->mHasAlpha = true;
