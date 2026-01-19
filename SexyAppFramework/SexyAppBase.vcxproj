@@ -111,64 +111,64 @@
     <_ProjectFileVersion>16.0.29511.113</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bassWin32;$(SolutionDIr)lib/zlibWin32;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bass;$(SolutionDIr)lib/zlib;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bassWin32;$(SolutionDIr)lib/zlibWin32;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bass;$(SolutionDIr)lib/zlib;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bassWin32;$(SolutionDIr)lib/zlibWin32;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bass;$(SolutionDIr)lib/zlib;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpegWin32</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpegWin32</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bassWin32;$(SolutionDIr)lib/zlibWin32;$(SolutionDIr)lib/ffmpegWin32;$(SolutionDIr)lib/sdl3/x86;$(SolutionDIr)lib/sdl3_ttf/x86</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/ffmpeg</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfilesdialogs;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDIr)include/ImageLib;$(SolutionDIr)include/dx8sdk;$(SolutionDIr)include/sdl3_ttf;$(SolutionDIr)include/sdl3;$(SolutionDIr)include/portaudio;$(SolutionDIr)include/tinyfiledialogs;$(SolutionDIr)include/zlib;$(SolutionDIr)include/bass;$(SolutionDIr)include/ffmpeg</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDIr)lib/portaudio;$(SolutionDIr)lib/tinyfiledialogs;$(SolutionDIr)lib/bass;$(SolutionDIr)lib/zlib;$(SolutionDIr)lib/ffmpeg;$(SolutionDIr)lib/sdl3/x64;$(SolutionDIr)lib/sdl3_ttf/x64</LibraryPath>
     <TargetName>PlantsVsZombies</TargetName>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\bin\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
@@ -181,6 +181,9 @@
       <PrecompiledHeader />
       <UseFullPaths>true</UseFullPaths>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -190,7 +193,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -201,14 +204,11 @@
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -219,6 +219,9 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       </PrecompiledHeader>
       <UseFullPaths>true</UseFullPaths>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -228,7 +231,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -240,14 +243,11 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
@@ -259,6 +259,9 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <UseFullPaths>true</UseFullPaths>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -268,7 +271,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -281,11 +284,8 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <Manifest />
     <PostBuildEvent>
       <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-EXIT 0
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-EXIT 0
 robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-EXIT 0
 robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
 EXIT 0</Command>
     </PostBuildEvent>
@@ -299,6 +299,9 @@ EXIT 0</Command>
       <UseFullPaths>true</UseFullPaths>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -308,7 +311,7 @@ EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -322,11 +325,8 @@ EXIT 0</Command>
     <Manifest />
     <PostBuildEvent>
       <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-EXIT 0
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-EXIT 0
 robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-EXIT 0
 robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
 EXIT 0</Command>
     </PostBuildEvent>
@@ -353,6 +353,7 @@ EXIT 0</Command>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -362,7 +363,7 @@ EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
@@ -371,14 +372,11 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -404,6 +402,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -413,7 +412,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -423,14 +422,11 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
@@ -457,6 +453,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       </AdditionalUsingDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -466,7 +463,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x86.lib;tinyfiledialogs32.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
@@ -475,14 +472,11 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
@@ -508,6 +502,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -517,7 +512,7 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Winmm.lib;Ws2_32.lib;avcodec.lib;avdevice.lib;avformat.lib;avfilter.lib;avutil.lib;swresample.lib;swscale.lib;shlwapi.lib;SDL3.lib;SDL3_ttf.lib;zlib.lib;bass.lib;portaudio_x64.lib;tinyfiledialogs64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(UniversalCRT_LibraryPath_x64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -527,14 +522,11 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
+      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" "main.pak" /XO /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /MIR /NFL /NDL /NJH /NJS
-IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
+robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
+robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
+EXIT 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -584,356 +576,6 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClCompile Include="..\Lawn\GameObject.cpp" />
     <ClCompile Include="..\Lawn\GridItem.cpp" />
     <ClCompile Include="..\include\ImageLib\ImageLib.cpp" />
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_cm.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_debug.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_getopt.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_icc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_iccdata.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_image.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_init.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_malloc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_seq.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_stream.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_string.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_tvp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jas_version.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jp2_cod.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jp2_dec.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jp2_enc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_bs.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_cs.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_dec.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_enc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_math.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mct.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mqcod.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mqdec.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_mqenc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_qmfb.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t1cod.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t1dec.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t1enc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t2cod.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t2dec.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_t2enc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_tagtree.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_tsfb.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\include\ImageLib\jpeg2000\jpc_util.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\include\ImageLib\jpeg\cdjpeg.c" />
     <ClCompile Include="..\include\ImageLib\jpeg\jcapimin.c" />
     <ClCompile Include="..\include\ImageLib\jpeg\jcapistd.c" />
@@ -1010,20 +652,6 @@ IF %ERRORLEVEL% LEQ 1 EXIT 0</Command>
     <ClCompile Include="..\include\ImageLib\png\pngwrite.c" />
     <ClCompile Include="..\include\ImageLib\png\pngwtran.c" />
     <ClCompile Include="..\include\ImageLib\png\pngwutil.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\adler32.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\compress.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\crc32.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\deflate.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\gzio.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\infblock.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\infcodes.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\inffast.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\inflate.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\inftrees.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\infutil.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\trees.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\uncompr.c" />
-    <ClCompile Include="..\include\ImageLib\zlib\zutil.c" />
     <ClCompile Include="..\LawnApp.cpp" />
     <ClCompile Include="..\Lawn\LawnCommon.cpp" />
     <ClCompile Include="..\Lawn\Widget\LawnDialog.cpp" />

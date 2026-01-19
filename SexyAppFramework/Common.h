@@ -196,7 +196,12 @@ SexyString			GetFullPath(const SexyString& theRelPath);
 SexyString			GetPathFrom(const SexyString& theRelPath, const SexyString& theDir);
 bool				AllowAllAccess(const SexyString& theFileName);
 
-inline void			inlineUpper(std::string&theData)
+void				SMemR(void*& _Src, void* _Dst, size_t _Size);
+void				SMemRStr(void*& _Src, std::string& theString);
+void				SMemW(void*& _Dst, const void* _Src, size_t _Size);
+void				SMemWStr(void*& _Dst, const std::string& theString);
+
+inline void			inlineUpper(std::string& theData)
 {
     //std::transform(theData.begin(), theData.end(), theData.begin(), toupper);
 

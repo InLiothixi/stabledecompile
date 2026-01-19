@@ -8,44 +8,45 @@ static long gBassLoadCount = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-static void CheckBassFunction(unsigned int theFunc, const char *theName)
+static void CheckBassFunction(unsigned int theFunc, const char* theName)
 {
-	if (theFunc==0)
+	if (theFunc == 0)
 	{
 		char aBuf[1024];
-		sprintf(aBuf,"%s function not found in bass.dll",theName);
-		MessageBoxA(NULL,aBuf,"Error",MB_OK | MB_ICONERROR);
+		sprintf(aBuf, "%s function not found in bass.dll", theName);
+		MessageBoxA(NULL, aBuf, "Error", MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
+BASS_INSTANCE::BASS_INSTANCE(const char* dllName)
 {
-	mModule = LoadLibraryA(dllName);
-
+	mModule = LoadLibrary(dllName);
 	if (!mModule)
 		return;
 
-#define GETPROC(_x) CheckBassFunction(*((unsigned int *)&_x) = (unsigned int)GetProcAddress(mModule, #_x),#_x)    
+#define GETPROC(_x) CheckBassFunction(*((uintptr_t *)&_x) = (uintptr_t)GetProcAddress(mModule, #_x),#_x)    
 
 	GETPROC(BASS_Init);
 	GETPROC(BASS_Free);
 	GETPROC(BASS_Stop);
 	GETPROC(BASS_Start);
-	
-	*((unsigned int*) &BASS_SetGlobalVolumes) = (unsigned int) GetProcAddress(mModule, "BASS_SetGlobalVolumes");
-	*((unsigned int*) &BASS_SetVolume) = (unsigned int) GetProcAddress(mModule, "BASS_SetVolume");
 
-	if ((BASS_SetVolume == NULL) && (BASS_SetGlobalVolumes == NULL))
+	//*((uintptr_t*) &BASS_SetGlobalVolumes) = (uintptr_t) GetProcAddress(mModule, "BASS_SetGlobalVolumes");
+	*((uintptr_t*)&BASS_SetVolume) = (uintptr_t)GetProcAddress(mModule, "BASS_SetVolume");
+
+	if (BASS_SetVolume == NULL /*&& (BASS_SetGlobalVolumes == NULL)*/)
 	{
-		MessageBoxA(NULL,"Neither BASS_SetGlobalVolumes or BASS_SetVolume found in bass.dll","Error",MB_OK | MB_ICONERROR);
+		MessageBoxA(NULL, "Whoops! You forgot to put the CD in your computer.", "Error", MB_OK | MB_ICONERROR);
 		exit(0);
-	}	
+	}
 
-	*((unsigned int*) &BASS_SetConfig) = (unsigned int) GetProcAddress(mModule, "BASS_SetConfig");
-	*((unsigned int*) &BASS_GetConfig) = (unsigned int) GetProcAddress(mModule, "BASS_GetConfig");
+	//*((uintptr_t*) &BASS_SetConfig) = (uintptr_t) GetProcAddress(mModule, "BASS_SetConfig");
+	//*((uintptr_t*) &BASS_GetConfig) = (uintptr_t) GetProcAddress(mModule, "BASS_GetConfig");
+	GETPROC(BASS_SetConfig);
+	GETPROC(BASS_GetConfig);
 
 	GETPROC(BASS_GetVolume);
 	GETPROC(BASS_GetInfo);
@@ -54,18 +55,15 @@ BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
 	GETPROC(BASS_ChannelStop);
 	GETPROC(BASS_ChannelPlay);
 	GETPROC(BASS_ChannelPause);
-#ifdef _WIN64
-#else
-	GETPROC(BASS_ChannelSetAttributes);
-	GETPROC(BASS_ChannelGetAttributes);
-	GETPROC(BASS_ChannelSetFlags);
-	GETPROC(BASS_ChannelSlideAttributes);
-#endif
+	GETPROC(BASS_ChannelSetAttribute);
+	GETPROC(BASS_ChannelGetAttribute);
 	GETPROC(BASS_ChannelSetPosition);
 	GETPROC(BASS_ChannelGetPosition);
 	GETPROC(BASS_ChannelIsActive);
+	GETPROC(BASS_ChannelFlags);
+	GETPROC(BASS_ChannelSlideAttribute);
 	GETPROC(BASS_ChannelIsSliding);
-	GETPROC(BASS_ChannelGetLevel);	
+	GETPROC(BASS_ChannelGetLevel);
 	GETPROC(BASS_ChannelSetSync);
 	GETPROC(BASS_ChannelRemoveSync);
 	GETPROC(BASS_ChannelGetData);
@@ -78,16 +76,14 @@ BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
 
 	GETPROC(BASS_MusicLoad);
 	GETPROC(BASS_MusicFree);
-#ifdef _WIN64
-#else
-	GETPROC(BASS_MusicGetAttribute);
-	GETPROC(BASS_MusicSetAttribute);
-	GETPROC(BASS_MusicGetOrders);
-	GETPROC(BASS_MusicGetOrderPosition);
-#endif
+	//GETPROC(BASS_MusicGetAttribute);
+	//GETPROC(BASS_MusicSetAttribute);
 
 	GETPROC(BASS_StreamCreateFile);
 	GETPROC(BASS_StreamFree);
+
+	//GETPROC(BASS_MusicGetOrders);
+	//GETPROC(BASS_MusicGetOrderPosition);
 
 	GETPROC(BASS_SampleLoad);
 	GETPROC(BASS_SampleFree);
@@ -98,28 +94,35 @@ BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
 
 	GETPROC(BASS_ErrorGetCode);
 
+	GETPROC(BASS_PluginLoad);
+	GETPROC(BASS_ChannelGetLength);
+
+	// The following are only supported in 2.2 and higher
+	//*((uintptr_t*) &BASS_PluginLoad) = (uintptr_t) GetProcAddress(mModule, "BASS_PluginLoad");
+	//*((uintptr_t*) &BASS_ChannelGetLength) = (uintptr_t) GetProcAddress(mModule, "BASS_ChannelGetLength");
+
+	/*
 	mVersion2 = BASS_SetConfig != NULL;
 	if (mVersion2)
 	{
 		// Version 2 has different BASS_Init params
-		*((unsigned int*) &BASS_Init2) = (unsigned int) BASS_Init;
+		*((uintptr_t*) &BASS_Init2) = (uintptr_t) BASS_Init;
 		BASS_Init = NULL;
 
-		*((unsigned int*) &BASS_MusicLoad2) = (unsigned int) BASS_MusicLoad;
+		*((uintptr_t*) &BASS_MusicLoad2) = (uintptr_t) BASS_MusicLoad;
 		BASS_MusicLoad = NULL;
 
-		// The following are only supported in 2.2 and higher
-		*((unsigned int*) &BASS_PluginLoad) = (unsigned int) GetProcAddress(mModule, "BASS_PluginLoad");
-		*((unsigned int*) &BASS_ChannelGetLength) = (unsigned int) GetProcAddress(mModule, "BASS_ChannelGetLength");
+
 
 		// 2.1 and higher only
-		*((unsigned int*) &BASS_ChannelPreBuf) = (unsigned int) GetProcAddress(mModule, "BASS_ChannelPreBuf");
+		*((uintptr_t*) &BASS_ChannelPreBuf) = (uintptr_t) GetProcAddress(mModule, "BASS_ChannelPreBuf");
 	}
 	else
 	{
 		BASS_PluginLoad = NULL;
 		BASS_ChannelPreBuf = NULL;
 	}
+	*/
 
 #undef GETPROC
 }
@@ -128,14 +131,14 @@ BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
 ///////////////////////////////////////////////////////////////////////////////
 BASS_INSTANCE::~BASS_INSTANCE()
 {
-    if (mModule)
-        FreeLibrary(mModule);
+	if (mModule)
+		FreeLibrary(mModule);
 }
 
 
 BOOL BASS_INSTANCE::BASS_MusicSetAmplify(HMUSIC handle, DWORD amp)
 {
-	BASS_MusicSetAttribute(handle, BASS_MUSIC_ATTRIB_AMPLIFY, amp);
+	BASS_ChannelSetAttribute(handle, BASS_ATTRIB_MUSIC_AMPLIFY, amp);
 	return true;
 }
 
@@ -148,13 +151,14 @@ BOOL BASS_INSTANCE::BASS_MusicPlay(HMUSIC handle)
 
 BOOL BASS_INSTANCE::BASS_MusicPlayEx(HMUSIC handle, DWORD pos, int flags, BOOL reset)
 {
-	int anOffset = MAKEMUSICPOS(pos,0);
+	(void)reset;
+	//int anOffset = MAKEMUSICPOS(pos,0);
 
 	BASS_ChannelStop(handle);
-	BASS_ChannelSetPosition(handle, anOffset);
-	BASS_ChannelSetFlags(handle, flags);
+	BASS_ChannelSetPosition(handle, MAKELONG(pos, 0), BASS_POS_MUSIC_ORDER);
+	BASS_ChannelFlags(handle, flags, -1);
 
-	return BASS_ChannelPlay(handle, false/*reset*/);
+	return BASS_ChannelPlay(handle, false/*reset*/); // What's wrong with actually using the reset flag?
 }
 
 
@@ -165,7 +169,7 @@ BOOL BASS_INSTANCE::BASS_ChannelResume(DWORD handle)
 
 BOOL BASS_INSTANCE::BASS_StreamPlay(HSTREAM handle, BOOL flush, DWORD flags)
 {
-	BASS_ChannelSetFlags(handle, flags);
+	BASS_ChannelFlags(handle, flags, -1);
 	return BASS_ChannelPlay(handle, flush);
 }
 
@@ -175,13 +179,10 @@ BOOL BASS_INSTANCE::BASS_StreamPlay(HSTREAM handle, BOOL flush, DWORD flags)
 void Sexy::LoadBassDLL()
 {
 	InterlockedIncrement(&gBassLoadCount);
-	if (gBass!=NULL)
+	if (gBass != NULL)
 		return;
-#ifdef _WIN64
-	gBass = new BASS_INSTANCE(".\\bass.dll");
-#else 
-	gBass = new BASS_INSTANCE(".\\bass.dll");
-#endif
+
+	gBass = new BASS_INSTANCE("bass.dll");
 	if (gBass->mModule == NULL)
 	{
 		MessageBoxA(NULL, "Can't find bass.dll.", "Error", MB_OK | MB_ICONERROR);
@@ -193,7 +194,7 @@ void Sexy::LoadBassDLL()
 ///////////////////////////////////////////////////////////////////////////////
 void Sexy::FreeBassDLL()
 {
-	if (gBass!=NULL)
+	if (gBass != NULL)
 	{
 		if (InterlockedDecrement(&gBassLoadCount) <= 0)
 		{
@@ -202,5 +203,4 @@ void Sexy::FreeBassDLL()
 		}
 	}
 }
-
 

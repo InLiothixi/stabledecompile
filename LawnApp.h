@@ -158,7 +158,6 @@ public:
 	MemoryImage*					mBoardCamera;
 
 	Rect							gBoardBounds;
-	MemoryImage*					mDirtyBushes[6];
 
 	bool							mRIPMode;
 

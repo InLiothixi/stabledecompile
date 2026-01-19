@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "bass.h"
+#include <bass.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@ namespace Sexy
 
 struct BASS_INSTANCE
 {
-	BASS_INSTANCE(const char *dllName);
+	BASS_INSTANCE(const char* dllName);
 	virtual ~BASS_INSTANCE();
 
 	BOOL BASS_MusicSetAmplify(HMUSIC handle, DWORD amp);
@@ -25,74 +25,71 @@ struct BASS_INSTANCE
 
 
 
-    HMODULE         mModule;
+	HMODULE         mModule;
 	bool			mVersion2;
 
-	DWORD(WINAPI *BASS_GetVersion)();
+	DWORD(WINAPI* BASS_GetVersion)();
 
-#ifdef _WIN64
 	BOOL(WINAPI* BASS_Init)(int device, DWORD freq, DWORD flags, HWND win, GUID* clsid);
-#else
-	BOOL(WINAPI* BASS_Init)(int device, DWORD freq, DWORD flags, HWND win);
-#endif
-	BOOL(WINAPI *BASS_Init2)(int device, DWORD freq, DWORD flags, HWND win, GUID* clsid);
-	void(WINAPI *BASS_Free)();
-	BOOL(WINAPI *BASS_Stop)();
-	BOOL(WINAPI *BASS_Start)();
-	void(WINAPI *BASS_SetGlobalVolumes)(int musvol, int samvol, int strvol);
-	BOOL(WINAPI *BASS_SetVolume)(DWORD volume);
-	BOOL(WINAPI *BASS_GetVolume)();
-	BOOL(WINAPI *BASS_GetInfo)(BASS_INFO* info);
+	//	BOOL(WINAPI *BASS_Init2)(int device, DWORD freq, DWORD flags, HWND win, GUID* clsid);
+	void(WINAPI* BASS_Free)();
+	BOOL(WINAPI* BASS_Stop)();
+	BOOL(WINAPI* BASS_Start)();
+	//	void(WINAPI *BASS_SetGlobalVolumes)(int musvol, int samvol, int strvol);
+	BOOL(WINAPI* BASS_SetVolume)(DWORD volume);
+	BOOL(WINAPI* BASS_GetVolume)();
+	BOOL(WINAPI* BASS_GetInfo)(BASS_INFO* info);
 
-	DWORD(WINAPI *BASS_SetConfig)(DWORD option, DWORD value); 
-	DWORD(WINAPI *BASS_GetConfig)(DWORD option); 
+	DWORD(WINAPI* BASS_SetConfig)(DWORD option, DWORD value);
+	DWORD(WINAPI* BASS_GetConfig)(DWORD option);
 
-	BOOL(WINAPI *BASS_ChannelStop)(DWORD handle);
-	BOOL(WINAPI *BASS_ChannelPlay)(DWORD handle, BOOL restart);
-	BOOL(WINAPI *BASS_ChannelPause)(DWORD handle);
-	BOOL(WINAPI *BASS_ChannelSetAttributes)(DWORD handle, int freq, int volume, int pan);
-	BOOL(WINAPI *BASS_ChannelGetAttributes)(DWORD handle, DWORD* freq, DWORD* volume, int* pan);
-	BOOL(WINAPI *BASS_ChannelSetPosition)(DWORD handle, QWORD pos);
-	QWORD(WINAPI *BASS_ChannelGetPosition)(DWORD handle);
-	BOOL (WINAPI *BASS_ChannelSetFlags)(DWORD handle, DWORD flags);
-	DWORD(WINAPI *BASS_ChannelIsActive)(DWORD handle);
-	BOOL (WINAPI *BASS_ChannelSlideAttributes)(DWORD handle, int freq, int volume, int pan, DWORD time);
-	DWORD (WINAPI *BASS_ChannelIsSliding)(DWORD handle);
-	DWORD (WINAPI *BASS_ChannelGetLevel)(DWORD handle);
-	HFX (WINAPI *BASS_ChannelSetFX)(DWORD handle, DWORD theType, int priority);
-	BOOL (WINAPI *BASS_ChannelRemoveFX)(DWORD handle, HFX fx);
-	QWORD (WINAPI *BASS_ChannelGetLength)(DWORD handle);
-	DWORD (WINAPI *BASS_ChannelGetData)(DWORD handle, void* buffer, DWORD length);
-	BOOL (WINAPI *BASS_ChannelPreBuf)(DWORD handle, DWORD length);
-	HSYNC (WINAPI *BASS_ChannelSetSync)(DWORD handle, DWORD theType, QWORD theParam, SYNCPROC* proc, DWORD user);
-	BOOL (WINAPI *BASS_ChannelRemoveSync)(DWORD handle, HSYNC sync);
-	
-	HMUSIC(WINAPI *BASS_MusicLoad)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags);
-	HMUSIC(WINAPI *BASS_MusicLoad2)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags, DWORD freq);
-	void(WINAPI *BASS_MusicFree)(HMUSIC handle);
+	BOOL(WINAPI* BASS_ChannelStop)(DWORD handle);
+	BOOL(WINAPI* BASS_ChannelPlay)(DWORD handle, BOOL restart);
+	BOOL(WINAPI* BASS_ChannelPause)(DWORD handle);
+	BOOL(WINAPI* BASS_ChannelSetAttribute)(DWORD handle, DWORD attrib, float value);
+	BOOL(WINAPI* BASS_ChannelGetAttribute)(DWORD handle, DWORD attrib, float* value);
+	BOOL(WINAPI* BASS_ChannelSetPosition)(DWORD handle, QWORD pos, DWORD mode);
+	QWORD(WINAPI* BASS_ChannelGetPosition)(DWORD handle, DWORD mode);
+	DWORD(WINAPI* BASS_ChannelFlags)(DWORD handle, DWORD flags, DWORD mask);
+	DWORD(WINAPI* BASS_ChannelIsActive)(DWORD handle);
+	//BOOL (WINAPI *BASS_ChannelSlideAttributes)(DWORD handle, int freq, int volume, int pan, DWORD time);
+	BOOL(WINAPI* BASS_ChannelSlideAttribute)(DWORD handle, DWORD attrib, float value, DWORD time);
+	DWORD(WINAPI* BASS_ChannelIsSliding)(DWORD handle, DWORD attrib);
+	DWORD(WINAPI* BASS_ChannelGetLevel)(DWORD handle);
+	HFX(WINAPI* BASS_ChannelSetFX)(DWORD handle, DWORD theType, int priority);
+	BOOL(WINAPI* BASS_ChannelRemoveFX)(DWORD handle, HFX fx);
+	QWORD(WINAPI* BASS_ChannelGetLength)(DWORD handle, DWORD mode);
+	DWORD(WINAPI* BASS_ChannelGetData)(DWORD handle, void* buffer, DWORD length);
+	//BOOL (WINAPI *BASS_ChannelPreBuf)(DWORD handle, DWORD length);
+	HSYNC(WINAPI* BASS_ChannelSetSync)(DWORD handle, DWORD type, QWORD param, SYNCPROC* proc, void* user);
+	BOOL(WINAPI* BASS_ChannelRemoveSync)(DWORD handle, HSYNC sync);
 
-	HSTREAM(WINAPI *BASS_StreamCreateFile)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags); 
-	void(WINAPI *BASS_StreamFree)(HSTREAM handle);
+	HMUSIC(WINAPI* BASS_MusicLoad)(BOOL mem, const void* file, QWORD offset, DWORD length, DWORD flags, DWORD freq);
+	//HMUSIC(WINAPI *BASS_MusicLoad2)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags, DWORD freq);
+	BOOL(WINAPI* BASS_MusicFree)(HMUSIC handle);
 
-	BOOL (WINAPI *BASS_FXSetParameters)(HFX handle, void *par);
-	BOOL (WINAPI *BASS_FXGetParameters)(HFX handle, void *par);
+	HSTREAM(WINAPI* BASS_StreamCreateFile)(BOOL mem, const void* file, QWORD offset, QWORD length, DWORD flags);
+	BOOL(WINAPI* BASS_StreamFree)(HSTREAM handle);
 
-	DWORD(WINAPI *BASS_MusicGetAttribute)(DWORD handle, DWORD attrib);
-	void(WINAPI *BASS_MusicSetAttribute)(DWORD handle, DWORD attrib,DWORD value);
+	BOOL(WINAPI* BASS_FXSetParameters)(HFX handle, const void* params);
+	BOOL(WINAPI* BASS_FXGetParameters)(HFX handle, void* params);
 
-	DWORD (WINAPI *BASS_MusicGetOrders)(HMUSIC handle);
-	DWORD (WINAPI *BASS_MusicGetOrderPosition)(HMUSIC handle);
+	//DWORD(WINAPI *BASS_MusicGetAttribute)(DWORD handle, DWORD attrib);
+	//void(WINAPI *BASS_MusicSetAttribute)(DWORD handle, DWORD attrib,DWORD value);
 
-	HPLUGIN (WINAPI *BASS_PluginLoad)(char *file, DWORD flags);
+	//DWORD (WINAPI *BASS_MusicGetOrders)(HMUSIC handle);
+	//DWORD (WINAPI *BASS_MusicGetOrderPosition)(HMUSIC handle);
 
-	HSAMPLE (WINAPI *BASS_SampleLoad)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD max, DWORD flags);
-	BOOL (WINAPI *BASS_SampleFree)(HSAMPLE handle);
-	BOOL (WINAPI *BASS_SampleSetInfo)(HSAMPLE handle, BASS_SAMPLE *info);
-	BOOL (WINAPI *BASS_SampleGetInfo)(HSAMPLE handle, BASS_SAMPLE *info);
-	HCHANNEL (WINAPI *BASS_SampleGetChannel)(HSAMPLE handle, BOOL onlynew);
-	BOOL (WINAPI *BASS_SampleStop)(HSAMPLE handle);	
+	HPLUGIN(WINAPI* BASS_PluginLoad)(char* file, DWORD flags);
 
-	int (WINAPI *BASS_ErrorGetCode)();
+	HSAMPLE(WINAPI* BASS_SampleLoad)(BOOL mem, const void* file, QWORD offset, DWORD length, DWORD max, DWORD flags);
+	BOOL(WINAPI* BASS_SampleFree)(HSAMPLE handle);
+	BOOL(WINAPI* BASS_SampleSetInfo)(HSAMPLE handle, BASS_SAMPLE* info);
+	BOOL(WINAPI* BASS_SampleGetInfo)(HSAMPLE handle, BASS_SAMPLE* info);
+	DWORD(WINAPI* BASS_SampleGetChannel)(HSAMPLE handle, DWORD flags);
+	BOOL(WINAPI* BASS_SampleStop)(HSAMPLE handle);
+
+	int (WINAPI* BASS_ErrorGetCode)();
 };
 
 

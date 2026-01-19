@@ -1,4 +1,4 @@
-#ifndef __DATAARRAY_H__
+﻿#ifndef __DATAARRAY_H__
 #define __DATAARRAY_H__
 
 #include <new.h>

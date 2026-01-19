@@ -59,6 +59,7 @@ public:
 	void				AddImageToMap(SharedImageRef* theImage, const std::string& thePath);
 	bool				TodLoadNextResource();
 	bool				TodLoadResources(const std::string& theGroup);
+	bool 				FindFontPath(Font* theFont, std::string* thePath);
 };
 
 /*inline*/ bool			TodLoadResources(const std::string& theGroup);
@@ -142,5 +143,7 @@ Color					ColorAdd(const Color& theColor1, const Color& theColor2);
 
 inline void				SetBit(uint& theNum, int theIdx, bool theValue = true) { if (theValue) theNum |= 1 << theIdx; else theNum &= ~(1 << theIdx); }
 inline bool				TestBit(uint theNum, int theIdx) { return theNum & (1 << theIdx); }
+
+bool					TodFindFontPath(Font* theFont, std::string* thePath);
 //#define SetBit(num, idx, val) { if (val) (num) |= 1 << (idx); else (num) &= ~(1 << (idx)); }
 //#define TestBit(num, idx) ((num) & (1 - (idx)))

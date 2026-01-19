@@ -1294,3 +1294,23 @@ int TodSnprintf(char* theBuffer, int theSize, const char* theFormat, ...)
 
 	return aCount;
 }
+
+// @Patoke implemented
+bool TodFindFontPath(Font* theFont, std::string* thePath) {
+	return ((TodResourceManager*)gSexyAppBase->mResourceManager)->FindFontPath(theFont, thePath);
+}
+
+bool TodResourceManager::FindFontPath(Font* theFont, std::string* thePath)
+{
+	for (auto anItr = mFontMap.begin(); anItr != mFontMap.end(); anItr++)
+	{
+		FontRes* aFontRes = (FontRes*)anItr->second;
+		Font* aFont = (Font*)aFontRes->mFont;
+		if (aFont == theFont)
+		{
+			*thePath = anItr->first;
+			return true;
+		}
+	}
+	return false;
+}

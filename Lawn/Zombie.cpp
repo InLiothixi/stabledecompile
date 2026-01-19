@@ -585,8 +585,11 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
         aFlagReanim->PlayReanim("Zombie_flag", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
         mSpecialHeadReanimID = mApp->ReanimationGetID(aFlagReanim);
         ReanimatorTrackInstance* aTrackInstance = aBodyReanim->GetTrackInstanceByName("Zombie_flaghand");
-        aTrackInstance->mRenderInBack = true;
-        AttachReanim(aTrackInstance->mAttachmentID, aFlagReanim, 0.0f, 0.0f);
+        if (aTrackInstance)
+        {
+            aTrackInstance->mRenderInBack = true;
+            AttachReanim(aTrackInstance->mAttachmentID, aFlagReanim, 0.0f, 0.0f);
+        }
         
         mPosX = WIDE_BOARD_WIDTH;
         break;

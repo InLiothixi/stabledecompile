@@ -1242,7 +1242,10 @@ void ReanimatorLoadDefinitions(ReanimationParams* theReanimationParamArray, int 
 	{
 		ReanimationParams* aReanimationParams = &theReanimationParamArray[i];
 		TOD_ASSERT(aReanimationParams->mReanimationType == i);
-		if (DefinitionIsCompiled(StringToSexyString(aReanimationParams->mReanimFileName)))
+		if (DefinitionIsCompiled(_S("resourcepack"), StringToSexyString(aReanimationParams->mReanimFileName)) ||
+			DefinitionIsCompiled(_S("extension"), StringToSexyString(aReanimationParams->mReanimFileName)) ||
+			DefinitionIsCompiled(_S("dependency"), StringToSexyString(aReanimationParams->mReanimFileName)) ||
+			DefinitionIsCompiled(_S(""), StringToSexyString(aReanimationParams->mReanimFileName)))
 			ReanimatorEnsureDefinitionLoaded(aReanimationParams->mReanimationType, true);
 	}
 }

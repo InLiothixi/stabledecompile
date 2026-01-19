@@ -2683,7 +2683,7 @@ void Board::GetPlantsOnLawn(int theGridX, int theGridY, PlantsOnLawn* thePlantOn
 		}
 		else if (aSeedType == SeedType::SEED_PUMPKINSHELL)
 		{
-			TOD_ASSERT(!thePlantOnLawn->mPumpkinPlant);
+			//TOD_ASSERT(!thePlantOnLawn->mPumpkinPlant);
 			thePlantOnLawn->mPumpkinPlant = aPlant;
 		}
 		else
@@ -7541,21 +7541,6 @@ void Board::DrawGameObjects(Graphics* g)
 		case RenderObjectType::RENDER_ITEM_REANIMATION:
 		{
 			Reanimation* aReanimation = aRenderItem.mReanimation;
-
-			if (!mApp->Is3DAccelerated() && aReanimation->mReanimationType >= ReanimationType::REANIM_BUSHES3 && aReanimation->mReanimationType <= ReanimationType::REANIM_NIGHT_BUSHES5 /*&& FloatApproxEqual(aReanimation->mAnimTime, 1.0f)*/)
-			{
-				const int _i = aReanimation->mReanimationType - ReanimationType::REANIM_BUSHES3;
-				if (mApp->mDirtyBushes[_i])
-				{
-					const bool isEven = _i % 2 == 0;
-					const float aPosX = isEven ? -7.3f : 1.2f;
-					const float aPosY = isEven ? 26.6f : 39.8f;
-
-					g->DrawImage(mApp->mDirtyBushes[_i], (int)aReanimation->mOverlayMatrix.m02 - aPosX, (int)aReanimation->mOverlayMatrix.m12 - aPosY);
-					break; // Optimize draw if it exists...
-				}
-			}
-
 			aReanimation->Draw(g);
 			break;
 		}
@@ -8315,10 +8300,13 @@ void Board::DrawDebugText(Graphics* g)
 				HMUSIC aMusicHandle1 = mApp->mMusic->GetBassMusicHandle(mApp->mMusic->mCurMusicFileMain);
 				HMUSIC aMusicHandle2 = mApp->mMusic->GetBassMusicHandle(mApp->mMusic->mCurMusicFileHihats);
 				HMUSIC aMusicHandle3 = mApp->mMusic->GetBassMusicHandle(mApp->mMusic->mCurMusicFileDrums);
-				int bpm1 = gBass->BASS_MusicGetAttribute(aMusicHandle1, BASS_MUSIC_ATTRIB_BPM);
-				int bpm2 = gBass->BASS_MusicGetAttribute(aMusicHandle2, BASS_MUSIC_ATTRIB_BPM);
-				int bpm3 = gBass->BASS_MusicGetAttribute(aMusicHandle3, BASS_MUSIC_ATTRIB_BPM);
-				aText += StrFormat(_S("bpm1 %d bmp2 %d bpm3 %d\n"), bpm1, bpm2, bpm3);
+				float bpm1;
+				gBass->BASS_ChannelGetAttribute(aMusicHandle1, BASS_ATTRIB_MUSIC_BPM, &bpm1);
+				float bpm2;
+				gBass->BASS_ChannelGetAttribute(aMusicHandle2, BASS_ATTRIB_MUSIC_BPM, &bpm1);
+				float bpm3;
+				gBass->BASS_ChannelGetAttribute(aMusicHandle3, BASS_ATTRIB_MUSIC_BPM, &bpm1);
+				aText += StrFormat(_S("bpm1 %f bmp2 %f bpm3 %f\n"), bpm1, bpm2, bpm3);
 			}
 			else if (mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS)
 			{

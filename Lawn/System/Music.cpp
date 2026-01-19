@@ -72,11 +72,8 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 		p_fread(aData, sizeof(char), aSize, pFile);  // 按字节读取数据
 		p_fclose(pFile);  // 关闭文件流
 
-		if (gBass->mVersion2)
-			aHMusic = gBass->BASS_MusicLoad2(true, aData, 0, 0, aBass->mMusicLoadFlags, 0);
-		else
-			aHMusic = gBass->BASS_MusicLoad(true, aData, 0, 0, aBass->mMusicLoadFlags);
-		delete[] aData;
+		aHMusic = gBass->BASS_MusicLoad(true, aData, 0, aSize, aBass->mMusicLoadFlags, 0);
+		delete[](char*)aData;
 
 		if (aHMusic == NULL)
 			return false;
@@ -108,7 +105,7 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 		TOD_ASSERT(gMusicFileData[theMusicFile].mFileData == nullptr);
 		gMusicFileData[theMusicFile].mFileData = (unsigned int*)aData;
 
-		if (aStream == NULL)
+		if (aStream == 0)
 			return false;
 	}
 	
@@ -171,8 +168,8 @@ void Music::SetupMusicFileForTune(MusicFile theMusicFile, MusicTune theMusicTune
 			aVolume = 100;
 		else
 			aVolume = 0;
-		
-		gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_VOL_CHAN + aTrack, aVolume);  // 设置音乐每条轨道的音量属性（静音与否）
+
+		gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_VOL_CHAN + aTrack, aVolume);
 	}
 }
 
@@ -186,7 +183,7 @@ void Music::LoadSong(MusicFile theMusicFile, const std::string& theFileName)
 	}
 	else
 	{
-		gBass->BASS_MusicSetAttribute(GetBassMusicHandle(theMusicFile), BASS_MUSIC_ATTRIB_PSCALER, 4);  // 设置音乐定位精确度属性
+		gBass->BASS_ChannelSetAttribute(GetBassMusicHandle(theMusicFile), BASS_ATTRIB_MUSIC_PSCALER, 4);
 		TodHesitationTrace("song '%s'", theFileName.c_str());
 	}
 }
@@ -305,9 +302,13 @@ void Music::PlayFromOffset(MusicFile theMusicFile, int theOffset, double theVolu
 		aMusicInfo->mStopOnFade = false;
 		aMusicInfo->mVolume = aMusicInfo->mVolumeCap * theVolume;
 		aMusicInfo->mVolumeAdd = 0.0;
-		gBass->BASS_ChannelSetAttributes(aMusicInfo->mHMusic, -1, aMusicInfo->mVolume * 100.0, -101);  // 调整音乐音量
-		gBass->BASS_ChannelSetFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESET /*| BASS_MUSIC_RAMP*/ | BASS_MUSIC_LOOP);
-		gBass->BASS_ChannelSetPosition(aMusicInfo->mHMusic, theOffset | 0x80000000);  // 设置偏移位置
+		//gBass->BASS_ChannelSetAttributes(aMusicInfo->mHMusic, -1, aMusicInfo->mVolume * 100.0, -101);  // 调整音乐音量
+		//gBass->BASS_ChannelSetFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESET /*| BASS_MUSIC_RAMP*/ | BASS_MUSIC_LOOP);
+		//gBass->BASS_ChannelSetPosition(aMusicInfo->mHMusic, theOffset | 0x80000000);  // 设置偏移位置
+
+		gBass->BASS_ChannelSetAttribute(aMusicInfo->mHMusic, BASS_ATTRIB_VOL, aMusicInfo->mVolume);
+		gBass->BASS_ChannelFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESET | BASS_MUSIC_RAMP | BASS_MUSIC_LOOP, -1);
+		gBass->BASS_ChannelSetPosition(aMusicInfo->mHMusic, theOffset /**/, BASS_POS_MUSIC_ORDER);  // 设置偏移位置
 		gBass->BASS_ChannelPlay(aMusicInfo->mHMusic, false);  // 重新开始播放
 	}
 }
@@ -326,7 +327,7 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 
 	switch (theMusicTune)
 	{
-	case MusicTune::MUSIC_TUNE_DAY_GRASSWALK:
+		case MusicTune::MUSIC_TUNE_DAY_GRASSWALK:
 		mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
 		mCurMusicFileDrums = MusicFile::MUSIC_FILE_DRUMS;
 		mCurMusicFileHihats = MusicFile::MUSIC_FILE_HIHATS;
@@ -342,8 +343,8 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		mCurMusicFileDrums = MusicFile::MUSIC_FILE_DRUMS;
 		if (theOffset == -1)
 		{
-			theOffset = 0x80000030;
-			theDrumsOffset = 0x8000005C;
+			theOffset = 0x30;
+			theDrumsOffset = 0x5C;
 		}
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		PlayFromOffset(mCurMusicFileDrums, theDrumsOffset, 0.0);
@@ -354,7 +355,7 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		mCurMusicFileDrums = MusicFile::MUSIC_FILE_DRUMS;
 		mCurMusicFileHihats = MusicFile::MUSIC_FILE_HIHATS;
 		if (theOffset == -1)
-			theOffset = 0x8000005E;
+			theOffset = 0x5E;
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		PlayFromOffset(mCurMusicFileDrums, theOffset, 0.0);
 		PlayFromOffset(mCurMusicFileHihats, theOffset, 0.0);
@@ -366,7 +367,7 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		mCurMusicFileDrums = MusicFile::MUSIC_FILE_DRUMS;
 		mCurMusicFileHihats = MusicFile::MUSIC_FILE_HIHATS;
 		if (theOffset == -1)
-			theOffset = 0x8000007D;
+			theOffset = 0x7D;
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		PlayFromOffset(mCurMusicFileDrums, theOffset, 0.0);
 		PlayFromOffset(mCurMusicFileHihats, theOffset, 0.0);
@@ -377,7 +378,7 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		mCurMusicFileDrums = MusicFile::MUSIC_FILE_DRUMS;
 		mCurMusicFileHihats = MusicFile::MUSIC_FILE_HIHATS;
 		if (theOffset == -1)
-			theOffset = 0x800000B8;
+			theOffset = 0xB8;
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		PlayFromOffset(mCurMusicFileDrums, theOffset, 0.0);
 		PlayFromOffset(mCurMusicFileHihats, theOffset, 0.0);
@@ -386,14 +387,14 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 	case MusicTune::MUSIC_TUNE_CHOOSE_YOUR_SEEDS:
 		mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
 		if (theOffset == -1)
-			theOffset = 0x8000007A;
+			theOffset = 0x7A;
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		break;
 
 	case MusicTune::MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME:
 		mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
 		if (theOffset == -1)
-			theOffset = 0x80000098;
+			theOffset = 0x98;
 		PlayFromOffset(mCurMusicFileMain, theOffset, 1.0);
 		break;
 
@@ -471,27 +472,27 @@ void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset)
 		if (mCurMusicFileMain != MusicFile::MUSIC_FILE_NONE)
 		{
 			HMUSIC aHMusic = GetBassMusicHandle(mCurMusicFileMain);
-			gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_BPM, mBaseBPM);
-			gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_SPEED, mBaseModSpeed);
+			gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_BPM, mBaseBPM);
+			gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_SPEED, mBaseModSpeed);
 		}
 		if (mCurMusicFileDrums != -1)
 		{
 			HMUSIC aHMusic = GetBassMusicHandle(mCurMusicFileDrums);
-			gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_BPM, mBaseBPM);
-			gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_SPEED, mBaseModSpeed);
+			gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_BPM, mBaseBPM);
+			gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_SPEED, mBaseModSpeed);
 		}
 		if (mCurMusicFileHihats != -1)
 		{
 			HMUSIC aHMusic = GetBassMusicHandle(mCurMusicFileHihats);
-			gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_BPM, mBaseBPM);
-			gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_SPEED, mBaseModSpeed);
+			gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_BPM, mBaseBPM);
+			gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_SPEED, mBaseModSpeed);
 		}
 	}
 	else
 	{
 		HMUSIC aHMusic = GetBassMusicHandle(mCurMusicFileMain);
-		mBaseBPM = gBass->BASS_MusicGetAttribute(aHMusic, BASS_MUSIC_ATTRIB_BPM);
-		mBaseModSpeed = gBass->BASS_MusicGetAttribute(aHMusic, BASS_MUSIC_ATTRIB_SPEED);
+		gBass->BASS_ChannelGetAttribute(aHMusic, BASS_ATTRIB_MUSIC_BPM, &mBaseBPM);
+		gBass->BASS_ChannelGetAttribute(aHMusic, BASS_ATTRIB_MUSIC_SPEED, &mBaseModSpeed);
 	}
 }
 
@@ -512,7 +513,7 @@ void Music::MusicResyncChannel(MusicFile theMusicFileToMatch, MusicFile theMusic
 	{
 		HMUSIC aHMusic = GetBassMusicHandle(theMusicFileToSync);
 
-		int aBPM = mBaseBPM;
+		float aBPM = mBaseBPM;
 		if (aDiff > 2)
 			aBPM -= 2;
 		else if (aDiff > 0)
@@ -522,7 +523,7 @@ void Music::MusicResyncChannel(MusicFile theMusicFileToMatch, MusicFile theMusic
 		else if (aDiff < 0)
 			aBPM += 1;
 
-		gBass->BASS_MusicSetAttribute(aHMusic, BASS_MUSIC_ATTRIB_BPM, aBPM);  // 适当调整待同步音乐的速率以缩小差距
+		gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_BPM, aBPM);
 	}
 }
 
@@ -574,11 +575,10 @@ void Music::UpdateMusicBurst()
 	else
 		return;
 
-	int aPackedOrderMain;
+	int aPackedOrderMain = GetMusicOrder(mCurMusicFileMain);
 	/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON)
 		aPackedOrderMain = ((BassMusicInterface*)mApp->mMusicInterface)->GetChannelPosition((int)mCurMusicFileMain);
 	else*/
-	aPackedOrderMain = GetMusicOrder(mCurMusicFileMain);
 	if (mBurstStateCounter > 0)
 		mBurstStateCounter--;
 	if (mDrumsStateCounter > 0)
@@ -672,17 +672,17 @@ void Music::UpdateMusicBurst()
 		}
 		else*/
 		{
-			aOrderMain = HIWORD(aPackedOrderMain) / 128;
-			aOrderDrum = HIWORD(mQueuedDrumTrackPackedOrder) / 128;
+			aOrderMain = (int)round(((aPackedOrderMain >> 16) & 0xFFFF) / 128.0f);
+			aOrderDrum = (int)round(((mQueuedDrumTrackPackedOrder >> 16) & 0xFFFF) / 128.0f);
 		}
 	}
 	else if (aBurstScheme == 2)
 	{
 		aOrderMain = LOWORD(aPackedOrderMain);
 		aOrderDrum = LOWORD(mQueuedDrumTrackPackedOrder);
-		if (HIWORD(aPackedOrderMain) > 252)
+		if (HIWORD(aPackedOrderMain >> 16) > 252)
 			aOrderMain++;
-		if (HIWORD(mQueuedDrumTrackPackedOrder) > 252)
+		if (HIWORD(mQueuedDrumTrackPackedOrder >> 16) > 252)
 			aOrderDrum++;
 	}
 
@@ -728,7 +728,7 @@ void Music::UpdateMusicBurst()
 		mMusicInterface->SetSongVolume(mCurMusicFileMain, aMainTrackVolume);
 		mMusicInterface->SetSongVolume(mCurMusicFileDrums, aDrumsVolume);
 		if (aDrumsJumpOrder != -1)
-			gBass->BASS_ChannelSetPosition(GetBassMusicHandle(mCurMusicFileDrums), LOWORD(aDrumsJumpOrder) | 0x80000000);
+			gBass->BASS_ChannelSetPosition(GetBassMusicHandle(mCurMusicFileDrums), LOWORD(aDrumsJumpOrder) /*| 0x80000000*/, BASS_POS_MUSIC_ORDER);
 	}
 }
 
@@ -847,7 +847,7 @@ void Music::GameMusicPause(bool thePause)
 			
 			if (aMusicInfo->mHStream)
 			{
-				mPauseOffset = gBass->BASS_ChannelGetPosition(aMusicInfo->mHStream);
+				mPauseOffset = gBass->BASS_ChannelGetPosition(aMusicInfo->mHStream, BASS_POS_MUSIC_ORDER);
 				mMusicInterface->StopMusic(mCurMusicFileMain);
 
 				/*if (mCurMusicTune == MusicTune::MUSIC_TUNE_GRASS_THE_MOON) {
@@ -857,8 +857,8 @@ void Music::GameMusicPause(bool thePause)
 			}
 			else
 			{
-				int aOrderMain = GetMusicOrder(mCurMusicFileMain);
-				mPauseOffset = MAKELONG(LOWORD(aOrderMain), HIWORD(aOrderMain) / 4);
+				unsigned long aOrderMain = GetMusicOrder(mCurMusicFileMain);
+				mPauseOffset = ((aOrderMain & 0xffff) | ((int)round((aOrderMain >> 16) / 4.0f) << 16));
 				mMusicInterface->StopMusic(mCurMusicFileMain);
 
 				if (mCurMusicTune == MusicTune::MUSIC_TUNE_DAY_GRASSWALK || mCurMusicTune == MusicTune::MUSIC_TUNE_POOL_WATERYGRAVES ||
@@ -869,8 +869,8 @@ void Music::GameMusicPause(bool thePause)
 				}
 				else if (mCurMusicTune == MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS)
 				{
-					int aOrderDrum = GetMusicOrder(mCurMusicFileDrums);
-					mPauseOffsetDrums = MAKELONG(LOWORD(aOrderDrum), HIWORD(aOrderDrum) / 4);
+					unsigned long aOrderDrums = GetMusicOrder(mCurMusicFileDrums);
+					mPauseOffsetDrums = ((aOrderDrums & 0xffff) | ((int)round((aOrderDrums >> 16) / 4.0f) << 16));
 					mMusicInterface->StopMusic(mCurMusicFileDrums);
 				}
 			}

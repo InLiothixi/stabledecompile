@@ -201,6 +201,7 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 				case SDLK_KP_PLUS:   theChar = '+'; break;
 				case SDLK_KP_MINUS:  theChar = '-'; break;
 				case SDLK_KP_MULTIPLY: theChar = '*'; break;
+				case SDLK_SLASH:
 				case SDLK_KP_DIVIDE: theChar = '/'; break;
 				case SDLK_KP_PERIOD: theChar = '.'; break;
 
@@ -216,7 +217,7 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 				case SDLK_KP_9: theChar = '9'; break;
 				}
 
-				if (theChar != -1 && theChar == 'D' && (mWidgetManager != NULL) && (mWidgetManager->mKeyDown[KEYCODE_CONTROL]) && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
+				if (theChar == 'D' && (mWidgetManager != NULL) && (mWidgetManager->mKeyDown[KEYCODE_CONTROL]) && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
 				{
 					PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
 					mDebugKeysEnabled = !mDebugKeysEnabled;
@@ -224,7 +225,7 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable)
 
 				mWidgetManager->KeyDown(GetKeyCodeFromCodeSDL(event.key.key));
 
-				if (theChar != -1 && !SDL_TextInputActive(mSDLWindow)) {
+				if (!SDL_TextInputActive(mSDLWindow)) {
 
 					bool shift = (event.key.mod & SDL_KMOD_SHIFT) != 0;
 					bool caps = (event.key.mod & SDL_KMOD_CAPS) != 0;
@@ -496,6 +497,7 @@ bool LawnApp::UpdateAppStep(bool* updated)
 					case SDLK_KP_PLUS:   theChar = '+'; break;
 					case SDLK_KP_MINUS:  theChar = '-'; break;
 					case SDLK_KP_MULTIPLY: theChar = '*'; break;
+					case SDLK_SLASH:
 					case SDLK_KP_DIVIDE: theChar = '/'; break;
 					case SDLK_KP_PERIOD: theChar = '.'; break;
 
@@ -683,7 +685,6 @@ LawnApp::LawnApp()
 	mVoiceVolume = 0.0f;
 	memset(&mFlowersPlucked, false, sizeof(mFlowersPlucked));
 	mRIPMode = false;
-	memset(&mDirtyBushes, 0, sizeof(mDirtyBushes));
 	mPlayerLevelRef = -1;
 }
 
@@ -4229,40 +4230,6 @@ void LawnApp::PreloadForUser()
 		ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_NIGHT_BUSHES5, true);
 		if (mCompletedLoadingThreadTasks < aNumTasks)
 			mCompletedLoadingThreadTasks += 408;
-
-		for (int _i = 0; _i < 6; _i++)
-		{
-			const ReanimationType aReanimType = (ReanimationType)((int)ReanimationType::REANIM_BUSHES3 + _i);
-			const bool isEven = _i % 2 == 0;
-			const int aWidth = isEven ?  337 : 364;
-			const int aHeight = isEven ? 243 : 291;
-			const float aPosX = isEven ? -7.3f : 1.2f;
-			const float aPosY = isEven ? 26.6f : 39.8f;
-
-			MemoryImage* aDirtyBush = new MemoryImage();
-			aDirtyBush->mWidth = aWidth;
-			aDirtyBush->mHeight = aHeight;
-			int aNumBits = aWidth * aHeight;
-			aDirtyBush->mBits = new unsigned long[aNumBits + 1];
-			aDirtyBush->mHasTrans = true;
-			aDirtyBush->mHasAlpha = true;
-			memset(aDirtyBush->mBits, 0, aNumBits * 4);
-			aDirtyBush->mBits[aNumBits] = Sexy::MEMORYCHECK_ID;
-
-			Reanimation aBushReanim;
-			aBushReanim.ReanimationInitializeType(aPosX, aPosY, aReanimType);
-			aBushReanim.SetFramesForLayer("anim_rustle");
-			aBushReanim.mLastFrameTime = 0.0f;
-			aBushReanim.mAnimTime = 0.0f;
-			aBushReanim.mAnimRate = 0.0f;
-			aBushReanim.mLoopType = ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
-
-			Graphics aImage(aDirtyBush);
-			aImage.SetLinearBlend(true);
-			aBushReanim.Draw(&aImage);
-
-			mDirtyBushes[_i] = aDirtyBush;
-		}
 	}
 
 	if (mPlayerInfo)

@@ -24,10 +24,15 @@ void ReanimAtlas::ReanimAtlasDispose()
 
 ReanimAtlasImage* ReanimAtlas::GetEncodedReanimAtlas(Image* theImage)
 {
-	if (theImage == nullptr || (int)theImage > 1000)
+	if (theImage == nullptr)
 		return nullptr;
 
-	int aAtlasIndex = (int)theImage - 1;
+	intptr_t value = reinterpret_cast<intptr_t>(theImage);
+
+	if (value > 1000)
+		return nullptr;
+
+	int aAtlasIndex = static_cast<int>(value - 1);
 	TOD_ASSERT(aAtlasIndex >= 0 && aAtlasIndex < mImageCount);
 	return &mImageArray[aAtlasIndex];
 }
