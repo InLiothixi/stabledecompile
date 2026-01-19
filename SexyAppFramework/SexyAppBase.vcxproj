@@ -204,11 +204,15 @@
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -243,11 +247,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|Win32'">
@@ -283,11 +291,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGOTY|x64'">
@@ -324,11 +336,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -372,11 +388,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -422,11 +442,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|Win32'">
@@ -472,11 +496,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGOTY|x64'">
@@ -522,11 +550,15 @@ EXIT 0</Command>
     </PreBuildEvent>
     <Manifest />
     <PostBuildEvent>
-      <Command>robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /E /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /NFL /NDL /NJH /NJS
-robocopy "$(SolutionDir)Plants Vs. Zombies\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /E /NFL /NDL /NJH /NJS
-EXIT 0</Command>
+      <Command>set "PVZ_DIR=$(SolutionDir)Plants Vs Zombies"
+if not exist "%PVZ_DIR%" set "PVZ_DIR=$(SolutionDir)Plants Vs. Zombies"
+
+robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" /S
+robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
+robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
+robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
+
+EXIT /B 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
