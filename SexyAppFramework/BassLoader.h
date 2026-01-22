@@ -64,7 +64,7 @@ struct BASS_INSTANCE
 	HSYNC(WINAPI* BASS_ChannelSetSync)(DWORD handle, DWORD type, QWORD param, SYNCPROC* proc, void* user);
 	BOOL(WINAPI* BASS_ChannelRemoveSync)(DWORD handle, HSYNC sync);
 
-	HMUSIC(WINAPI* BASS_MusicLoad)(BOOL mem, const void* file, QWORD offset, DWORD length, DWORD flags, DWORD freq);
+	HMUSIC(WINAPI* BASS_MusicLoad)(DWORD filetype, const void* file, QWORD offset, DWORD length, DWORD flags, DWORD freq);
 	//HMUSIC(WINAPI *BASS_MusicLoad2)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags, DWORD freq);
 	BOOL(WINAPI* BASS_MusicFree)(HMUSIC handle);
 

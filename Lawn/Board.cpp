@@ -6936,6 +6936,7 @@ void Board::DrawBackdrop(Graphics* g)
 {
 	g->PushState();
 	g->SetLinearBlend(true);
+	g->SetPixelArtBlend(true);
 	Image* aBgImage = nullptr;
 	switch (mBackground)
 	{
@@ -6996,6 +6997,8 @@ void Board::DrawBackdrop(Graphics* g)
 	{
 		DrawHouseDoorBottom(g);
 	}
+	g->SetPixelArtBlend(false);
+
 	if (StageHasPool())
 	{
 		mApp->mPoolEffect->PoolEffectDraw(g, StageIsNight());
@@ -8306,7 +8309,7 @@ void Board::DrawDebugText(Graphics* g)
 				gBass->BASS_ChannelGetAttribute(aMusicHandle2, BASS_ATTRIB_MUSIC_BPM, &bpm1);
 				float bpm3;
 				gBass->BASS_ChannelGetAttribute(aMusicHandle3, BASS_ATTRIB_MUSIC_BPM, &bpm1);
-				aText += StrFormat(_S("bpm1 %f bmp2 %f bpm3 %f\n"), bpm1, bpm2, bpm3);
+				aText += StrFormat(_S("bpm1 %d bmp2 %d bpm3 %d\n"), (int)bpm1, (int)bpm2, (int)bpm3);
 			}
 			else if (mApp->mMusic->mCurMusicTune == MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS)
 			{

@@ -72,7 +72,7 @@ bool Music::TodLoadMusic(MusicFile theMusicFile, const std::string& theFileName)
 		p_fread(aData, sizeof(char), aSize, pFile);  // 按字节读取数据
 		p_fclose(pFile);  // 关闭文件流
 
-		aHMusic = gBass->BASS_MusicLoad(true, aData, 0, aSize, aBass->mMusicLoadFlags, 0);
+		aHMusic = gBass->BASS_MusicLoad(BASS_FILE_MEM, aData, 0, aSize, aBass->mMusicLoadFlags, 0);
 		delete[](char*)aData;
 
 		if (aHMusic == NULL)
@@ -304,7 +304,7 @@ void Music::PlayFromOffset(MusicFile theMusicFile, int theOffset, double theVolu
 		aMusicInfo->mVolumeAdd = 0.0;
 
 		gBass->BASS_ChannelSetAttribute(aMusicInfo->mHMusic, BASS_ATTRIB_VOL, aMusicInfo->mVolume);
-		gBass->BASS_ChannelFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESET /*| BASS_MUSIC_RAMP*/ | BASS_MUSIC_LOOP, -1);
+		gBass->BASS_ChannelFlags(aMusicInfo->mHMusic, BASS_MUSIC_POSRESETEX | BASS_MUSIC_RAMP | BASS_MUSIC_LOOP, -1);
 		gBass->BASS_ChannelSetPosition(aMusicInfo->mHMusic, theOffset /**/, BASS_POS_MUSIC_ORDER);  // 设置偏移位置
 		gBass->BASS_ChannelPlay(aMusicInfo->mHMusic, false);  // 重新开始播放
 	}
@@ -691,7 +691,7 @@ void Music::UpdateMusicBurst()
 				aDrumsVolume = 1.0f; 
 				mMusicDrumsState = MusicDrumsState::MUSIC_DRUMS_ON;
 				if (aBurstScheme == 2)
-					aDrumsJumpOrder = (aOrderMain % 2 == 0) ? 76 : 77;
+					aDrumsJumpOrder = ((aOrderMain >> 16) % 2 == 0) ? 76 : 77;
 			}
 			break;
 		case MusicDrumsState::MUSIC_DRUMS_ON:

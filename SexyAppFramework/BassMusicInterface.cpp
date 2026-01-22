@@ -67,7 +67,7 @@ BassMusicInterface::BassMusicInterface(HWND theHWnd)
 
 	mMaxMusicVolume = 40;
 
-	mMusicLoadFlags = /*gBass->mVersion2 ? BASS_MUSIC_LOOP | BASS2_MUSIC_RAMP : */ BASS_MUSIC_LOOP;
+	mMusicLoadFlags = BASS_MUSIC_LOOP | BASS2_MUSIC_RAMP;
 }
 
 BassMusicInterface::~BassMusicInterface()
@@ -104,7 +104,7 @@ bool BassMusicInterface::LoadMusic(int theSongId, const std::string& theFileName
 		p_fread(aData, 1, aSize, aFP);
 		p_fclose(aFP);
 
-		aHMusic = gBass->BASS_MusicLoad(FALSE, (void*)theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP /*| BASS2_MUSIC_RAMP*/, 0);
+		aHMusic = gBass->BASS_MusicLoad(FALSE, (void*)theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP | BASS2_MUSIC_RAMP, 0);
 
 		delete[] aData;
 	}
@@ -135,7 +135,7 @@ void BassMusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)
 		if (aMusicInfo->mHMusic)
 		{
 			if (gBass->mVersion2)
-				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, BASS_MUSIC_POSRESET /*| BASS2_MUSIC_RAMP*/ | (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
+				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, BASS_MUSIC_POSRESET | BASS2_MUSIC_RAMP | (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
 			else
 				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, noLoop ? 0 : BASS_MUSIC_LOOP, TRUE);
 		}
@@ -262,7 +262,7 @@ void BassMusicInterface::FadeIn(int theSongId, int theOffset, double theSpeed, b
 				gBass->BASS_MusicPlay(aMusicInfo->mHMusic);
 			else
 			{
-				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, /*BASS2_MUSIC_RAMP |*/ (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
+				gBass->BASS_MusicPlayEx(aMusicInfo->mHMusic, theOffset, BASS2_MUSIC_RAMP | (noLoop ? 0 : BASS_MUSIC_LOOP), TRUE);
 			}
 		}
 		else
@@ -386,7 +386,7 @@ void BassMusicInterface::Update()
 			}
 
 			//gBass->BASS_ChannelSetAttributes(aMusicInfo->GetHandle(), -1, (int) (aMusicInfo->mVolume*100), -101);
-			gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_VOL, (int)(aMusicInfo->mVolume));
+			gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_VOL, aMusicInfo->mVolume);
 		}
 
 		++anItr;
