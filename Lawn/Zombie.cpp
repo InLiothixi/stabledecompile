@@ -2549,8 +2549,9 @@ void Zombie::UpdateZombieImp()
 {
     if (mZombiePhase == ZombiePhase::PHASE_IMP_GETTING_THROWN)
     {
-        mVelZ -= THOWN_ZOMBIE_GRAVITY;
-        mAltitude += mVelZ;
+        float aAccZ = -THOWN_ZOMBIE_GRAVITY;
+        mAltitude += mVelZ + 0.5f * aAccZ;
+        mVelZ += aAccZ;
         mPosX -= mVelX;
 
         float aDiffY = GetPosYBasedOnRow(mRow) - mPosY;
