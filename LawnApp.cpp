@@ -565,6 +565,10 @@ bool LawnApp::UpdateAppStep(bool* updated)
 
 					switch (event.key.key)
 					{
+					case SDLK_KP_HASH:   theChar = '#'; break;
+					case SDLK_PERCENT:   theChar = '%'; break;
+					case SDLK_DOLLAR:   theChar = '$'; break;
+
 					case SDLK_KP_PLUS:   theChar = '+'; break;
 					case SDLK_KP_MINUS:  theChar = '-'; break;
 					case SDLK_KP_MULTIPLY: theChar = '*'; break;
