@@ -7878,7 +7878,7 @@ void Board::DrawLevel(Graphics* g)
 	{
 		TouchInfo touch = mWidgetManager->mTouches[i];
 		if (touch.id != 0)
-			g->DrawCircle(touch.x, touch.y, 20, 10 * PI);
+			g->DrawCircle(touch.x, touch.y, 20, 10);
 	}
 }
 #ifdef _REPLANTED_SPEED_CONTROL
@@ -8412,29 +8412,29 @@ void Board::DrawDebugObjectRects(Graphics* g)
 			if (aPlant->mSeedType == SeedType::SEED_CHERRYBOMB)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 115, PI * 115);
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 115, 115);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_EXPLODE_O_NUT)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 90, PI * 90);
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 90, 90);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_DOOMSHROOM)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 250, PI * 250);
+				g->DrawCircle(aPlant->mX + 40, aPlant->mY + 40.0f, 250, 250);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_SCAREDYSHROOM)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40.0f, 80.0f, 120.0f, PI * 80.0f);
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40.0f, 80.0f, 120.0f, 80);
 			}
 			else if (aPlant->mSeedType == SeedType::SEED_MAGNETSHROOM)
 			{
 				g->SetColor(Color(255, 255, 0));
-				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 230.0f, 270.0f, PI * 270.0f);
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 230.0f, 270.0f, 270);
 				g->SetColor(Color(255, 255, 0, 128));
-				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 280.0f, 320.0f, PI * 320.0f);
+				g->DrawOval(aPlant->mX + 40, aPlant->mY + 40, 280.0f, 320.0f, 320);
 			}
 		}
 		Zombie* aZombie = nullptr;
@@ -8455,11 +8455,11 @@ void Board::DrawDebugObjectRects(Graphics* g)
 					if (!aZombie->mMindControlled)
 					{
 						g->SetColor(Color(255, 255, 0));
-						g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 90, PI * 90);
+						g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 90, 90);
 					}
 
 					g->SetColor(Color(255, 255, 0, 128));
-					g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 115, PI * 115);
+					g->DrawCircle(aZombie->mX + 60, aZombie->mY + 60, 115, 115);
 				}
 			}
 		}

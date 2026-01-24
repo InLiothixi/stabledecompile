@@ -239,7 +239,7 @@ void HTTPTransfer::GetThreadProc()
 						chunked = true;
 					}
 
-					char* aCheckStr = "Transfer-Encoding: ";
+					const char* aCheckStr = "Transfer-Encoding: ";
 					if (strncmp(aLine.c_str(), aCheckStr, strlen(aCheckStr)) == 0)
 					{
 						if (strcmp(aLine.c_str() + strlen(aCheckStr), "identity") != 0)

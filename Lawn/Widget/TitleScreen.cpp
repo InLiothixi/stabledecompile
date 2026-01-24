@@ -133,7 +133,7 @@ void TitleScreen::Draw(Graphics* g)
 		g->FillRect(0, 0, mWidth, mHeight);
 		return;
 	}
-	if (!mApp->IsScreenSaver())
+	if (!mApp->IsScreenSaver() && !mApp->IsParticleEditor())
 		g->DrawImage(IMAGE_TITLESCREEN, 0, 0);
 	if (mNeedToInit)
 	{
@@ -149,15 +149,15 @@ void TitleScreen::Draw(Graphics* g)
 	{
 		aLogoY = TodAnimateCurve(60, 50, mTitleStateCounter, 10, 15, CURVE_BOUNCE);
 	}
-	if (!mApp->IsScreenSaver())
+	if (!mApp->IsScreenSaver() && !mApp->IsParticleEditor())
 		g->DrawImage(IMAGE_PVZ_LOGO, mWidth / 2 - IMAGE_PVZ_LOGO->mWidth / 2, aLogoY);
 
 	int aGrassX = mStartButton->mX - 4;
 	int aGrassY = mStartButton->mY - 17;
-	if (!mApp->IsScreenSaver())
+	if (!mApp->IsScreenSaver() && !mApp->IsParticleEditor())
 		g->DrawImage(IMAGE_LOADBAR_DIRT, aGrassX + 6, aGrassY + 18);
 
-	if (!mApp->IsScreenSaver())
+	if (!mApp->IsScreenSaver() && !mApp->IsParticleEditor())
 	{
 		if (mCurBarWidth >= mTotalBarWidth)
 		{
@@ -217,7 +217,7 @@ void TitleScreen::Update()
 		mApp->mMusic->MusicTitleScreenInit();
 		mApp->StartLoadingThread();
 
-		mTitleState = mApp->IsScreenSaver() ? TitleState::TITLESTATE_POPCAP_LOGO : TitleState::TITLESTATE_SCREEN;
+		mTitleState = mApp->IsScreenSaver() || mApp->IsParticleEditor() ? TitleState::TITLESTATE_POPCAP_LOGO : TitleState::TITLESTATE_SCREEN;
 		if (mDisplayPartnerLogo)
 		{
 			mTitleStateDuration = 150;
@@ -288,7 +288,7 @@ void TitleScreen::Update()
 		mStartButton->mLabel = TodStringTranslate(_S("[LOADING]"));
 		mStartButton->SetFont(FONT_BRIANNETOD16);
 		mStartButton->Resize(mWidth / 2 - IMAGE_LOADBAR_DIRT->mWidth / 2, 650, mTotalBarWidth, 50);
-		mStartButton->mVisible = !mApp->IsScreenSaver();
+		mStartButton->mVisible = !mApp->IsScreenSaver() && !mApp->IsParticleEditor();
 
 		float aEstimatedTotalLoadTime;
 		if (aCurrentProgress > 0.000001f)
@@ -479,7 +479,7 @@ void TitleScreen::Update()
 				aSproutReanim->SetPosition(aPosX - 21.0f, aPosY);
 			}
 
-			if (mApp->IsScreenSaver()) continue;
+			if (mApp->IsScreenSaver() || mApp->IsParticleEditor()) continue;
 
 			if (i == 4)
 			{
@@ -537,7 +537,7 @@ void TitleScreen::ButtonDepress(int theId)
 //0x48E650
 void TitleScreen::MouseDown(int x, int y, int theClickCount)
 {
-	if (mApp->IsScreenSaver()) return;
+	if (mApp->IsScreenSaver() || mApp->IsParticleEditor()) return;
 
 	if (mLoadingThreadComplete)
 	{
@@ -549,7 +549,7 @@ void TitleScreen::MouseDown(int x, int y, int theClickCount)
 //0x48E690
 void TitleScreen::KeyDown(KeyCode theKey)
 {
-	if (mApp->IsScreenSaver()) return;
+	if (mApp->IsScreenSaver() || mApp->IsParticleEditor()) return;
 
 	if (mLoadingThreadComplete)
 	{

@@ -1100,7 +1100,7 @@ bool FlashWidget::StartAnimation(const SexyString& theFileName)
 
 void FlashWidget::SetQuality(int theQuality)
 {
-	static char* aQualityNames[3] = {"Low", "Medium", "High"};
+	static const char* aQualityNames[3] = {"Low", "Medium", "High"};
 	
 	_bstr_t aNewStr = aQualityNames[theQuality];
 	mFlashInterface->put_Quality2(aNewStr);
@@ -1181,7 +1181,7 @@ int FlashWidget::GetCurrentFrame()
 
 SexyString FlashWidget::GetCurrentLabel(const SexyString& theTimeline)
 {
-	BSTR aBStr = L"";
+	BSTR aBStr = nullptr;
 	if (mFlashInterface != NULL)
 		mFlashInterface->TCurrentLabel(_bstr_t(theTimeline.c_str()), &aBStr);
 	return (const SexyChar*) _bstr_t(aBStr);
@@ -1201,7 +1201,7 @@ void FlashWidget::CallLabel(const SexyString& theTimeline, const SexyString& the
 
 SexyString FlashWidget::GetVariable(const SexyString& theName)
 {
-	BSTR aBStr = L"";
+	BSTR aBStr = nullptr;
 	if (mFlashInterface != NULL)
 		mFlashInterface->GetVariable(_bstr_t(theName.c_str()), &aBStr);
 	return (const SexyChar*) _bstr_t(aBStr);

@@ -196,7 +196,7 @@ void ParticleScreen::Draw(Graphics* g) {
 			{
 				g->SetColor(Color(255, 255, 255));
 				float aRadius1 = FloatTrackEvaluate(def->mEmitterRadius, emitter->mSystemTimeValue, 1);
-				g->DrawCircle(mWidth / 2, mHeight / 2, aRadius1, (int)(PI * aRadius1));
+				g->DrawCircle(mWidth / 2, mHeight / 2, aRadius1, (int)(aRadius1));
 			}
 			else if (def->mEmitterType == EmitterType::EMITTER_BOX || def->mEmitterType == EmitterType::EMITTER_BOX_PATH)
 			{

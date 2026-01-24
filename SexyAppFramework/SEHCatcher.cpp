@@ -48,7 +48,7 @@ static bool gUseDefaultFonts = true;
 struct 
 {
     DWORD   dwExceptionCode;
-    char    *szMessage;
+    const char*    szMessage;
 } gMsgTable[] = {
    { STATUS_SEGMENT_NOTIFICATION,     "Segment Notification" },
    { STATUS_BREAKPOINT,               "Breakpoint" },
@@ -354,7 +354,7 @@ void SEHCatcher::DoHandleDebugEvent(LPEXCEPTION_POINTERS lpEP)
    
 		///////////////////////////
 	// first name the exception	
-	char  *szName = NULL;
+	const char  *szName = NULL;
     for (int i=0; gMsgTable[i].dwExceptionCode != 0xFFFFFFFF; i++) 
 	{
         if (gMsgTable[i].dwExceptionCode == lpEP->ExceptionRecord->ExceptionCode) 

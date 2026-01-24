@@ -139,7 +139,7 @@ void Sexy::SetAppDataFolder(const std::string& thePath)
 
 std::string Sexy::URLEncode(const std::string& theString)
 {
-	char* aHexChars = "0123456789ABCDEF";
+	const char* aHexChars = "0123456789ABCDEF";
 
 	std::string aString;
 

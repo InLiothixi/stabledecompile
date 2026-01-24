@@ -1167,14 +1167,14 @@ SexyString SexyAppBase::GetProductVersion(const SexyString& thePath)
 		aGetFileVersionInfoFunc((SexyChar*) thePath.c_str(), 0, aSize, aVersionBuffer);
 		SexyChar* aBuffer;
 		if (aVerQueryValueFunc(aVersionBuffer, 
-				  _S("\\StringFileInfo\\040904B0\\ProductVersion"), 
+			const_cast<LPSTR>(_S("\\StringFileInfo\\040904B0\\ProductVersion")),
 				  (void**) &aBuffer, 
 				  &aSize))
 		{
 			aProductVersion = aBuffer;
 		}
 		else if (aVerQueryValueFunc(aVersionBuffer, 
-				  _S("\\StringFileInfo\\040904E4\\ProductVersion"), 
+			const_cast<LPSTR>(_S("\\StringFileInfo\\040904E4\\ProductVersion")),
 				  (void**) &aBuffer, 
 				  &aSize))
 		{
@@ -1553,7 +1553,7 @@ bool SexyAppBase::RegistryWrite(const SexyString& theValueName, ulong theType, c
 	if (aResult != ERROR_SUCCESS)
 	{
 		ulong aDisp;
-		aResult = RegCreateKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, "Key", REG_OPTION_NON_VOLATILE,
+		aResult = RegCreateKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, const_cast<char*>("Key"), REG_OPTION_NON_VOLATILE,
 			KEY_ALL_ACCESS, NULL, &aGameKey, &aDisp);
 	}
 

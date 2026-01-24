@@ -183,7 +183,7 @@ bool DSoundManager::LoadWAVSound(unsigned int theSfxID, const SexyString& theFil
 
 	PFILE* fp = p_fopen(theFilename.c_str(), _S("rb"));
 
-	if (fp <= 0)
+	if (!fp)
 		return false;
 
 	SexyChar aChunkType[5];
@@ -550,7 +550,7 @@ bool DSoundManager::LoadAUSound(unsigned int theSfxID, const SexyString& theFile
 
 	fp = p_fopen(theFilename.c_str(), _S("rb"));	
 
-	if (fp <= 0)
+	if (!fp)
 		return false;	
 
 	
@@ -864,7 +864,7 @@ bool DSoundManager::WriteWAV(unsigned int theSfxID, const SexyString& theFilenam
 
 	FILE* fp = sexyfopen(theFilename.c_str(), _S("wb"));
 
-	if (fp <= 0)
+	if (!fp)
 	{
 		mSourceSounds[theSfxID]->Unlock(lpvPtr, dwBytes, NULL, NULL);
 		return false;

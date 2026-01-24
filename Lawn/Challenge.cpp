@@ -6128,7 +6128,7 @@ void Challenge::HeatWaveUpdate()
 
 					}
 
-					char* animTrack = "anim_head_idle";
+					const char* animTrack = "anim_head_idle";
 					if (isExhausted)
 					{
 						animTrack = aPlant->mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED ? "anim_head_tired" : "anim_head_exhausted";
@@ -6204,7 +6204,7 @@ void Challenge::HeatWaveUpdate()
 					aBodyReanim->SetImageOverride("backleaf", aPlant->mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED ? Sexy::IMAGE_REANIM_PEASHOOTER_BACKLEAF_EXHAUSTED : Sexy::IMAGE_REANIM_PEASHOOTER_BACKLEAF_EXHAUSTED2);
 				}
 
-				char* animTrack = "anim_head_idle";
+				const char* animTrack = "anim_head_idle";
 				if (isExhausted)
 				{
 					animTrack = aPlant->mState == PlantState::STATE_HEAT_WAVE_EXHAUSTED ? "anim_head_tired" : "anim_head_exhausted";
