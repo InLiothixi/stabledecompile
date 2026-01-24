@@ -42,7 +42,7 @@ public:
 	float		mSecondLastPicked;
 };
 
-/*inline*/ int			TodPickFromArray(const int* theArray, int theCount);
+/*inline*/ intptr_t			TodPickFromArray(const intptr_t* theArray, int theCount);
 int						TodPickFromWeightedArray(const TodWeightedArray* theArray, int theCount);
 TodWeightedArray* TodPickArrayItemFromWeightedArray(const TodWeightedArray* theArray, int theCount);
 TodWeightedGridArray* TodPickFromWeightedGridArray(const TodWeightedGridArray* theArray, int theCount);

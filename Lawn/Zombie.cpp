@@ -11849,7 +11849,7 @@ void Zombie::BossSpawnContact()
             aZombieTypeCount--;
         }
 
-        aZombieType = (ZombieType)TodPickFromArray((int*)gBossZombieList, aZombieTypeCount);
+        aZombieType = (ZombieType)TodPickFromArray((intptr_t*)gBossZombieList, aZombieTypeCount);
     }
 
     Zombie* aZombie = mBoard->AddZombieInRow(aZombieType, mTargetRow, 0);
@@ -11876,7 +11876,7 @@ bool Zombie::BossIsAbleToStomp()
 void Zombie::BossStompAttack()
 {
     int aRowsCount = 0;
-    int aRowArray[MAX_GRID_SIZE_Y];
+    intptr_t aRowArray[MAX_GRID_SIZE_Y];
     for (int i = 0; i < 4; i++)
     {
         if (BossCanStompRow(i))

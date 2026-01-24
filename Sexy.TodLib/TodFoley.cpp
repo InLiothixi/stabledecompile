@@ -253,7 +253,7 @@ void TodFoley::PlayFoleyPitch(FoleyType theFoleyType, float thePitch)
 		return;
 
 	int aVariations = 0;
-	int aVariationsArray[10];
+	intptr_t aVariationsArray[10];
 	FoleyTypeData* aFoleyData = &mFoleyTypeData[(int)theFoleyType];
 	for (int i = 0; i < 10; i++)
 	{
@@ -266,7 +266,7 @@ void TodFoley::PlayFoleyPitch(FoleyType theFoleyType, float thePitch)
 		}
 	}
 	TOD_ASSERT(aVariations > 0);
-	int aVariation = TodPickFromArray(aVariationsArray, aVariations);
+	intptr_t aVariation = TodPickFromArray(aVariationsArray, aVariations);
 	aFoleyData->mLastVariationPlayed = aVariation;
 	SoundInstance* aSoundInstance = gSexyAppBase->mSoundManager->GetSoundInstance(*aFoleyParams->mSfxID[aVariation]);
 	if (aSoundInstance == nullptr)
