@@ -1556,8 +1556,8 @@ void ZenGarden::StinkyUpdate(GridItem* theStinky)
     Reanimation* aStinkyReanim = mApp->ReanimationGet(theStinky->mGridItemReanimID);
 
     __time32_t aNow = _time32(nullptr);
-    if (mApp->mPlayerInfo->mLastStinkyChocolateTime > aNow || 
-        mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_STINKY_THE_SNAIL] > aNow)
+    if ((mApp->mPlayerInfo->mLastStinkyChocolateTime > aNow ||
+        mApp->mPlayerInfo->mPurchases[(int)StoreItem::STORE_ITEM_STINKY_THE_SNAIL] > aNow) && !mApp->IsScreenSaver())
     {
         ResetStinkyTimers();
     }
@@ -1778,6 +1778,19 @@ void ZenGarden::ZenToolUpdate(GridItem* theZenTool)
 //0x520B30
 void ZenGarden::ZenGardenUpdate()
 {
+    if (mApp->IsScreenSaver())
+    {
+        GridItem* aGridItem = nullptr;
+        while (mBoard->IterateGridItems(aGridItem))
+        {
+            if (aGridItem->mGridItemType == GridItemType::GRIDITEM_STINKY)
+            {
+                StinkyUpdate(aGridItem);
+            }
+        }
+        
+        return;
+    }
     if (mApp->GetDialog(Dialogs::DIALOG_STORE))
     {
         return;
@@ -1801,7 +1814,6 @@ void ZenGarden::ZenGardenUpdate()
             mBoard->mChallenge->mChallengeStateCounter = 50;
         }
     }
-
     UpdatePlantNeeds();
     {
         Plant* aPlant = nullptr;
@@ -2349,7 +2361,7 @@ void ZenGarden::PottedPlantUpdate(Plant* thePlant)
 //0x521F30
 void ZenGarden::DrawPlantOverlay(Graphics* g, Plant* thePlant)
 {
-    if (thePlant->mPottedPlantIndex == -1)
+    if (thePlant->mPottedPlantIndex == -1 || mApp->IsScreenSaver())
     {
         return;
     }

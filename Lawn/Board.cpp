@@ -236,6 +236,11 @@ Board::Board(LawnApp* theApp)
 		mMenuButton->SetLabel(_S("[MAIN_MENU_BUTTON]"));
 		mMenuButton->Resize(628, -10, 163, 46);
 
+		if (mApp->IsScreenSaver())
+		{
+			mMenuButton->Resize(-1000, -1000, 163, 46);
+		}
+
 		mStoreButton = new GameButton(1);
 		mStoreButton->mButtonImage = IMAGE_ZENSHOPBUTTON;
 		mStoreButton->mOverImage = IMAGE_ZENSHOPBUTTON_HIGHLIGHT;

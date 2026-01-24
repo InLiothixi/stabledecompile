@@ -6484,12 +6484,13 @@ void SexyAppBase::HandleCmdLineParam(const std::string& theParamName, const std:
 		char* a = 0;
 		*a = '!';		
 	}
-	else if (theParamName == "-screensaver" ||
+	else if (theParamName == "-screensaver" || 
 		theParamName.rfind("/s") == 0 || theParamName.rfind("/S") == 0 ||
 		aIsPreviewParameter ||
 		theParamName.rfind("/c") == 0 || theParamName.rfind("/C") == 0)
 	{
 		mIsScreenSaver = true;
+		mNoSoundNeeded = true;
 		
 		if (aIsPreviewParameter)
 		{

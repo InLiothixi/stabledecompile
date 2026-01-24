@@ -324,7 +324,26 @@ void LawnApp::MakeWindow()
 		mDDInterface = new DDInterface(this);
 	}
 
-	mSDLWindow = SDL_CreateWindow(mTitle.c_str(), mWidth, mHeight, SDL_WINDOW_RESIZABLE | (mIsWindowed ? 0 : SDL_WINDOW_FULLSCREEN) | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+	if (IsScreenSaver())
+	{
+		mTitle = _S("Zen Garden");
+		mIsWindowed = false;
+		mFullScreenWindow = true;
+	}
+	else if (IsPreviewSaver())
+	{
+		mTitle = _S("Zen Garden Preview");
+		mIsWindowed = true;
+		mFullScreenWindow = false;
+	}
+	else if (IsParticleEditor())
+	{
+		mTitle = _S("Particle Editor");
+		mIsWindowed = true;
+		mFullScreenWindow = false;
+	}
+
+	mSDLWindow = SDL_CreateWindow(mTitle.c_str(), mWidth, mHeight, SDL_WINDOW_RESIZABLE | (mIsWindowed && !IsScreenSaver()  ? 0 : SDL_WINDOW_FULLSCREEN) | SDL_WINDOW_HIGH_PIXEL_DENSITY);
 	mSDLRenderer = SDL_CreateRenderer(mSDLWindow, nullptr);
 	SDL_SetRenderVSync(mSDLRenderer, mEnableVsync);
 	SDL_SetRenderLogicalPresentation(mSDLRenderer, mWidth, mHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
@@ -336,6 +355,10 @@ void LawnApp::MakeWindow()
 	mWidgetManager->mImage->mD3DData = SDL_CreateTexture(LawnApp::mSDLRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, mWidgetManager->mImage->mWidth, mWidgetManager->mImage->mHeight);
 	SDL_SetTextureBlendMode((SDL_Texture*)mWidgetManager->mImage->mD3DData, SDL_BLENDMODE_BLEND);
 	mWidgetManager->MarkAllDirty();
+
+	if (IsScreenSaver()) {
+		SDL_HideCursor();
+	}
 }
 
 bool LawnApp::DrawDirtyStuff()
@@ -351,6 +374,29 @@ void LawnApp::Redraw(Rect* theClipRect)
 	if (mIsPlayingVideo) return;
 	//SexyAppBase::Redraw(theClipRect);
 	SDL_RenderPresent(mSDLRenderer);
+}
+
+static int mouseMoveCount = 0;
+static int lastMouseX = -1;
+static int lastMouseY = -1;
+
+bool IsRealMouseMove(const SDL_Event& e)
+{
+	if (lastMouseX == -1)
+	{
+		lastMouseX = e.motion.x;
+		lastMouseY = e.motion.y;
+		return false;
+	}
+
+	if (e.motion.x != lastMouseX || e.motion.y != lastMouseY)
+	{
+		lastMouseX = e.motion.x;
+		lastMouseY = e.motion.y;
+		mouseMoveCount++;
+	}
+
+	return mouseMoveCount >= 4;
 }
 
 bool LawnApp::UpdateAppStep(bool* updated)
@@ -383,118 +429,142 @@ bool LawnApp::UpdateAppStep(bool* updated)
 		while (SDL_PollEvent(&event))
 		{
 			SDL_ConvertEventToRenderCoordinates(mSDLRenderer, &event);
-			switch (event.type)
-			{
-			case SDL_EVENT_QUIT:
-				Shutdown();
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-				if ((!gInAssert) && (!mSEHOccured))
+
+			if (IsScreenSaver()) {
+				switch (event.type)
 				{
-					int x = event.button.x;
-					int y = event.button.y;
-					mWidgetManager->RemapMouse(x, y);
-					mLastUserInputTick = mLastTimerTime;
-					mWidgetManager->MouseMove(x, y);
+					case SDL_EVENT_QUIT:
+						Shutdown();
+						break;
 
-					if (!mMouseIn)
-					{
-						mMouseIn = true;
-						EnforceCursor();
-					}
+					case SDL_EVENT_MOUSE_MOTION:
+						if (IsRealMouseMove(event))
+							Shutdown();
+						break;
 
-					mWidgetManager->MouseDown(event.button.x, event.button.y, buttonTrans(event.button.button));
+					case SDL_EVENT_MOUSE_BUTTON_DOWN:
+					case SDL_EVENT_KEY_DOWN:
+					case SDL_EVENT_TEXT_INPUT:
+							Shutdown();
+						break;
+
+					default:
+						break;
 				}
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_UP:
-				if ((!gInAssert) && (!mSEHOccured))
-				{
-					int x = event.button.x;
-					int y = event.button.y;
-					mWidgetManager->RemapMouse(x, y);
-					mLastUserInputTick = mLastTimerTime;
-					mWidgetManager->MouseMove(x, y);
-
-					if (!mMouseIn)
-					{
-						mMouseIn = true;
-						EnforceCursor();
-					}
-
-					mWidgetManager->MouseUp(event.button.x, event.button.y, buttonTrans(event.button.button));
-				}
-				break;
-			case SDL_EVENT_MOUSE_MOTION:
-				if ((!gInAssert) && (!mSEHOccured))
-				{
-					int x = event.motion.x;
-					int y = event.motion.y;
-					mWidgetManager->RemapMouse(x, y);
-					mLastUserInputTick = mLastTimerTime;
-					mWidgetManager->MouseMove(x, y);
-
-					if (!mMouseIn)
-					{
-						mMouseIn = true;
-						EnforceCursor();
-					}
-				}
-				break;
-			case SDL_EVENT_MOUSE_WHEEL:
-				mLastUserInputTick = mLastTimerTime;
-				mWidgetManager->MouseWheel(event.wheel.y);
-				break;
-			case SDL_EVENT_WINDOW_FOCUS_GAINED:
-				mActive = true;
-				RehupFocus();
-				EnforceCursor();
-				break;
-			case SDL_EVENT_WINDOW_FOCUS_LOST:
-				mActive = false;
-				RehupFocus();
-				break;
-			case SDL_EVENT_WINDOW_RESIZED:
-			{
-				float scale = 1.0f;
-				int pw, ph;
-				SDL_GetWindowSizeInPixels(mSDLWindow, &pw, &ph);
-
-				if (pw >= 800 || ph >= 600) scale = max(max(static_cast<float>(pw)/ 800.0f, static_cast<float>(ph) / 600.0f), 1.0f);
-				SDL3Font::RebuildFonts(scale);
-				break;
 			}
-			case SDL_EVENT_KEY_DOWN:
-			{
-				mLastUserInputTick = mLastTimerTime;
-				if (mDebugKeysEnabled)
+			else {
+				switch (event.type)
 				{
-					if (DebugKeyDown(GetKeyCodeFromCodeSDL(event.key.key)))
-						break;
-				}
-				else
-				{
-					KeyCode theKey = GetKeyCodeFromCodeSDL(event.key.key);
-					if (theKey == KEYCODE_F10)
+				case SDL_EVENT_QUIT:
+					Shutdown();
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
+					if ((!gInAssert) && (!mSEHOccured))
 					{
-						TakeScreenshot();
-						break;
+						int x = event.button.x;
+						int y = event.button.y;
+						mWidgetManager->RemapMouse(x, y);
+						mLastUserInputTick = mLastTimerTime;
+						mWidgetManager->MouseMove(x, y);
+
+						if (!mMouseIn)
+						{
+							mMouseIn = true;
+							EnforceCursor();
+						}
+
+						mWidgetManager->MouseDown(event.button.x, event.button.y, buttonTrans(event.button.button));
 					}
-					else if (theKey == KeyCode::KEYCODE_F11)
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_UP:
+					if ((!gInAssert) && (!mSEHOccured))
 					{
-						gLawnApp->SwitchScreenMode(!gLawnApp->mIsWindowed, true);
-						break;
+						int x = event.button.x;
+						int y = event.button.y;
+						mWidgetManager->RemapMouse(x, y);
+						mLastUserInputTick = mLastTimerTime;
+						mWidgetManager->MouseMove(x, y);
+
+						if (!mMouseIn)
+						{
+							mMouseIn = true;
+							EnforceCursor();
+						}
+
+						mWidgetManager->MouseUp(event.button.x, event.button.y, buttonTrans(event.button.button));
 					}
-				}
+					break;
+				case SDL_EVENT_MOUSE_MOTION:
+					if ((!gInAssert) && (!mSEHOccured))
+					{
+						int x = event.motion.x;
+						int y = event.motion.y;
+						mWidgetManager->RemapMouse(x, y);
+						mLastUserInputTick = mLastTimerTime;
+						mWidgetManager->MouseMove(x, y);
 
-				int theChar = GetKeyCodeFromCodeSDL(event.key.key);
-
-				if ((theChar < KEYCODE_ASCIIBEGIN || theChar > KEYCODE_ASCIIEND) && (theChar < KEYCODE_ASCIIBEGIN2 || theChar > KEYCODE_ASCIIEND2))
+						if (!mMouseIn)
+						{
+							mMouseIn = true;
+							EnforceCursor();
+						}
+					}
+					break;
+				case SDL_EVENT_MOUSE_WHEEL:
+					mLastUserInputTick = mLastTimerTime;
+					mWidgetManager->MouseWheel(event.wheel.y);
+					break;
+				case SDL_EVENT_WINDOW_FOCUS_GAINED:
+					mActive = true;
+					RehupFocus();
+					EnforceCursor();
+					break;
+				case SDL_EVENT_WINDOW_FOCUS_LOST:
+					mActive = false;
+					RehupFocus();
+					break;
+				case SDL_EVENT_WINDOW_RESIZED:
 				{
-					theChar = -1;
-				}
+					float scale = 1.0f;
+					int pw, ph;
+					SDL_GetWindowSizeInPixels(mSDLWindow, &pw, &ph);
 
-				switch (event.key.key)
+					if (pw >= 800 || ph >= 600) scale = max(max(static_cast<float>(pw) / 800.0f, static_cast<float>(ph) / 600.0f), 1.0f);
+					SDL3Font::RebuildFonts(scale);
+					break;
+				}
+				case SDL_EVENT_KEY_DOWN:
 				{
+					mLastUserInputTick = mLastTimerTime;
+					if (mDebugKeysEnabled)
+					{
+						if (DebugKeyDown(GetKeyCodeFromCodeSDL(event.key.key)))
+							break;
+					}
+					else
+					{
+						KeyCode theKey = GetKeyCodeFromCodeSDL(event.key.key);
+						if (theKey == KEYCODE_F10)
+						{
+							TakeScreenshot();
+							break;
+						}
+						else if (theKey == KeyCode::KEYCODE_F11)
+						{
+							gLawnApp->SwitchScreenMode(!gLawnApp->mIsWindowed, true);
+							break;
+						}
+					}
+
+					int theChar = GetKeyCodeFromCodeSDL(event.key.key);
+
+					if ((theChar < KEYCODE_ASCIIBEGIN || theChar > KEYCODE_ASCIIEND) && (theChar < KEYCODE_ASCIIBEGIN2 || theChar > KEYCODE_ASCIIEND2))
+					{
+						theChar = -1;
+					}
+
+					switch (event.key.key)
+					{
 					case SDLK_KP_PLUS:   theChar = '+'; break;
 					case SDLK_KP_MINUS:  theChar = '-'; break;
 					case SDLK_KP_MULTIPLY: theChar = '*'; break;
@@ -512,47 +582,50 @@ bool LawnApp::UpdateAppStep(bool* updated)
 					case SDLK_KP_7: theChar = '7'; break;
 					case SDLK_KP_8: theChar = '8'; break;
 					case SDLK_KP_9: theChar = '9'; break;
-				}
-
-				if (theChar != -1 && theChar == 'D' && (mWidgetManager != NULL) && (mWidgetManager->mKeyDown[KEYCODE_CONTROL]) && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
-				{
-					PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
-					mDebugKeysEnabled = !mDebugKeysEnabled;
-				}
-
-				mWidgetManager->KeyDown(GetKeyCodeFromCodeSDL(event.key.key));
-
-				if (theChar != -1 && !SDL_TextInputActive(mSDLWindow)) {
-
-					bool shift = (event.key.mod & SDL_KMOD_SHIFT) != 0;
-					bool caps = (event.key.mod & SDL_KMOD_CAPS) != 0;
-
-					SexyChar c = theChar;
-
-					if (isalpha(c))
-					{
-						if (shift ^ caps)
-							c = toupper(c);
-						else
-							c = tolower(c);
 					}
-					mWidgetManager->KeyChar(c);
+
+					if (theChar != -1 && theChar == 'D' && (mWidgetManager != NULL) && (mWidgetManager->mKeyDown[KEYCODE_CONTROL]) && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
+					{
+						PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
+						mDebugKeysEnabled = !mDebugKeysEnabled;
+					}
+
+					mWidgetManager->KeyDown(GetKeyCodeFromCodeSDL(event.key.key));
+
+					if (theChar != -1 && !SDL_TextInputActive(mSDLWindow)) {
+
+						bool shift = (event.key.mod & SDL_KMOD_SHIFT) != 0;
+						bool caps = (event.key.mod & SDL_KMOD_CAPS) != 0;
+
+						SexyChar c = theChar;
+
+						if (isalpha(c))
+						{
+							if (shift ^ caps)
+								c = toupper(c);
+							else
+								c = tolower(c);
+						}
+						mWidgetManager->KeyChar(c);
+					}
+
+					break;
 				}
+				case SDL_EVENT_KEY_UP:
+					mLastUserInputTick = mLastTimerTime;
+					mWidgetManager->KeyUp(GetKeyCodeFromCodeSDL(event.key.key));
+					break;
+				case SDL_EVENT_TEXT_INPUT:
+					mLastUserInputTick = mLastTimerTime;
+					SexyChar aChar = event.text.text[0];
 
-				break;
+					mWidgetManager->KeyChar((SexyChar)aChar);
+					break;
+
+				}
 			}
-			case SDL_EVENT_KEY_UP:
-				mLastUserInputTick = mLastTimerTime;
-				mWidgetManager->KeyUp(GetKeyCodeFromCodeSDL(event.key.key));
-				break;
-			case SDL_EVENT_TEXT_INPUT: 
-				mLastUserInputTick = mLastTimerTime;
-				SexyChar aChar = event.text.text[0]; 
 
-				mWidgetManager->KeyChar((SexyChar)aChar);
-				break;
 			
-			}
 		}
 		mUpdateAppState = UPDATESTATE_PROCESS_1;
 	}
@@ -2100,7 +2173,8 @@ void LawnApp::Init()
 #endif
 	mTimer.Start();
 
-	PlayVideo(StrFormat("%svideos/intro.mp4", SDL_GetBasePath()).c_str(), true);
+	if (!IsScreenSaver())
+		PlayVideo(StrFormat("%svideos/intro.mp4", SDL_GetBasePath()).c_str(), true);
 }
 
 //0x4522A0
@@ -2641,7 +2715,7 @@ void LawnApp::LoadingThreadProc()
 	int aDuration = max(aTimer.GetDuration(), 0);
 	aTimer.Start();
 
-	if (!IsScreenSaver() && !IsParticleEditor())
+	if (/*!IsScreenSaver() && */!IsParticleEditor())
 	{
 		mPoolEffect = new PoolEffect();
 		mPoolEffect->PoolEffectInitialize();
@@ -4636,11 +4710,11 @@ void LawnApp::KillLanguageScreen()
 
 bool LawnApp::ChallengeUsesMicrophone(GameMode theGameMode)
 {
-	return 
+	return
 #ifdef _MOBILE_MINIGAMES
-		theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE ||
+		theGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE; // ||
 #endif
-		theGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && gLawnApp->IsScreenSaver();
+		//theGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && gLawnApp->IsScreenSaver();
 }
 
 bool LawnApp::ChallengeHasScores(GameMode theGameMode)

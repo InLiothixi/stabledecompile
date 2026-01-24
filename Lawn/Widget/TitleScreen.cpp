@@ -65,7 +65,7 @@ void TitleScreen::Draw(Graphics* g)
 
 	if (mTitleState == TitleState::TITLESTATE_WAITING_FOR_FIRST_DRAW)
 	{
-		g->SetColor(Color::White);
+		g->SetColor(mApp->IsScreenSaver() ? Color::Black : Color::White);
 		g->FillRect(0, 0, mWidth, mHeight);
 
 		if (!mDrawnYet)
@@ -133,8 +133,8 @@ void TitleScreen::Draw(Graphics* g)
 		g->FillRect(0, 0, mWidth, mHeight);
 		return;
 	}
-
-	g->DrawImage(IMAGE_TITLESCREEN, 0, 0);
+	if (!mApp->IsScreenSaver())
+		g->DrawImage(IMAGE_TITLESCREEN, 0, 0);
 	if (mNeedToInit)
 	{
 		return;
@@ -149,49 +149,52 @@ void TitleScreen::Draw(Graphics* g)
 	{
 		aLogoY = TodAnimateCurve(60, 50, mTitleStateCounter, 10, 15, CURVE_BOUNCE);
 	}
-	g->DrawImage(IMAGE_PVZ_LOGO, mWidth / 2 - IMAGE_PVZ_LOGO->mWidth / 2, aLogoY);
+	if (!mApp->IsScreenSaver())
+		g->DrawImage(IMAGE_PVZ_LOGO, mWidth / 2 - IMAGE_PVZ_LOGO->mWidth / 2, aLogoY);
 
 	int aGrassX = mStartButton->mX - 4;
 	int aGrassY = mStartButton->mY - 17;
-	g->DrawImage(IMAGE_LOADBAR_DIRT, aGrassX + 6, aGrassY + 18);
+	if (!mApp->IsScreenSaver())
+		g->DrawImage(IMAGE_LOADBAR_DIRT, aGrassX + 6, aGrassY + 18);
 
-	if (mCurBarWidth >= mTotalBarWidth)
+	if (!mApp->IsScreenSaver())
 	{
-		g->DrawImage(IMAGE_LOADBAR_GRASS, aGrassX + 4, aGrassY);
-
-		if (mLoadingThreadComplete)
+		if (mCurBarWidth >= mTotalBarWidth)
 		{
-			DrawToPreload(g);
+			g->DrawImage(IMAGE_LOADBAR_GRASS, aGrassX + 4, aGrassY);
+
+			if (mLoadingThreadComplete)
+			{
+				DrawToPreload(g);
+			}
+
+			Reanimation* aReanim = nullptr;
+			while (mApp->mEffectSystem->mReanimationHolder->mReanimations.IterateNext(aReanim))
+			{
+				aReanim->Draw(g);
+			}
 		}
-
-		Reanimation* aReanim = nullptr;
-		while (mApp->mEffectSystem->mReanimationHolder->mReanimations.IterateNext(aReanim))
+		else
 		{
-			aReanim->Draw(g);
+			Graphics aClipG(*g);
+			aClipG.ClipRect(240 - 8, aGrassY, mCurBarWidth, IMAGE_LOADBAR_GRASS->mHeight);
+			aClipG.DrawImage(IMAGE_LOADBAR_GRASS, aGrassX + 4, aGrassY);
+
+			Reanimation* aReanim = nullptr;
+			while (mApp->mEffectSystem->mReanimationHolder->mReanimations.IterateNext(aReanim))
+			{
+				aReanim->Draw(g);
+			}
+
+			float aRollLen = mCurBarWidth * 0.94f;
+			float aRotation = -aRollLen / 180 * PI * 2;
+			float aScale = TodAnimateCurveFloatTime(0, mTotalBarWidth, mCurBarWidth, 1, 0.5f, TodCurves::CURVE_LINEAR);
+			SexyTransform2D aTransform;
+			TodScaleRotateTransformMatrix(aTransform, aGrassX + 11.0f + aRollLen + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aGrassY - 3.0f - 35.0f * aScale + 35.0f + gSexyAppBase->mDDInterface->mWideScreenOffsetY, aRotation, aScale, aScale);
+			Rect aSrcRect(0, 0, IMAGE_REANIM_SODROLLCAP->mWidth, IMAGE_REANIM_SODROLLCAP->mHeight);
+			TodBltMatrix(g, IMAGE_REANIM_SODROLLCAP, aTransform, g->mClipRect, Color::White, g->mDrawMode, aSrcRect);
 		}
 	}
-	else
-	{
-		Graphics aClipG(*g);
-		aClipG.ClipRect(240-8, aGrassY, mCurBarWidth, IMAGE_LOADBAR_GRASS->mHeight);
-		aClipG.DrawImage(IMAGE_LOADBAR_GRASS, aGrassX + 4, aGrassY);
-
-		Reanimation* aReanim = nullptr;
-		while (mApp->mEffectSystem->mReanimationHolder->mReanimations.IterateNext(aReanim))
-		{
-			aReanim->Draw(g);
-		}
-
-		float aRollLen = mCurBarWidth * 0.94f;
-		float aRotation = -aRollLen / 180 * PI * 2;
-		float aScale = TodAnimateCurveFloatTime(0, mTotalBarWidth, mCurBarWidth, 1, 0.5f, TodCurves::CURVE_LINEAR);
-		SexyTransform2D aTransform;
-		TodScaleRotateTransformMatrix(aTransform, aGrassX + 11.0f + aRollLen + gSexyAppBase->mDDInterface->mWideScreenOffsetX, aGrassY - 3.0f - 35.0f * aScale + 35.0f + gSexyAppBase->mDDInterface->mWideScreenOffsetY, aRotation, aScale, aScale);
-		Rect aSrcRect(0, 0, IMAGE_REANIM_SODROLLCAP->mWidth, IMAGE_REANIM_SODROLLCAP->mHeight);
-		TodBltMatrix(g, IMAGE_REANIM_SODROLLCAP, aTransform, g->mClipRect, Color::White, g->mDrawMode, aSrcRect);
-	}
-
-	
 }
 
 //0x48DCB0
@@ -214,7 +217,7 @@ void TitleScreen::Update()
 		mApp->mMusic->MusicTitleScreenInit();
 		mApp->StartLoadingThread();
 
-		mTitleState = TitleState::TITLESTATE_SCREEN;//TitleState::TITLESTATE_POPCAP_LOGO;
+		mTitleState = mApp->IsScreenSaver() ? TitleState::TITLESTATE_POPCAP_LOGO : TitleState::TITLESTATE_SCREEN;
 		if (mDisplayPartnerLogo)
 		{
 			mTitleStateDuration = 150;
@@ -285,7 +288,7 @@ void TitleScreen::Update()
 		mStartButton->mLabel = TodStringTranslate(_S("[LOADING]"));
 		mStartButton->SetFont(FONT_BRIANNETOD16);
 		mStartButton->Resize(mWidth / 2 - IMAGE_LOADBAR_DIRT->mWidth / 2, 650, mTotalBarWidth, 50);
-		mStartButton->mVisible = true;
+		mStartButton->mVisible = !mApp->IsScreenSaver();
 
 		float aEstimatedTotalLoadTime;
 		if (aCurrentProgress > 0.000001f)
@@ -374,16 +377,16 @@ void TitleScreen::Update()
 		mLoadingThreadComplete = true;
 		mStartButton->SetDisabled(false);
 
-		if (mApp->IsScreenSaver() || mApp->IsParticleEditor())
+		if (/*mApp->IsScreenSaver() ||*/ mApp->IsParticleEditor())
 		{
 			mApp->LoadingCompleted();
 		}
-		else if (/*mApp->IsScreenSaver() ||*/ mQuickLoadKey == KeyCode::KEYCODE_ASCIIEND)
+		else if (mApp->IsScreenSaver() || mQuickLoadKey == KeyCode::KEYCODE_ASCIIEND)
 		{
-			/*mApp->LoadingCompleted();
+			mApp->LoadingCompleted();
 			mApp->KillGameSelector();
 			mApp->PreNewGame(GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN, false);
-			return;*/
+			return;
 
 			mApp->FastLoad(GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN);
 		}
