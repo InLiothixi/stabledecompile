@@ -3296,22 +3296,22 @@ void Challenge::DrawRain(Graphics* g)
 	}
 
 	int aTime = mBoard->mEffectCounter % 100;
-	int aTimeOffsetXEst = TodAnimateCurve(0, 100, aTime, 0, -100, CURVE_LINEAR);
-	int aTimeOffsetYEst = TodAnimateCurve(0, 20, aTime % 20, -100, 0, CURVE_LINEAR);
+	float aTimeOffsetXEst = TodAnimateCurveFloat(0, 100, aTime, 0, -100, CURVE_LINEAR);
+	float aTimeOffsetYEst = TodAnimateCurveFloat(0, 20, aTime % 20, -100, 0, CURVE_LINEAR);
 	// 绘制远景的雨
 	for (int aHorCnt = 9; aHorCnt > -2; aHorCnt--)
 	{
 		for (int aVerCnt = 7; aVerCnt > -2; aVerCnt--)
 		{
-			int aImageX = aTimeOffsetXEst + 100 * aHorCnt + aBoardOffsetX;
-			int aImageY = aTimeOffsetYEst + 100 * aVerCnt;
-			g->DrawImage(Sexy::IMAGE_RAIN, aImageX, aImageY);
+			float aImageX = aTimeOffsetXEst + 100 * aHorCnt + aBoardOffsetX;
+			float aImageY = aTimeOffsetYEst + 100 * aVerCnt;
+			g->DrawImageF(Sexy::IMAGE_RAIN, aImageX, aImageY);
 		}
 	}
 
 	aTime = mBoard->mEffectCounter;
-	float aTimeOffsetXCls = TodAnimateCurve(0, 161, aTime % 161, 0, -100, CURVE_LINEAR);
-	float aTimeOffsetYCls = TodAnimateCurve(0, 33, aTime % 33, -100, 0, CURVE_LINEAR);
+	float aTimeOffsetXCls = TodAnimateCurveFloat(0, 161, aTime % 161, 0, -100, CURVE_LINEAR);
+	float aTimeOffsetYCls = TodAnimateCurveFloat(0, 33, aTime % 33, -100, 0, CURVE_LINEAR);
 	// 绘制近景的雨
 	for (int aHorCnt = -2; aHorCnt < 9; aHorCnt++)
 	{
