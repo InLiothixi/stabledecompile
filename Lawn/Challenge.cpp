@@ -1362,7 +1362,7 @@ bool Challenge::MouseDown(int x, int y, int theClickCount, HitResult* theHitResu
 		ScaryPotterMalletPot((GridItem*)theHitResult->mObject);
 		return true;
 	}
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
 	if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN && theHitResult->mObjectType == OBJECT_TYPE_NONE &&
 		mBoard->mCursorObject->mCursorType == CURSOR_TYPE_BUTTER && theClickCount >= 0)
 	{
