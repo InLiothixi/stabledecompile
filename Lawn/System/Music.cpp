@@ -149,7 +149,7 @@ void Music::SetupMusicFileForTune(MusicFile theMusicFile, MusicTune theMusicTune
 		case MusicFile::MUSIC_FILE_DRUMS:			aTrackCount = 29;	aTrackStart1 = 18;	aTrackEnd1 = 20;											break;
 		} break;
 	default:
-		if (theMusicFile == MusicFile::MUSIC_FILE_MAIN_MUSIC || theMusicFile == MusicFile::MUSIC_FILE_DRUMS)
+		if (theMusicFile == MusicFile::MUSIC_FILE_MAIN_MUSIC || theMusicFile == MusicFile::MUSIC_FILE_HIHATS || theMusicFile == MusicFile::MUSIC_FILE_DRUMS)
 		{
 			aTrackCount = 29;
 			aTrackStart1 = 0;
@@ -159,13 +159,18 @@ void Music::SetupMusicFileForTune(MusicFile theMusicFile, MusicTune theMusicTune
 	}
 
 	HMUSIC aHMusic = GetBassMusicHandle(theMusicFile);
+	for (int aTrack = 0; aTrack <= 29; aTrack++) 
+	{
+		gBass->BASS_ChannelSetAttribute(aHMusic, BASS_ATTRIB_MUSIC_VOL_CHAN + aTrack, 1.0f);
+	}
+
 	for (int aTrack = 0; aTrack <= aTrackCount; aTrack++) // Originally: aTrack < aTrackCount (It ignores Channel 30 which makes Hihats play on Non-Burst Music)
 	{
 		int aVolume;
 		if (aTrack >= aTrackStart1 && aTrack <= aTrackEnd1)
-			aVolume = 100;
+			aVolume = 1.0f;
 		else if (aTrack >= aTrackStart2 && aTrack <= aTrackEnd2)
-			aVolume = 100;
+			aVolume = 1.0f;
 		else
 			aVolume = 0;
 
