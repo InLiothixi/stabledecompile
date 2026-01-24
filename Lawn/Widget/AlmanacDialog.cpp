@@ -434,7 +434,9 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 		if (aZombieType != ZombieType::ZOMBIE_INVALID)
 		{
 			if (!ZombieIsShown(aZombieType))
+			{
 				g->DrawImage(Sexy::IMAGE_ALMANAC_ZOMBIEBLANK, aPosX, aPosY);
+			}
 			else
 			{
 				g->DrawImage(Sexy::IMAGE_ALMANAC_ZOMBIEWINDOW, aPosX, aPosY);
@@ -495,8 +497,10 @@ void AlmanacDialog::DrawZombies(Graphics* g)
 				}
 				mApp->mReanimatorCache->DrawCachedZombie(g, 0, 0, aZombieTypeToDraw);
 				g->PopState();
-
+				g->PushState();
+				g->SetLinearBlend(false);
 				g->DrawImage(Sexy::IMAGE_ALMANAC_ZOMBIEWINDOW2, aPosX, aPosY);
+				g->PopState();
 				if (aZombieType == aZombieMouseOn)
 				{
 					g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);

@@ -334,11 +334,13 @@ void LawnMower::Draw(Graphics* g)
         }
     }
 
-    if (mMowerState == LawnMowerState::MOWER_TRIGGERED || mMowerState == LawnMowerState::MOWER_SQUISHED)
+    //if (mMowerState == LawnMowerState::MOWER_TRIGGERED || mMowerState == LawnMowerState::MOWER_SQUISHED)
     {
+        g->mTransX -= 10;
+        if (mMowerType == LawnMowerType::LAWNMOWER_POOL) g->mTransY += 25;
         mApp->ReanimationGet(mReanimID)->Draw(g);
     }
-    else
+    /*else
     {
         LawnMowerType aMowerType = mMowerType;
         if (mMowerType == LawnMowerType::LAWNMOWER_LAWN && mBoard->mSuperMowerMode)
@@ -346,7 +348,7 @@ void LawnMower::Draw(Graphics* g)
             aMowerType = LawnMowerType::LAWNMOWER_SUPER_MOWER;
         }
         mApp->mReanimatorCache->DrawCachedMower(g, 0.0f, 19.0f, aMowerType);
-    }
+    }*/
     g->PopState();
 }
 

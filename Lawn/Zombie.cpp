@@ -6805,6 +6805,7 @@ void Zombie::DrawBungeeCord(Graphics* g, int theOffsetX, int theOffsetY)
     g->PushState();
     g->SetColorizeImages(true);
     g->SetColor(Color::White);
+    g->SetLinearBlend(false);
 
     bool aSetClip = false;
     if (IsOnBoard() && mApp->IsFinalBossLevel())
