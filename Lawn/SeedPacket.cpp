@@ -67,7 +67,7 @@ void SeedPacket::PickNextSlotMachineSeed()
 			}
 		}
 
-		aSeedWeightArray[aSeedsCount].mItem = (int)aSeedType;
+		aSeedWeightArray[aSeedsCount].mItem = aSeedType;
 		aSeedWeightArray[aSeedsCount].mWeight = aWeight;
 		aSeedsCount++;
 	}
