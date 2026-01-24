@@ -3533,7 +3533,7 @@ void Board::UpdateCursor()
 	{
 		if (aHitResult.mObjectType == GameObjectType::OBJECT_TYPE_GLOVE 
 #ifdef _MOBILE_MINIGAMES
-			&& mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+			&& mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE && aHitResult.mObjectType != GameObjectType::OBJECT_TYPE_COIN
 #endif
 			)
 			aShowFinger = false;
@@ -6996,7 +6996,7 @@ void Board::DrawBackdrop(Graphics* g)
 	{
 		DrawHouseDoorBottom(g);
 	}
-	g->SetPixelArtBlend(false);
+	g->SetLinearBlend(true);
 
 	if (StageHasPool())
 	{

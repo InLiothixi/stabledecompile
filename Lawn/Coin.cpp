@@ -1504,7 +1504,11 @@ bool Coin::MouseHitTest(int theX, int theY, HitResult* theHitResult)
     }
     if (mType == CoinType::COIN_USABLE_SEED_PACKET && mBoard)
     {
-        if (mBoard->mCursorObject->mCursorType != CursorType::CURSOR_TYPE_NORMAL && !mApp->IsWhackAZombieLevel())
+        if (mBoard->mCursorObject->mCursorType != CursorType::CURSOR_TYPE_NORMAL && !mApp->IsWhackAZombieLevel() 
+#ifdef _MOBILE_MINIGAMES
+            && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE
+#endif
+            )
         {
             aCanHitCoin = false;
         }

@@ -336,8 +336,11 @@ void LawnMower::Draw(Graphics* g)
 
     //if (mMowerState == LawnMowerState::MOWER_TRIGGERED || mMowerState == LawnMowerState::MOWER_SQUISHED)
     {
-        g->mTransX -= 10;
-        if (mMowerType == LawnMowerType::LAWNMOWER_POOL) g->mTransY += 25;
+        if (mMowerState == LawnMowerState::MOWER_READY) 
+        {
+            g->mTransX -= 10;
+            if (mMowerType == LawnMowerType::LAWNMOWER_POOL) g->mTransY += 25;
+        }
         mApp->ReanimationGet(mReanimID)->Draw(g);
     }
     /*else

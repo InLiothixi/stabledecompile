@@ -8840,6 +8840,49 @@ void Zombie::DieNoLoot()
         if (aZombie) aZombie->DieNoLoot();
     }
 #endif
+
+#ifdef _MOBILE_MINIGAMES
+    if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAT_WAVE)
+    {
+        int shooters = 0;
+        int nuts = 0;
+        int pads = 0;
+        if (IsOnBoard())
+        {
+            shooters = 4 - min(mBoard->CountPlantByType(SeedType::SEED_PEASHOOTER), 4);
+            nuts = 2 - min(mBoard->CountPlantByType(SeedType::SEED_WALLNUT), 2);
+            pads = 4 - min(mBoard->CountPlantByType(SeedType::SEED_LILYPAD), 4);
+
+            Coin* aCoin = nullptr;
+            while (mBoard->IterateCoins(aCoin)) {
+                if (aCoin->mType != CoinType::COIN_USABLE_SEED_PACKET) continue;
+
+                if (aCoin->mUsableSeedType == SeedType::SEED_PEASHOOTER) shooters--;
+                if (aCoin->mUsableSeedType == SeedType::SEED_WALLNUT) nuts--;
+                if (aCoin->mUsableSeedType == SeedType::SEED_LILYPAD) pads--;
+            }
+        }
+        Rect aZombieRect = GetZombieRect();
+        int aCenterX = aZombieRect.mX + 20;
+        int aCenterY = aZombieRect.mY + aZombieRect.mHeight / 4;
+
+        int s = shooters;
+        while (s-- > 0) {
+            Coin* aCoin = mBoard->AddCoin(aCenterX - 10 - s * 10, aCenterY, CoinType::COIN_USABLE_SEED_PACKET, CoinMotion::COIN_MOTION_FROM_PLANT);
+            aCoin->mUsableSeedType = SeedType::SEED_PEASHOOTER;
+        }
+        int n = nuts;
+        while (n-- > 0) {
+            Coin* aCoin = mBoard->AddCoin(aCenterX - 10 - n * 10 - shooters * 10, aCenterY, CoinType::COIN_USABLE_SEED_PACKET, CoinMotion::COIN_MOTION_FROM_PLANT);
+            aCoin->mUsableSeedType = SeedType::SEED_WALLNUT;
+        }
+        int p = pads;
+        while (p-- > 0) {
+            Coin* aCoin = mBoard->AddCoin(aCenterX - 10 - p * 10 - shooters * 10 - nuts * 10, aCenterY, CoinType::COIN_USABLE_SEED_PACKET, CoinMotion::COIN_MOTION_FROM_PLANT);
+            aCoin->mUsableSeedType = SeedType::SEED_LILYPAD;
+        }
+    }
+#endif
 }
 
 //0x530640

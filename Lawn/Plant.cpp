@@ -1091,7 +1091,7 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon)
         {
             mShootingCounter = 33;
         }
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
         if (mState == PlantState::STATE_HEAT_WAVE_POWERED)
             mShootingCounter = 26;
 #endif
@@ -1297,7 +1297,7 @@ void Plant::UpdateShooter()
     if (mLaunchCounter <= 0)
     {
         mLaunchCounter = mLaunchRate - Sexy::Rand(15);
-#ifdef _CONSOLE_MINIGAMES
+#ifdef _MOBILE_MINIGAMES
         if (mState == PlantState::STATE_HEAT_WAVE_POWERED)
             mLaunchCounter = 26;
 #endif
